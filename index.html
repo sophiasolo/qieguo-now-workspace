@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>切果NOW · 运营工作台</title>
+<script src="https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --brand: #2d8a4e; --brand-light: #e8f5e9; --brand-dark: #1b5e2f;
+  --yellow: #f9a825; --yellow-light: #fff8e1; --bg: #f5f7f5;
+  --sidebar-bg: #ffffff; --card: #ffffff; --text: #263238;
+  --text-dim: #6b7c7c; --text-muted: #9eacac; --border: #e8ece8;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,.08);
+  --radius: 12px; --radius-sm: 8px;
+  --sidebar-width: 220px; --header-height: 56px;
+  --red: #e53935; --red-light: #ffebee; --amber: #ff8f00;
+  --blue: #1976d2; --teal: #00897b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden}
+.sidebar{width:var(--sidebar-width);min-width:var(--sidebar-width);background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;padding:16px 0}
+.sidebar-brand{padding:8px 20px 20px;display:flex;align-items:center;gap:8px}
+.sidebar-brand .logo{width:32px;height:32px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px}
+.sidebar-brand .name{font-weight:700;font-size:16px;color:var(--brand-dark)}
+.sidebar-brand .name span{color:var(--brand)}
+.nav-section{padding:8px 12px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;margin:2px 8px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-weight:500;color:var(--text-dim);transition:all .15s;text-decoration:none;position:relative}
+.nav-item:hover{background:var(--brand-light);color:var(--brand-dark)}
+.nav-item.active{background:var(--brand);color:#fff;font-weight:600}
+.nav-item.nav-sub{font-size:12px}
+.nav-item.nav-sub .icon{font-size:14px}
+.nav-item .icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.nav-item .badge{margin-left:auto;font-size:10px;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-weight:600;display:none}
+.nav-item .badge.show{display:inline-block}
+.main{flex:1;margin-left:var(--sidebar-width);min-width:0}
+.header{height:var(--header-height);background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
+.header h2{font-size:18px;font-weight:700;color:var(--text)}
+.header-actions{display:flex;gap:12px;align-items:center}
+.header-actions .date{font-size:13px;color:var(--text-dim)}
+.header-actions .user{width:32px;height:32px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.content{padding:20px 24px;max-width:1440px}
+.page{display:none}
+.page.active{display:block}
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:16px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:15px;font-weight:700;color:var(--text)}
+.card-sub{font-size:12px;color:var(--text-dim)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);border-left:4px solid var(--brand);transition:transform .15s,box-shadow .15s}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.kpi .kpi-label{font-size:11px;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.kpi .kpi-value{font-size:26px;font-weight:700;color:var(--text);line-height:1.1}
+.kpi .kpi-sub{font-size:11px;color:var(--text-dim);margin-top:4px}
+.kpi .kpi-change{font-size:12px;font-weight:600;margin-left:4px}
+.kpi .kpi-change.up{color:#2e7d32}
+.kpi .kpi-change.down{color:var(--red)}
+.kpi .kpi-change.flat{color:var(--amber)}
+.kpi.accent-green{border-left-color:var(--brand)}
+.kpi.accent-yellow{border-left-color:var(--yellow)}
+.kpi.accent-red{border-left-color:var(--red)}
+.kpi.accent-blue{border-left-color:var(--blue)}
+.kpi.accent-teal{border-left-color:var(--teal)}
+.kpi.accent-amber{border-left-color:var(--amber)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.star-btn{cursor:pointer;font-size:14px;opacity:.3;transition:opacity .15s;flex-shrink:0;margin-left:4px}
+.star-btn.active{opacity:1}
+.schedule-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.schedule-day{background:#fff;border-radius:var(--radius-sm);padding:6px;min-height:100px;border:1px solid var(--border);position:relative;cursor:pointer;transition:all .15s;font-size:11px;overflow:hidden}
+.schedule-day:hover{border-color:var(--brand);box-shadow:var(--shadow-lg)}
+.schedule-day.weekend{background:#fafafa}
+.schedule-day .day-num{font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:3px;line-height:1}
+.schedule-day .entry{font-size:10px;padding:1px 2px 1px 6px;margin-bottom:1px;border-radius:2px;border-left:3px solid #ccc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
+.entry-bar-program{border-left-color:#e65100;background:#fff3e0}
+.entry-bar-market{border-left-color:#1565c0;background:#e3f2fd}
+.entry-bar-brand{border-left-color:#7b1fa2;background:#f3e5f5}
+.entry-bar-wechat{border-left-color:#2e7d32;background:#e8f5e9}
+.entry-bar-festival{border-left-color:#c62828;background:#fce4ec}
+.entry-bar-note{border-left-color:#f9a825;background:#fff9c4}
+
+.schedule-day:hover{border-color:var(--brand);box-shadow:var(--shadow-lg)}
+.schedule-day.weekend{background:#fafafa}
+.schedule-day.today{border-color:var(--brand);background:var(--brand-light)}
+.schedule-day .day-num{font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:4px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;justify-content:center;align-items:center}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:var(--radius);padding:24px;max-width:480px;width:90%;box-shadow:var(--shadow-lg)}
+.modal h3{font-size:16px;margin-bottom:12px;color:var(--brand-dark)}
+.modal textarea{width:100%;min-height:80px;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;font-size:13px;font-family:inherit;resize:vertical}
+.modal textarea:focus{outline:none;border-color:var(--brand)}
+.modal .btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.btn{padding:8px 18px;border-radius:var(--radius-sm);border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-dark)}
+.btn-ghost{background:transparent;color:var(--text-dim)}
+.btn-ghost:hover{background:var(--bg)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:10px 24px;border-radius:20px;font-size:13px;z-index:300;animation:toastIn .3s ease;pointer-events:none}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-dim)}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.empty-state h3{font-size:16px;margin-bottom:6px;color:var(--text)}
+.empty-state p{font-size:13px}
+@media(max-width:1024px){.grid2,.grid3{grid-template-columns:1fr}.sidebar{width:60px;min-width:60px;padding:12px 0}.sidebar .nav-item{padding:10px 14px;justify-content:center}.sidebar .nav-item span:not(.icon){display:none}.sidebar .nav-section{display:none}.sidebar-brand{padding:8px 12px 16px;justify-content:center}.sidebar-brand .name{display:none}.main{margin-left:60px}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="logo">🍉</div><div class="name">切果<span>NOW</span></div></div>
+  <div class="nav-section">核心</div>
+  <div class="nav-item active" data-page="overview"><span class="icon">🏠</span><span>总览</span></div>
+  <div class="nav-section">监控</div>
+  <div class="nav-item" data-page="sentiment"><span class="icon">🛡️</span><span>舆情监控</span><span class="badge" id="sentimentBadge">3</span></div>
+  <div class="nav-item nav-sub" data-page="star"><span class="icon">⭐</span><span>精选正面</span></div>
+  <div class="nav-section">运营</div>
+  <div class="nav-item" data-page="community"><span class="icon">📅</span><span>社群运营</span></div>
+  <div class="nav-item" data-page="communitydata"><span class="icon">👥</span><span>社群数据</span></div>
+  <div class="nav-item" data-page="acquisition"><span class="icon">🔗</span><span>社群引流</span></div>
+  <div class="nav-item" data-page="activities"><span class="icon">🎯</span><span>小程序活动</span></div>
+  <div class="nav-section">创作</div>
+  <div class="nav-item" data-page="products">
+    <span class="icon">📦</span> <span>产品库</span>
+  </div>
+  <div class="nav-item" data-page="hotspot">
+    <span class="icon">📡</span> <span>热点捕捉</span>
+  </div>
+  <div class="nav-item" data-page="copy"><span class="icon">✍️</span><span>文案创作</span></div>
+  <div class="nav-item" data-page="prompt"><span class="icon">🎨</span><span>配图Prompt</span></div>
+  <div class="nav-item" data-page="inspiration"><span class="icon">📚</span><span>素材灵感库</span></div>
+  <div class="nav-item" data-page="ailearn"><span class="icon">💡</span><span>AI前沿案例</span></div>
+  <div class="nav-item" data-page="portfolio"><span class="icon">🖼️</span><span>作品集</span></div>
+</aside>
+<div class="main">
+  <header class="header"><h2 id="pageTitle">🏠 总览</h2><div class="header-actions"><span class="date" id="currentDate"></span><div class="user">U</div></div></header>
+  <div class="content">
+    <div class="page active" id="page-overview">
+      <div class="kpi-grid">
+        <div class="kpi accent-green"><div class="kpi-label">📊 今日舆情</div><div class="kpi-value">--<span class="kpi-change flat">待接入</span></div><div class="kpi-sub">数据接入后将自动更新</div></div>
+        <div class="kpi accent-yellow"><div class="kpi-label">👥 群客户数</div><div class="kpi-value">34,676</div><div class="kpi-sub">6月末 · 1,045个群</div></div>
+        <div class="kpi accent-blue"><div class="kpi-label">🎯 本周活动</div><div class="kpi-value">3<span class="kpi-change flat">个</span></div><div class="kpi-sub">会员日 · 周末套餐 · 宠粉周</div></div>
+        <div class="kpi accent-teal"><div class="kpi-label">📝 本周内容产出</div><div class="kpi-value">--<span class="kpi-change flat">件</span></div><div class="kpi-sub">文案 + Prompt + 配图</div></div>
+        <div class="kpi accent-amber"><div class="kpi-label">⭐ 正面素材</div><div class="kpi-value">--<span class="kpi-change flat">条</span></div><div class="kpi-sub">待接入舆情数据</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><div class="card-header"><div class="card-title">📅 本周排期</div></div><div id="overviewSchedule" style="font-size:13px;color:var(--text-dim)">加载中...</div></div>
+        <div class="card"><div class="card-header"><div class="card-title">⚠️ 待关注</div></div><div id="overviewAlerts" style="font-size:13px;color:var(--text-dim)"><div style="padding:4px 0">🔴 舆情数据待接入</div><div style="padding:4px 0">🟡 作品集模块待建</div></div></div>
+      </div>
+    </div>
+    <div class="page" id="page-sentiment">
+      <div class="kpi-grid" id="sentimentKPI"></div>
+      <div class="grid2">
+        <div class="card"><div class="card-header"><div class="card-title">📈 近7天舆情趋势</div></div><div style="height:260px"><canvas id="sentimentTrendChart"></canvas></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">⚠️ 近7天负面舆情</div></div><div id="sentimentNegList" style="max-height:260px;overflow-y:auto;font-size:13px"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📋 <span id="sentimentItemDateLabel">舆情明细</span>（<span id="sentimentItemCount">0</span>条）</div><div style="font-size:11px;color:var(--text-dim)">数据日期：<span id="sentimentItemTime"></span></div></div>
+        <div style="display:flex;gap:6px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
+          <select id="sentimentDateSelect" onchange="switchSentimentDate(this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:11px;background:#fff">
+            <option value="today">📅 今日（自动）</option>
+          </select>
+          <button class="btn btn-primary" onclick="filterSentimentItems('all')" id="sentFilterAll" style="font-size:11px;padding:4px 10px">全部</button>
+          <button class="btn btn-ghost" onclick="filterSentimentItems('pos')" id="sentFilterPos" style="font-size:11px;padding:4px 10px">😊 正面</button>
+          <button class="btn btn-ghost" onclick="filterSentimentItems('neg')" id="sentFilterNeg" style="font-size:11px;padding:4px 10px">🔴 负面</button>
+        </div>
+        <div id="sentimentItemsList" style="font-size:12px;max-height:500px;overflow-y:auto;padding-right:12px;margin-right:-4px"></div>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-title">🔗 快捷入口</div></div><div style="display:flex;gap:12px"><a href="#" onclick="window.open('切果NOW综合舆情看板.html','_blank')" class="btn btn-primary" style="text-decoration:none">📊 综合舆情看板</a> <a href="#" onclick="refreshSentimentLive()" class="btn btn-ghost" style="font-size:12px">🔄 刷新</a><span style="font-size:12px;color:var(--text-dim);align-self:center" id="sentimentMeta"></span></div></div>
+    </div>
+    <div class="page" id="page-star">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div><span style="font-size:15px;font-weight:700">⭐ 精选正面素材</span><span style="font-size:12px;color:var(--text-dim);margin-left:8px">——手动勾选收藏，可用于二次传播</span></div>
+        <button class="btn btn-ghost" onclick="exportStarsJSON()" style="font-size:11px;color:var(--brand)">📤 导出JSON</button>
+        <button class="btn btn-ghost" onclick="clearStars()" style="font-size:11px;color:var(--red)">🗑 清空收藏</button>
+      </div>
+      <div id="starContent" style="font-size:13px;color:var(--text-dim)">加载中...</div>
+    </div>
+    <div class="page" id="page-community">
+      <div class="card">
+        <div class="card-header"><div><div class="card-title">📅 社群运营排期</div><div class="card-sub">点击日期格子编辑 · 自动本地保存</div></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><select id="scheduleYearSelect" onchange="renderSchedule()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:#fff"></select><div id="scheduleMonthNav" style="display:flex;gap:6px"></div><button class="btn btn-ghost" onclick="exportScheduleToExcel()" style="font-size:11px;margin-left:8px" title="导出CSV">📥 导出</button></div></div>
+        <div id="scheduleContent"></div>
+      </div>
+    </div>
+    <div class="page" id="page-communitydata">
+      <div class="kpi-grid" id="communityDataKPI"></div>
+      <div class="grid2">
+        <div class="card"><div class="card-header"><div class="card-title">📊 社群周报</div></div><div id="weeklyReportsList" style="font-size:13px;line-height:2"></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">📈 月度报告</div></div><div id="monthlyReportsList" style="font-size:13px;line-height:2"></div></div>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-title">📖 社群半年报</div></div><div style="font-size:13px;line-height:2"><div>📄 <a href="#" onclick="openReport('2026H1')" style="color:var(--brand)">2026H1 社群半年报（3-6月）</a></div><div style="color:var(--text-dim);font-size:11px;margin-top:4px">覆盖1,013家门店 · 1,045个群 · 半年净增+27,455人</div></div></div>
+    </div>
+    <div class="page" id="page-acquisition">
+      <div class="kpi-grid" id="acquisitionKPI"></div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📣 随单卡 · 本周转化漏斗</div></div>
+          <div id="communityFunnel" style="font-size:13px"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⏳ 随单卡历史留存率</div></div>
+          <div id="communityRetention" style="font-size:13px"></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🪧 台卡 <span style="font-size:11px;color:var(--text-dim);font-weight:400">——预留</span></div></div>
+          <div style="text-align:center;padding:40px;color:var(--text-dim);font-size:13px">门店台卡数据接入中...</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📱 小程序社群入口 <span style="font-size:11px;color:var(--text-dim);font-weight:400">——预留</span></div></div>
+          <div style="text-align:center;padding:40px;color:var(--text-dim);font-size:13px">小程序社群入口数据接入中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="page" id="page-activities">
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="btn btn-primary" onclick="switchActTab('member')" id="actBtnMember" style="font-size:13px">🍎 周三会员日</button>
+        <button class="btn btn-ghost" onclick="switchActTab('weekend')" id="actBtnWeekend" style="font-size:13px">🛒 周末套餐</button>
+        <button class="btn btn-ghost" onclick="switchActTab('monthly')" id="actBtnMonthly" style="font-size:13px">💰 月末宠粉周</button>
+      </div>
+      <div id="actContentMember" class="act-tab">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <span style="font-size:13px;font-weight:600;color:var(--text-dim)">📅 选择日期：</span>
+          <select id="memberDateSelect" onchange="renderMemberDay()" style="padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:#fff">
+            <option value="2026-07-15">7月15日 vs 7月8日</option>
+            <option value="2026-07-08">7月8日 vs 7月1日</option>
+            <option value="2026-07-01">7月1日 vs 6月24日</option>
+          </select>
+          <a href="#" onclick="window.open('切果NOW周三会员日复盘报告_2026-07-15.html','_blank')" class="btn btn-primary" style="text-decoration:none;font-size:12px;margin-left:auto">📊 完整复盘看板</a>
+        </div>
+        <div class="grid2" id="memberDayContent"></div>
+      </div>
+      <div id="actContentWeekend" class="act-tab" style="display:none">
+        <div class="card"><div class="card-header"><div class="card-title">🛒 自选3盒套餐 · 三轮推送对比</div></div><div style="font-size:13px;line-height:2.2;color:var(--text-dim)"><div>R1(6.18-21): 日均48.2单 · 连带率24.9% · 193单</div><div>R2(7.3-5): 日均52.0单 · 连带率28.2% · 156单 🔥高温红利</div><div>R3(7.10-12): 日均47.7单 · 连带率<b style="color:var(--brand)">33.6%</b> · 143单 🌧暴雨拖累</div><div style="margin-top:8px;font-size:11px">💡 剔除天气因素后R3质量最优（前2天日均54.5单），新客连带率37%三轮最高</div></div></div>
+      </div>
+      <div id="actContentMonthly" class="act-tab" style="display:none">
+        <div class="card"><div class="card-header"><div class="card-title">💰 月末9.9宠粉特价周 · 5-6月对比</div></div><div style="font-size:13px;line-height:2.2;color:var(--text-dim)"><div>5月: 679单 · ¥13,541 · 328家店 · 客单价¥19.94</div><div>6月: 713单 · ¥13,952 · 334家店 · 客单价¥19.57</div><div style="margin-top:8px;font-size:11px">📈 6月订单↑5%、门店↑6家，环比基线周提升显著（6月基线仅182单→713单）</div></div></div>
+      </div>
+    </div>
+<div class="page" id="page-products">
+      <div style="background:var(--brand-light);border:1px dashed var(--brand);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:12px">
+        <span style="font-size:20px">📂</span>
+        <div>
+          <div style="font-weight:600;color:var(--brand-dark)">丢表格到这里 → 自动提取产品</div>
+          <div style="color:var(--text-dim)">桌面「切果NOW工作台/产品表」文件夹 · 每天12:30自动刷新</div>
+        </div>
+        <span style="margin-left:auto;font-size:11px;color:var(--text-dim)" id="productUpdateTime"></span>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">📦 产品库</div><div class="card-sub" id="productMeta">加载中...</div></div>
+          <div style="display:flex;gap:6px">
+            <input id="productSearch" oninput="renderProducts()" placeholder="🔍 搜索产品..." style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;width:180px">
+            <select id="productCat" onchange="renderProducts()" style="padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px"></select>
+          </div>
+        </div>
+        <div id="productsGrid" style="font-size:13px;max-height:calc(100vh - 200px);overflow-y:auto">
+          <div style="display:grid;grid-template-columns:40px 1fr 100px 80px 100px;gap:0;font-size:11px;color:var(--text-muted);padding:6px 8px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:1;font-weight:600">
+            <div style="text-align:center">#</div><div>产品</div><div>分类</div><div style="text-align:right">单价</div><div style="text-align:right">销量</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page" id="page-hotspot">
+      <div class="card">
+        <div class="card-header"><div class="card-title">📡 今日热点捕捉</div><div style="display:flex;gap:6px;align-items:center"><span style="font-size:11px;color:var(--text-dim)" id="hotspotDate"></span><button class="btn btn-ghost" id="hotspotRefreshBtn" onclick="refreshHotspot()" style="font-size:11px;padding:3px 10px">🔄 刷新</button></div></div>
+        <div id="hotspotContent" style="font-size:13px;color:var(--text-dim)">抓取中...</div>
+      </div>
+    </div>
+    <div class="page" id="page-copy">
+      <div style="display:grid;grid-template-columns:280px 1fr 200px;gap:16px;min-height:calc(100vh - 120px)">
+        <!-- LEFT: 配置栏 -->
+        <div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">📅 推送日</div></div>
+            <div style="font-size:13px;font-weight:700;color:var(--brand)" id="copyDayLabel">加载中...</div>
+          </div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">📦 产品</div></div>
+            <div id="copyProducts" style="font-size:13px;color:var(--text-dim)">产品库建设中...</div>
+          </div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">💰 价格模式</div></div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-primary" onclick="setCopyConfig('priceMode','unified')" id="priceUnified" style="font-size:11px;padding:5px 12px">统一价格</button>
+              <button class="btn btn-ghost" onclick="setCopyConfig('priceMode','regional')" id="priceRegional" style="font-size:11px;padding:5px 12px">区域差异</button>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">🚚 配送费</div></div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="setCopyConfig('delivery','free30')" id="delivery30" style="font-size:11px;padding:5px 12px">满30免配送费</button>
+              <button class="btn btn-ghost" onclick="setCopyConfig('delivery','custom')" id="deliveryCustom" style="font-size:11px;padding:5px 12px">自定义</button>
+              <input id="deliveryCustomVal" placeholder="如：满25免" style="display:none;width:100%;margin-top:4px;padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:11px" onchange="setCopyConfig('deliveryCustomVal',this.value)">
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">🔗 链接</div></div>
+            <div style="display:flex;gap:8px;font-size:12px" id="copyLinks">
+              <label><input type="checkbox" checked onchange="setCopyConfig('linkMeituan',this.checked)"> 美团</label>
+              <label><input type="checkbox" checked onchange="setCopyConfig('linkEleme',this.checked)"> 饿了么</label>
+              <label id="linkMiniapp"><input type="checkbox" checked onchange="setCopyConfig('linkMini',this.checked)"> 小程序</label>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">☀️ 今日信息</div></div>
+            <div id="copyWeather" style="font-size:12px;color:var(--text-dim)">加载中...</div>
+          </div>
+          <button class="btn btn-primary" onclick="generateCopy()" style="width:100%;padding:12px;font-size:14px">🚀 一键生成 3 版</button>
+        </div>
+        
+        <!-- CENTER: 创作区 -->
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">📡 今日灵感（来自热点捕捉）</div>
+          <div id="copyHotspotBar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;font-size:11px"></div>
+          <div style="margin-bottom:8px">
+            <span style="font-size:12px;color:var(--text-dim)">🎯 方向：</span>
+            <select id="copyDirection" onchange="setCopyConfig('direction',this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px">
+              <option value="auto">🤖 AI推荐</option>
+              <option value="habit">🏠 习惯绑定</option>
+              <option value="emotion">💔 情感缺口</option>
+              <option value="seasonal">⏳ 时令稀缺</option>
+              <option value="scene">🌆 场景共鸣</option>
+              <option value="data">📊 数据种草</option>
+              <option value="social">👥 社交裂变</option>
+              <option value="surprise">🎁 惊喜彩蛋</option>
+              <option value="hotspot">🔥 热点借势</option>
+              <option value="health">💪 健康密码</option>
+              <option value="contrast">⚖️ 对比锚定</option>
+              <option value="lazy">😴 懒人救星</option>
+              <option value="member">🎫 会员权益</option>
+            </select>
+          </div>
+          <div id="copyVersions" style="display:flex;flex-direction:column;gap:12px">
+            <div class="card" style="opacity:0.5">
+              <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本一 · 待生成</div>
+              <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV1">点击左侧 🚀 生成</div>
+              <div style="display:flex;gap:8px;margin-top:10px;display:none" class="copy-actions">
+                <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">📋 复制</button>
+                <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">🔄 换版</button>
+              </div>
+            </div>
+            <div class="card" style="opacity:0.5">
+              <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本二 · 待生成</div>
+              <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV2">点击左侧 🚀 生成</div>
+            </div>
+            <div class="card" style="opacity:0.5">
+              <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本三 · 待生成</div>
+              <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV3">点击左侧 🚀 生成</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- RIGHT: 输出栏 -->
+        <div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">📜 历史记录</div></div>
+            <div id="copyHistory" style="font-size:11px;color:var(--text-dim);max-height:400px;overflow-y:auto">
+              <div style="padding:4px 0">暂无记录</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page" id="page-prompt"><iframe src="toolbox.html?tab=prompt" style="width:100%;height:calc(100vh - 80px);border:none;border-radius:var(--radius);background:#f5f7f5" title="配图Prompt"></iframe></div>
+    <div class="page" id="page-inspiration"><div class="empty-state"><div class="icon">📚</div><h3>素材灵感库 · 灵感墙 Mood Board</h3><p>花字卡片 · 博主灵感图 · 水果知识文章 — 建设中</p></div></div>
+    <div class="page" id="page-ailearn"><div class="empty-state"><div class="icon">💡</div><h3>AI前沿案例 · 知识卡片盒</h3><p>AI资讯收藏 → 标签分类 → 翻卡浏览 — 建设中</p></div></div>
+    <div class="page" id="page-portfolio"><div class="empty-state"><div class="icon">🖼️</div><h3>作品集 · 切果画册 Lookbook</h3><p>月度封面 → 翻页浏览 → 导出PDF画册 — 建设中</p></div></div>
+  </div>
+</div>
+<div class="modal-overlay" id="noteModal"><div class="modal" style="max-width:520px"><h3 id="noteModalTitle">📝 编辑排期内容</h3>
+<div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">直接修改各分类内容，保存后实时更新</div>
+<div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#e65100">🟠 小程序</label><input id="editProgram" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：会员日、9块9特价单品"></div>
+<div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#1565c0">🔵 市场/外卖</label><input id="editMarket" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：下单返利"></div>
+<div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#7b1fa2">🟣 品宣</label><input id="editBrand" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：海盐青柠杯海报"></div>
+<div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#2e7d32">🟢 朋友圈</label><input id="editWechat" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：✅️"></div>
+<div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
+<div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
+<div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
+<script src="js/app.js"></script>
+</body>
+</html>

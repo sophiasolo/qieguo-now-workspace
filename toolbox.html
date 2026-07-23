@@ -1,0 +1,3817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d8a4e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="切果NOW">
+  <link rel="apple-touch-icon" href="app-icon-ios.png">
+  <link rel="manifest" href="manifest.json?v=2">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.bootcdn.net/ajax/libs/flatpickr/4.6.13/flatpickr.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcdn.net/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/flatpickr/4.6.13/l10n/zh.js"></script>
+  <title>🍉 私域运营工具箱</title>
+  <style>
+    :root {
+      --accent: #2d8a4e;
+      --accent-hover: #1b5e2f;
+      --accent-light: #e8f5e9;
+      --bg: #f5f7f5;
+      --bg-gradient: #f5f7f5;
+      --surface: #ffffff;
+      --text: #263238;
+      --text-secondary: #6b7c7c;
+      --text-muted: #9eacac;
+      --border: #e8ece8;
+      --border-focus: rgba(45,138,78,0.50);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 2px 6px rgba(0,0,0,0.07);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding-bottom: max(32px, env(safe-area-inset-bottom));
+      text-rendering: optimizeLegibility;
+      min-height: 100vh;
+      background-attachment: fixed;
+    }
+    .app-header {
+      background: rgba(255,255,255,0.82);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 20px 16px;
+      padding-top: max(18px, env(safe-area-inset-top));
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(20px) saturate(1.6);
+      -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    }
+    .app-header h1 { 
+      font-size: 18px; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+      letter-spacing: -0.01em;
+    }
+    .app-header .brand-logo {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .app-header h1::before { display: none; } /* 替换为logo图片 */
+    .app-header { display: none; }
+    .container { max-width: 100%; margin: 0; padding: 20px 24px; }
+    body { padding-top: 0; }
+
+    /* 日期选择器 */
+    .date-selector {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+    .date-selector:hover { border-color: rgba(0,0,0,0.14); }
+    .date-selector:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-glow); transform: translateY(-1px); }
+    .date-selector input[type="date"] {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: transparent;
+      -webkit-appearance: none;
+      min-height: 44px;
+    }
+    .date-selector input[type="date"]:focus { outline: none; }
+    .day-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .day-badge.active { background: var(--accent-light); color: var(--accent); }
+    .day-badge.inactive { background: rgba(0,0,0,0.05); color: var(--text-muted); }
+    .live-hint { margin-top:6px; font-size:12px; color:rgba(0,0,0,0.5); min-height:20px; }
+    .live-hint .htag { display:inline-block; background:#e8f5e9; color:#2d8a4e; padding:2px 8px; border-radius:10px; font-size:11px; margin:2px 4px 2px 0; }
+    .live-hint .htag .hdesc { font-weight:400; color:rgba(0,0,0,0.5); }
+
+    /* Flatpickr 品牌主题 */
+    .flatpickr-calendar {
+      border-radius: 16px !important;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04) !important;
+      font-family: inherit !important;
+      width: 312px !important;
+      padding: 10px 12px 12px !important;
+      background: linear-gradient(180deg, #ffffff 0%, #fafcfa 100%);
+    }
+    .flatpickr-months { padding-top: 2px; margin-bottom: 4px; }
+    .flatpickr-months .flatpickr-month {
+      color: var(--accent) !important;
+      font-family: system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif !important;
+      font-size: 16px; font-weight: 600;
+    }
+    .flatpickr-current-month {
+      padding: 0 !important;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+      font-family: system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif !important;
+      font-weight: 600; font-size: 16px;
+      -webkit-appearance: none; appearance: none;
+      background: transparent; border: none; color: var(--accent);
+      padding: 2px 20px 2px 4px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%232d8a4e'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right center;
+      cursor: pointer;
+    }
+    .flatpickr-current-month input.cur-year {
+      font-family: system-ui, -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif !important;
+      font-weight: 600 !important; font-size: 16px !important;
+      color: var(--accent) !important;
+      background: transparent; border: none;
+      width: 48px; text-align: center;
+    }
+    .flatpickr-prev-month, .flatpickr-next-month {
+      width: 30px; height: 30px; padding: 0 !important;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; transition: background 0.2s;
+    }
+    .flatpickr-prev-month:hover, .flatpickr-next-month:hover { background: var(--accent-light); }
+    .flatpickr-prev-month svg, .flatpickr-next-month svg { width: 14px; height: 14px; }
+    .flatpickr-prev-month svg path, .flatpickr-next-month svg path { fill: var(--accent) !important; }
+    .flatpickr-weekday { color: var(--text-muted) !important; font-weight: 500; font-size: 11px; padding: 8px 0 4px; }
+    .flatpickr-days {
+      padding: 0 !important;
+      width: 100%;
+    }
+    .flatpickr-days .dayContainer {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+      justify-content: space-evenly;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .flatpickr-days .dayContainer > * {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    .flatpickr-day {
+      border-radius: 50% !important;
+      font-size: 13px;
+      height: 36px; line-height: 22px;
+      flex: 0 0 calc(100% / 7);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border: none !important;
+      color: var(--text);
+      margin: 0 !important;
+    }
+    .flatpickr-day:hover { background: var(--accent-light) !important; }
+    .flatpickr-day.today { background: var(--accent) !important; color: white !important; font-weight: 600; }
+    .flatpickr-day.today .lunar-label,
+    .flatpickr-day.today .solar-label { color: rgba(255,255,255,0.8) !important; }
+    .flatpickr-day.selected { background: var(--accent) !important; color: white !important; font-weight: 600; }
+    .flatpickr-day.selected .lunar-label,
+    .flatpickr-day.selected .festival-label,
+    .flatpickr-day.selected .solar-label { color: rgba(255,255,255,0.85) !important; }
+    .flatpickr-day.flatpickr-disabled { color: rgba(0,0,0,0.2) !important; }
+    .flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay { color: rgba(0,0,0,0.25); }
+    /* 周末列淡绿底 */
+    .flatpickr-days .dayContainer .flatpickr-day:nth-child(7n+1),
+    .flatpickr-days .dayContainer .flatpickr-day:nth-child(7n) {
+      background: rgba(45,138,78,0.03);
+    }
+    /* 节日圆点标记 */
+    .flatpickr-day.festival-day { position: relative; }
+    .flatpickr-day.festival-day::after {
+      content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%; background: var(--accent);
+    }
+    .flatpickr-day.festival-day.selected::after { background: white; }
+    /* 格子内小字 */
+    .lunar-label { font-size: 9px; line-height: 1; color: var(--text-muted); margin-top: 1px; }
+    .festival-label { font-size: 9px; line-height: 1; color: var(--accent); font-weight: 600; margin-top: 1px; }
+    .solar-label { font-size: 9px; line-height: 1; color: #e67e22; font-weight: 500; margin-top: 1px; }
+
+    /* 节日提示条 */
+    .festival-hint {
+      background: linear-gradient(135deg, var(--accent-light), #e8f5e9);
+      border: 1px solid rgba(45,138,78,0.2);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: fadeSlideIn 0.3s ease;
+    }
+
+    /* Tab导航 */
+    .day-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 5px;
+      background: rgba(0,0,0,0.025);
+      border-radius: var(--radius);
+      scrollbar-width: none;
+      mask-image: linear-gradient(to right, black 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
+    }
+    .day-tabs::-webkit-scrollbar { display: none; }
+    .day-tab {
+      padding: 11px 18px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+      flex-shrink: 0;
+      color: var(--text-secondary);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .day-tab:hover:not(.sunday):not(.active) { color: var(--text); background: rgba(0,0,0,0.04); }
+    .day-tab:active { transform: scale(0.97); }
+    .day-tab.sunday { opacity: 0.3; cursor: not-allowed; }
+    .day-tab.active { background: var(--surface); color: var(--accent); box-shadow: var(--shadow); font-weight: 700; }
+
+    /* 顶部主导航 */
+    .main-nav {
+      display: flex;
+      gap: 0;
+      margin-bottom: 14px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+    .main-nav button {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      border-radius: calc(var(--radius) - 4px);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .main-nav button.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 4px rgba(45,138,78,0.3);
+    }
+
+    /* 舆情卡片 */
+    .sent-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .sent-stat {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .sent-stat .num { font-size: 28px; font-weight: 700; line-height: 1.2; }
+    .sent-stat .num.pos-c { color: var(--accent); }
+    .sent-stat .num.neg-c { color: #e74c3c; }
+    .sent-stat .num.neu-c { color: #6c757d; }
+    .sent-stat .lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .sent-stat .pct { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+    .sent-date-label {
+      font-size: 13px; font-weight: 600; color: var(--text);
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .sent-date-label .badge {
+      font-size: 11px; padding: 2px 8px; border-radius: 999px;
+      background: var(--accent-light); color: var(--accent); font-weight: 500;
+    }
+
+    .neg-header {
+      font-size: 13px; font-weight: 700; color: #e74c3c;
+      margin: 14px 0 8px;
+    }
+    .neg-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid #e74c3c;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .neg-item .ni-head {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+    }
+    .neg-item .ni-platform {
+      font-size: 10px; padding: 1px 6px; border-radius: 4px;
+      background: #fdecea; color: #c0392b; font-weight: 600;
+    }
+    .neg-item .ni-time { font-size: 11px; color: var(--text-muted); }
+    .neg-item .ni-cat {
+      font-size: 10px; padding: 1px 6px; border-radius: 4px;
+      background: var(--accent-subtle); color: var(--accent);
+    }
+    .neg-item .ni-title {
+      font-weight: 600; margin-bottom: 2px; line-height: 1.4;
+    }
+    .neg-item .ni-summary {
+      color: var(--text-secondary); margin-bottom: 4px; line-height: 1.4;
+    }
+    .neg-item .ni-link {
+      font-size: 11px; color: var(--accent); text-decoration: none;
+    }
+    .sent-loading {
+      text-align: center; padding: 40px 20px; color: var(--text-muted);
+    }
+    .sent-error {
+      text-align: center; padding: 40px 20px; color: #e74c3c; font-size: 13px;
+    }
+    .sent-empty {
+      text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;
+    }
+
+    /* Prompt 折叠卡片 */
+    .prompt-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .prompt-card .pc-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; cursor: pointer;
+      font-size: 12px; font-weight: 600;
+      color: var(--text);
+    }
+    .prompt-card .pc-head .pc-tag {
+      font-size: 10px; padding: 2px 8px; border-radius: 999px;
+      background: var(--accent-light); color: var(--accent);
+      white-space: nowrap;
+    }
+    .prompt-card .pc-head .pc-preview {
+      flex: 1; margin: 0 8px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      color: var(--text-muted); font-weight: 400;
+    }
+    .prompt-card .pc-head .pc-arrow {
+      font-size: 10px; color: var(--text-muted); transition: transform 0.2s;
+    }
+    .prompt-card.open .pc-head .pc-arrow { transform: rotate(180deg); }
+    .prompt-card .pc-body {
+      display: none;
+      padding: 0 12px 12px;
+    }
+    .prompt-card.open .pc-body { display: block; }
+    .prompt-card .pc-body .copy-box {
+      font-size: 12px; max-height: 240px; overflow-y: auto;
+      white-space: pre-wrap; word-break: break-all;
+      background: var(--bg); border-radius: 6px; padding: 10px;
+      line-height: 1.6;
+    }
+    .prompt-card .pc-actions {
+      display: flex; gap: 6px; margin-top: 8px;
+    }
+    .prompt-card .pc-actions button {
+      font-size: 11px; padding: 4px 10px;
+      border: 1px solid var(--border); border-radius: 6px;
+      background: var(--surface); cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    /* 节日横幅 */
+    #festivalBanner {
+      background: linear-gradient(135deg, var(--accent) 0%, #1a6b35 100%);
+      color: white;
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-align: center;
+      animation: fadeSlideIn 0.5s ease;
+      box-shadow: 0 2px 12px rgba(45,138,78,0.25);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      line-height: 1.3;
+    }
+    #festivalBanner.valentine { background: linear-gradient(135deg, #e91e63, #c2185b); box-shadow: 0 2px 12px rgba(233,30,99,0.3); }
+    #festivalBanner.spring { background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 2px 12px rgba(231,76,60,0.3); }
+    #festivalBanner.golden { background: linear-gradient(135deg, #f39c12, #e67e22); box-shadow: 0 2px 12px rgba(243,156,18,0.3); }
+    #festivalBanner.christmas { background: linear-gradient(135deg, #27ae60, #1e8449); box-shadow: 0 2px 12px rgba(39,174,96,0.3); }
+
+    /* 节日横幅装饰emoji */
+    .fx-left, .fx-right { flex-shrink: 0; }
+    .fx-text { flex-shrink: 1; }
+
+    /* 雪花飘落特效 */
+    @keyframes snowfall {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 100px 200px, -50px 300px; }
+    }
+    @keyframes snowFloat1 { 0% { transform: translateY(-10px) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(60px) rotate(360deg); opacity: 0; } }
+    @keyframes snowFloat2 { 0% { transform: translateY(-5px) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(50px) rotate(-360deg); opacity: 0; } }
+    #festivalBanner.fx-snow { position: relative; overflow: hidden; }
+    #festivalBanner.fx-snow::before,
+    #festivalBanner.fx-snow::after {
+      content: '❄️'; position: absolute; font-size: 12px; pointer-events: none; opacity: 0;
+      animation: snowFloat1 3s ease-in-out infinite;
+    }
+    #festivalBanner.fx-snow::before { left: 15%; top: -10px; animation-delay: 0s; }
+    #festivalBanner.fx-snow::after { content: '❅'; left: 75%; top: -5px; animation: snowFloat2 3.5s ease-in-out infinite; animation-delay: 1.5s; font-size: 10px; }
+
+    /* 金色闪烁 */
+    @keyframes sparkle { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.3) drop-shadow(0 0 6px gold); } }
+    #festivalBanner.fx-sparkle .fx-left,
+    #festivalBanner.fx-sparkle .fx-right { animation: sparkle 2s ease-in-out infinite; }
+
+    /* 烟花闪烁 */
+    @keyframes firework { 0%,100% { filter: brightness(1); } 30% { filter: brightness(1.4) drop-shadow(0 0 8px #ff6); } 60% { filter: brightness(1.2) drop-shadow(0 0 4px #f90); } }
+    #festivalBanner.fx-firework .fx-left,
+    #festivalBanner.fx-firework .fx-right { animation: firework 1.5s ease-in-out infinite; }
+
+    /* 爱心跳动 */
+    @keyframes heartbeat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.2); } 30% { transform: scale(1); } 45% { transform: scale(1.15); } }
+    #festivalBanner.fx-heart .fx-left,
+    #festivalBanner.fx-heart .fx-right { display: inline-block; animation: heartbeat 1.5s ease-in-out infinite; }
+
+    /* 柔和呼吸光 */
+    @keyframes glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.5)); } }
+    #festivalBanner.fx-glow .fx-left,
+    #festivalBanner.fx-glow .fx-right { animation: glow 3s ease-in-out infinite; }
+
+    /* 弹跳 */
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    #festivalBanner.fx-bounce .fx-left,
+    #festivalBanner.fx-bounce .fx-right { display: inline-block; animation: bounce 0.6s ease-in-out infinite; }
+    #festivalBanner.fx-bounce .fx-right { animation-delay: 0.3s; }
+
+    /* 全局漂浮粒子 */
+    .festival-particle {
+      position: fixed;
+      top: -40px;
+      z-index: 999;
+      pointer-events: none;
+      animation: particleFall linear infinite;
+      color: white;
+      text-shadow: 0 0 4px rgba(255,255,255,0.6);
+    }
+    @keyframes particleFall {
+      0% { transform: translateY(-40px) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
+    body.festival-active {
+      background-image: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 60%);
+    }
+    /* 节日专属背景 */
+    body.festival-bg-xmas { background: #1a2f25 !important; background-image: linear-gradient(180deg, #1a2f25 0%, #0f1f18 100%) !important; }
+    body.festival-bg-xmas .input-section,
+    body.festival-bg-xmas .date-selector,
+    body.festival-bg-xmas .price-mode-bar,
+    body.festival-bg-xmas .output-section,
+    body.festival-bg-xmas .history-section { background: rgba(255,255,255,0.92); }
+    body.festival-bg-xmas .app-header { background: rgba(26,47,37,0.92); border-bottom-color: rgba(255,255,255,0.06); }
+    body.festival-bg-xmas .app-header h1 { color: #fff; }
+    body.festival-bg-xmas .app-header .subtitle { color: rgba(255,255,255,0.6); }
+    body.festival-bg-spring { background: #2d1111 !important; background-image: linear-gradient(180deg, #2d1111 0%, #1a0808 100%) !important; }
+    body.festival-bg-spring .input-section,
+    body.festival-bg-spring .date-selector,
+    body.festival-bg-spring .price-mode-bar,
+    body.festival-bg-spring .output-section,
+    body.festival-bg-spring .history-section { background: rgba(255,255,255,0.92); }
+    body.festival-bg-spring .app-header { background: rgba(45,17,17,0.92); border-bottom-color: rgba(255,255,255,0.06); }
+    body.festival-bg-spring .app-header h1 { color: #fff; }
+    body.festival-bg-spring .app-header .subtitle { color: rgba(255,255,255,0.6); }
+    body.festival-bg-night { background: #0d1525 !important; background-image: linear-gradient(180deg, #0d1525 0%, #060a14 100%) !important; }
+    body.festival-bg-night .input-section,
+    body.festival-bg-night .date-selector,
+    body.festival-bg-night .price-mode-bar,
+    body.festival-bg-night .output-section,
+    body.festival-bg-night .history-section { background: rgba(255,255,255,0.92); }
+    body.festival-bg-night .app-header { background: rgba(13,21,37,0.92); border-bottom-color: rgba(255,255,255,0.06); }
+    body.festival-bg-night .app-header h1 { color: #fff; }
+    body.festival-bg-night .app-header .subtitle { color: rgba(255,255,255,0.6); }
+    body.festival-bg-newyear { background: #4a3000 !important; background-image: linear-gradient(180deg, #4a3000 0%, #2a1800 100%) !important; }
+    body.festival-bg-newyear .input-section,
+    body.festival-bg-newyear .date-selector,
+    body.festival-bg-newyear .price-mode-bar,
+    body.festival-bg-newyear .output-section,
+    body.festival-bg-newyear .history-section { background: rgba(255,255,255,0.92); }
+    body.festival-bg-newyear .app-header { background: rgba(74,48,0,0.92); border-bottom-color: rgba(255,255,255,0.06); }
+    body.festival-bg-newyear .app-header h1 { color: #fff; }
+    body.festival-bg-newyear .app-header .subtitle { color: rgba(255,255,255,0.6); }
+    /* CSS雪花形状 */
+    .festival-particle.snow-particle {
+      width: 14px; height: 14px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.7;
+      box-shadow:
+        0 10px 0 -5px white, 0 -10px 0 -5px white,
+        10px 0 0 -5px white, -10px 0 0 -5px white,
+        7px 7px 0 -5px white, -7px 7px 0 -5px white,
+        7px -7px 0 -5px white, -7px -7px 0 -5px white,
+        0 18px 0 -8px rgba(255,255,255,0.5), 0 -18px 0 -8px rgba(255,255,255,0.5),
+        18px 0 0 -8px rgba(255,255,255,0.5), -18px 0 0 -8px rgba(255,255,255,0.5);
+    }
+    .festival-particle.heart-particle {
+      width: 0; height: 0;
+    }
+    .festival-particle.heart-particle::before,
+    .festival-particle.heart-particle::after {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      background: #ff6b81;
+      border-radius: 50%;
+    }
+    .festival-particle.heart-particle::before { left: -8px; top: 0; }
+    .festival-particle.heart-particle::after { left: 0; top: -8px; }
+    .festival-particle.star-particle {
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 10px solid #ffd700;
+      transform-origin: center;
+    }
+    .festival-particle.star-particle::after {
+      content: '';
+      position: absolute; top: 3px; left: -7px;
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 10px solid #ffd700;
+    }
+
+    /* 输入区 */
+    .input-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 14px;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .input-section:hover { border-color: rgba(0,0,0,0.12); }
+    .input-section:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .input-section h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .input-group { margin-bottom: 16px; }
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+    .input-group input, .input-group textarea, .input-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      min-height: 44px;
+    }
+    .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+    .input-group textarea {
+      resize: vertical;
+      min-height: 68px;
+      line-height: 1.7;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* 按钮 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 24px;
+      border: none;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
+      letter-spacing: 0.005em;
+    }
+    .btn:active { transform: scale(0.975); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: grayscale(0.3); }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      width: 100%;
+      box-shadow: 0 2px 8px rgba(45,138,78,0.28);
+    }
+    .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 4px 14px rgba(45,138,78,0.35); transform: translateY(-1px); }
+    .btn-primary:active { background: var(--accent-hover); box-shadow: 0 1px 4px rgba(45,138,78,0.22); transform: translateY(0); }
+    .btn-primary.loading { pointer-events: none; }
+    .btn-outline {
+      background: var(--surface);
+      color: var(--accent);
+      border: 1.5px solid rgba(45,138,78,0.28);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-outline:hover { background: var(--accent-light); border-color: rgba(45,138,78,0.5); transform: translateY(-1px); box-shadow: var(--shadow); }
+    .btn-outline:active { transform: translateY(0); }
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 12px;
+      border-radius: 7px;
+      font-weight: 600;
+      min-height: 36px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    /* 价格模式 / 配送费 */
+    .price-mode-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 18px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition);
+    }
+    .price-mode-bar:hover { border-color: rgba(0,0,0,0.12); }
+    .price-mode-bar .label { font-weight: 600; color: var(--text); }
+    .price-mode-toggle {
+      display: flex;
+      background: rgba(0,0,0,0.035);
+      border-radius: 999px;
+      padding: 3px;
+    }
+    .price-mode-toggle button {
+      padding: 7px 16px;
+      border: none;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      font-family: inherit;
+      min-height: 34px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .price-mode-toggle button:hover:not(.active) { color: var(--text); }
+    .price-mode-toggle button.active {
+      background: var(--surface);
+      color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    /* 链接管理 */
+    .link-manager {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .link-manager:hover { border-color: rgba(0,0,0,0.12); }
+    .link-manager .toggle-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-height: 40px;
+      -webkit-tap-highlight-color: transparent;
+      transition: color var(--transition-fast);
+    }
+    .link-manager .toggle-header:hover { color: var(--text); }
+    .link-manager .toggle-icon { font-size: 14px; transition: transform 0.25s; opacity: 0.5; }
+    .link-manager.open .toggle-icon { transform: rotate(180deg); opacity: 0.7; }
+    .link-manager .link-list { display: none; margin-top: 8px; }
+    .link-manager.open .link-list { display: block; }
+    .link-manager .link-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 11px;
+    }
+    .link-manager .link-item label {
+      min-width: 80px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+    .link-manager .link-item input {
+      flex: 1;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-secondary);
+      background: var(--bg);
+    }
+    .link-checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .link-checkboxes label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.04);
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      min-height: 36px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .link-checkboxes label:active { background: rgba(0,0,0,0.08); }
+    .link-checkboxes label.checked { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+
+    /* 输出区 */
+    .output-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 10px;
+      display: none;
+      animation: fadeSlideIn 0.3s ease;
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .output-section.visible { display: block; }
+    .output-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      padding: 3px;
+      background: rgba(0,0,0,0.03);
+      border-radius: 8px;
+    }
+    .output-tab {
+      flex: 1;
+      padding: 8px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+    .output-tab.active {
+      background: var(--surface);
+      color: var(--accent);
+      box-shadow: var(--shadow-sm);
+    }
+    .output-section h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+    }
+    .copy-label { font-size: 12px; color: var(--accent); font-weight: 600; }
+    .copy-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.8;
+      max-height: 360px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      color: var(--text);
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei', monospace;
+    }
+    .copy-toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(45,138,78,0.92);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 100;
+      animation: toastFade 1.8s ease forwards;
+      pointer-events: none;
+      box-shadow: 0 4px 16px rgba(45,138,78,0.25);
+    }
+    @keyframes toastFade {
+      0% { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.95); }
+      12% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    }
+
+    /* 历史记录 */
+    .history-section { margin-top: 16px; }
+    .history-section h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+    .history-search {
+      width: 100%;
+      padding: 9px 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color var(--transition);
+      -webkit-appearance: none;
+    }
+    .history-search:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .history-search::placeholder {
+      color: var(--text-muted);
+    }
+    .history-section .no-result {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .history-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.15s;
+    }
+    .history-item:hover { border-color: rgba(0,0,0,0.15); }
+    .history-item:active { background: var(--accent-subtle); transform: scale(0.985); }
+    .history-item .date { color: var(--accent); font-weight: 600; font-size: 11px; }
+    .history-item .preview { color: var(--text-secondary); font-size: 11px; max-width: 55%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* 空状态 */
+    .empty-state {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .empty-state .icon { font-size: 36px; margin-bottom: 8px; opacity: 0.5; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+    .section-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.05em; margin-top: 8px; text-transform: uppercase; }
+
+    /* IP形象装饰 */
+    .brand-ip-footer {
+      text-align: center;
+      padding: 20px 0 32px;
+      opacity: 0.45;
+      transition: opacity 0.3s;
+    }
+    .brand-ip-footer:hover { opacity: 0.75; }
+    .brand-ip-footer img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+    }
+.fruit-picker { margin-top:8px; }
+.fruit-picker .flabel { font-size:12px; color:rgba(0,0,0,0.55); margin-bottom:6px; }
+.fruit-tags { display:flex; flex-wrap:wrap; gap:6px; max-height:160px; overflow-y:auto; }
+.fruit-tag { padding:5px 10px; border-radius:16px; font-size:11px; cursor:pointer; border:1px solid rgba(0,0,0,0.1); background:#fff; color:rgba(0,0,0,0.65); transition:all 0.15s; user-select:none; white-space:nowrap; }
+.fruit-tag:hover { border-color:#2d8a4e; color:#2d8a4e; }
+.fruit-tag.selected { background:#2d8a4e; color:white; border-color:#2d8a4e; font-weight:600; }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <h1><img src="./logo.png" alt="切果NOW" class="brand-logo">私域运营工具箱</h1>
+    <div class="subtitle">社群文案 + AI配图Prompt</div>
+  </div>
+
+  <div class="container">
+    <div class="main-nav" id="mainNav">
+      <button class="active" onclick="switchTab('copy')">📝 文案</button>
+      <button onclick="switchTab('prompt')">🎨 Prompt</button>
+    </div>
+    <!-- 日期选择（全局） -->
+    <div class="date-selector">
+      <input type="date" id="datePicker">
+      <span id="dayBadge" class="day-badge">--</span>
+    </div>
+    <div id="festivalHint" class="festival-hint" style="display:none"></div>
+    <!-- 节日横幅（全局） -->
+    <div id="festivalBanner" style="display:none"></div>
+    <div id="tab-copy">
+
+    <!-- 价格模式全局设置 -->
+    <div class="price-mode-bar">
+      <span class="label">💰 价格模式</span>
+      <div class="price-mode-toggle">
+        <button id="priceModeUnified" onclick="setPriceMode('unified')">统一价格</button>
+        <button id="priceModeRegional" onclick="setPriceMode('regional')">区域差异</button>
+      </div>
+    </div>
+
+    <!-- 配送费配置 -->
+    <div class="price-mode-bar" style="margin-top:-6px">
+      <span class="label">🚚 配送费提示</span>
+      <div class="price-mode-toggle" id="deliveryToggle">
+        <button onclick="setDelivery('off')">无</button>
+        <button onclick="setDelivery('20')">满20</button>
+        <button onclick="setDelivery('30')">满30</button>
+        <button onclick="setDelivery('custom')">自定义</button>
+      </div>
+    </div>
+    <div class="price-mode-bar" id="deliveryCustomRow" style="display:none;margin-top:-6px">
+      <span class="label">自定义文案</span>
+      <input type="text" id="deliveryCustomText" placeholder="如：限时满25免配送费" style="flex:1;padding:6px 10px;border:2px solid var(--border);border-radius:10px;font-size:13px" onchange="saveDeliveryCustom()">
+    </div>
+
+    <!-- 链接管理 -->
+    <div class="link-manager" id="linkManager">
+      <div class="toggle-header" onclick="document.getElementById('linkManager').classList.toggle('open')">
+        <span>🔗 链接管理（点击展开）</span>
+        <span class="toggle-icon">▼</span>
+      </div>
+      <div class="link-list" id="linkList"></div>
+    </div>
+
+    <!-- 推送日Tab -->
+    <div class="day-tabs" id="dayTabs">
+      <button class="day-tab" data-day="2">📊 周二·热销</button>
+      <button class="day-tab" data-day="3">🎫 周三·会员日</button>
+      <button class="day-tab" data-day="4">🔥 周四·特价</button>
+      <button class="day-tab" data-day="5">🎬 周五·周末</button>
+      <button class="day-tab" data-day="6">🌟 周六·种草</button>
+      <button class="day-tab sunday" data-day="0" disabled>😴 周日休息</button>
+    </div>
+
+    <!-- 动态输入区 -->
+    <div id="inputArea"></div>
+
+    <!-- 输出区 -->
+    <div class="output-section" id="outputCopy">
+      <h3>📋 文案 <span class="copy-label" id="copyStatus"></span></h3>
+      <div class="copy-box" id="copyContent"></div>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn btn-outline btn-sm" onclick="copyText('copy')">📋 复制文案</button>
+      </div>
+    </div>
+
+    <!-- 历史记录 -->
+    <div class="history-section" id="historySection">
+      <h3>📚 最近生成 <span id="historyCount" style="font-size:12px;color:#999;font-weight:400"></span></h3>
+      <input type="text" id="historySearch" class="history-search" placeholder="🔍 搜索文案内容、产品名、日期..." oninput="searchHistory()">
+      <div id="historyList"></div>
+      <div id="historyClear" style="display:none;text-align:center;margin-top:8px">
+        <button class="btn btn-sm btn-outline" onclick="clearHistory()" style="color:#d32f2f;border-color:#d32f2f">🗑️ 清空全部记录</button>
+      </div>
+    </div>
+    </div>
+    <div id="tab-sentiment" style="display:none">
+    </div>
+    <div id="tab-prompt" style="display:none">
+      <div class="input-section">
+        <h3>🎨 配图Prompt生成</h3>
+        <div class="hint" style="margin-bottom:12px">独立生成配图Prompt，产品选择+场景风格 → 一键出Prompt → 打开豆包生图</div>
+        <div class="input-group">
+          <label>🍉 产品名称</label>
+          <input type="text" id="promptProduct" placeholder="如：麒麟瓜鲜切 / 招牌四拼">
+        </div>
+        <div class="fruit-picker">
+          <div class="flabel">🍉 选水果品类（可多选）</div>
+          <div class="fruit-tags" id="promptFruitTags"></div>
+        </div>
+        <div class="input-group">
+          <label>🎬 场景风格</label>
+          <select id="promptScene">
+            <option value="social">💬 社群图用（弱化LOGO）</option>
+            <option value="brand">🏷️ 品牌正式图（保留LOGO）</option>
+            <option value="2">🌡️ 热销爆品·精致质感</option>
+            <option value="3">💎 会员日·清新仪式感</option>
+            <option value="4">⚡ 特价·极简冰镇感</option>
+            <option value="5">🏠 周末·窗边松弛感</option>
+            <option value="6">🌟 种草·高级食欲感</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="genPromptStandalone()" style="width:100%">➕ 生成并追加</button>
+      </div>
+      <div id="promptOutput" style="display:none;margin-top:14px">
+        <div id="promptList"></div>
+        <div style="text-align:center;margin-top:10px">
+          <button class="btn btn-sm btn-outline" onclick="clearPromptList()" style="color:#d32f2f;border-color:#d32f2f">🗑️ 清空全部</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== 核心数据 ====================
+    const today = new Date();
+    const DAY_NAMES = ['周日','周一','周二','周三','周四','周五','周六'];
+    const DAY_TABS = ['周日','周一','周二','周三','周四','周五','周六'];
+
+    // ==================== 节日营销配置 ====================
+    // 农历节日阳历日期需每年更新（标注的农历日期供参考）
+    // ==================== 农历换算引擎 ====================
+    // 农历年信息编码表 (1900-2100)，标准压缩格式
+    const LUNAR_YEAR_INFO = [
+      0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
+      0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
+      0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
+      0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
+      0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
+      0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,
+      0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
+      0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,
+      0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
+      0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x05ac0,0x0ab60,0x096d5,0x092e0,
+      0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
+      0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
+      0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
+      0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
+      0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,
+      0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x068a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,
+      0x0a2e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,
+      0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,
+      0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,
+      0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a4d0,0x0d150,0x0f252,
+      0x0d520
+    ];
+    const LUNAR_MONTH_NAMES = ['正','二','三','四','五','六','七','八','九','十','冬','腊'];
+    const LUNAR_DAY_NAMES = ['','初一','初二','初三','初四','初五','初六','初七','初八','初九','初十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'];
+    const LUNAR_BASE = new Date(1900, 0, 31);
+
+    function lunarYearDays(y) {
+      let sum = 348;
+      for (let i = 0x8000; i > 0x8; i >>= 1) sum += (LUNAR_YEAR_INFO[y - 1900] & i) ? 1 : 0;
+      return sum + leapDays(y);
+    }
+    function leapMonth(y) { return LUNAR_YEAR_INFO[y - 1900] & 0xf; }
+    function leapDays(y) { return leapMonth(y) ? (LUNAR_YEAR_INFO[y - 1900] & 0x10000 ? 30 : 29) : 0; }
+    function monthDays(y, m) {
+      return (LUNAR_YEAR_INFO[y - 1900] & (0x10000 >> m)) ? 30 : 29;
+    }
+
+    function solarToLunar(date) {
+      const base = LUNAR_BASE;
+      let offset = Math.floor((date.getTime() - base.getTime()) / 86400000);
+      if (offset < 0) return null;
+      let year = 1900, daysInYear;
+      while (year < 2101 && offset > 0) {
+        daysInYear = lunarYearDays(year);
+        if (offset < daysInYear) break;
+        offset -= daysInYear; year++;
+      }
+      let month = 1, isLeap = false;
+      const leap = leapMonth(year);
+      for (let m = 1; m <= 12; m++) {
+        if (leap > 0 && m === leap + 1) {
+          const ld = leapDays(year);
+          if (offset < ld) { month = leap; isLeap = true; break; }
+          offset -= ld;
+        }
+        const md = monthDays(year, m);
+        if (offset < md) { month = m; break; }
+        offset -= md;
+      }
+      return {
+        year, month, day: offset + 1, isLeap,
+        monthName: (isLeap ? '闰' : '') + LUNAR_MONTH_NAMES[month - 1] + '月',
+        dayName: LUNAR_DAY_NAMES[offset + 1]
+      };
+    }
+
+    // 24节气对照表 (2026-2035)，按年份索引
+    const SOLAR_TERMS = {
+      2026:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2027:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-06',春分:'03-21',清明:'04-05',谷雨:'04-20',立夏:'05-06',小满:'05-21',芒种:'06-06',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-08',处暑:'08-23',白露:'09-08',秋分:'09-23',寒露:'10-08',霜降:'10-24',立冬:'11-08',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2028:{小寒:'01-06',大寒:'01-20',立春:'02-04',雨水:'02-19',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-22',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-22',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-21'},
+      2029:{小寒:'01-05',大寒:'01-20',立春:'02-03',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-22',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-22',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-21'},
+      2030:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2031:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-06',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-06',小满:'05-21',芒种:'06-06',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-08',处暑:'08-23',白露:'09-08',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2032:{小寒:'01-06',大寒:'01-21',立春:'02-04',雨水:'02-19',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-19',立夏:'05-05',小满:'05-20',芒种:'06-05',夏至:'06-21',小暑:'07-06',大暑:'07-22',立秋:'08-07',处暑:'08-22',白露:'09-07',秋分:'09-22',寒露:'10-07',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-06',冬至:'12-21'},
+      2033:{小寒:'01-05',大寒:'01-20',立春:'02-03',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-22',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-21'},
+      2034:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2035:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-19',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-06',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+    };
+
+    function getSolarTerm(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      const md = m + '-' + d;
+      const yearTerms = SOLAR_TERMS[y];
+      if (!yearTerms) return null;
+      for (const [name, termDate] of Object.entries(yearTerms)) {
+        if (termDate === md) return name;
+      }
+      return null;
+    }
+
+    // 农历节日→阳历日期对照表 (2026-2035)
+    const LUNAR_DATES = {
+      春节:   {2026:'02-17',2027:'02-06',2028:'01-26',2029:'02-13',2030:'02-03',2031:'01-23',2032:'02-11',2033:'01-31',2034:'02-19',2035:'02-08'},
+      元宵节: {2026:'03-03',2027:'02-20',2028:'02-09',2029:'02-27',2030:'02-17',2031:'02-06',2032:'02-25',2033:'02-14',2034:'03-04',2035:'02-22'},
+      端午节: {2026:'06-19',2027:'06-09',2028:'05-28',2029:'06-16',2030:'06-05',2031:'05-25',2032:'06-12',2033:'06-01',2034:'06-20',2035:'06-10'},
+      七夕:   {2026:'08-29',2027:'08-18',2028:'08-06',2029:'08-25',2030:'08-14',2031:'08-04',2032:'08-22',2033:'08-11',2034:'08-30',2035:'08-20'},
+      中秋节: {2026:'09-25',2027:'09-15',2028:'10-03',2029:'09-22',2030:'09-12',2031:'10-01',2032:'09-19',2033:'09-08',2034:'09-27',2035:'09-16'},
+      重阳节: {2026:'10-19',2027:'10-09',2028:'10-26',2029:'10-16',2030:'10-06',2031:'09-24',2032:'10-12',2033:'10-01',2034:'10-20',2035:'10-10'},
+    };
+
+    const FESTIVALS = [
+      // ---- 阳历固定节日 ----
+      { name:'元旦', start:'01-01', end:'01-03', hua:'🎉 新年第一口甜｜{product}', cta:'🎉 新年第一单·甜蜜开局', theme:'spring' },
+      { name:'情人节', start:'02-14', end:'02-14', hua:'💕 甜过初恋｜{product}', cta:'💕 甜到心里的情人节', theme:'valentine' },
+      { name:'妇女节', start:'03-08', end:'03-08', hua:'👑 女神专属甜蜜｜{product}', cta:'👑 今天你最大·甜蜜宠自己', theme:'valentine' },
+      { name:'愚人节', start:'04-01', end:'04-01', hua:'😜 不骗你·这个真好吃｜{product}', cta:'😜 真甜不骗人·尝了就知道' },
+      { name:'劳动节', start:'05-01', end:'05-05', hua:'🛠️ 劳动人民的甜蜜补给｜{product}', cta:'🛠️ 辛苦啦·来份甜蜜犒赏自己', theme:'spring' },
+      { name:'母亲节', start:'05-10', end:'05-10', hua:'🌸 妈妈也爱吃这一口甜｜{product}', cta:'🌸 给妈妈的甜蜜心意', theme:'valentine' },
+      { name:'520', start:'05-20', end:'05-20', hua:'💗 520甜蜜暴击｜{product}', cta:'💗 说不出的话·让甜来表达', theme:'valentine' },
+      { name:'儿童节', start:'06-01', end:'06-01', hua:'🍭 谁还不是个宝宝｜{product}', cta:'🍭 大朋友的儿童节甜蜜' },
+      { name:'父亲节', start:'06-21', end:'06-21', hua:'👔 老爸也爱这一口甜｜{product}', cta:'👔 给老爸的甜蜜心意' },
+      { name:'七夕', type:'lunar', lunarName:'七夕', startOffset:-1, endOffset:1, hua:'🌌 鹊桥相会·以果传情｜{product}', cta:'🌌 七夕的甜·比情话更动人', theme:'valentine' },
+      { name:'教师节', start:'09-10', end:'09-10', hua:'🍎 谢师恩·甜蜜献礼｜{product}', cta:'🍎 桃李芬芳·甜蜜谢师' },
+      { name:'中秋节', type:'lunar', lunarName:'中秋节', startOffset:-1, endOffset:2, hua:'🥮 月圆人甜｜{product}', cta:'🥮 月满中秋·甜蜜团圆', theme:'golden' },
+      { name:'国庆节', start:'10-01', end:'10-07', hua:'🇨🇳 国庆甜蜜假期｜{product}', cta:'🇨🇳 长假快乐·甜蜜相伴', theme:'spring' },
+      { name:'万圣节', start:'10-30', end:'11-01', hua:'🎃 不给糖就捣蛋·给果切也行｜{product}', cta:'🎃 Trick or Sweet!' },
+      { name:'感恩节', start:'11-26', end:'11-26', hua:'🍂 感恩有你·甜蜜相伴｜{product}', cta:'🍂 谢谢你·这份甜蜜献给你', theme:'golden' },
+      { name:'平安夜', start:'12-24', end:'12-24', hua:'🎄 平安夜的一口甜｜{product}', cta:'🎄 平安夜的甜蜜祝福', theme:'christmas' },
+      { name:'圣诞节', start:'12-25', end:'12-26', hua:'🎅 圣诞老人的甜蜜快递｜{product}', cta:'🎅 圣诞快乐·甜蜜到家', theme:'christmas' },
+      { name:'跨年夜', start:'12-31', end:'12-31', hua:'🎆 跨年夜的最后一甜｜{product}', cta:'🎆 新年倒计时·甜蜜迎新年', theme:'golden' },
+      { name:'春节', type:'lunar', lunarName:'春节', startOffset:-1, endOffset:7, hua:'🧧 新年大吉·甜蜜开运｜{product}', cta:'🧧 金兔送福·甜蜜新年', theme:'spring' },
+      { name:'元宵节', type:'lunar', lunarName:'元宵节', startOffset:-1, endOffset:1, hua:'🏮 汤圆甜甜·果切也甜｜{product}', cta:'🏮 元宵快乐·甜蜜圆满', theme:'spring' },
+      { name:'端午节', type:'lunar', lunarName:'端午节', startOffset:-1, endOffset:1, hua:'🐲 粽情一夏·甜蜜相伴｜{product}', cta:'🐲 端午安康·甜蜜加分' },
+    ];
+
+    function getTodayFestival() {
+      const dp = document.getElementById('datePicker');
+      let useDate;
+      if (dp && dp.value) {
+        useDate = new Date(dp.value + 'T00:00:00');
+      } else {
+        useDate = new Date();
+      }
+      const year = useDate.getFullYear();
+      const m = String(useDate.getMonth() + 1).padStart(2, '0');
+      const d = String(useDate.getDate()).padStart(2, '0');
+      const md = m + '-' + d;
+      for (const f of FESTIVALS) {
+        let start = f.start, end = f.end;
+        // 农历节日：从对照表取基日+offset动态计算
+        if (f.type === 'lunar') {
+          const baseStr = LUNAR_DATES[f.lunarName]?.[year];
+          if (!baseStr) continue; // 超出对照表年份跳过
+          const baseDate = new Date(year + '-' + baseStr + 'T00:00:00');
+          const s = new Date(baseDate);
+          s.setDate(s.getDate() + (f.startOffset || 0));
+          const e = new Date(baseDate);
+          e.setDate(e.getDate() + (f.endOffset || 0));
+          start = String(s.getMonth() + 1).padStart(2, '0') + '-' + String(s.getDate()).padStart(2, '0');
+          end   = String(e.getMonth() + 1).padStart(2, '0') + '-' + String(e.getDate()).padStart(2, '0');
+        }
+        if (md >= start && md <= end) return f;
+      }
+      return null;
+    }
+
+    function getFestivalHua(product) {
+      const f = getTodayFestival();
+      return f ? f.hua.replace('{product}', product) : null;
+    }
+    function getFestivalCTA() {
+      const f = getTodayFestival();
+      return f ? f.cta : null;
+    }
+
+    function updateFestivalBanner() {
+      const f = getTodayFestival();
+      const banner = document.getElementById('festivalBanner');
+      if (!banner) return;
+      // 清理旧粒子
+      document.querySelectorAll('.festival-particle').forEach(p => p.remove());
+      document.body.classList.remove('festival-active');
+      // 移除所有节日背景class
+      document.body.className = document.body.className.replace(/\s*festival-bg-\w+/g, '');
+      if (f) {
+        const icons = FESTIVAL_ICONS[f.name] || { left:'🎉', right:'🎉', fx:'' };
+        banner.innerHTML = '<span class="fx-left">' + icons.left + '</span>' +
+          '<span class="fx-text">' + f.name + '限定</span>' +
+          '<span class="fx-right">' + icons.right + '</span>';
+        banner.style.display = 'flex';
+        banner.className = (f.theme || '') + (icons.fx ? ' fx-' + icons.fx : '');
+        // 全局漂浮粒子
+        if (icons.particle) {
+          document.body.classList.add('festival-active');
+          spawnParticles(icons.particle);
+        }
+        // 节日背景
+        if (icons.bg) {
+          document.body.classList.add('festival-bg-' + icons.bg);
+        }
+      } else {
+        banner.style.display = 'none';
+        banner.innerHTML = '';
+      }
+      // 更新节日提示条
+      updateFestivalHint(f);
+    }
+
+    function updateFestivalHint(festival) {
+      const hint = document.getElementById('festivalHint');
+      if (!hint) return;
+      if (festival) {
+        const icons = FESTIVAL_ICONS[festival.name] || { left: '🎉' };
+        let rangeText = '';
+        if (festival.type === 'lunar') {
+          rangeText = '农历节日 · 每年自动换算';
+        } else {
+          rangeText = festival.start + ' ~ ' + festival.end;
+        }
+        hint.innerHTML = '<span>' + icons.left + '</span> <strong>' + festival.name + '</strong> ' + rangeText;
+        hint.style.display = 'flex';
+      } else {
+        hint.style.display = 'none';
+        hint.innerHTML = '';
+      }
+    }
+
+    function spawnParticles(particleType) {
+      const isCSS = /^[a-z]/.test(particleType);
+      const count = 8;
+      // 用显式数组避免emoji被Array.from拆分
+      var chars;
+      if (!isCSS) {
+        if (Array.isArray(particleType)) chars = particleType;
+        else chars = particleType.split(/(?=[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}])/u).filter(Boolean);
+        if (chars.length === 0) chars = ['🎉'];
+      }
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        p.className = 'festival-particle' + (isCSS ? ' ' + particleType : '');
+        if (!isCSS) {
+          p.textContent = chars[i % chars.length];
+          p.style.fontSize = (14 + Math.random() * 16) + 'px';
+        }
+        p.style.left = Math.random() * 90 + '%';
+        p.style.animationDuration = (8 + Math.random() * 10) + 's';
+        p.style.animationDelay = Math.random() * 8 + 's';
+        p.style.opacity = isCSS ? (0.4 + Math.random() * 0.4) : (0.5 + Math.random() * 0.3);
+        document.body.appendChild(p);
+      }
+    }
+
+    // 节日横幅装饰（左右emoji + 可选特效）
+    const FESTIVAL_ICONS = {
+      '元旦': { left:'🎉🎊', right:'✨🥂', fx:'sparkle', particle:'star-particle', bg:'newyear' },
+      '春节': { left:'🧧🧨🏮', right:'🐇🎇🧧', fx:'firework', particle:'🧧🏮✨', bg:'spring' },
+      '元宵节': { left:'🏮🏮', right:'🥟✨', fx:'glow', particle:'🏮✨🌟' },
+      '情人节': { left:'💕🌹', right:'💝✨💕', fx:'heart', particle:'💕💗💖' },
+      '妇女节': { left:'👑🌸', right:'💐✨', fx:'sparkle', particle:'🌸💐✨' },
+      '愚人节': { left:'😜🎭', right:'🎪✨', particle:'😜🎭' },
+      '劳动节': { left:'🛠️💪', right:'🏖️✨', fx:'sparkle', particle:'✨🌟' },
+      '母亲节': { left:'🌸💐', right:'💖👩', fx:'heart', particle:'🌸💖💕' },
+      '520': { left:'💗💕', right:'💝💌', fx:'heart', particle:'💗💖💕' },
+      '儿童节': { left:'🍭🎈🎠', right:'🎪🧸🍬', fx:'bounce', particle:'🎈🎪🍬' },
+      '618': { left:'🛒💥', right:'📦🔥' },
+      '父亲节': { left:'👔👨', right:'💼❤️' },
+      '端午节': { left:'🐲🎋', right:'🥁🚣', fx:'glow', particle:'🐲✨' },
+      '七夕': { left:'💕🌌', right:'✨💫💕', fx:'heart', particle:'💕💗💖' },
+      '教师节': { left:'🍎📚', right:'✏️💐' },
+      '中秋节': { left:'🌕🐇🥮', right:'🏮✨🌕', fx:'glow', particle:'🌙✨🌟', bg:'night' },
+      '国庆节': { left:'🇨🇳🎉', right:'🎆✨🇨🇳', fx:'firework', particle:['🇨🇳','🎆'], bg:'spring' },
+      '万圣节': { left:'🎃👻🕯️', right:'🦇🕸️🎃', fx:'glow', particle:'👻🎃🦇' },
+      '感恩节': { left:'🍂🦃', right:'🍁🧡', fx:'glow', particle:'🍂🍁' },
+      '平安夜': { left:'🎄✨❄', right:'🕯🎁🌟', fx:'snow', particle:'❄❅❆✨', bg:'xmas' },
+      '圣诞节': { left:'🎅🎄❄', right:'🦌🔔🎁', fx:'snow', particle:'❄❅❆✨', bg:'xmas' },
+      '跨年夜': { left:'🎆🥂', right:'🕛🎇🎆', fx:'firework', particle:'star-particle', bg:'night' },
+    };
+
+    // 8类花字库（2026-07扩展版）
+    const HUA_ZI = {
+      pun: ['周一见·一见倾心🍓','周三三·小周末前夜🌊','周五福来day！快乐加倍🎉','周六懒day，果切解压.ᐟ.ᐟ','Ö椰Yeeeeee✌️','快乐！快乐是什么呢❓'],
+      unicode: ['𝗠𝗼𝗻𝗱𝗮𝘆 𝗣𝗶𝗰𝗸','𝙒𝙚𝙙𝙣𝙚𝙨𝙙𝙖𝙮 𝙈𝙚𝙢𝙗𝙚𝙧','𝗧𝗵𝘂𝗿𝘀𝗱𝗮𝘆 𝗦𝗽𝗲𝗰𝗶𝗮𝗹','𝗙𝗿𝗶𝗱𝗮𝘆 𝗩𝗶𝗯𝗲𝘀','𝙡̶̶̶𝙤̶̶̶𝙫̶̶̶𝙚̶̶̶ᥫᩣ 💜','𝙤𝙤𝙤𝙤𝙤𝙔𝙚 很耶的一天🌻'],
+      formula: ['鲜果+冰爽=周一不丧🍉','高温×果切-热量=快乐²','鲜果+88折=周三快乐²','周末=果切+沙发+空调🍉','快乐+快乐=快乐*²🫟🫟'],
+      emojiChain: ['🥱😪➡😋🤩✨','😴➡🍉😋 .ᐟ.ᐟ','一周过半⏳该奖励自己了🥝','🥱➡🤩🍇 周末充电中','⛱ིྀ开心的话 日子就不算虚度','叽叽喳喳嘻嘻哈哈✌️ℋᎯℙℙᎽ'],
+      report: ['🤔今日诊断：你缺一份鲜果切','📋今日处方：冰镇西瓜×1 即刻服用','🩺周三体检报告：维生素C余额不足','📒ʟɪᴠᴇ：一些超开心的瞬间𓈒꙳⋆','今天很开🫶🏻𝓛𝓲𝓯𝓮'],
+      limited: ['⚡今日限定｜仅此一天','⏰倒计时｜今晚24:00截止','🔥手慢无｜错过再等一周','⚡24h限定｜今天不吃明天没','🪸快乐正在派送中……','📍标记我的笑脸'],
+      receipt: ['🧾今日推荐｜━━━━━━ 🍉招牌鲜果切','🧾本周必入｜━━━━━━ 🍓当季限定','📋ꕁ·果切𝙿𝙻𝙾𝙶⁺⁹','咔嚓·快樂值ᵁᴾ⁺¹ºº 💕'],
+      search: ['🔍搜索中：今天吃什么果切→结果：___','🔍正在搜索：周末最佳果切搭档…'],
+      summer: ['ய˚🍋‍🟩🌵𝖘𝖚𝖒𝖒𝖊𝖗✧🪴🦜🕊️꙳','˖✧🫧🍈𝑊𝑒𝑒𝑘𝑒𝑛𝑑༘🛀🏻🧼🪀༉','ᩚ°🌵🪴𝓢𝓾𝓶𝓶𝓮𝓻ꔛ🛣️🍾🧼ෆ','⋆⁺🧊🍃𝐿𝑎𝑤𝑛꙳🏝️⛰️🌲᳜','🍐🌿夏了个夏天＂🍾🛶⛳️₊˚','˚🏄🏻‍♂️💚夏日治愈瞬间・˖⁺🥝🫧🍐ᝰ'],
+    };
+
+    // 节日专属花字库（节日检测到时自动使用）
+    const FESTIVAL_HUA = {
+      '五一': [
+        '🍈五月ʺ̤','🏄🏻放假很𝑶𝒌ᵎᵎᵎ','五月的心情是绿色的🌴ᵕ̈','ᐢ..ᐢ 休假𝑫𝒂𝒚 👒 🏝','📮叮咚!! 五月它来啦ʚ 🛶 ྀིɞ',
+        'Wᴏ̆̈ᴡ̆̈•🧜🏻‍♀️游记小片段𓆡˂ᵒ͜͡ᵏᵎ⁾','🚙 ╭══╮ ╭═══════╮ ╭╯让路 五月份来咯！╰⊙ ═ ⊙╯',
+        '👩🏻‍🌾 🌤🄷🄴🄻🄻🄾五月の第②天𖠦','📋ꕁ·五月𝙿𝙻𝙾𝙶⁺⁹','🌷和假期𝑺𝒂𝒚 𝒉𝒊 📎','↻·假期加载完毕🪫⁺¹',
+      ],
+      '六一': [
+        '♡6.1◡̈°🍭 要做这个六月最快乐的崽','🎡ꃅꍏᖘᖘꌩ😋ꉓꃅꀤ꒒ꀸꋪꍟꈤꌗꀸ♡ꌩ 🍭超甜小可爱在线卖萌',
+        '˃̵͈̑ᴗ˂̵͈̑ 𝚌𝚑𝚒𝚕𝚍𝚛𝚎𝚗𝚜 𝚍𝚊𝚢🫧 baby愿你童心未泯','🍿𝗛𝗮𝗽𝗽𝘆 𝗰𝗵𝗶𝗹𝗱𝗿𝗲𝗻𝘀 𝗗𝗮𝘆',
+        '♡ happy everyday🍉 这个世界不缺大人，你不需要做满分小孩','ᙏ̤̫ · ᴴᴱᴸᴸᴼ ᴼ̈⃝ 今天是儿童节限定小盆友',
+      ],
+      '端午': [
+        '🌿𝕯𝖗𝖆𝖌𝖔𝖓 𝕭𝖔𝖆𝖙 𝕱𝖊𝖘𝖙𝖎𝖛𝖆𝖑🌿 💚一年一端午🐲一岁一安康💚',
+        '┏━━端午🐉安康━━┓ 🍙香香糯米暖暖胃 🌿 🍶记得快乐忘了累 🎐 ┗━━ 🚣🚣‍♀🚣🚣‍♂️━━┛',
+        '💚 𝑫𝒓𝒂𝒈𝒐𝒏 𝑩𝒐𝒂𝒕 𝑭𝒆𝒔𝒕𝒊𝒗𝒂𝒍🛶 🍀 好运总会接\"粽\"而来 🎋','✨ • ✿ 端午 ˗ˋˏ🍙ˎˊ˗ 安康 ✿ •✨',
+        '🧡(•͈ᴗ•͈ૢૢ)❊⿻* “不论咸甜🐲粽有所爱”','🐉 𝔻𝕣𝕒𝕘𝕠𝕟 𝔹𝕠𝕒𝕥 🌿 加点爱❤️ 粽能让生活与粽不同💫',
+      ],
+      '七夕': [
+        '𝑾𝒊𝒕𝒉 𝒚𝒐𝒖 ⸝⸝⸝⸝ ᥫᩣ 🫶🏻忙和爱一点都不冲突','ʟ̆̈ᴏ̆̈ᴠ̆̈ᴇ̆̈ ʏ̆̈ᴏ̆̈ᴜ̆̈ “爱在七夕，更在一朝一夕💞”',
+        '⁸/₂₉Cʜɪɴᴇsᴇ Vᴀʟᴇɴᴛɪɴᴇs Dᴀʏ❣️ “所有的节日都是为了提醒你 爱与被爱”',
+        '𝐿𝑜𝑣𝑒𝑙𝑦 𝐷𝑎𝑦💞 “喜欢是棋逢对手 爱是甘拜下风”','𝑾𝒊𝒕𝒉 𝒚𝒐𝒖🤎🧡 做你的小朋友 在你身后 在你左右',
+        'ᥫᩣᩚ | 👧+👦 =💏 有幸成为你的例外和偏爱❤','♡ 𝗟𝗶𝗳𝗲 + 𝘂＝𝘀𝘄𝗲𝗲𝘁 ♡',
+      ],
+      '中秋': [
+        '🥰\"𝑴𝒐𝒐𝒏 𝒄𝒂𝒌𝒆\"🥮 \"月圆家圆钱包圆，人顺心顺事事顺\"','🌕 𝕄𝕚𝕕-𝔸𝕦𝕥𝕦𝕞𝕟 “月亮慢ᴹᵃⁿ变圆 事事慢ᴹᵃⁿ如愿”',
+        '🐇²⁰²⁴/₀₉.₁₇🌕 \"两处相思同望月，此刻也算共团圆\"','🏮中秋快樂◟ \"幸福就是抬头看月亮时 家在脚下，爱在身旁\"',
+        '˗ˋˏ 🌕 ˎˊ˗ \"月亮是我抛出的硬币，两面都是祝福你\"','🥮͂ ₍ ๐╹ ꈊ ╹๐ ₎节日快落🌙','𝓗𝓪𝓹𝓹𝔂 𝓜𝓲𝓭-𝓪𝓾𝓽𝓾𝓶𝓷 𝓓𝓪𝔂',
+      ],
+      '国庆': [
+        '𝓱𝓪𝓹𝓹𝔂国庆快乐🇨🇳','𝟙𝟘.𝟘𝟙🇨🇳//𝗖𝗛𝗜𝗡𝗔','🇨🇳₊⁺中国红𝐫𝐞𝐝⋆','🚩·红旗飘飘 举杯同庆🥂',
+        '₂₀₂₅.₁₀.₀₁⌇𝗜 🫶🏻 𝗖𝗵𝗶𝗻𝗮 🇨🇳','¹⁰/₁ 🇨🇳𝙃𝙖𝙥𝙥𝙮 𝙣𝙖𝙩𝙞𝙤𝙣𝙖𝙡 𝙙𝙖𝙮 ◡̈°','金秋十月 紅旗萬里🇨🇳🍂',
+        '𝐈 ❤️𝐂𝐡𝐢𝐧𝐚 🇨🇳 十里红旗，千里月光 国泰民安','🇨🇳 𝟏𝟗𝟒𝟗-𝟐𝟎𝟐𝟓 ⭐ 我追随的光🌟 是五角的星光',
+      ],
+      '圣诞': [
+        '🎄𝗠𝙚𝗿𝗿𝘆 𝗖𝗵𝗿𝗶𝘀𝘁𝗺𝗮𝘀⋆₊🍎','✿ 𓂂🧣🍎✩₊ 𝕸𝖊𝖗𝖗𝖞 𝕮𝖍𝖗𝖎𝖘𝖙𝖒𝖆𝖘','🎄 𝓜𝓮𝓻𝓻𝔂 𝓒𝓱𝓻𝓲𝓼𝓽𝓶𝓪𝓼 🎄',
+        '⸝ ⸝ 🎅🏻🪜 𓍼 叮🔔请签收圣诞节好运✨','🎄𝐻𝑒𝑦 𝐷𝑒𝑐𝑒𝑚𝑏𝑒𝑟✨ 十二月的街道溢满热咖和圣诞气息𖠚ᐝ',
+        '🦌•┈┈🎄┈┈🎅┈┈🎁┈┈•👫 “希望圣诞树 礼物 雪花 和你一起到来”',
+        '☆.🎄.:*🛷°☆.🦌.:*🍎','🌲+✨=🎄 𝐻𝑒𝑦 𝐷𝑒𝑐𝑒𝑚𝑏𝑒𝑟 *·°',
+      ],
+      '春节': [
+        '🧧🐇新年大吉·甜蜜开运🍊','🏮²⁰²⁵🧨新年快乐ᐝ “岁岁常欢愉 年年皆胜意”','🧧𝑯𝒂𝒑𝒑𝒚 𝑵𝒆𝒘 𝒀𝒆𝒂𝒓🐉 万事如意 心想事成',
+      ],
+    };
+
+    // 获取节日花字（自动更新年份）
+    function getFestivalHuaZi(festivalName) {
+      const pool = FESTIVAL_HUA[festivalName];
+      if (!pool) return null;
+      const year = new Date().getFullYear();
+      // 自动替换年份
+      return pool.map(h => h.replace(/2024|2025/g, year));
+    }
+
+    // 周三花字轮换追踪
+    const HUA_ZI_TYPES = ['pun','unicode','formula','emojiChain','report','limited','receipt','search'];
+    let wedHuaZiIndex = parseInt(localStorage.getItem('wedHuaZiIndex') || '0');
+
+    // 周六主题轮换
+    const SAT_THEMES = [
+      { name: '果切图鉴', hua: '𝐒𝐚𝐭𝐮𝐫𝐝𝐚𝐲｜周末门面担当🍉', desc: '当季代表果切产品高清图 + 一句话食欲种草' },
+      { name: '水果冷知识', hua: '🤔周六冷知识：原来___这么甜是有原因的', desc: '趣味科普、段子、挑水果技巧' },
+      { name: '场景化种草', hua: '🎬周末追剧人的充电方案：___+___', desc: '追剧/办公/野餐/下午茶场景绑定' },
+      { name: '粉丝互动', hua: '🥱😪➡🍉😋 周末诊断书：你缺一份___', desc: '二选一站队/填空/地域梗轻互动' },
+      { name: '水果×谐音梗', hua: '周六懒day，___来解压.ᐟ.ᐟ', desc: '地域共鸣/谐音轻松话题' },
+    ];
+    let satThemeIndex = parseInt(localStorage.getItem('satThemeIndex') || '0');
+
+    // 价格模式
+    let priceMode = localStorage.getItem('priceMode') || 'unified';
+    function setPriceMode(mode) {
+      priceMode = mode;
+      localStorage.setItem('priceMode', mode);
+      document.getElementById('priceModeUnified').className = mode === 'unified' ? 'active' : '';
+      document.getElementById('priceModeRegional').className = mode === 'regional' ? 'active' : '';
+      // 更新价格字段 placeholder
+      updatePricePlaceholders();
+    }
+    function updatePricePlaceholders() {
+      const inputs = document.querySelectorAll('.price-input');
+      inputs.forEach(el => {
+        el.placeholder = priceMode === 'unified' ? '如：19.9' : '如：XX元起·各区域以平台为准';
+      });
+    }
+    // 初始化价格模式UI
+    function initPriceMode() {
+      document.getElementById('priceModeUnified').className = priceMode === 'unified' ? 'active' : '';
+      document.getElementById('priceModeRegional').className = priceMode === 'regional' ? 'active' : '';
+    }
+
+    // ========== 配送费配置 ==========
+    let deliveryMode = localStorage.getItem('deliveryMode') || '20';
+    function setDelivery(mode) {
+      deliveryMode = mode;
+      localStorage.setItem('deliveryMode', mode);
+      initDeliveryUI();
+    }
+    function getDeliveryText() {
+      if (deliveryMode === 'off') return '';
+      if (deliveryMode === '20') return '💡 满20免配送费';
+      if (deliveryMode === '30') return '💡 满30免配送费';
+      if (deliveryMode === 'custom') {
+        const custom = localStorage.getItem('deliveryCustom') || '';
+        return custom ? `💡 ${custom}` : '';
+      }
+      return '';
+    }
+    function saveDeliveryCustom() {
+      const val = document.getElementById('deliveryCustomText')?.value?.trim() || '';
+      localStorage.setItem('deliveryCustom', val);
+    }
+    function initDeliveryUI() {
+      const btns = document.querySelectorAll('#deliveryToggle button');
+      btns.forEach(b => {
+        let mode = b.textContent;
+        if (mode === '无') mode = 'off';
+        else if (mode === '满20') mode = '20';
+        else if (mode === '满30') mode = '30';
+        else mode = 'custom';
+        b.className = deliveryMode === mode ? 'active' : '';
+      });
+      const customRow = document.getElementById('deliveryCustomRow');
+      if (customRow) customRow.style.display = deliveryMode === 'custom' ? 'flex' : 'none';
+      if (deliveryMode === 'custom') {
+        const saved = localStorage.getItem('deliveryCustom') || '';
+        const input = document.getElementById('deliveryCustomText');
+        if (input && saved) input.value = saved;
+      }
+    }
+
+    // ========== 链接管理 ==========
+    const DEFAULT_LINKS = [
+      { id: 'miniapp-home', label: '🏠 小程序首页', url: '#小程序://切果NOW/YjSxtICz2CSRZfv' },
+      { id: 'miniapp-order', label: '📱 门店点单页', url: '#小程序://切果NOW/LFtIEeLhMcgq0Rx' },
+      { id: 'meituan', label: '🟡 美团外卖', url: '#小程序://美团闪购/qLu5ftvWrGfSQbK' },
+      { id: 'eleme', label: '🔵 饿了么/淘宝闪购', url: 'https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b?alsc_debug=true&alsc_u_id=459631' },
+    ];
+    // 每个推送日的默认勾选
+    const DAY_DEFAULT_LINKS = {
+      2: ['miniapp-order'],
+      3: ['miniapp-order'],
+      4: ['meituan', 'eleme'],
+      5: ['miniapp-order'],
+      6: ['miniapp-order'],
+    };
+
+    function loadLinks() {
+      const saved = localStorage.getItem('customLinks');
+      return saved ? JSON.parse(saved) : DEFAULT_LINKS.map(l => ({...l}));
+    }
+    function saveLinks(links) { localStorage.setItem('customLinks', JSON.stringify(links)); }
+    function getDayLinks(day) {
+      const key = 'dayLinks_' + day;
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : (DAY_DEFAULT_LINKS[day] || ['miniapp-order']);
+    }
+    function setDayLinks(day, ids) { localStorage.setItem('dayLinks_' + day, JSON.stringify(ids)); }
+    function getLinkById(id) { return loadLinks().find(l => l.id === id); }
+
+    function renderLinkManager() {
+      const links = loadLinks();
+      const list = document.getElementById('linkList');
+      list.innerHTML = links.map(l => `
+        <div class="link-item">
+          <label>${l.label}</label>
+          <input type="text" value="${l.url.replace(/"/g,'&quot;')}" onchange="updateLinkUrl('${l.id}', this.value)" placeholder="输入链接">
+        </div>
+      `).join('');
+    }
+
+    function updateLinkUrl(id, newUrl) {
+      const links = loadLinks();
+      const link = links.find(l => l.id === id);
+      if (link) { link.url = newUrl.trim(); saveLinks(links); }
+    }
+
+    function renderDayLinkCheckboxes(day) {
+      const links = loadLinks();
+      const selected = getDayLinks(day);
+      return `
+        <div class="input-group">
+          <label>🔗 附带链接（多选）</label>
+          <div class="link-checkboxes" id="linkCb_${day}">
+            ${links.map(l => `
+              <label class="${selected.includes(l.id) ? 'checked' : ''}" onclick="toggleDayLink(${day},'${l.id}',this)">
+                ${l.label}
+              </label>
+            `).join('')}
+          </div>
+        </div>`;
+    }
+
+    function toggleDayLink(day, linkId, labelEl) {
+      const selected = getDayLinks(day);
+      const idx = selected.indexOf(linkId);
+      if (idx >= 0) { selected.splice(idx, 1); labelEl.classList.remove('checked'); }
+      else { selected.push(linkId); labelEl.classList.add('checked'); }
+      setDayLinks(day, selected);
+    }
+
+    function renderSelectedLinks(day) {
+      const selected = getDayLinks(day);
+      const links = loadLinks();
+      if (selected.length === 0) return '';
+      return selected.map(id => {
+        const link = links.find(l => l.id === id);
+        return link ? link.url : '';
+      }).filter(Boolean).join('\n');
+    }
+
+    function renderSelectedLinksLabeled(day) {
+      const selected = getDayLinks(day);
+      const links = loadLinks();
+      if (selected.length === 0) return '';
+      return selected.map(id => {
+        const link = links.find(l => l.id === id);
+        return link ? link.label + '\n' + link.url : '';
+      }).filter(Boolean).join('\n');
+    }
+
+    // 周二数据背书：30条口语化短句（活人感，相邻4次不重复）
+    const DATA_BADGES = [
+      '大家用订单投出来的第一名',
+      '卖到断货的爆款，不是没道理',
+      '千店热销，真实数据不说谎',
+      '回购率高到离谱，吃过的都懂',
+      '群里问得最多的就是它',
+      '门店卖空的速度比外卖还快',
+      '上周被你们买爆的，这周继续',
+      '后台数据拉出来，它独一档',
+      '真实销量说话，它就是扛把子',
+      '大家嘴巴很诚实，回购说明一切',
+      '一周卖了别人一个月的量',
+      '不是我们吹，数据太能打',
+      '人手一盒的存在，懂的都懂',
+      '上架就没停过，谁吃谁知道',
+      '群友认证的好吃，不是广告',
+      '数据不会演戏，它确实能打',
+      '上周的销量冠军，不服来战',
+      '吃到停不下来的那种回购',
+      '销量是大家一口一口吃出来的',
+      '每天最先卖完的，永远是它',
+      '回头客最多的，没有之一',
+      '不靠广告靠回购，实力说话',
+      '你们用下单投的票，它赢了',
+      '拿销量写简历，它是满分',
+      '群里安利最多的果切单品',
+      '老客闭眼入，新客一吃就上头',
+      '卖得好到我们自己都意外',
+      '看一眼后台数据，它断层领先',
+      '回购率比我们文案还能打',
+      '你们自己选出来的周销冠',
+    ];
+    let dataBadgeUsed = JSON.parse(localStorage.getItem('dataBadgeUsed') || '[]');
+
+    function getFreshDataBadge() {
+      const recent = dataBadgeUsed.slice(-4);
+      const candidates = DATA_BADGES.filter(b => !recent.includes(b));
+      const pick = candidates[Math.floor(Math.random() * candidates.length)] || DATA_BADGES[0];
+      dataBadgeUsed.push(pick);
+      if (dataBadgeUsed.length > 40) dataBadgeUsed = dataBadgeUsed.slice(-40);
+      localStorage.setItem('dataBadgeUsed', JSON.stringify(dataBadgeUsed));
+      return pick;
+    }
+
+    function refreshTueDataLabel() {
+      const el = document.getElementById('tueDataLabel');
+      if (el) el.value = getFreshDataBadge();
+    }
+
+    // ========== 水果品类特性库：自动匹配 + 理由优化 ==========
+    const FRUIT_TRAITS = {
+      '瓜': { season:'盛夏当季', taste:'冰甜多汁', texture:'脆爽', scene:'消暑解渴', tip:'冰镇后甜度翻倍' },
+      '西瓜': { season:'盛夏当季', taste:'冰甜多汁', texture:'脆爽', scene:'消暑解渴', tip:'冰镇后甜度翻倍' },
+      '麒麟': { season:'6-8月甜度巅峰', taste:'冰甜多汁', texture:'脆爽无渣', scene:'一口消暑', tip:'比喝饮料还解渴' },
+      '芒': { season:'当季最甜时', taste:'浓郁香甜', texture:'绵密细腻', scene:'热带果香', tip:'甜到不用加糖' },
+      '芒果': { season:'当季最甜时', taste:'浓郁香甜', texture:'绵密细腻', scene:'热带果香', tip:'桂七甜度20°·凯特比脸大·甜到不用加糖' },
+      '杨梅': { season:'6月限定', taste:'酸甜爆汁', texture:'入口化渣', scene:'解腻神器', tip:'东魁个大·荸荠种最甜·错过等一年' },
+      '荔枝': { season:'6-7月限定', taste:'清甜多汁', texture:'嫩滑', scene:'冰镇更绝', tip:'妃子笑20°·桂味19°·白糖罂15°·季节短抓紧吃' },
+      '蜜瓜': { season:'正当季', taste:'甜蜜细腻', texture:'软糯', scene:'像吃冰淇淋', tip:'口口蜜22°·哈密瓜21°·羊角蜜20°·西州蜜18°' },
+      '哈密': { season:'正当季', taste:'甜蜜细腻', texture:'软糯', scene:'像吃冰淇淋', tip:'口口蜜22°·哈密瓜21°·羊角蜜20°·西州蜜18°' },
+      '羊角蜜': { season:'春夏', taste:'清甜多汁', texture:'松脆爽口', scene:'细长如角', tip:'甜度20°·汁多清甜' },
+      '葡萄': { season:'当季鲜摘', taste:'清甜爽脆', texture:'无籽方便', scene:'追剧零嘴', tip:'夏黑24°国内最甜·阳光玫瑰28°玫瑰香·巨峰17°' },
+      '提子': { season:'当季鲜摘', taste:'清甜爽脆', texture:'无籽方便', scene:'追剧零嘴', tip:'夏黑24°国内最甜·阳光玫瑰28°玫瑰香·巨峰17°' },
+      '草莓': { season:'冬季限定', taste:'酸甜可口', texture:'鲜嫩', scene:'颜值担当', tip:'丹东99甜度14°+·白雪公主有黄桃味' },
+      '苹果': { season:'四季常鲜', taste:'脆甜可口', texture:'咔嚓脆', scene:'每天一个', tip:'阿克苏17%冰糖心·红富士16.4%·花牛13.3%' },
+      '梨': { season:'夏秋', taste:'清甜多汁', texture:'脆嫩爽口', scene:'润肺佳品', tip:'丰水梨16%·秋月13%·砀山酥13%·库尔勒12%' },
+      '桃': { season:'盛夏限定', taste:'香甜多汁', texture:'软硬适中', scene:'夏日仪式感', tip:'阳山水蜜桃19%·金秋红蜜18%·春雪17%' },
+      '蜜桃': { season:'盛夏限定', taste:'香甜多汁', texture:'软硬适中', scene:'夏日仪式感', tip:'阳山水蜜桃19%·金秋红蜜18%·春雪17%' },
+      '凤梨': { season:'当季金黄', taste:'酸甜浓郁', texture:'脆嫩', scene:'热带风情', tip:'金钻20%·菲律宾16%·徐闻16%·不用泡盐水' },
+      '菠萝': { season:'当季金黄', taste:'酸甜浓郁', texture:'脆嫩', scene:'热带风情', tip:'金钻20%·菲律宾16%·徐闻16%·不用泡盐水' },
+      '橙': { season:'鲜甜多汁季', taste:'酸甜平衡', texture:'粒粒分明', scene:'维C补充', tip:'赣南脐橙汁多·冰糖橙15%·新奇士14%' },
+      '柑橘': { season:'鲜甜多汁季', taste:'酸甜平衡', texture:'粒粒分明', scene:'维C补充', tip:'耙耙柑14%·沃柑17%·丑橘18%·金桔28%' },
+      '冬枣': { season:'秋冬限定', taste:'甜脆爽口', texture:'嘎嘣脆', scene:'维C之王', tip:'大荔冬枣23%·酥脆香甜·维C是苹果70倍' },
+      '蓝莓': { season:'当季', taste:'清甜微酸', texture:'小巧爆浆', scene:'健康轻食', tip:'云南甜过砂糖橘·野生花青素王者·护眼神器' },
+      '樱桃': { season:'季节限定', taste:'甜美多汁', texture:'脆嫩', scene:'颜值天花板', tip:'国产美早不输车厘子·汶川个大色深' },
+      '圣女果': { season:'当季', taste:'酸甜爆汁', texture:'一口一个', scene:'低卡轻食', tip:'千禧9%·玲珑最甜·比零食健康多了' },
+      '榴莲': { season:'当季', taste:'浓郁香甜', texture:'绵密如奶油', scene:'爱它的人懂', tip:'猫山王/金枕20°·冰镇后像冰淇淋·一口上头' },
+      '火龙果': { season:'当季鲜摘', taste:'清甜爽滑', texture:'细腻多汁', scene:'润肠神器', tip:'蜜宝18°·红心15°·白心10°·红心更甜更营养' },
+      '菠萝蜜': { season:'当季', taste:'浓郁甜蜜', texture:'脆韧有嚼劲', scene:'热带果王', tip:'红肉25°Q弹脆甜·黄肉17°甘甜' },
+      '柿子': { season:'秋日限定', taste:'脆甜如蜜', texture:'软糯无丝', scene:'秋日风物', tip:'甜脆柿17%·火晶16%可吸着喝' },
+      '芭乐': { season:'夏秋', taste:'清香甘甜', texture:'脆爽细腻', scene:'热带风情', tip:'红心8%甘甜·白心7%酸脆·蘸酸梅粉绝配' },
+      '石榴': { season:'8-10月', taste:'甘甜多汁', texture:'粒粒爆汁', scene:'秋日红宝石', tip:'突尼斯软籽16%·不用吐籽' },
+      '杏': { season:'6-7月', taste:'清香蜜甜', texture:'细腻多汁', scene:'新疆珍果', tip:'库车小白杏23%·果仁脆香' },
+      '荸荠': { season:'12-3月', taste:'清甜多汁', texture:'清脆可口', scene:'冬日马蹄', tip:'甜度15°·清脆可口·药食同源' },
+      '甜瓜': { season:'盛夏当季', taste:'清甜多汁', texture:'脆嫩爽口', scene:'消暑必备', tip:'甜而不腻' },
+      '苹果': { season:'四季常鲜', taste:'脆甜可口', texture:'咔嚓脆', scene:'每天一个', tip:'烟台脆·阿克苏冰糖心·花牛奶香' },
+      '樱桃': { season:'季节限定', taste:'甜美多汁', texture:'脆嫩', scene:'颜值天花板', tip:'科迪亚28°车厘子之王·雷尼尔23°·汉源20°·皇家黎明21°' },
+      '奇异果': { season:'当季鲜摘', taste:'酸甜多汁', texture:'软糯细腻', scene:'维C炸弹', tip:'佳沛金果16°·红心19°·徐香15°·绿心14°' },
+      '绿果': { season:'当季鲜摘', taste:'酸甜多汁', texture:'软糯细腻', scene:'维C炸弹', tip:'佳沛金果16°·红心19°·徐香15°·绿心14°' },
+      '青柚': { season:'当季', taste:'清甜微酸', texture:'粒粒爆汁', scene:'解腻高手', tip:'比普通柚子清爽十倍' },
+      '龙眼': { season:'6-8月限定', taste:'清甜多汁', texture:'肉脆嫩滑', scene:'岭南珍珠', tip:'泰国龙眼22°·石硖22°·储良21°·鲜食脆甜·干果桂圆' },
+      '桑葚': { season:'4-7月', taste:'甘甜微酸', texture:'软嫩多汁', scene:'春日限定', tip:'甜度18°·药食同源·花青素丰富' },
+      '柚子': { season:'秋冬', taste:'清甜回甘', texture:'粒粒多汁', scene:'解腻佳品', tip:'琯溪蜜柚贡品级·沙田柚梨形经典' },
+      '黄桃': { season:'盛夏限定', taste:'甜蜜多汁', texture:'软糯香甜', scene:'罐头之外的鲜享', tip:'鲜切比罐头好吃百倍' },
+      '椰青': { season:'四季常备', taste:'清甜椰香', texture:'椰肉嫩滑', scene:'一秒到海边', tip:'泰国/海南/台湾产地·甜度7°·7-8月最佳' },
+      '百香果': { season:'当季', taste:'酸甜浓郁', texture:'籽粒脆爽', scene:'香气炸弹', tip:'拌什么都好吃' },
+      '木瓜': { season:'当季', taste:'香甜软糯', texture:'入口即化', scene:'养颜圣品', tip:'冰镇后像吃布丁' },
+      '冬枣': { season:'秋冬限定', taste:'甜脆爽口', texture:'嘎嘣脆', scene:'维C之王', tip:'比苹果维C高70倍' },
+      '酸嘢': { season:'四季', taste:'酸甜咸辣', texture:'脆爽开胃', scene:'一口上瘾', tip:'广西特色，越吃越上头' },
+      '干噎酸奶': { season:'四季', taste:'浓郁醇厚', texture:'绵密扎实', scene:'健康代餐', tip:'高蛋白低脂·饱腹感强' },
+      '海盐青柠': { season:'四季', taste:'海盐+青柠', texture:'清爽刺激', scene:'风味天花板', tip:'咸甜交织，一口醒神' },
+      '青柠': { season:'四季', taste:'清香酸爽', texture:'清新提神', scene:'解腻神器', tip:'比普通柠檬更香' },
+      '乌梅': { season:'四季', taste:'酸甜回甘', texture:'脆韧有嚼劲', scene:'古早风味', tip:'腌制的魔力' },
+      '枇杷': { season:'早春到初夏', taste:'甜软多汁', texture:'细嫩化渣', scene:'江南春味', tip:'米易枇杷甜度13°·12-3月·绒毛完整才新鲜' },
+      '梨': { season:'夏秋', taste:'清甜多汁', texture:'脆嫩爽口', scene:'润肺佳品', tip:'砀山酥·秋月甜过初恋·库尔勒香' },
+      '柿子': { season:'秋日限定', taste:'脆甜如蜜', texture:'软糯无丝', scene:'秋日风物', tip:'火晶可吸着喝·磨盘大如碗' },
+      '李子': { season:'夏季', taste:'脆甜多汁', texture:'爽脆离核', scene:'酸甜开胃', tip:'蜂糖李甜度15°+·三华李明朝贡品' },
+      '西梅': { season:'夏秋', taste:'浓郁甜蜜', texture:'脆爽爆汁', scene:'甜蜜炸弹', tip:'智利23°·新疆法兰西22°·自带糖霜·一口爆汁' },
+      '龙眼': { season:'6-8月限定', taste:'清甜多汁', texture:'肉脆嫩滑', scene:'岭南珍珠', tip:'泰国金标最佳·鲜食脆甜·干果桂圆' },
+      '红毛丹': { season:'夏季', taste:'清甜多汁', texture:'软嫩爽滑', scene:'热带风情', tip:'泰国红毛丹耐储藏·越南价优' },
+      '山竹': { season:'夏季', taste:'清甜微酸', texture:'软嫩多汁', scene:'果中皇后', tip:'紫红皮白肉·冰镇后像吃冰淇淋' },
+      '柠檬': { season:'四季', taste:'酸香浓郁', texture:'清新多汁', scene:'美白排毒', tip:'泡水喝·柠檬香清新提神' },
+      '无花果': { season:'夏秋', taste:'浓厚甘甜', texture:'软糯细腻', scene:'果中之花', tip:'皮薄肉嫩·软糯甘甜' },
+      '释迦': { season:'夏秋', taste:'浓郁甜蜜', texture:'软滑如脂', scene:'热带珍果', tip:'甜度爆表·软滑像吃冰淇淋' },
+      '莲雾': { season:'夏季', taste:'清甜爽脆', texture:'脆嫩多汁', scene:'清爽解暑', tip:'脆嫩清甜·夏日补水神器' },
+      '杨桃': { season:'夏秋', taste:'清甜微酸', texture:'脆爽多汁', scene:'星形果切', tip:'五星造型自带网红感' },
+      '芭乐': { season:'夏秋', taste:'清香甘甜', texture:'脆爽细腻', scene:'热带风情', tip:'脆爽清香·蘸酸梅粉绝配' },
+      '甘蔗': { season:'秋冬', taste:'清甜多汁', texture:'脆硬嚼劲', scene:'润喉解燥', tip:'润喉去燥·清凉佳品' },
+      '青枣': { season:'秋冬', taste:'清甜脆爽', texture:'脆嫩多汁', scene:'丝丝脆甜', tip:'台湾青枣·维生素C丰富' },
+    };
+
+    // 口语化卖点金句（可直接用于社群文案，每种4变体）
+    const FRUIT_SELLING = {
+      '阳光玫瑰': ['自带玫瑰香·无籽一口脆·葡萄界的爱马仕', '清香甜脆不腻口·冷藏后像吃果冻', '日本引进品种·自带花香Buff·甜度拉满', '不用吐籽不用剥皮·洗洗就能吃·懒人快乐果'],
+      '西瓜': ['冰镇后甜度翻倍·比饮料还解渴', '沙瓤脆甜·一口消暑·夏天的快乐', '红到心坎里的甜·冰一下幸福感爆表', '没有西瓜的夏天是不完整的·不接受反驳'],
+      '芒果': ['桂七甜度20°·甜到不用加糖', '金黄绵密·热带果香·一口沦陷', '切果NOW回购王·甜到核都想啃', '芒果季的快乐·软糯香甜还会爆汁'],
+      '榴莲': ['绵密如奶油·甜到上头·爱它的人懂', '金枕果肉饱满·冰镇后像吃冰淇淋', '榴莲控的终极快乐·一口入魂·回味无穷', '树上熟金枕·不苦不涩·纯甜暴击'],
+      '荔枝': ['季节限定·冰镇更绝·清甜一口爆汁', '6-7月限定赏味期·错过了等一年', '妃子笑·核小肉厚·一口回到唐朝', '新鲜荔枝的正确打开方式·冰镇！'],
+      '杨梅': ['东魁个大爆汁·酸甜解腻神器', '6月限定·入口化渣·错过等一年', '浙江东魁·乒乓球那么大·酸甜会上瘾', '没有杨梅的夏天·就像泡面没有调料包'],
+      '草莓': ['丹东99甜度14°·颜值担当', '酸甜可口·鲜嫩多汁·冬天的甜蜜', '红到发光·甜到心尖·冬天的幸福感', '丹东空运直达·比初恋还甜那种'],
+      '蓝莓': ['云南直送·花青素王者·一口爆浆', '甜过砂糖橘·护眼神器·每天一把', '云南高山蓝莓·小小的身体大大的花青素', '追剧办公必备·一颗接一颗·根本停不下'],
+      '樱桃': ['美早大果不输车厘子·汶川直发', '甜美多汁·脆嫩爽口·颜值天花板', '汶川樱桃·国货之光·车厘子看了都沉默', '红宝石般的光泽·咬一口幸福感拉满'],
+      '凤梨': ['金钻不用泡盐水·手撕都行', '酸甜浓郁·热带风情·自带网感', '台湾金钻·甜到你怀疑人生', '凤梨的夏天·酸酸甜甜·越吃越上头'],
+      '蜜瓜': ['甜度16°+·软糯像吃冰淇淋', '甜蜜细腻·冰镇后更绝', '可以舀着吃的瓜·一勺下去全是幸福感', '日本网纹瓜平替·甜度不输·价格骨折'],
+      '葡萄': ['当季鲜摘·清甜爽脆·一颗接一颗', '无籽方便·追剧零嘴首选', '新鲜得像刚从藤上摘下来', '不用吐籽的快乐·吃着吃着就没了'],
+      '桃': ['盛夏限定·香甜多汁·咬一口满溢', '软硬适中·夏日仪式感的开始', '水蜜桃巅峰时刻·软到可以吸着吃', '一掰就离核·甜汁顺手指流·夏天的味道'],
+      '橙': ['赣南脐橙汁多无渣·维C补充站', '酸甜平衡·粒粒分明·现切最新鲜', '维C含量拉满·一颗橙子=一天活力', '现切现吃·比你剥的橙子甜三倍'],
+      '海盐青柠': ['咸甜交织一口醒神·风味界天花板', '海盐+青柠·清爽刺激·一秒提神', '没想到咸的和甜在一起会这么上头', '广西风味入侵·吃完你会回来谢我'],
+      '酸嘢': ['广西地道风味·酸甜咸辣·越吃越上头', '脆爽开胃·一口一个停不下', '没吃过酸嘢的夏天是不完整的', '酸甜咸辣四重暴击·一口打开新世界'],
+      '苹果': ['烟台脆·阿克苏冰糖心·咔嚓一口', '花牛奶香·四季常鲜·每天一个', '脆到隔壁办公室都能听见', '苹果界卷王·又甜又脆又有奶香'],
+      '奇异果': ['红心更甜·绿心无酸·一颗顶一天维C', '软糯细腻·维C炸弹', '维C含量≈10个苹果·免疫力充电宝', '可以舀着吃的水果·比布丁还嫩滑'],
+      '椰青': ['清甜椰香·一秒到海边', '比饮料还解渴·椰肉嫩滑', '热带海岛的快乐·不用机票就能拥有', '夏天解暑神器·椰香四溢·冰镇绝了'],
+      '龙眼': ['泰国金标·肉脆清甜·岭南珍珠', '鲜食冰镇更甜·干果桂圆泡茶绝配', '6-8月限定·小小一颗甜到心坎', '冰镇龙眼·一口一个根本停不下'],
+      '山竹': ['紫红皮白肉·果中皇后·冰镇像冰淇淋', '酸甜多汁·解暑神器·夏天必囤', '白嫩果肉·清甜不腻·一人能吃一斤', '山竹配榴莲·冰火两重天的快乐'],
+      '柠檬': ['酸香浓郁·泡水喝清新提神', '美白排毒·一颗柠檬=一天的维C', '柠檬切片泡冰水·夏天的最佳打开方式', '不是所有酸都让人皱眉·柠檬的酸会上瘾'],
+      '无花果': ['软糯甘甜·皮薄肉嫩·果中之花', '浓厚甘甜·一口沦陷·冷藏后更绝', '小众宝藏水果·吃过就会回购', '无花果的甜·是阳光酿出来的味道'],
+      '释迦': ['甜度爆表·软滑像吃冰淇淋', '热带珍果·浓郁甜蜜·一口入魂', '奶香口感·丝滑绵密·水果界甜品', '没吃过释迦·不知道水果能有多甜'],
+      '莲雾': ['脆嫩清甜·夏日补水神器', '清爽解暑·一口咬下去全是汁水', '红艳艳的外表·清甜甜的内心', '夏天吃莲雾·比喝矿泉水还解渴'],
+      '杨桃': ['五星造型·自带网红感·脆爽多汁', '横切是星星·竖切是美味', '清甜微酸·颜值和口感都在线', '水果界的颜值担当·随手一拍都好看'],
+      '芭乐': ['脆爽清香·蘸酸梅粉绝配', '热带风情·清香甘甜·越吃越上头', '粉红果肉·脆爽细腻·宝藏水果', '吃过酸梅粉芭乐·才知道什么叫灵魂搭配'],
+      '甘蔗': ['润喉去燥·清凉佳品·秋冬必备', '清甜多汁·嚼一口甜到心底', '冰镇甘蔗汁·比奶茶还解渴', '冬天的甘蔗·自然的甜蜜'],
+      '红毛丹': ['毛茸茸的外表·甜蜜蜜的内心', '泰国红毛丹·软嫩爽滑·热带风情', '形似荔枝·更甜更嫩·夏季限定', '剥开毛茸茸·露出甜蜜蜜'],
+      '青枣': ['台湾青枣·脆嫩多汁·丝丝脆甜', '维C含量高·脆爽超过瘾', '一口嘎嘣脆·甜中带鲜', '绿色小甜心·秋冬限定脆'],
+      '桑葚': ['春日限定·甘甜微酸·花青素爆表', '甜度18°·药食同源·一口爆汁', '4-7月限定·错过等一年', '紫色小浆果·营养密度天花板'],
+      'default': ['当季新鲜现切·冰镇一口入夏', '新鲜现做·口感刚好·冰一下更好吃', '今早现切·新鲜到滴水·冰镇刚刚好', '不冰不夏天·这份鲜甜·值得一试'],
+    };
+    // 周四特价专用理由模板（不套用水果模板的"为什么这周还值得吃"）
+    function matchFruitSelling(product) {
+      let bestKey = null, bestLen = 0;
+      for (const key of Object.keys(FRUIT_SELLING)) {
+        if (key === 'default') continue;
+        if (product.includes(key) && key.length > bestLen) { bestKey = key; bestLen = key.length; }
+      }
+      if (bestKey) return FRUIT_SELLING[bestKey];
+      // 模糊匹配
+      const FUZZY = { '麒麟':'西瓜','蜜':'蜜瓜','榴':'榴莲','荔':'荔枝','芒':'芒果','莓':'草莓','樱':'樱桃','桃':'桃','橙':'橙','橘':'橙','柠':'柠檬','海盐':'海盐青柠','凤':'凤梨','菠':'凤梨','杨':'杨梅','蓝':'蓝莓','提':'葡萄','瓜':'西瓜','李':'桃','阳光玫瑰':'阳光玫瑰','龙':'龙眼','山':'山竹','无花':'无花果','释':'释迦','莲':'莲雾','杨桃':'杨桃','芭':'芭乐','甘':'甘蔗','青':'青枣','红毛':'红毛丹','桑':'桑葚' };
+      for (const [f, t] of Object.entries(FUZZY)) { if (product.includes(f) && FRUIT_SELLING[t]) return FRUIT_SELLING[t]; }
+      return FRUIT_SELLING['default'];
+    }
+    const THU_REASON_TEMPLATES = [
+      (p,t) => `${t.taste}的${p}，${t.tip}`,
+      (p,t) => `${p}｜${t.texture}，${t.scene}`,
+      (p,t) => `${t.scene}担当！${p}，${t.taste}`,
+      (p,t) => `${t.taste}，${t.texture}，${p}值得囤`,
+    ];
+
+    const REASON_TEMPLATES = [
+      (p,t) => `${t.season}的${p}，${t.taste}，${t.tip}`,
+      (p,t) => `为什么这周还值得吃？${p}${t.season}，${t.texture}，${t.scene}`,
+      (p,t) => `${t.taste}的${p}，${t.texture}，${t.scene}首选`,
+      (p,t) => `${p}正值${t.season}，${t.taste}，${t.tip}`,
+      (p,t) => `${t.scene}就选${p}，${t.season}，${t.taste}`,
+    ];
+
+    // 风味产品专用模板（区别于水果模板）
+    const FLAVOR_CATEGORIES = ['酸嘢','海盐青柠','青柠','乌梅'];
+    const FLAVOR_TEMPLATES = [
+      (p,t) => `一口上瘾的${p}｜${t.taste}，${t.tip}`,
+      (p,t) => `${p}，${t.taste}的独特风味，${t.scene}`,
+      (p,t) => `${t.taste}暴击⚡${p}，${t.tip}`,
+      (p,t) => `${t.scene}就选${p}｜${t.taste}，${t.tip}`,
+    ];
+    let reasonTemplateIdx = parseInt(localStorage.getItem('reasonTemplateIdx') || '0');
+    // 每周继承上次用过的模板尾，确保轮换
+    reasonTemplateIdx = (reasonTemplateIdx + 1) % REASON_TEMPLATES.length;
+
+    function matchFruitTrait(productName) {
+      // 复合产品：按+/／分割，每部分独立匹配，返回组合描述
+      const parts = productName.split(/[+／\/]/).map(s => s.trim()).filter(Boolean);
+      const traits = [];
+      const seen = new Set();
+      for (const part of parts) {
+        const resolved = resolveFruitName(part);
+        let bestMatch = null, bestLen = 0;
+        for (const [key, trait] of Object.entries(FRUIT_TRAITS)) {
+          if (resolved.includes(key) && key.length > bestLen) {
+            bestMatch = trait; bestLen = key.length;
+          }
+        }
+        if (bestMatch && !seen.has(bestLen + bestMatch.taste)) {
+          seen.add(bestLen + bestMatch.taste);
+          traits.push(bestMatch);
+        }
+      }
+      if (traits.length > 0) {
+        // 合并多个品类的季节/口感/卖点
+        const allTaste = [...new Set(traits.map(t => t.taste))].join('·');
+        return { season: traits[0].season, taste: allTaste, tip: traits.map(t => t.tip).join('·'), scene: traits[0].scene };
+      }
+      return FRUIT_TRAITS['西瓜']; // fallback
+    }
+
+    function optimizeReason(productName, keywords, customTemplates) {
+      const trait = matchFruitTrait(productName);
+      const matchedKey = Object.keys(FRUIT_TRAITS).find(k => 
+        productName.includes(k) && Object.keys(FRUIT_TRAITS).filter(k2 => productName.includes(k2)).reduce((a,k2)=>k2.length>a.length?k2:a,'').length === k.length
+      );
+      const isFlavor = matchedKey && FLAVOR_CATEGORIES.includes(matchedKey);
+      const templates = customTemplates || (isFlavor ? FLAVOR_TEMPLATES : REASON_TEMPLATES);
+      const template = templates[reasonTemplateIdx % templates.length];
+      reasonTemplateIdx = (reasonTemplateIdx + 1) % templates.length;
+      localStorage.setItem('reasonTemplateIdx', reasonTemplateIdx);
+      let base = template(productName, trait);
+      if (keywords && keywords.trim()) {
+        const kw = keywords.trim();
+        if (!base.includes(kw.slice(0,2))) {
+          base = base.replace('。', `，${kw}`) + (base.endsWith('。') ? '' : '');
+        }
+      }
+      return base;
+    }
+
+    function detectFruitCategory(productName) {
+      // 返回匹配到的品类名（用于UI标签显示）
+      let bestKey = null, bestLen = 0;
+      for (const key of Object.keys(FRUIT_TRAITS)) {
+        if (productName.includes(key) && key.length > bestLen) {
+          bestKey = key;
+          bestLen = key.length;
+        }
+      }
+      if (bestKey) return FLAVOR_CATEGORIES.includes(bestKey) ? '风味·' + bestKey : bestKey;
+      // 检查模糊映射
+      const FUZZY_MAP = {
+        '番茄': '圣女果', '小番茄': '圣女果', '千禧': '圣女果',
+        '乌梅': '杨梅', '梅': '杨梅',
+        '杨枝': '芒果', '甘露': '芒果', '椰奶': '椰青',
+        '李': '桃', '梨': '苹果', '枣': '冬枣',
+        '柠': '橙', '橘': '柑橘', '桔': '柑橘',
+        '莓': '草莓', '蕉': '芒果', '榴': '榴莲',
+        '柚': '青柚', '柿': '苹果', '杏': '桃',
+        '瓜': '甜瓜', '提': '葡萄', '荔': '荔枝',
+      };
+      for (const [fuzzy, target] of Object.entries(FUZZY_MAP)) {
+        if (productName.includes(fuzzy)) return target + '(近似)';
+      }
+      return '未知品类';
+    }
+
+    // ========== 实时品类识别提示条 ==========
+    function resolveFruitName(name) {
+      // 模糊映射：别名 → 标准品类名（全覆盖，不再补丁）
+      const ALIAS = {
+        // 西瓜系
+        '麒麟瓜':'麒麟','8424':'西瓜','特小凤':'西瓜','硒砂瓜':'西瓜','甜王':'西瓜','黑美人':'西瓜','无籽瓜':'西瓜',
+        // 蜜瓜系
+        '哈密瓜':'蜜瓜','哈密':'蜜瓜','西州蜜':'蜜瓜','网纹':'蜜瓜','白金蜜':'蜜瓜','口口蜜':'蜜瓜','玉菇':'蜜瓜',
+        // 注意：羊角蜜已是独立品类，不映射到蜜瓜
+        // 芒果系
+        '台农':'芒果','水仙芒':'芒果','青芒':'芒果','金煌芒':'芒果','凯特芒':'芒果','贵妃芒':'芒果','澳芒':'芒果','鸡蛋芒':'芒果',
+        // 葡萄系
+        '巨峰':'葡萄','夏黑':'葡萄','红提':'葡萄','青提':'葡萄','无籽提':'葡萄','黑提':'葡萄','美人指':'葡萄','金手指':'葡萄','阳光玫瑰':'阳光玫瑰',
+        // 桃系
+        '水蜜桃':'桃','黄桃':'桃','油桃':'桃','蟠桃':'桃','春雪':'桃','金秋红蜜':'桃','阳山':'桃',
+        // 橙系
+        '脐橙':'橙','冰糖橙':'橙','爱媛':'橙','新奇士':'橙','澳橙':'橙','血橙':'橙','夏橙':'橙','橙子':'橙',
+        // 柑橘系
+        '砂糖橘':'柑橘','耙耙柑':'柑橘','丑橘':'柑橘','皇帝柑':'柑橘','沃柑':'柑橘','金桔':'柑橘','蜜桔':'柑橘','芦柑':'柑橘','茂谷柑':'柑橘','春见':'柑橘','橘子':'柑橘','桔子':'柑橘',
+        // 樱桃系
+        '车厘子':'樱桃','美早':'樱桃','汉源':'樱桃','桑提娜':'樱桃','拉宾':'樱桃','科迪亚':'樱桃','雷尼尔':'樱桃','布鲁克斯':'樱桃','冰宾':'樱桃','米易樱桃':'樱桃',
+        // 番茄系
+        '小番茄':'圣女果','番茄':'圣女果','千禧':'圣女果','玲珑':'圣女果','樱桃番茄':'圣女果',
+        // 榴莲系
+        '猫山王':'榴莲','金枕':'榴莲','金枕头':'榴莲',
+        // 凤梨系
+        '金钻':'凤梨','徐闻菠萝':'凤梨','菲律宾凤梨':'凤梨','菠萝':'凤梨','凤梨':'凤梨','都乐':'凤梨',
+        // 草莓系
+        '丹东99':'草莓','奶油草莓':'草莓','红颜':'草莓','章姬':'草莓','白雪公主':'草莓',
+        // 杨梅/荔枝系
+        '东魁':'杨梅','杨梅':'杨梅','荸荠种':'杨梅',
+        '妃子笑':'荔枝','桂味':'荔枝','白糖罂':'荔枝','糯米糍':'荔枝','挂绿':'荔枝',
+        // 甜瓜系
+        '甜瓜':'甜瓜','玉菇甜瓜':'甜瓜',
+        // 苹果系
+        '红富士':'苹果','阿克苏':'苹果','花牛':'苹果','蛇果':'苹果','嘎啦':'苹果','国光':'苹果',
+        // 梨系
+        '秋月':'梨','丰水梨':'梨','砀山梨':'梨','皇冠梨':'梨','库尔勒':'梨','翠冠':'梨','鸭梨':'梨','水晶梨':'梨','黄金梨':'梨',
+        // 猕猴桃系
+        '猕猴桃':'奇异果','佳沛':'奇异果','金果':'奇异果','红心猕猴桃':'奇异果','徐香':'奇异果','翠香':'奇异果',
+        // 柚子系
+        '西柚':'青柚','葡萄柚':'青柚','三红蜜柚':'柚子','琯溪蜜柚':'柚子','文旦':'柚子','沙田柚':'柚子','甜桔柚':'柚子',
+        // 冬枣系
+        '大荔冬枣':'冬枣','台湾青枣':'青枣',
+        // 龙眼系
+        '桂圆':'龙眼','石硖':'龙眼','储良':'龙眼','泰国龙眼':'龙眼',
+        // 李子系
+        '黑布林':'李子','三华李':'李子','蜂糖李':'李子','青红脆李':'李子','西梅':'西梅','法兰西':'西梅','智利西梅':'西梅',
+        // 甘蔗系
+        '黑皮甘蔗':'甘蔗','青皮甘蔗':'甘蔗',
+        // 芭乐系
+        '番石榴':'芭乐','红心芭乐':'芭乐','白心芭乐':'芭乐',
+        // 柿系
+        '火晶':'柿子','火柿子':'柿子','甜脆柿':'柿子',
+        // 其他
+        '木瓜':'木瓜','牛奶木瓜':'木瓜','椰子':'椰青','石榴':'石榴','软籽石榴':'石榴','小白杏':'杏','库车':'杏',
+        '马蹄':'荸荠','地梨':'荸荠','桑葚':'桑葚','乌梅':'乌梅','青柠':'青柠','柠檬':'柠檬','羊角蜜':'羊角蜜',
+        // 单字模糊
+        '蜜':'蜜瓜','瓜':'西瓜','芒':'芒果','提':'葡萄','橙':'橙','橘':'柑橘','柠':'柠檬','李':'李子',
+      };
+      for (const [k, v] of Object.entries(ALIAS)) { if (name.includes(k)) return v; }
+      return name;
+    }
+    function showLiveHint(prodId, hintId, subId) {
+      const prodEl = document.getElementById(prodId);
+      const hintEl = document.getElementById(hintId);
+      if (!prodEl || !hintEl) return;
+      let raw = (prodEl.value || '').trim();
+      // 去掉【大四拼】之类的前缀标签
+      raw = raw.replace(/【[^】]*】/g, ' ').trim();
+      // 如果有子主题输入，也加入识别
+      if (subId) { const subEl = document.getElementById(subId); if (subEl && subEl.value.trim()) raw += '/' + subEl.value.trim(); }
+      if (!raw) { hintEl.innerHTML = ''; return; }
+      const parts = raw.split(/[+／\/]/).map(s => s.trim()).filter(Boolean);
+      if (parts.length === 0) { hintEl.innerHTML = ''; return; }
+      const sortedKeys = Object.keys(FRUIT_TRAITS).sort((a, b) => b.length - a.length);
+      const seen = new Set();
+      let html = '';
+      for (const part of parts) {
+        // 迭代解析：找到所有匹配的别名，从左到右逐个切分
+        let remaining = part;
+        const results = [];
+        while (remaining.length > 0) {
+          let bestKey = '', bestVal = '', bestIdx = Infinity;
+          for (const [k, v] of Object.entries(ALIAS)) {
+            const idx = remaining.indexOf(k);
+            if (idx >= 0 && idx < bestIdx) { bestIdx = idx; bestKey = k; bestVal = v; }
+          }
+          if (!bestKey) break; // 无匹配，退出
+          const resolved = bestVal;
+          let matched = null;
+          for (const key of sortedKeys) {
+            if (resolved.includes(key)) { matched = key; break; }
+          }
+          if (matched && !seen.has(matched)) {
+            seen.add(matched);
+            const t = FRUIT_TRAITS[matched];
+            html += `<span class="htag">🍉${matched} <span class="hdesc">${t.season}·${t.taste}·${t.scene}</span></span>`;
+          }
+          remaining = remaining.slice(bestIdx + bestKey.length);
+        }
+      }
+      if (!html) html = '<span class="htag" style="background:#f5f5f5;color:rgba(0,0,0,0.5)">📝 未识别到品类</span>';
+      hintEl.innerHTML = html;
+    }
+
+    function autoOptimizeReason() {
+      const productEl = document.getElementById('tueProduct');
+      const keywordEl = document.getElementById('tueKeywords');
+      const reasonEl = document.getElementById('tueReason');
+      const tagEl = document.getElementById('tueFruitTag');
+      if (!reasonEl || !productEl) return;
+      const product = (productEl.value || productEl.placeholder || '招牌鲜果切').trim();
+      if (manualCategory && product !== lastManualProduct) { clearManualCategory(); }
+      if (tagEl && !manualCategory) {
+        const cat = getEffectiveCategory(product);
+        tagEl.textContent = cat.includes('+') ? '复合·' + cat : cat;
+        tagEl.style.color = '#2d8a4e';
+      }
+      const keywords = keywordEl ? (keywordEl.value || '').trim() : '';
+      reasonEl.value = optimizeReason(product, keywords);
+    }
+
+    let lastManualProduct = '';
+    let daySelectedFruits = {}; // {2:[], 3:[], 4:[], 5:[], 6:[]}
+
+    const FRUIT_DAY_MAP = { tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
+
+    function getFruitPickerDay(containerId) {
+      const prefix = (containerId || '').slice(0, 3);
+      return FRUIT_DAY_MAP[prefix] || 2;
+    }
+
+    function toggleFruitTag(el) {
+      el.classList.toggle('selected');
+      const fruit = el.dataset.fruit;
+      const tagsContainer = el.closest('.fruit-tags');
+      const day = getFruitPickerDay(tagsContainer ? tagsContainer.id : '');
+      if (!daySelectedFruits[day]) daySelectedFruits[day] = [];
+      if (el.classList.contains('selected')) {
+        if (!daySelectedFruits[day].includes(fruit)) daySelectedFruits[day].push(fruit);
+      } else {
+        daySelectedFruits[day] = daySelectedFruits[day].filter(f => f !== fruit);
+      }
+    }
+
+    function renderFruitPicker(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const day = getFruitPickerDay(containerId);
+      const selected = daySelectedFruits[day] || [];
+      // 品类合并：绿果→奇异果, 哈密→蜜瓜
+      const MERGE = { '绿果':'奇异果', '哈密':'蜜瓜' };
+      const HIDE = new Set(['绿果','哈密','提子','菠萝','蜜桃','麒麟']);
+      const CATEGORIES = {
+        '风味': ['乌梅','酸嘢','海盐青柠','干噎酸奶','青柠','柠檬'],
+        '瓜类': ['西瓜','蜜瓜','羊角蜜','甜瓜','木瓜','椰青'],
+        '热带': ['芒果','凤梨','榴莲','山竹','火龙果','菠萝蜜','百香果','芭乐','红毛丹','释迦','莲雾','杨桃','龙眼'],
+        '浆果': ['草莓','蓝莓','樱桃','杨梅','桑葚','圣女果','石榴'],
+        '核果': ['桃','李子','西梅','杏','枇杷','柿子','黄桃'],
+        '柑橘': ['橙','柑橘','青柚','柚子'],
+        '葡萄': ['葡萄','阳光玫瑰'],
+        '仁果': ['苹果','梨'],
+        '奇异果': ['奇异果'],
+        '其他': ['荔枝','冬枣','青枣','甘蔗','荸荠','无花果'],
+      };
+      const cats = {};
+      for (const [cat, fruits] of Object.entries(CATEGORIES)) {
+        const valid = fruits.filter(f => FRUIT_TRAITS[f] && !HIDE.has(f));
+        if (valid.length) cats[cat] = valid;
+      }
+      const used = new Set(Object.values(cats).flat());
+      const unused = Object.keys(FRUIT_TRAITS).filter(k => k.length >= 2 && !used.has(k) && !HIDE.has(k));
+      if (unused.length) cats['其他'] = [...(cats['其他']||[]), ...unused];
+
+      let html = '';
+      for (const [cat, fruits] of Object.entries(cats)) {
+        html += `<div style="font-size:11px;color:rgba(0,0,0,0.3);margin:10px 0 4px;font-weight:500">${cat}</div><div class="fruit-tags" style="max-height:none;gap:8px">`;
+        for (const fruit of fruits) {
+          const sel = selected.includes(fruit) ? ' selected' : '';
+          html += `<span class="fruit-tag${sel}" data-fruit="${fruit}" onclick="toggleFruitTag(this)">${fruit}</span>`;
+        }
+        html += '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    function getSelectedFruits(day) {
+      if (!day) day = 2;
+      return [...(daySelectedFruits[day] || [])]; // 纯手动选择，不自动匹配
+    }
+
+    function updateFriContainerUI() {
+      const prodEl = document.getElementById('friProduct');
+      const subRow = document.getElementById('friSubThemeRow');
+      if (!prodEl || !subRow) return;
+      subRow.style.display = isContainerProduct((prodEl.value || '').trim()) ? 'block' : 'none';
+    }
+
+    // ========== 通用产品品类识别（所有推送日） ==========
+    function updateProductTag(prodId, tagId, subRowId) {
+      const prodEl = document.getElementById(prodId);
+      const tagEl = document.getElementById(tagId);
+      if (!prodEl || !tagEl) return;
+      const product = (prodEl.value || '').trim();
+      if (!product) { tagEl.textContent = '--'; return; }
+      const cat = getEffectiveCategory(product);
+      tagEl.textContent = cat;
+      // 容器检测
+      if (subRowId) {
+        const subRow = document.getElementById(subRowId);
+        if (subRow) subRow.style.display = isContainerProduct(product) ? 'block' : 'none';
+      }
+    }
+
+    // ========== 价格格式化 ==========
+    function formatPrice(priceVal) {
+      if (!priceVal || !priceVal.trim()) return '';
+      const v = priceVal.trim();
+      if (priceMode === 'unified') {
+        if (!isNaN(parseFloat(v)) && isFinite(v)) return `💰 ¥${v}`;
+        return `💰 ${v}`;
+      }
+      if (!isNaN(parseFloat(v)) && isFinite(v)) return `💰 ¥${v}起·各区域以平台为准`;
+      return `💰 ${v}`;
+    }
+
+    function formatWedPrice(originalPrice) {
+      if (!originalPrice || !originalPrice.trim()) return '';
+      const v = originalPrice.trim();
+      const num = parseFloat(v);
+      if (isNaN(num) || !isFinite(num)) return `💰 会员日88折·${v}`;
+      const discounted = (num * 0.88).toFixed(1);
+      if (priceMode === 'unified') return `💰 原价¥${num} → 会员日88折 ¥${discounted}`;
+      return `💰 参考原价¥${num} → 88折约¥${discounted}·各区域以平台为准`;
+    }
+
+    function getPriceById(id) {
+      const el = document.getElementById(id);
+      return el ? (el.value || '').trim() : '';
+    }
+
+    // ========== 排版引擎：自动拆行 + emoji注入 ==========
+    const DECO_EMOJI = ['🍉','🍓','🍊','🍇','🥝','🍑','🍈','✨','🔥','💡','⚡','🌟','📊','🎯','💫'];
+
+    // 水果→emoji映射
+    const FRUIT_EMOJI = {
+      '西瓜':'🍉','麒麟':'🍉','芒果':'🥭','杨梅':'🔴','荔枝':'🍈','蜜瓜':'🍈','哈密':'🍈','羊角蜜':'🍈','甜瓜':'🍈',
+      '草莓':'🍓','葡萄':'🍇','提子':'🍇','桃':'🍑','蜜桃':'🍑','黄桃':'🍑','凤梨':'🍍','菠萝':'🍍',
+      '橙':'🍊','柑橘':'🍊','青柚':'🍈','柚子':'🍈','蓝莓':'🫐','樱桃':'🍒','榴莲':'🫒','圣女果':'🍅',
+      '火龙果':'🐉','菠萝蜜':'🫒','阳光玫瑰':'🍇','苹果':'🍎','梨':'🍐','奇异果':'🥝','绿果':'🥝',
+      '椰青':'🥥','百香果':'🍋','木瓜':'🟠','冬枣':'🟤','酸嘢':'🌶️','海盐青柠':'🧂','青柠':'🍋','柠檬':'🍋',
+      '乌梅':'🫐','枇杷':'🟡','李子':'🟣','西梅':'🟣','龙眼':'🟤','红毛丹':'🔴','山竹':'⚪','无花果':'🟢',
+      '释迦':'🟢','莲雾':'🔴','杨桃':'⭐','芭乐':'🟢','甘蔗':'🟤','青枣':'🟢','桑葚':'🟣','石榴':'🔴',
+      '杏':'🟡','荸荠':'⚪','柿子':'🟠','干噎酸奶':'🥛','木瓜':'🟠',
+    };
+    const FALLBACK_EMOJI = ['🌸','💖','⭐','🌈','🌿','💫','✨','🍃','💚','🌻'];
+    function fruitEmoji(fruit) {
+      return FRUIT_EMOJI[fruit] || FALLBACK_EMOJI[fruit.length % FALLBACK_EMOJI.length];
+    }
+
+    function splitLines(text, maxLen) {
+      // 按\n或。或，拆分，每段不超过maxLen字
+      maxLen = maxLen || 20;
+      const result = [];
+      // 先按已有换行拆分
+      const parts = text.split('\n');
+      for (let part of parts) {
+        part = part.trim();
+        if (!part) { result.push(''); continue; }
+        // 如果整段不超过maxLen，直接保留
+        if ([...part].length <= maxLen) {
+          result.push(part);
+          continue;
+        }
+        // 长段拆分：在，。处断
+        let remaining = part;
+        while ([...remaining].length > maxLen) {
+          let cut = maxLen;
+          // 找最近的断点
+          for (let i = maxLen - 1; i >= maxLen - 8; i--) {
+            const ch = [...remaining][i] || '';
+            if ('，。！？、｜·'.includes(ch)) { cut = i + 1; break; }
+          }
+          result.push([...remaining].slice(0, cut).join('').trim());
+          remaining = [...remaining].slice(cut).join('').trim();
+        }
+        if (remaining) result.push(remaining);
+      }
+      return result;
+    }
+
+    function ensureEmoji(line) {
+      if (!line || !line.trim()) return line;
+      if (/^(#|http|\/\/)/.test(line.trim())) return line;
+      if (/[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{2500}-\u{257F}]/u.test(line)) return line;
+      const emoji = DECO_EMOJI[Math.floor(Math.random() * DECO_EMOJI.length)];
+      // emoji放行尾，不撑宽
+      return line + ' ' + emoji;
+    }
+
+    function formatCopy(lines) {
+      return lines.filter(l => l !== null && l !== undefined).map(l => ensureEmoji(l)).join('\n');
+    }
+
+    function getTueHuaZi(product, dataLabel) {
+      // 智能缩减：8字以内全用，否则在标点/词组边界截断
+      let shortDL = dataLabel;
+      if ([...dataLabel].length > 8) {
+        let cut = 8;
+        for (let i = 7; i >= 5; i--) {
+          if ('，。！？、 '.includes([...dataLabel][i] || '')) { cut = i; break; }
+        }
+        shortDL = [...dataLabel].slice(0, cut).join('');
+      }
+      const pool = [
+        `📊${shortDL}の${product}🏆`, `🔥真实数据｜${product}实至名归`,
+        `🏆${shortDL}｜${product}`, `📈${product}断层领先`,
+        `💪${product}｜${shortDL}`, `⚡一周销冠｜${product}`,
+        `🎯千店之选｜${product}`, `👑${shortDL}｜${product}`,
+        `📊数据会说话｜${product}`, `🔥回购王就是${product}`,
+        `🌟${product}卖爆了`, `💥真数据不骗人｜${product}`,
+        `👀看看谁又上榜了｜${product}`, `📢本周C位｜${product}`,
+        `🏅口碑认证｜${product}`, `🎖️回购率说话｜${product}`,
+      ];
+      return pickFreshHuaZi(pool, 'tueHuaUsed', 5);
+    }
+
+    // ========== 统一大花字库 ==========
+    // 周三：8类 × 3变体 = 24个
+    const WED_HUA_POOLS = {
+      pun: [`周三三🌊｜{p}来续命🍉`,`小周末前夜🍃｜{p}安排`,`周三过半⏳｜{p}充电`,`水曜日の快乐🎫｜{p}88折`],
+      unicode: [`𝗪𝗲𝗱𝗻𝗲𝘀𝗱𝗮𝘆 鲜果+88折=快乐²`,`𝐖𝐞𝐝𝐧𝐞𝐬𝐝𝐚𝐲🍉{p}会员专享`,`𝗠𝗲𝗺𝗯𝗲𝗿 𝗗𝗮𝘆｜{p}88折`,`𝑾𝒆𝒅𝒏𝒆𝒔𝒅𝒂𝒚🍉{p}宠粉日`],
+      formula: [`一周过半⏳={p}×88折🍉`,`周三电量告急🔋={p}+88折`,`{p}+会员日=快乐³`,`周三=88折×{p}=完美下午`],
+      emojiChain: [`🥱😪➡😋🤩 周三会员日到！`,`😴➡🍉😋 88折续命中`,`一周过半⏳该奖励自己了🥝`,`🍉×88折=周三满血复活⚡`],
+      report: [`🤔周三诊断：你缺一份88折{p}`,`📋今日处方：{p}×1 即刻服用`,`🩺体检报告：幸福指数↓ 需{p}`,`📊周中数据：{p}摄入量为0⚠️`],
+      limited: [`⚡会员日倒计时｜88折仅限今天`,`⏰今天不买明天原价｜{p}`,`🎫周三限定｜88折今日有效`,`🔔叮！你的88折券今日到期`],
+      receipt: [`🧾周三会员菜单｜━━━ 全场果切8️⃣8️⃣折`,`🧾今日账单：{p}×1 折后价惊喜`,`📋周三特供｜{p}已加入88折清单`,`🧾会员专享价｜{p}已标记88折`],
+      search: [`🔍搜索中：周三怎么吃最划算→88折{p}`,`🔍正在搜索：{p}的88折入口`,`🔍全网比价→还是会员日88折香`,`🔍周三热搜：{p}88折`],
+    };
+    function pickFreshHuaZi(pool, storageKey, avoidCount) {
+      const used = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      // 排除最近avoidCount个用过的
+      const recent = used.slice(-avoidCount);
+      const candidates = pool.filter((_, i) => !recent.includes(i));
+      const pick = candidates.length > 0 
+        ? candidates[Math.floor(Math.random() * candidates.length)]
+        : pool[Math.floor(Math.random() * pool.length)];
+      const pickIdx = pool.indexOf(pick);
+      // 记录使用
+      const updated = [...used, pickIdx];
+      if (updated.length > 30) updated.splice(0, updated.length - 30);
+      localStorage.setItem(storageKey, JSON.stringify(updated));
+      return pick;
+    }
+
+    // ========== CTA引导语池（按推送日风格分组，每池8条） ==========
+    const CTA_POOLS = {
+      2: ['👇 看看大家为什么回购','🛒 戳这里，尝尝销冠的滋味','🍉 今日份甜蜜，一键get','📱 鲜切直达，点一下就到','💫 被数据选中的味道，试试？','🔥 回购王的口碑，自己尝尝看','🎯 千店之选，今天轮到你','✨ 好果切不用挑，点就对了'],
+      3: ['🎫 今日份福利，领了再走','🛒 88折入口，别和快乐擦肩','💫 会员日的仪式感，从下单开始','🍉 犒赏周三的自己，就趁现在','📱 点一下，88折到手','🎁 一周一次的宠爱，接住','⚡ 再犹豫折扣就溜了','🍃 鲜甜不等人，今日份已就位'],
+      4: ['🛵 动动手指，鲜切到家','📱 外卖下单，现切现送','🍉 冰爽一键抵达','🛒 不用出门的甜蜜，点这里','💨 鲜切直达，比外卖小哥还快','🎯 今日特价入口，冲','🍃 新鲜切好，等你下单','🧊 冰凉一夏，从这一单开始'],
+      5: ['🛋️ 周末快乐入口','🍉 点一份果切，开启周末模式','📱 戳这里，周末甜蜜就位','💫 犒赏一周的努力，从这里开始','🎬 追剧搭子已就位，就差你下单','🍃 周末的仪式感，一键拥有','✨ 快乐周末，果切先行','🧊 冰镇周末，点一下就到'],
+      6: ['🌟 发现一份好吃的','🍉 今天换个口味试试？','📱 点开看看，说不定就爱上了','💫 周末小惊喜，藏在链接里','🍃 没吃过的味道，值得一试','🎯 这周的宝藏果切，拿走','✨ 舌尖上的新鲜感，一键解锁','🧊 周末的味道，自己定义'],
+    };
+    function getCTA(day) {
+      const pool = CTA_POOLS[day] || CTA_POOLS[2];
+      return pickFreshHuaZi(pool, 'ctaUsed_'+day, 3);
+    }
+
+    // ========== 容器类产品 + 子主题处理 ==========
+    const CONTAINER_KEYWORDS = ['一杯','拼盘','分享装','组合','全家福','套餐','桶','盒','杯','双拼','三拼','四拼','多拼'];
+
+    function isContainerProduct(name) {
+      return CONTAINER_KEYWORDS.some(k => name.includes(k));
+    }
+
+    function getSubThemes() {
+      const el = document.getElementById('tueSubThemes');
+      return el ? (el.value || '').trim() : '';
+    }
+
+    function getEffectiveProduct() {
+      const prodEl = document.getElementById('tueProduct');
+      const product = (prodEl ? (prodEl.value || prodEl.placeholder || '招牌鲜果切') : '招牌鲜果切').trim();
+      const subThemes = getSubThemes();
+      if (subThemes) {
+        // 取第一个子主题作为品类匹配锚点
+        const first = subThemes.split('/')[0].trim();
+        return first || product;
+      }
+      return product;
+    }
+
+    function getSubThemeCount() {
+      const subThemes = getSubThemes();
+      if (!subThemes) return 0;
+      return subThemes.split('/').filter(s => s.trim()).length;
+    }
+
+    function updateContainerUI() {
+      const prodEl = document.getElementById('tueProduct');
+      const subRow = document.getElementById('subThemeRow');
+      if (!prodEl || !subRow) return;
+      const name = (prodEl.value || prodEl.placeholder || '').trim();
+      const subEl = document.getElementById('tueSubThemes');
+      if (isContainerProduct(name)) {
+        subRow.style.display = 'block';
+      } else {
+        subRow.style.display = 'none';
+        if (subEl) subEl.value = ''; // 清空旧子主题
+      }
+    }
+
+    let manualCategory = null; // 手动覆盖的品类
+
+    function toggleCategoryPicker() {
+      const picker = document.getElementById('categoryPicker');
+      if (!picker) return;
+      if (picker.style.display === 'none' || !picker.style.display) {
+        renderCategoryPicker();
+        picker.style.display = 'block';
+      } else {
+        picker.style.display = 'none';
+      }
+    }
+
+    function renderCategoryPicker() {
+      const picker = document.getElementById('categoryPicker');
+      if (!picker) return;
+      const allKeys = Object.keys(FRUIT_TRAITS);
+      const flavors = allKeys.filter(k => FLAVOR_CATEGORIES.includes(k));
+      const fruits = allKeys.filter(k => !FLAVOR_CATEGORIES.includes(k) && k.length >= 2);
+      const groups = [
+        { label: '🔥 热门水果', keys: fruits.slice(0, 12) },
+        { label: '🌶️ 风味产品', keys: flavors },
+      ];
+      picker.innerHTML = `
+        <div style="font-size:11px;color:#999;margin-bottom:6px">点击选择品类（覆盖自动识别）</div>
+        <span style="display:inline-block;padding:3px 8px;margin:2px;border-radius:4px;background:#fff;border:1px solid var(--border);cursor:pointer;font-size:11px" onclick="clearManualCategory()">🔄 恢复自动</span>
+        ${groups.map(g => `
+          <div style="font-size:10px;color:#999;margin:6px 0 2px;font-weight:600">${g.label}</div>
+          ${g.keys.map(k => `
+            <span style="display:inline-block;padding:3px 8px;margin:2px;border-radius:4px;background:#fff;border:1px solid var(--border);cursor:pointer;font-size:11px" 
+                  onclick="setManualCategory('${k}')">${k}</span>
+          `).join('')}
+        `).join('')}
+      `;
+    }
+
+    function setManualCategory(cat) {
+      manualCategory = cat;
+      const product = document.getElementById('tueProduct')?.value?.trim() || document.getElementById('tueProduct')?.placeholder || '';
+      lastManualProduct = product;
+      document.getElementById('tueFruitTag').textContent = '✏️' + cat;
+      document.getElementById('tueFruitTag').style.color = '#e67e22';
+      document.getElementById('categoryPicker').style.display = 'none';
+      const keywords = document.getElementById('tueKeywords')?.value?.trim() || '';
+      const reasonEl = document.getElementById('tueReason');
+      if (reasonEl) {
+        reasonEl.value = optimizeReason(cat + '切', keywords).replace(cat + '切', product || cat);
+      }
+    }
+
+    function clearManualCategory() {
+      manualCategory = null;
+      document.getElementById('tueFruitTag').style.color = '#2d8a4e';
+      document.getElementById('categoryPicker').style.display = 'none';
+      autoOptimizeReason();
+    }
+
+    // 修改原有的品类匹配逻辑：手动覆盖优先
+    function getEffectiveCategory(productName) {
+      if (manualCategory) return manualCategory;
+      // 复合产品检测（含"+"号）
+      if (productName.includes('+')) {
+        const parts = productName.split('+').map(s => s.trim());
+        const found = [];
+        // 按key长度降序，优先精确匹配（芒果>芒，西瓜>瓜）
+        const sortedKeys = Object.keys(FRUIT_TRAITS).sort((a, b) => b.length - a.length);
+        for (const part of parts) {
+          for (const key of sortedKeys) {
+            if (part.includes(key) && !found.includes(key) && found.length < 2 && key.length > 1) {
+              found.push(key);
+              break; // 匹配到最长key就停止这个part
+            }
+          }
+        }
+        if (found.length >= 2) return found.join('+');
+      }
+      return detectFruitCategory(productName).replace('风味·','');
+    }
+
+    function updateReasonWithSubThemes() {
+      const subThemes = getSubThemes();
+      const reasonEl = document.getElementById('tueReason');
+      const fruitTag = document.getElementById('tueFruitTag');
+      if (subThemes && reasonEl) {
+        const count = getSubThemeCount();
+        const first = subThemes.split('/')[0].trim();
+        const effectiveProduct = first; // 用第一个子主题匹配品类
+        // 品类标签指向第一个子主题
+        if (fruitTag) fruitTag.textContent = detectFruitCategory(effectiveProduct) + ' · ' + count + '款主题';
+        // 用有效产品重新优化理由
+        const keywords = (document.getElementById('tueKeywords')?.value || '').trim();
+        reasonEl.value = optimizeReason(effectiveProduct, keywords) + '（' + count + '款主题可选）';
+      } else {
+        autoOptimizeReason();
+      }
+    }
+
+    // ==================== 日期格子标签 ====================
+    function getDayDisplayInfo(year, month, day) {
+      const d = new Date(year, month, day);
+      const md = String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+
+      // 1. 检查节日（日历格子标注用基日，不用offset）
+      for (const f of FESTIVALS) {
+        let checkMd = md;
+        if (f.type === 'lunar') {
+          const baseStr = LUNAR_DATES[f.lunarName]?.[year];
+          if (baseStr) {
+            // 日历格子只看基日当天（正月初一）
+            if (md === baseStr) return { cls: 'festival-day', label: f.name, labelCls: 'festival-label' };
+          }
+          continue;
+        }
+        // 阳历节日：当天标注
+        if (md === f.start) return { cls: 'festival-day', label: f.name, labelCls: 'festival-label' };
+      }
+
+      // 2. 检查节气
+      const solar = getSolarTerm(d);
+      if (solar) return { cls: '', label: solar, labelCls: 'solar-label' };
+
+      // 3. 农历
+      const lunar = solarToLunar(d);
+      if (lunar) {
+        const label = lunar.dayName === '初一' ? lunar.monthName : lunar.dayName;
+        return { cls: '', label, labelCls: 'lunar-label' };
+      }
+
+      return null;
+    }
+
+    // ==================== 舆情监测 Tab ====================
+    // Auto-detect tab from URL parameter + hide other tab
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var tab = params.get('tab');
+  if (tab === 'copy') {
+    // Only show 文案 tab, hide Prompt tab button
+    var style = document.createElement('style');
+    style.textContent = '#mainNav button[onclick*="prompt"]{display:none}';
+    document.head.appendChild(style);
+    document.addEventListener('DOMContentLoaded', function(){ switchTab('copy'); document.getElementById('mainNav').style.display='none'; });
+  } else if (tab === 'prompt') {
+    var style = document.createElement('style');
+    style.textContent = '#mainNav button[onclick*="copy"]{display:none}';
+    document.head.appendChild(style);
+    document.addEventListener('DOMContentLoaded', function(){ switchTab('prompt'); document.getElementById('mainNav').style.display='none'; });
+  }
+})();
+
+function switchTab(tab) {
+      var nav = document.getElementById('mainNav');
+      nav.querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+      var idx = tab === 'copy' ? 0 : tab === 'prompt' ? 1 : 2;
+      nav.children[idx].classList.add('active');
+      document.getElementById('tab-copy').style.display = tab === 'copy' ? '' : 'none';
+      document.getElementById('tab-prompt').style.display = tab === 'prompt' ? '' : 'none';
+      document.getElementById('tab-sentiment').style.display = tab === 'sentiment' ? '' : 'none';
+      if (tab === 'sentiment') fetchSentiment();
+      if (tab === 'prompt') restorePromptList();
+    }
+
+    var SENTIMENT_CACHE = null;
+    var SENTIMENT_DAY_IDX = 0;
+
+    function fetchSentiment() {
+      var el = document.getElementById('sentimentContent');
+      if (SENTIMENT_CACHE) { renderSentiment(SENTIMENT_DAY_IDX); return; }
+      el.className = 'sent-loading';
+      el.innerHTML = '⏳ 正在加载舆情数据…';
+      fetch('sentiment_summary.json?v=' + Date.now())
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(data) {
+          SENTIMENT_CACHE = data.days || [];
+          SENTIMENT_DAY_IDX = 0;
+          renderSentiment(0);
+        })
+        .catch(function(e) {
+          el.className = 'sent-error';
+          el.innerHTML = '⚠️ 舆情数据加载失败<br><small>' + e.message + '</small><br><small>请确认今日看板已生成</small>';
+        });
+    }
+
+    function renderSentiment(idx) {
+      var el = document.getElementById('sentimentContent');
+      var days = SENTIMENT_CACHE;
+      if (!days || days.length === 0) { el.className = 'sent-empty'; el.innerHTML = '暂无数据'; return; }
+      if (idx < 0) idx = 0;
+      if (idx >= days.length) idx = days.length - 1;
+      SENTIMENT_DAY_IDX = idx;
+      var d = days[idx];
+      var negCount = (d.negatives || []).length;
+      var html = '';
+
+      // 日期选择器
+      html += '<div class=\"date-selector\" style=\"margin-bottom:12px;padding:6px 8px;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;justify-content:flex-start\">';
+      days.forEach(function(day, i) {
+        var active = i === idx ? 'active' : '';
+        var label = (day.label || day.date || '').replace('月','/').replace('日','');
+        html += '<button class=\"day-badge ' + active + '\" onclick=\"renderSentiment(' + i + ')\" style=\"flex-shrink:0;font-size:11px;padding:5px 10px\">' + label + '</button>';
+      });
+      html += '</div>';
+
+      // 日期 + 更新时间
+      html += '<div class=\"sent-date-label\">📊 ' + (d.label || d.date || '') + ' 舆情概况</div>';
+
+      // 统计卡片
+      html += '<div class=\"sent-stats\">';
+      html += '<div class=\"sent-stat\"><div class=\"num\">' + (d.total || 0) + '</div><div class=\"lbl\">总条数</div></div>';
+      html += '<div class=\"sent-stat\"><div class=\"num pos-c\">' + (d.pos || 0) + '</div><div class=\"lbl\">正面</div><div class=\"pct\">' + (d.pos_pct || 0).toFixed(1) + '%</div></div>';
+      html += '<div class=\"sent-stat\"><div class=\"num neg-c\">' + (d.neg || 0) + '</div><div class=\"lbl\">负面</div><div class=\"pct\">' + (d.neg_pct || 0).toFixed(1) + '%</div></div>';
+      html += '<div class=\"sent-stat\"><div class=\"num neu-c\">' + (d.neu || 0) + '</div><div class=\"lbl\">中性</div><div class=\"pct\">' + (d.neu_pct || 0).toFixed(1) + '%</div></div>';
+      html += '</div>';
+
+      // 负面列表
+      if (negCount > 0) {
+        html += '<div class=\"neg-header\">⚠️ 负面舆情 (' + negCount + '条)</div>';
+        (d.negatives || []).forEach(function(n) {
+          html += '<div class=\"neg-item\">';
+          html += '<div class=\"ni-head\">';
+          html += '<span class=\"ni-platform\">' + esc(n.platform || n.p || '') + '</span>';
+          html += '<span class=\"ni-time\">' + esc(n.time || '') + '</span>';
+          if (n.category) html += '<span class=\"ni-cat\">' + esc(n.category) + '</span>';
+          html += '</div>';
+          html += '<div class=\"ni-title\">' + esc(n.title || '') + '</div>';
+          if (n.summary) html += '<div class=\"ni-summary\">' + esc(n.summary) + '</div>';
+          if (n.url) html += '<a class=\"ni-link\" href=\"' + esc(n.url) + '\" target=\"_blank\" rel=\"noopener\">📎 查看原帖 →</a>';
+          html += '</div>';
+        });
+      } else if ((d.neg || 0) === 0) {
+        html += '<div class=\"sent-empty\">✅ 本日无负面舆情</div>';
+      }
+
+      el.className = '';
+      el.innerHTML = html;
+    }
+
+    function esc(s) {
+      if (!s) return '';
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;');
+    }
+
+    // ==================== 初始化 ====================
+    function init() {
+      const dpEl = document.getElementById('datePicker');
+      if (typeof flatpickr !== 'undefined' && dpEl) {
+        // Flatpickr 替换原生日期控件
+        const fp = flatpickr(dpEl, {
+          locale: 'zh',
+          dateFormat: 'Y-m-d',
+          defaultDate: today,
+          disableMobile: true,
+          onDayCreate: function(dObj, dStr, fp, dayElem) {
+            const info = getDayDisplayInfo(dayElem.dateObj.getFullYear(), dayElem.dateObj.getMonth(), dayElem.dateObj.getDate());
+            if (info) {
+              if (info.cls) dayElem.classList.add(info.cls);
+              const span = document.createElement('span');
+              span.className = info.labelCls;
+              span.textContent = info.label;
+              dayElem.appendChild(span);
+            }
+          },
+          onChange: function(selectedDates, dateStr) {
+            updateDayInfo();
+            updateFestivalBanner();
+          }
+        });
+      } else {
+        // 降级：原生 date input + onchange
+        if (dpEl) {
+          dpEl.value = today.toISOString().slice(0,10);
+          dpEl.addEventListener('change', function() {
+            updateDayInfo();
+            updateFestivalBanner();
+          });
+        }
+      }
+      initPriceMode();
+      initDeliveryUI();
+      renderLinkManager();
+      // 预渲染 Prompt 板块的水果选择器
+      setTimeout(function() { renderFruitPicker('promptFruitTags'); }, 200);
+      updateFestivalBanner();
+      updateDayInfo();
+
+      // Tab点击
+      document.querySelectorAll('.day-tab:not(.sunday)').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const day = parseInt(tab.dataset.day);
+          selectDay(day);
+        });
+      });
+
+      // 默认选中今天
+      const currentDay = today.getDay();
+      if (currentDay === 0) {
+        selectDay(2); // 周日默认看周二
+      } else {
+        selectDay(currentDay);
+      }
+
+      renderHistory();
+    }
+
+    function updateDayInfo() {
+      const dp = document.getElementById('datePicker');
+      if (!dp || !dp.value) return;
+      const dateVal = dp.value;
+      const d = new Date(dateVal + 'T00:00:00');
+      const dayOfWeek = d.getDay();
+      const badge = document.getElementById('dayBadge');
+      if (badge) {
+        badge.textContent = '📅 ' + DAY_NAMES[dayOfWeek];
+        badge.className = 'day-badge ' + (dayOfWeek === 0 ? 'inactive' : 'active');
+      }
+
+      // 核心：日期切换后，自动查询该日期有无历史文案
+      const dateKey = dateVal; // YYYY-MM-DD
+      const history = JSON.parse(localStorage.getItem('copyHistory') || '[]');
+      const match = history.find(h => h.dateKey === dateKey);
+
+      if (dayOfWeek === 0) {
+        if (document.getElementById('tab-copy').style.display !== 'none') selectDay(2);
+        return;
+      }
+
+      // 只在文案Tab下切换推送日表单
+      if (document.getElementById('tab-copy').style.display !== 'none') {
+        selectDay(dayOfWeek, dateKey);
+      }
+
+      // 如果该日期有历史记录，自动加载
+      if (match) {
+        showOutput(match.copy, match.prompt, match.day);
+        // 延迟填充表单（等DOM渲染完）
+        setTimeout(() => fillFormFromHistory(match), 100);
+      } else {
+        // 该日期无历史，清空输出区
+        document.getElementById('outputCopy').classList.remove('visible');
+        document.getElementById('copyContent').textContent = '';
+        var pc = document.getElementById('promptContent');
+        if (pc) pc.textContent = '';
+      }
+    }
+
+    function selectDay(day, dateKey) {
+      // 更新Tab高亮
+      document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+      const tab = document.querySelector('.day-tab[data-day="' + day + '"]');
+      if (tab) tab.classList.add('active');
+
+      renderInputForm(day, dateKey);
+    }
+
+    // ==================== 输入表单 ====================
+    let currentDateKey = today.toISOString().slice(0,10); // 追踪当前选中日期
+
+    function renderInputForm(day, dateKey) {
+      if (dateKey) currentDateKey = dateKey;
+      else currentDateKey = document.getElementById('datePicker').value || today.toISOString().slice(0,10);
+
+      const area = document.getElementById('inputArea');
+      let html = '';
+
+      switch(day) {
+        case 2: // 周二
+          html = `
+            <div class="input-section">
+              <h3>📊 周二 · 生活关怀</h3>
+              <div class="hint" style="margin-bottom:12px">基于季节天气+节日关怀，生成生活化品类种草文案，无数据背书</div>
+              <div class="input-group">
+                <label>🔥 爆品名称（如：麒麟瓜鲜切）</label>
+                <input type="text" id="tueProduct" placeholder="麒麟瓜鲜切" oninput="updateContainerUI();autoOptimizeReason();">
+              </div>
+              <div class="fruit-picker" id="tueFruitPicker">
+                <div class="flabel">🍉 选水果品类（可多选，未选则自动匹配）</div>
+                <div class="fruit-tags" id="tueFruitTags"></div>
+              </div>
+              <div class="input-group">
+                <label>🏷️ 核心卖点关键词（1-3个词）</label>
+                <input type="text" id="tueKeywords" placeholder="如：甜度 冰镇 一口消暑" oninput="autoOptimizeReason()">
+                <div class="hint">输入后自动融合产品品类特性，生成优化后的本周理由 ⬇️</div>
+              </div>
+              <div class="input-group">
+                <label>💡 优化本周理由（自动生成，可编辑）</label>
+                <textarea id="tueReason" placeholder="输入上方关键词后自动生成..."></textarea>
+                <div class="hint">根据品类特性+模板自动优化，不满意可手动修改</div>
+              </div>
+              <div class="input-group">
+                <label>💰 参考价格（可选）</label>
+                <input type="text" id="tuePrice" class="price-input" placeholder="如：19.9">
+              </div>
+              <button class="btn btn-primary" onclick="generateCopy(2)">🖊️ 生成文案</button>
+            </div>`;
+          break;
+
+        case 3: // 周三
+          html = `
+            <div class="input-section">
+              <h3>🎫 周三 · 会员日88折</h3>
+              <div class="hint" style="margin-bottom:12px">全自动生成，无需输入。自动匹配当月应季产品+天气情绪+花字轮换。</div>
+              <div class="input-group">
+                <label>🍉 本周主打产品（可选，不填则自动匹配）</label>
+                <input type="text" id="wedProduct" placeholder="如：麒麟瓜鲜切（留空自动匹配）" oninput="updateProductTag('wedProduct','wedFruitTag','wedSubRow');">
+              </div>
+              <div class="fruit-picker" id="wedFruitPicker">
+                <div class="flabel">🍉 选水果品类（可多选，未选则自动匹配）</div>
+                <div class="fruit-tags" id="wedFruitTags"></div>
+              </div>
+              <div class="input-group" id="wedSubRow" style="display:none">
+              </div>
+              <div class="input-group">
+                <label>💰 原价参考（可选，填后自动算88折）</label>
+                <input type="text" id="wedPrice" class="price-input" placeholder="如：29.9">
+              </div>
+              <button class="btn btn-primary" onclick="generateCopy(3)">🖊️ 生成文案</button>
+            </div>`;
+          break;
+
+        case 4: // 周四
+          html = `
+            <div class="input-section">
+              <h3>🔥 周四 · 限定特价</h3>
+              <div class="hint" style="margin-bottom:12px">每周一款特价产品，外卖双平台链接，系统自动匹配品类卖点</div>
+              <div class="input-group">
+                <label>🔥 特价产品名（必填）</label>
+                <input type="text" id="thuProduct" placeholder="如：招牌鲜果切" oninput="updateProductTag('thuProduct','thuFruitTag','thuSubRow');">
+              </div>
+              <div class="fruit-picker" id="thuFruitPicker">
+                <div class="flabel">🍉 选水果品类（可多选，未选则自动匹配）</div>
+                <div class="fruit-tags" id="thuFruitTags"></div>
+              </div>
+              <div class="input-group" id="thuSubRow" style="display:none"></div>
+              <div class="input-group">
+                <label>✨ 产品卖点（至少1个，如甜度/品种/人气）</label>
+                <input type="text" id="thuSelling" placeholder="如：甜度16° 冰镇 水果冰淇淋（关键词会自动优化）">
+              </div>
+              <div class="input-group">
+                <label>💰 特价参考（可选）</label>
+                <input type="text" id="thuPrice" class="price-input" placeholder="如：9.9">
+              </div>
+              <button class="btn btn-primary" onclick="generateCopy(4)">🖊️ 生成文案</button>
+            </div>`;
+          break;
+
+        case 5: // 周五
+          html = `
+            <div class="input-section">
+              <h3>🎬 周五 · 周末场景搭配</h3>
+              <div class="hint" style="margin-bottom:12px">优先推套餐/拼盘，绑定周末场景</div>
+              <div class="input-group">
+                <label>🥡 产品名（优先拼盘/套餐）</label>
+                <input type="text" id="friProduct" placeholder="如：分享大拼盘" oninput="updateFriContainerUI();autoOptimizeFri();">
+              </div>
+              <div class="fruit-picker" id="friFruitPicker">
+                <div class="flabel">🍉 选水果品类（可多选，未选则自动匹配）</div>
+                <div class="fruit-tags" id="friFruitTags"></div>
+              </div>
+              <div class="input-group" id="friSubThemeRow" style="display:none">
+                <label>🎯 内含组合（用 / 分隔）</label>
+                <input type="text" id="friSubThemes" placeholder="如：芒果蓝莓/西瓜/橙子蓝莓" oninput="autoOptimizeFri()">
+                <div class="hint">输入后品类自动匹配第一个组合，文案体现多样性</div>
+              </div>
+              <div class="input-group">
+                <label>🎬 周末场景</label>
+                <select id="friScene">
+                  <option value="binge">追剧刷综艺</option>
+                  <option value="home">宅家避暑</option>
+                  <option value="party">朋友聚会</option>
+                  <option value="game">游戏开黑夜</option>
+                  <option value="picnic">周末野餐</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label>💡 绑定理由（为什么这个场景配这个产品）</label>
+                <input type="text" id="friReason" placeholder="如：四种水果 一大盘 不打架（关键词会自动优化）">
+              </div>
+              <div class="input-group">
+                <label>💰 套餐价格（可选）</label>
+                <input type="text" id="friPrice" class="price-input" placeholder="如：39.9">
+              </div>
+              <button class="btn btn-primary" onclick="generateCopy(5)">🖊️ 生成文案</button>
+            </div>`;
+          break;
+
+        case 6: // 周六
+          html = `
+            <div class="input-section">
+              <h3>🌟 周六 · 轮换主题种草</h3>
+              <div class="hint" style="margin-bottom:12px">5周主题循环，本周自动匹配</div>
+              <div class="input-group">
+                <label>🎯 本周主题</label>
+                <input type="text" id="satThemeDisplay" readonly style="background:#f5f5f5;color:#666">
+              </div>
+              <div class="input-group">
+                <label>🍉 推荐产品名</label>
+                <input type="text" id="satProduct" placeholder="如：麒麟瓜鲜切" oninput="updateProductTag('satProduct','satFruitTag','satSubRow');">
+              </div>
+              <div class="fruit-picker" id="satFruitPicker">
+                <div class="flabel">🍉 选水果品类（可多选，未选则自动匹配）</div>
+                <div class="fruit-tags" id="satFruitTags"></div>
+              </div>
+              <div class="input-group" id="satSubRow" style="display:none"></div>
+              <div class="input-group">
+                <label>💬 种草理由（1句话）</label>
+                <input type="text" id="satReason" placeholder="如：冰镇一下午的快乐">
+              </div>
+              <div class="input-group">
+                <label>💰 参考价格（可选）</label>
+                <input type="text" id="satPrice" class="price-input" placeholder="如：19.9">
+              </div>
+              <button class="btn btn-primary" onclick="generateCopy(6)">🖊️ 生成文案</button>
+            </div>`;
+          break;
+
+        case 0:
+          html = `
+            <div class="input-section">
+              <div class="empty-state">
+                <div class="icon">😴</div>
+                <p>周日休息，不推送社群内容</p>
+                <p style="font-size:12px;color:#999;margin-top:4px">请选择其他推送日查看</p>
+              </div>
+            </div>`;
+          break;
+      }
+
+      area.innerHTML = html;
+
+      // 天2-6：在生成按钮前插入链接勾选区
+      if (day >= 2 && day <= 6) {
+        const btn = area.querySelector('.btn-primary');
+        if (btn) {
+          const linkDiv = document.createElement('div');
+          linkDiv.innerHTML = renderDayLinkCheckboxes(day);
+          btn.parentNode.insertBefore(linkDiv.firstElementChild, btn);
+        }
+      }
+
+      // 填充默认值
+      setTimeout(() => {
+        if (day === 2) {
+          // 产品名修改时也触发理由优化
+          const prodEl = document.getElementById('tueProduct');
+          if (prodEl) prodEl.addEventListener('input', autoOptimizeReason);
+        }
+        // 渲染水果多选器
+        const FRUIT_TAG_IDS = { 2: 'tueFruitTags', 3: 'wedFruitTags', 4: 'thuFruitTags', 5: 'friFruitTags', 6: 'satFruitTags' };
+        if (FRUIT_TAG_IDS[day]) renderFruitPicker(FRUIT_TAG_IDS[day]);
+        if (day === 6) {
+          const theme = SAT_THEMES[satThemeIndex];
+          document.getElementById('satThemeDisplay').value = theme.name + ' — ' + theme.desc;
+        }
+      }, 50);
+    }
+
+    // ==================== 文案生成 ====================
+    function generateCopy(day) {
+      let copy = '', prompt = '', product = '';
+
+      switch(day) {
+        case 2:
+          copy = genTuesday();
+          product = getInputVal('tueProduct', '招牌鲜果切');
+          prompt = genPrompt(2, product);
+          break;
+        case 3:
+          copy = genWednesday();
+          product = getInputVal('wedProduct', getSeasonalProduct());
+          prompt = genPrompt(3, product);
+          break;
+        case 4:
+          copy = genThursday();
+          product = getInputVal('thuProduct', '招牌鲜果切');
+          prompt = genPrompt(4, product);
+          break;
+        case 5:
+          copy = genFriday();
+          product = getInputVal('friProduct', '分享大拼盘');
+          prompt = genPrompt(5, product);
+          break;
+        case 6:
+          copy = genSaturday();
+          product = getInputVal('satProduct', '麒麟瓜鲜切');
+          prompt = genPrompt(6, product);
+          break;
+        default: return;
+      }
+
+      showOutput(copy, prompt, day);
+    }
+
+    // ==================== 周二生成 ====================
+    function getInputVal(id, fallback) {
+      const el = document.getElementById(id);
+      return (el && el.value && el.value.trim()) || (el && el.placeholder) || fallback;
+    }
+
+    // 获取季节天气描述（无法实时获取天气，用月份推断）
+    function getSeasonWeatherDesc() {
+      const m = new Date().getMonth() + 1;
+      if (m >= 6 && m <= 8) return { type:'summer', label:'盛夏', temp:'35°C+' };
+      if (m === 9) return { type:'autumn', label:'初秋', temp:'凉爽' };
+      if (m === 10) return { type:'autumn', label:'金秋', temp:'微凉' };
+      if (m === 11) return { type:'winter', label:'深秋', temp:'渐冷' };
+      if (m === 12 || m === 1 || m === 2) return { type:'winter', label:'冬日', temp:'寒冷' };
+      if (m >= 3 && m <= 5) return { type:'spring', label:'春天', temp:'温暖' };
+      return { type:'summer', label:'当季', temp:'宜人' };
+    }
+
+    // 周二生活化花字池（关怀型，无数据背书）
+    function getLifeHuaZi(product, season) {
+      const dynamicPool = [];
+      const dayName = '周二工作日';
+      if (season.type === 'summer') {
+        dynamicPool.push(
+          `☀️${season.temp}的夏天，你需要${product}`,
+          `💼${dayName}的解暑方案｜${product}`,
+          `🧊打败高温的快乐源泉｜${product}`,
+          `🌡️热到不想动？试试${product}`,
+          `🍃三伏天的续命果切｜${product}`,
+          `💦高温天的清爽选择｜${product}`,
+        );
+      } else if (season.type === 'winter') {
+        dynamicPool.push(
+          `❄️${season.label}的温暖甜蜜｜${product}`,
+          `💼${dayName}的暖心果切｜${product}`,
+          `🔥天冷也要吃新鲜｜${product}`,
+          `🍊冬日维C补给站｜${product}`,
+        );
+      } else if (season.type === 'spring') {
+        dynamicPool.push(
+          `🌿${season.label}的新鲜味道｜${product}`,
+          `💼${dayName}的活力补给｜${product}`,
+          `🌸春日元气果切｜${product}`,
+        );
+      } else {
+        dynamicPool.push(
+          `🍂${season.label}的甜蜜收获｜${product}`,
+          `💼${dayName}的秋日甜蜜｜${product}`,
+          `🍁秋高气爽来份果切｜${product}`,
+        );
+      }
+      // 合并HUA_ZI中生活化类型（emojiChain/report/summer），不用数据类花字
+      const huaExtra = [...HUA_ZI.emojiChain, ...HUA_ZI.report];
+      if (season.type === 'summer') huaExtra.push(...HUA_ZI.summer);
+      const fullPool = [...dynamicPool, ...huaExtra];
+      return pickFreshHuaZi(fullPool, 'tueLifeHuaUsed', 6);
+    }
+
+    function genTuesday() {
+      const productEl = document.getElementById('tueProduct');
+      const product = (productEl && productEl.value && productEl.value.trim()) || '招牌鲜果切';
+      const selectedFruits = getSelectedFruits();
+
+      // 品类特性：优先用用户选中的第一个水果
+      const primaryFruit = selectedFruits[0];
+      const trait = (primaryFruit && FRUIT_TRAITS[primaryFruit]) || matchFruitTrait(product);
+
+      const priceVal = (document.getElementById('tuePrice')?.value || '').trim();
+      const priceLine = priceVal ? formatPrice(priceVal) : '';
+      const links = renderSelectedLinks(2);
+
+      // 生活化花字：节日优先 → 天气/季节 → 通用
+      const festHua2 = getFestivalHua(product);
+      const seasonDesc = getSeasonWeatherDesc();
+      const huaLine = festHua2 || getLifeHuaZi(product, seasonDesc);
+
+      // 卖点理由：优先用FRUIT_SELLING金句（更有营销味），其次用FRUIT_TRAITS数据
+      const sellingTarget = primaryFruit || product;
+      const selling = matchFruitSelling(sellingTarget);
+      const sellPhrase = selling[Math.floor(Math.random() * selling.length)];
+      const reason = `${trait.season}｜${sellPhrase}`;
+
+      const lines = [huaLine, ''];
+
+      lines.push(`🔥 ${product}`);
+
+      // 价格
+      if (priceLine) { lines.push(priceLine); }
+
+      // 主题：用知识库展示水果特性
+      if (selectedFruits.length > 1) {
+        for (const fruit of selectedFruits) {
+          const t = FRUIT_TRAITS[fruit];
+          if (t) lines.push(`${fruitEmoji(fruit)} ${fruit}｜${t.taste}·${t.tip}`);
+        }
+      }
+
+      lines.push('');
+      lines.push(`💡 ${reason}`);
+      lines.push('');
+      lines.push(getFestivalCTA() || getCTA(2));
+      lines.push('');
+      if (links) lines.push(...links.split('\n'));
+
+      return formatCopy(lines);
+    }
+    // ========== genTuesday fixed ==========
+
+    // ==================== 周三生成 ====================
+    function genWednesday() {
+      const productEl = document.getElementById('wedProduct');
+      const product = (productEl && productEl.value && productEl.value.trim()) || getSeasonalProduct();
+      const huaType = HUA_ZI_TYPES[wedHuaZiIndex];
+      wedHuaZiIndex = (wedHuaZiIndex + 1) % HUA_ZI_TYPES.length;
+      localStorage.setItem('wedHuaZiIndex', wedHuaZiIndex);
+
+      // 从大花字库中选：每类3变体
+      const typePool = WED_HUA_POOLS[huaType] || WED_HUA_POOLS['pun'];
+      const festHua3 = getFestivalHua(product);
+      const huaLine = festHua3 || pickFreshHuaZi(typePool, 'wedHuaUsed_'+huaType, 2).replace(/\{p\}/g, product);
+
+      const wedPrice = formatWedPrice(getPriceById('wedPrice'));
+      const links = renderSelectedLinks(3);
+
+      // 品类卖点：优先用用户选中的水果
+      const wedSelectedFruits = getSelectedFruits(3);
+      const wedPrimaryFruit = wedSelectedFruits[0];
+      const sellingTarget = wedPrimaryFruit || product;
+      const wedSell = matchFruitSelling(sellingTarget)[0];
+
+      const lines = [
+        huaLine,
+        '',
+        `𝑾𝒆𝒅𝒏𝒆𝒔𝒅𝒂𝒚🍉周三会员日┊全场8️⃣8️⃣折❗`,
+        `✅️ ${product}享88折`,
+        `✅️ 全场果切通用`,
+      ];
+      if (wedPrice) lines.push(wedPrice);
+      const delivery = getDeliveryText();
+      if (delivery) lines.push(delivery);
+      lines.push(`🍈 ${wedSell}`);
+      lines.push('');
+      lines.push(getFestivalCTA() || getCTA(3));
+      lines.push('');
+      if (links) { const ll = links.split('\n'); lines.push(...ll); }
+
+      return formatCopy(lines);
+    }
+
+    // ==================== 周四生成 ====================
+    function genThursday() {
+      const productEl = document.getElementById('thuProduct');
+      const sellingEl = document.getElementById('thuSelling');
+      const product = (productEl && productEl.value && productEl.value.trim()) || '招牌鲜果切';
+      const userSelling = (sellingEl && sellingEl.value && sellingEl.value.trim()) || '';
+
+      // 品类卖点：优先用用户选中的水果
+      const thuSelectedFruits = getSelectedFruits(4);
+      const thuPrimaryFruit = thuSelectedFruits[0];
+      const sellingTarget = thuPrimaryFruit || product;
+      
+      // 用户真正输入了卖点就用用户的；否则自动用品类金句
+      let selling;
+      if (userSelling && userSelling.length > 2 && userSelling !== sellingEl.placeholder) {
+        selling = userSelling;
+      } else {
+        const sellingPool = matchFruitSelling(sellingTarget);
+        const idx = parseInt(localStorage.getItem('thuSellingIdx') || '0');
+        selling = sellingPool[idx % sellingPool.length];
+        localStorage.setItem('thuSellingIdx', String((idx + 1) % sellingPool.length));
+      }
+      const thuHuaPool = [
+        `🔥 今日外卖特价｜${product}`, `🛵 外卖专享价｜${product}`,
+        `⚡ 周四外卖活动品｜${product}`, `🍈 外卖特惠｜${product}今日好价`,
+        `📱 下单鲜切｜${product}外卖好价`, `🎯 今日主推｜${product}`,
+        `💫 外卖活动｜${product}值得囤`, `🍊 这周外卖品｜${product}别错过`,
+        `🛒 外卖必加｜${product}`, `🔥 限时活动价｜${product}`,
+        `📦 外卖到手｜${product}鲜切直达`, `🏠 宅家必点｜${product}`,
+        `🍃 鲜切外卖｜${product}不踩雷`, `🛵 一键下单｜${product}送到家`,
+      ];
+      const huaIdx = parseInt(localStorage.getItem('thuHuaIdx') || '0');
+      const festHua = getFestivalHua(product);
+      const huaLine = festHua || thuHuaPool[huaIdx % thuHuaPool.length];
+      if (!festHua) localStorage.setItem('thuHuaIdx', String((huaIdx + 1) % thuHuaPool.length));
+
+      const priceLine = formatPrice(getPriceById('thuPrice'));
+      const links = renderSelectedLinksLabeled(4);
+
+      const lines = [
+        huaLine,
+        '',
+        `🔥 ${product}`,
+        `📱 下单鲜切·各区域以平台实际价格为准`,
+      ];
+      if (priceLine) lines.push(priceLine);
+      lines.push(`🍈 ${selling}`);
+      lines.push('');
+      lines.push(getFestivalCTA() || getCTA(4));
+      lines.push('');
+      if (links) { const ll = links.split('\n'); lines.push(...ll); }
+
+      return formatCopy(lines);
+    }
+
+    // ==================== 周五生成 ====================
+    function genFriday() {
+      const productEl = document.getElementById('friProduct');
+      const product = (productEl && productEl.value && productEl.value.trim()) || '分享大拼盘';
+      const scene = (document.getElementById('friScene')?.value) || 'binge';
+
+      // 品类卖点：优先用用户选中的水果
+      const friSelectedFruits = getSelectedFruits(5);
+      const friPrimaryFruit = friSelectedFruits[0];
+      const sellingTarget = friPrimaryFruit || product;
+
+      let reason = (() => {
+        const el = document.getElementById('friReason');
+        const val = (el && el.value && el.value.trim()) || '';
+        if (val && !val.includes('如：') && !val.includes('新鲜现做') && !val.includes('关键词')) return val;
+        return matchFruitSelling(sellingTarget)[0];
+      })();
+
+      const sceneNames = { binge: '追剧刷综艺', home: '宅家避暑', party: '朋友聚会', game: '游戏开黑夜', picnic: '周末野餐' };
+      const priceLine = formatPrice(getPriceById('friPrice'));
+      const links = renderSelectedLinks(5);
+      // 子主题处理
+      const friSubThemes = (document.getElementById('friSubThemes')?.value || '').trim();
+      const themeCount = friSubThemes ? friSubThemes.split('/').filter(s=>s.trim()).length : 0;
+      const themeNote = themeCount > 1 ? `🎯 ${themeCount}款组合可选｜` + friSubThemes.split('/').map(s=>s.trim()).join('·') : '';
+      const sceneHua = {
+        binge: '😆 周五福来day！追剧搭档已就位🍉',
+        home: '周末宅家公式：沙发🛋️+空调❄️+果切🍊',
+        party: '🎉 周五解放日｜朋友局上少不了果切',
+        game: '🎮 周五开黑夜，果切比五杀还爽',
+        picnic: '🌿 周末野餐计划｜果切是C位担当🧺',
+      };
+      // 扩充周六花字池（10个，用去重）
+      const friHuaPool = [
+        sceneHua[scene] || sceneHua['binge'],
+        `🎬 周末追剧搭子｜${product}就位`, `🛋️ 宅家的正确打开方式｜${product}`,
+        `🍃 周末时光｜${product}刚刚好`, `💫 周五的小确幸｜${product}`,
+        `🌟 迎接周末｜${product}已安排`, `🎯 周末计划第一步｜${product}`,
+        `✨ 周五犒赏自己｜${product}`, `🌿 放松模式开启｜${product}`,
+        `🍊 周末前奏｜${product}先行`, `🎉 TGIF！${product}安排上`,
+        `🛀 周末倒计时｜${product}就位`, `💆 犒劳一周的自己｜${product}`,
+        `🏖️ 周末微度假｜${product}相伴`, `📺 沙发+${product}=完美周末`,
+      ];
+      const festHua5 = getFestivalHua(product);
+      const huaLine = festHua5 || pickFreshHuaZi(friHuaPool, 'friHuaUsed', 3);
+
+      const lines = [
+        huaLine, '',
+        `${sceneNames[scene]}的周末🍃`,
+        `🍃 ${product} + ${reason} = 周末标配`,
+      ];
+      if (themeNote) lines.push(themeNote);
+      if (priceLine) lines.push(priceLine);
+      lines.push('');
+      lines.push(getFestivalCTA() || getCTA(5));
+      lines.push('');
+      if (links) { const ll = links.split('\n'); lines.push(...ll); }
+
+      return formatCopy(lines);
+    }
+
+    // ==================== 周六生成 ====================
+    function genSaturday() {
+      const productEl = document.getElementById('satProduct');
+      const product = (productEl && productEl.value && productEl.value.trim()) || '麒麟瓜鲜切';
+      const reasonEl = document.getElementById('satReason');
+      const userReason = (reasonEl && reasonEl.value && reasonEl.value.trim()) || '';
+
+      // 品类卖点：优先用用户选中的水果
+      const satSelectedFruits = getSelectedFruits(6);
+      const satPrimaryFruit = satSelectedFruits[0];
+      const sellingTarget = satPrimaryFruit || product;
+
+      const reason = (userReason && userReason !== reasonEl.placeholder) ? userReason : matchFruitSelling(sellingTarget)[0];
+      const theme = SAT_THEMES[satThemeIndex];
+
+      // 水果知识库：根据主题轮换输出趣味科普/挑果技巧
+      const FRUIT_FACTS = {
+        '西瓜':['挑西瓜看纹路：纹路越清晰越甜','8424西瓜甜度达13.8°，冰镇甜度翻倍','西瓜92%是水，夏天补水神器','拍西瓜听声音：清脆是熟瓜，闷响是生瓜'],
+        '芒果':['芒果维A居水果之首，明目护眼','桂七芒甜度20°，甜到不用加糖','挑芒果看果蒂：有白色汁液渗出说明新鲜','芒果不宜放冰箱，易产生黑斑'],
+        '草莓':['草莓是唯一种子长在外面的水果','丹东99草莓甜度14°+，冬天最甜','挑草莓看蒂头：绿色越新鲜，发黑不新鲜','草莓不宜久放，当天买当天吃'],
+        '蓝莓':['表面的白霜是天然果粉，越多越新鲜','云南蓝莓甜过砂糖橘，花青素之王','蓝莓护眼神器：每天一把缓解眼疲劳','野生蓝莓花青素是种植的2倍'],
+        '樱桃':['车厘子=樱桃，只是品种不同','科迪亚车厘子甜度28°，车厘子之王','挑樱桃看果柄：绿色新鲜，发黑不新鲜','樱桃铁含量是苹果20倍，补血圣品'],
+        '榴莲':['榴莲是水果之王，一棵树年产300个','猫山王底部有五角星标记','挑榴莲摇一摇：有晃动声说明熟了','榴莲不宜和酒同食'],
+        '凤梨':['凤梨和菠萝是同一水果不同品种','金钻凤梨不用泡盐水，直接吃不刺嘴','挑凤梨看芽眼：少且平说明成熟好','凤梨冷藏不宜超3天'],
+        '阳光玫瑰':['日本引进品种，自带玫瑰香','甜度最高可达28°','挑葡萄看果粉：白霜越多越新鲜','冷藏后像吃果冻'],
+        '荔枝':['妃子笑核小肉厚，唐朝贡品','冰镇后更甜，甜度可达20°','挑荔枝看果皮：暗红带绿最鲜','6-7月限定，错过等一年'],
+        '杨梅':['东魁杨梅乒乓球大，浙江特产','泡盐水可逼出小虫','挑杨梅看颜色：深红发紫最甜','6月限定，入口化渣'],
+        '桃':['阳山水蜜桃可插吸管喝，甜度19%','水蜜桃软了才是最佳食用期','挑桃看绒毛：完整说明新鲜','夏天仪式感的开始'],
+        '柑橘':['耙耙柑学名春见，纯甜无酸','沃柑橘中爱马仕，甜度17%','挑橘子捏底部：软的最甜','金桔皮可吃，甜度28%'],
+        '苹果':['阿克苏苹果有冰糖心，甜度17%','苹果是智慧果，含大脑必需营养','挑苹果看果脐：深而大更甜','苹果不宜和胡萝卜海鲜同食'],
+        '梨':['库尔勒香梨入口即化，甜度12%','秋月梨甜过初恋，9月最佳','挑梨看果皮：细腻光滑的水分足','梨性凉，脾胃虚寒者不宜多食'],
+        '蜜瓜':['哈密瓜甜度21%，新疆特产','口口蜜甜度22°，瓜中极品','挑蜜瓜看网纹：越密越粗越甜','冰镇后口感最佳'],
+        '羊角蜜':['甜度20°，细长如羊角','春季上市，汁多清甜','挑羊角蜜看颜色：灰绿色泽为佳','松脆爽口，不用削皮直接吃'],
+        '葡萄':['夏黑国内最甜早熟品种，甜度24°','表面白霜是天然保护膜','挑葡萄看果粉：白霜越多越新鲜','不宜清洗后再存放'],
+        '枇杷':['米易枇杷甜度13°，12-3月上市','枇杷润肺止咳，中药常用','挑枇杷看绒毛：完整说明新鲜','不宜放冰箱，阴凉通风保存'],
+        '石榴':['突尼斯软籽不用吐籽，甜度16%','秋日红宝石，8-10月上市','看果皮：光滑紧实最鲜','富含花青素，抗氧化'],
+        '杏':['库车小白杏甜度23%，新疆珍果','6-7月上市，清香蜜甜','看颜色：金黄带红最甜','不宜多食，每天3-5个为宜'],
+        '柠檬':['富含维C，美白排毒','泡水不宜用沸水，温水最佳','看果皮：光滑细腻的汁水多','不宜和海鲜同食'],
+        '酸嘢':['广西特色，酸甜咸辣四重暴击','越吃越上头，脆爽开胃','四季可做，不同水果不同风味','没吃过酸嘢的夏天不完整'],
+        '火龙果':['红心更甜，富含花青素','润肠神器，低卡健康','看鳞片：绿色新鲜，发黄不新鲜','蜜宝甜度18°，可手撕剥皮'],
+        '圣女果':['维C是普通番茄1.7倍','玲珑最袖珍最甜，甜度9%','深红色最甜','青色含龙葵碱不宜生吃'],
+        'default':['应季鲜果，新鲜现切冰一下更好吃','每天吃够200g水果更健康','新鲜水果营养远高于果汁','吃当季水果口感和营养最好'],
+      };
+      function getFruitFact(fruit) {
+        const facts = FRUIT_FACTS[fruit] || FRUIT_FACTS['default'];
+        return facts[satThemeIndex % facts.length];
+      }
+
+      satThemeIndex = (satThemeIndex + 1) % SAT_THEMES.length;
+      localStorage.setItem('satThemeIndex', satThemeIndex);
+
+      const priceLine = formatPrice(getPriceById('satPrice'));
+      const links = renderSelectedLinks(6);
+
+      const satHuaPool = [
+        `𝐒𝐚𝐭𝐮𝐫𝐝𝐚𝐲｜周末门面担当🍉`, `🌟 周末限定｜${product}安排上`,
+        `🎬 周末仪式感｜从一份${product}开始`, `🛋️ 宅家周末｜${product}是标配`,
+        `💫 周末小确幸｜${product}`, `🍃 轻松周末｜${product}刚刚好`,
+        `✨ 周末就该宠自己｜${product}`, `🌿 周末慢时光｜${product}`,
+        `☀️ 早安周末｜${product}开启`, `🌈 周末调色盘｜${product}`,
+        `📖 悠闲周六｜${product}的仪式感`, `🧘 放空日｜${product}相伴`,
+      ];
+      const festHua6 = getFestivalHua(product);
+      const huaLine = festHua6 || pickFreshHuaZi(satHuaPool, 'satHuaUsed', 3);
+
+      const lines = [
+        huaLine,
+        '',
+        `📌 ${theme.name}`,
+      ];
+      const fact = getFruitFact(sellingTarget);
+      if (theme.name === '水果冷知识') {
+        lines.push(`💡 ${fact}`);
+      }
+      lines.push('');
+      lines.push(`周末推荐${fruitEmoji(sellingTarget)} ${product}｜${reason}`);
+      if (priceLine) lines.push(priceLine);
+      lines.push('');
+      lines.push(getFestivalCTA() || getCTA(6));
+      lines.push('');
+      if (links) { const ll = links.split('\n'); lines.push(...ll); }
+
+      return formatCopy(lines);
+    }
+
+    // ==================== 配图Prompt生成 ====================
+    // 品类色彩个性（基于16张AI素材实测数据提炼）
+    const PRODUCT_COLORS = {
+      '榴莲': { palette: '金黄奶油调·暖金色基底·R>G>B强烈暖倾向', sat: '中高饱和0.5-0.7', hint: '果肉金黄绵密，配原木色道具，画面温暖浓郁' },
+      '荔枝': { palette: '透白粉嫩调·米白基底+红粉点缀', sat: '中饱和0.4-0.5', hint: '果肉半透明质感，浅色背景突出晶莹感' },
+      '西瓜': { palette: '红绿强对比·翠绿外皮×鲜红果肉', sat: '中高饱和0.5-0.7', hint: '色彩对比是核心视觉记忆点，水珠增强新鲜感' },
+      '芒果': { palette: '金黄暖调·明黄到橙渐变', sat: '中饱和0.4-0.5', hint: '果肉色泽温暖，适合暖光+暗背景突出' },
+      '杨梅': { palette: '深紫红高级调·暗红到紫黑', sat: '中低饱和0.3-0.4', hint: '深色水果需要浅色背景/道具托底，否则画面沉闷' },
+      '蓝莓': { palette: '深蓝紫冷艳调·蓝紫+白霜点缀', sat: '中低饱和0.3-0.4', hint: '大量小颗粒的蓝色调，需暖色桌面平衡' },
+      '凤梨': { palette: '金黄+深绿热带调', sat: '中高饱和0.5-0.6', hint: '外皮纹理丰富，适合侧光突出立体感' },
+      '海盐青柠': { palette: '清新黄绿调·淡黄+青绿+透明感', sat: '低饱和0.1-0.3', hint: '清爽透明玻璃杯质感，适合明亮漫射光' },
+      '酸嘢': { palette: '暖金混合调·金黄+红+绿多层次', sat: '中饱和0.4-0.5', hint: '多种水果混合，色彩层次丰富，需要统一色调基底' },
+      '蜜瓜': { palette: '橙黄柔暖调', sat: '中饱和0.4-0.5', hint: '果肉柔软质感，暖光打亮切面纹理' },
+      '草莓': { palette: '红+绿高对比·鲜红果肉×绿叶', sat: '中高饱和0.5-0.6', hint: '红绿经典配色，白色容器最搭' },
+      '樱桃': { palette: '深红宝石调·暗红到酒红', sat: '中饱和0.4-0.5', hint: '光泽感是核心，需要高光点' },
+      '葡萄': { palette: '紫绿渐变调', sat: '中低饱和0.3-0.4', hint: '串状排列有节奏感' },
+      '桃': { palette: '粉橘柔美调·粉白到橘粉', sat: '低中饱和0.2-0.4', hint: '柔和色调匹配柔和光线' },
+      '橙': { palette: '橙黄明亮调', sat: '中饱和0.4-0.5', hint: '明亮色调适合暗背景突出' },
+      'default': { palette: '自然暖调·R>G>B暖倾向', sat: '中饱和0.4-0.5', hint: '自然光暖调，不过度饱和，生活感优先' }
+    };
+
+    // 品类场景元素（每种2-3变体，轮换避免同质化）
+    const PRODUCT_SCENE = {
+      '榴莲': [
+        '整颗榴莲半开露出果肉作为背景，热带大叶植物点缀，深色木纹桌面',
+        '榴莲壳做天然容器盛放果肉，旁边散落几颗山竹，浓郁东南亚风情',
+        '榴莲肉摆放在黑色石板或深色陶盘上，金色果肉与暗色背景形成强烈对比'
+      ],
+      '荔枝': [
+        '几颗带枝叶的新鲜荔枝散落桌角，白瓷冰裂纹盘，半透明果肉质感',
+        '荔枝摆放在竹编小筐中，旁边一杯冰镇荔枝饮品，夏日清凉感',
+        '剥开一半的荔枝露出晶莹果肉，浅灰石板桌面，极简东方美学'
+      ],
+      '西瓜': [
+        '半个迷你西瓜或一片翠绿瓜皮作为场景装饰，薄荷叶和冰块散落，水珠晶莹',
+        '西瓜切块在透明玻璃碗中，旁边整颗西瓜和木质刀板，户外野餐感',
+        '红绿撞色对比——翠绿瓜皮衬底，鲜红果肉C位，极简高饱和构图'
+      ],
+      '芒果': [
+        '一颗完整芒果和芭蕉叶作为热带背景，藤编托盘，暖金色氛围',
+        '半个芒果切面展示金黄果肉纹理，竹编蒸笼垫底，旁边一小碟椰浆',
+        '芒果切片扇形排列在浅灰石板桌面，热带大叶做背景虚化，明亮侧光'
+      ],
+      '杨梅': [
+        '几颗带叶杨梅散落，深色哑光陶盘，浅灰背景托底避免沉闷',
+        '杨梅放在白色陶瓷小碗里，旁边一杯杨梅汁，冰镇夏日感',
+        '杨梅堆叠在深蓝或墨绿色布面上，暗调高级感，侧逆光勾勒果霜质感'
+      ],
+      '蓝莓': [
+        '一小把蓝莓自然散落桌面，白色陶瓷碗，暖木桌面平衡冷色调',
+        '蓝莓堆放在灰色石板或水泥纹理台面上，北欧极简冷调风格',
+        '蓝莓洒落在木质砧板上，旁边一小罐蜂蜜，温暖自然早餐氛围'
+      ],
+      '凤梨': [
+        '整颗凤梨或凤梨叶片作为背景元素，草编垫，热带阳光感',
+        '凤梨切片环形排列在木质托盘上，旁边青柠和薄荷，夏日派对感',
+        '凤梨竖切半颗展示金黄内芯，藤编餐垫，巴厘岛度假风'
+      ],
+      '海盐青柠': [
+        '玻璃杯中冰块和青柠片，海盐碎粒散落，透明清透感，冷白色调',
+        '青柠和海盐放在大理石台面，旁边莫吉托风格薄荷束，高级酒吧感',
+        '青柠对半切开挤出汁水动态感，蓝色或浅绿背景，极简冷调'
+      ],
+      '草莓': [
+        '几颗完整草莓和翠绿叶片点缀，红白格子布或白色蕾丝垫，奶油色陶瓷碗',
+        '草莓对半切开展示渐变果肉，木质小砧板自然散落，旁边一小碟炼乳',
+        '草莓和白色雏菊交替摆放成环形，浅灰色石板桌面，极简北欧甜点风'
+      ],
+      '樱桃': [
+        '几颗带梗樱桃散落，深色哑光瓷盘，酒红色调，光泽感是核心',
+        '樱桃放在复古银质托盘上，深色天鹅绒或丝质衬布，奢华甜品风',
+        '樱桃和黑巧克力碎片搭配，暗木桌面，法式甜点橱窗感'
+      ],
+      '葡萄': [
+        '一小串葡萄自然垂落桌面边缘，木质砧板，紫绿色调层次',
+        '葡萄剪成小串放在白瓷盘中，旁边一杯葡萄酒，地中海下午茶',
+        '青紫双色葡萄混搭散落，藤编篮倾泻而出，丰收田园感'
+      ],
+      '桃': [
+        '一颗完整水蜜桃和桃叶，粉白色调，柔和晨光，棉麻桌布',
+        '桃子对半切开露出粉色渐变果核，浅木托盘，日系温柔早餐',
+        '桃子和杏子混搭在竹篮中，阳光透过窗纱的斑驳光影，田园诗意'
+      ],
+      '橙': [
+        '半个切开的橙子和橙皮，木质托盘，明亮对比色调',
+        '橙子切片和肉桂棒搭配，深色背景，圣诞暖冬氛围',
+        '橙子榨汁动态瞬间——半颗橙子在榨汁器上，玻璃杯接汁，活力早餐'
+      ],
+      '蜜瓜': [
+        '半颗蜜瓜展示切面纹理，原木托盘，柔暖调灯光',
+        '蜜瓜切块和火腿薄片搭配，大理石托盘，地中海前菜精致风',
+        '蜜瓜挖成球状放在透明玻璃碗中，冰镇水珠，日系夏日甜品'
+      ],
+      '酸嘢': [
+        '广西花布或竹编小筐，多种腌渍水果色彩层次，辣椒粉小碟点缀',
+        '酸嘢装在透明密封罐中，木质托盘，手写标签，市集手工感',
+        '酸嘢搭配青柠片和辣椒串装饰，深色木桌，浓郁广西街头风'
+      ],
+      'default': [
+        '几颗同品类完整水果自然散落桌面作为场景呼应',
+        '水果切面展示纹理，搭配同色系花卉或叶片，柔和自然光'
+      ]
+    };
+
+    function matchProductColor(product) {
+      // 用FRUIT_TRAITS的匹配逻辑找到最佳品类key
+      let bestKey = null, bestLen = 0;
+      for (const key of Object.keys(PRODUCT_COLORS)) {
+        if (key === 'default') continue;
+        if (product.includes(key) && key.length > bestLen) {
+          bestKey = key;
+          bestLen = key.length;
+        }
+      }
+      if (bestKey && PRODUCT_COLORS[bestKey]) return PRODUCT_COLORS[bestKey];
+      // 二级：通过模糊关键词映射
+      const FUZZY_COLOR_MAP = {
+        '麒麟': '西瓜', '蜜': '蜜瓜', '玫': '葡萄',
+        '榴': '榴莲', '荔': '荔枝', '芒': '芒果',
+        '莓': '草莓', '樱': '樱桃', '桃': '桃',
+        '橙': '橙', '橘': '橙', '柑': '橙',
+        '柠': '海盐青柠', '凤': '凤梨', '菠': '凤梨',
+        '杨': '杨梅', '蓝': '蓝莓', '提': '葡萄',
+        '瓜': '西瓜', '李': '桃',
+      };
+      for (const [fuzzy, target] of Object.entries(FUZZY_COLOR_MAP)) {
+        if (product.includes(fuzzy) && PRODUCT_COLORS[target]) {
+          return PRODUCT_COLORS[target];
+        }
+      }
+      return PRODUCT_COLORS['default'];
+    }
+
+    function matchProductScene(product) {
+      let bestKey = null, bestLen = 0;
+      for (const key of Object.keys(PRODUCT_SCENE)) {
+        if (key === 'default') continue;
+        if (product.includes(key) && key.length > bestLen) { bestKey = key; bestLen = key.length; }
+      }
+      if (!bestKey) {
+        for (const [fuzzy, target] of Object.entries({
+          '麒麟': '西瓜','蜜': '蜜瓜','榴': '榴莲','荔': '荔枝','芒': '芒果',
+          '莓': '草莓','樱': '樱桃','桃': '桃','橙': '橙','橘': '橙',
+          '柠': '海盐青柠','凤': '凤梨','菠': '凤梨','杨': '杨梅',
+          '蓝': '蓝莓','提': '葡萄','瓜': '西瓜','李': '桃',
+        })) { if (product.includes(fuzzy) && PRODUCT_SCENE[target]) { bestKey = target; break; } }
+      }
+      const pool = PRODUCT_SCENE[bestKey] || PRODUCT_SCENE['default'];
+      // 去重轮换：最近2次不重复
+      const storageKey = 'sceneIdx_' + (bestKey || 'default');
+      const used = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      const recent = used.slice(-2);
+      const candidates = pool.filter((_, i) => !recent.includes(i));
+      const pick = candidates.length > 0
+        ? candidates[Math.floor(Math.random() * candidates.length)]
+        : pool[Math.floor(Math.random() * pool.length)];
+      const pickIdx = pool.indexOf(pick);
+      const updated = [...used, pickIdx];
+      if (updated.length > 10) updated.splice(0, updated.length - 10);
+      localStorage.setItem(storageKey, JSON.stringify(updated));
+      return pick;
+    }
+
+    function genPrompt(day, product) {
+      const trait = matchFruitTrait(product);
+      const colorInfo = matchProductColor(product);
+      const sceneInfo = matchProductScene(product);
+      
+      // 画幅比例（基于素材实际尺寸：单品竖版3:4，套餐可1:1或4:3）
+      const isSet = product.includes('套餐') || product.includes('拼盘') || product.includes('双拼') || product.includes('分享');
+      const aspectRatio = isSet ? '画幅比例建议1:1或4:3横版' : '画幅比例建议3:4竖版';
+      
+      // 构图轮换追踪
+      const compKey = 'compIdx_' + day;
+      let compIdx = parseInt(localStorage.getItem(compKey) || '0');
+      
+      // 各推送日专属场景 + 构图轮换池（融合胖胖胖&小太阳构图美学）
+      const SCENES = {
+        2: { // 周二·热销 → 中心对称 + 三角稳定
+          comps: [
+            '居中对称构图：果切盒在画面正中心C位，四周留白均匀，像「胖胖胖」的卡通餐风格——主体绝对居中，背景干净不抢戏，突出产品的饱满分量感',
+            '三角稳定构图：果切盒为主角，左侧放一杯冰饮、右上角点缀一小枝薄荷叶或鲜花，三点形成稳定三角，参考「小太阳」的下午茶全景布局'
+          ],
+          scene: '纹理细腻的深色橡木桌面自然俯拍，午后柔光从侧窗斜入，木纹肌理隐约可见但不抢眼',
+          tone: '中性偏暖柔光调，白平衡干净不过度偏黄，高光柔和不过曝，阴影过渡细腻有层次',
+          vibe: '精致热销氛围——产品质感拉满，分量扎实但不粗放，让人有下单冲动而不是地摊感',
+        },
+        3: { // 周三·会员日 → 手部入镜 + 居中偏上
+          comps: [
+            '手部入镜构图：画面底部露出一截手腕和指尖（戴细珍珠手链），轻轻托着或指向果切盒边缘，食物居中偏上，背景虚化柔焦。参考「胖胖胖」的人物手→食物→背景三层纵深法，弱化纯静物冰冷感，增加亲密生活气息',
+            '居中偏上构图：果切盒在画面中央偏上位置，画面透气自然，完整呈现产品本身，不添加多余元素'
+          ],
+          scene: '质感微水泥或浅橡木桌面微俯拍，柔和定向窗光从上方自然洒落，桌面纹理细腻不反光',
+          tone: '清新明亮干净调，白平衡准确不偏黄不偏蓝，高光通透有细节，阴影柔和自然',
+          vibe: '精致会员仪式感——亲切有温度但不廉价，像拆开一份用心的礼物而非促销传单',
+        },
+        4: { // 周四·特价 → 极简留白 + 对角线
+          comps: [
+            '极简留白构图：产品在画面正中心，大面积纯色台面留白，如「胖胖胖」的树莓吐司风格——只有一个主角，干净到极致，产品质感就是全部',
+            '对角斜线构图：产品沿画面左下到右上对角线摆放，旁边配一把原木小叉或一片薄荷叶做视觉引导线，打破呆板，增加画面动感'
+          ],
+          scene: '哑光大理石纹或微水泥台面俯拍，干净利落，光影清透无杂色',
+          tone: '清透干净的高调冷白调，白平衡中性准确，偏冷微蓝的纯净冰镇感，无暖黄浑浊',
+          vibe: '精致外卖感——新鲜直达的高级便当美学，不是廉价快餐的塑料感',
+        },
+        5: { // 周五·周末 → 窗边纵深 + 高低错落（小太阳标志性风格）
+          comps: [
+            '窗边纵深构图（小太阳标志性）：木质百叶窗做画面上方天然框架，窗台由近到远摆放果切套餐→小束鲜花→背景绿植虚化，形成「前景产品→中景点缀→背景百叶窗」三层纵深，窗户框住画面，自带居家温暖氛围',
+            '高低错落构图：原木托盘做视觉基底——上层放主打果切盒C位，下层亚麻餐巾上自然散落搭配水果切块，藤编垫托底增加肌理层次。利用托盘和餐巾的叠放制造竖向纵深，套餐多品类自然展开不拥挤'
+          ],
+          scene: '奶油色原木百叶窗窗边场景，午后柔和金色侧光，窗外绿植虚化成朦胧色块',
+          tone: '午后柔和侧光调，白平衡中性偏暖但不黄，高光有质感，阴影有层次，明暗过渡自然',
+          vibe: '精致周末松弛感——不是懒散的邋遢，是用心生活的惬意，如「小太阳」的窗边田园但更克制高级',
+        },
+        6: { // 周六·种草 → 居中特写 + 中心聚拢
+          comps: [
+            '居中特写构图：果切盒在画面中央偏下，精致摆盘，水果颜色搭配像一幅画。周围用小雏菊或洋牡丹花瓣零散点缀，参考「小太阳」的鲜花填空法——不抢镜但增加画面生机',
+            '中心聚拢构图：藤编垫或草编餐垫上，各色水果切块向中心聚拢摆放，四周留白，突出丰盛感和高颜值。食物色彩鲜艳作为视觉锚点，背景暖木色低饱和衬托'
+          ],
+          scene: '阳台浅橡木小桌或窗边台面微俯拍，柔和漫射自然光，无硬阴影',
+          tone: '柔和自然清新调，白平衡准确，高光如薄纱般通透，阴影若有若无，食物色彩做视觉锚点',
+          vibe: '高级种草感——不是硬推销，是让人看到就忍不住截图发给朋友说"这个看起来也太好吃了"',
+        },
+      };
+
+      const s = SCENES[day] || SCENES[2];
+      const comp = s.comps[compIdx % s.comps.length];
+      compIdx = (compIdx + 1) % s.comps.length;
+      localStorage.setItem(compKey, compIdx);
+
+      return `精致食物摄影，画面丰富有呼吸感，元素自然分布在前后不同纵深层次，不堆在同一平面。
+画面规格：${aspectRatio}。
+场景：${s.scene}。
+构图：${comp}。
+产品：「${product}」——${colorInfo.hint}。通透果切盒，表面细腻水珠，冰镇新鲜感。
+场景氛围元素（分布在不同纵深）：${sceneInfo}。
+色调：${s.tone}。
+氛围：${s.vibe}。
+层次：前景1-2件小道具（花瓣/薄荷叶/散落水果），中景主产品C位，后景1-2件氛围道具（饮品杯/编织篮/小花束/整果），前后形成3层纵深。道具总数4-6件，间距合理不拥挤。
+光影：定向柔光，有明显明暗过渡和阴影层次，不要全画面均匀亮、不要平光。
+景深：前景清晰，后景浅景深柔和虚化。
+风格防线：中性白平衡不过度偏黄、色彩克制不跳脱。
+禁止：画面中不出现任何文字、logo、水印，不出现除本产品外的其他食物或饮料。
+【复刻硬性约束】拼盘的塑料盒/塑料桶/塑料碗，必须完整复刻参考图原生形态，全部完整呈现，不丢失、不裁剪、不拉伸变形。
+【拼盘内容顶级约束】所有拼盘内部水果100%原样保留，无任何改动空间：水果尺寸、堆叠顺序、水果品类、摆放角度完全和参考图一致，严禁替换、增减、移位任何果肉，禁止重塑拼盘水果布局。`;
+
+    }
+
+    // ==================== 输出展示 ====================
+    function showOutput(copy, prompt, day) {
+      document.getElementById('outputCopy').classList.add('visible');
+      document.getElementById('copyContent').textContent = copy;
+      (document.getElementById('promptContent') || {}).textContent = '';
+
+      // 保存历史（以选中日期为主键）
+      saveHistory(day, copy, prompt, currentDateKey);
+
+      // 滚动到输出区
+      document.getElementById('outputCopy').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ==================== 独立Prompt生成 ====================
+    var PROMPT_ITEMS = [];
+    var PROMPT_COUNTER = 0;
+
+    function genPromptStandalone() {
+      var product = document.getElementById('promptProduct').value.trim() || '招牌鲜果切';
+      var sceneVal = document.getElementById('promptScene').value;
+      var sceneEl = document.getElementById('promptScene');
+      var sceneLabel = sceneEl.options[sceneEl.selectedIndex].text;
+      var prompt = '';
+
+      if (sceneVal === 'brand' || sceneVal === 'social') {
+        var logoRule = sceneVal === 'brand'
+          ? '1.图1（产品白底图）强制规则：果盒、容器、果肉种类与摆放完整原样复刻，不得修改、增减水果；完整保留原图LOGO图案，LOGO统一放置画面左上角，随3:4画幅等比例适配缩放，禁止消除、扭曲、移位至其他区域。'
+          : '1.图1（产品白底图）强制规则：果盒、容器、果肉种类与摆放完整原样复刻，不得修改、增减水果；LOGO可直接去除弱化。';
+        prompt = '根据上传两张图片生成果切实拍图。\n\n' + logoRule + '\n\n' +
+          '2.图2（博主氛围参考图）通用参考范围：保留画面整体光影色调、构图留白、桌面布景、餐具搭配、人物手持/摆放姿势、生活化氛围感、背景虚化层次；仅忽略图内博主手中盛放的水果、餐食、原装容器，禁止照搬这份食物形态。\n\n' +
+          '3.版权约束：仅借鉴拍摄风格与布局逻辑，生成全新原创场景，不完整复刻博主原图道具、背景细节。\n\n' +
+          '4.画质底线：原生实拍质感，禁用3D塑料建模感、高饱和刺眼色彩、厚重黑影、廉价塑料装饰；画面留白充足，产品始终清晰突出。\n\n' +
+          '5.规格：3:4竖版4K高清，无多余文字、无水印。';
+      } else {
+        var sceneId = parseInt(sceneVal) || 2;
+        prompt = genPrompt(sceneId, product);
+      }
+
+      var id = 'p' + (++PROMPT_COUNTER);
+      PROMPT_ITEMS.push({ id: id, label: sceneLabel, text: prompt });
+      appendPromptCard(id, sceneLabel, prompt);
+      localStorage.setItem('promptItems', JSON.stringify(PROMPT_ITEMS));
+      localStorage.setItem('promptCounter', PROMPT_COUNTER);
+      document.getElementById('promptOutput').style.display = 'block';
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function appendPromptCard(id, label, text) {
+      var preview = text.replace(/\n/g, ' ').substring(0, 60);
+      var html = '<div class="prompt-card" id="' + id + '">' +
+        '<div class="pc-head" onclick="togglePromptCard(\'' + id + '\')">' +
+          '<span class="pc-tag">' + esc(label) + '</span>' +
+          '<span class="pc-preview">' + esc(preview) + '…</span>' +
+          '<span class="pc-arrow">▼</span>' +
+        '</div>' +
+        '<div class="pc-body">' +
+          '<div class="copy-box">' + esc(text) + '</div>' +
+          '<div class="pc-actions">' +
+            '<button onclick="event.stopPropagation();copyOnePrompt(\'' + id + '\')">📋 复制</button>' +
+            '<button onclick="event.stopPropagation();openDoubaoOne(\'' + id + '\')">📱 打开豆包</button>' +
+            '<button onclick="event.stopPropagation();deletePromptCard(\'' + id + '\')" style="color:#d32f2f">🗑️</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+      document.getElementById('promptList').insertAdjacentHTML('beforeend', html);
+    }
+
+    function togglePromptCard(id) {
+      document.getElementById(id).classList.toggle('open');
+    }
+
+    function deletePromptCard(id) {
+      var el = document.getElementById(id);
+      if (el) el.remove();
+      PROMPT_ITEMS = PROMPT_ITEMS.filter(function(p) { return p.id !== id; });
+      if (PROMPT_ITEMS.length === 0) document.getElementById('promptOutput').style.display = 'none';
+    }
+
+    function clearPromptList() {
+      PROMPT_ITEMS = [];
+      PROMPT_COUNTER = 0;
+      document.getElementById('promptList').innerHTML = '';
+      document.getElementById('promptOutput').style.display = 'none';
+      localStorage.removeItem('promptItems');
+      localStorage.removeItem('promptCounter');
+    }
+
+    function restorePromptList() {
+      var saved = localStorage.getItem('promptItems');
+      if (!saved) return;
+      try {
+        PROMPT_ITEMS = JSON.parse(saved);
+        PROMPT_COUNTER = parseInt(localStorage.getItem('promptCounter') || '0');
+        document.getElementById('promptList').innerHTML = '';
+        PROMPT_ITEMS.forEach(function(item) {
+          appendPromptCard(item.id, item.label, item.text);
+        });
+        if (PROMPT_ITEMS.length > 0) {
+          document.getElementById('promptOutput').style.display = 'block';
+        }
+      } catch(e) {
+        localStorage.removeItem('promptItems');
+        localStorage.removeItem('promptCounter');
+      }
+    }
+
+    function copyOnePrompt(id) {
+      var card = document.getElementById(id);
+      if (!card) return;
+      var text = card.querySelector('.pc-body .copy-box').textContent;
+      navigator.clipboard.writeText(text).then(function() {
+        showToast('✅ Prompt已复制');
+      }).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        showToast('✅ Prompt已复制');
+      });
+    }
+
+    function openDoubaoOne(id) {
+      var card = document.getElementById(id);
+      if (!card) return;
+      var prompt = card.querySelector('.pc-body .copy-box').textContent;
+      var msg = '帮我生成一张小红书风格的产品配图：\n' + prompt;
+      navigator.clipboard.writeText(msg).catch(function(){});
+      var isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+      showToast('✅ 已复制·正在打开豆包');
+      if (isMobile) {
+        setTimeout(function() { window.location.href = 'https://www.doubao.com/chat/'; }, 300);
+      } else {
+        window.open('doubao://', '_self');
+        setTimeout(function() { if (document.hasFocus()) window.open('https://www.doubao.com/chat/', '_blank'); }, 1500);
+      }
+    }
+
+    // ==================== 复制功能 ====================
+    function copyText(type) {
+      const text = document.getElementById('copyContent').textContent;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(type === 'copy' ? '✅ 文案已复制' : '🎨 Prompt已复制');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(type === 'copy' ? '✅ 文案已复制' : '🎨 Prompt已复制');
+      });
+    }
+
+    function openDoubao() {
+      const prompt = document.getElementById('promptContent').textContent;
+      if (!prompt || !prompt.trim()) { showToast('⚠️ 请先生成Prompt'); return; }
+
+      const msg = '帮我生成一张小红书风格的产品配图：\n' + prompt;
+      const webUrl = 'https://www.doubao.com/chat/';
+      const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+
+      // 复制（fire and forget）
+      navigator.clipboard.writeText(msg).catch(() => {});
+
+      if (isMobile) {
+        // 手机：直接跳网页版，豆包的Universal Link会自动唤起App
+        showToast('✅ 已复制·正在打开豆包');
+        setTimeout(() => { window.location.href = webUrl; }, 300);
+      } else {
+        // 桌面：优先尝试唤起App
+        showToast('✅ 已复制·正在打开豆包');
+        window.open('doubao://', '_self');
+        setTimeout(() => {
+          if (document.hasFocus()) window.open(webUrl, '_blank');
+        }, 1500);
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'copy-toast';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 1800);
+    }
+
+    // ==================== 历史记录 ====================
+    function saveHistory(day, copy, prompt, dateKey) {
+      const history = JSON.parse(localStorage.getItem('copyHistory') || '[]');
+      // 同日期覆盖旧记录
+      const existIdx = history.findIndex(h => h.dateKey === dateKey && h.day === day);
+      const entry = {
+        day, copy, prompt,
+        dateKey: dateKey,
+        savedAt: new Date().toISOString(),
+        preview: copy.split('\n')[0]
+      };
+      if (existIdx >= 0) {
+        history[existIdx] = entry;
+      } else {
+        history.unshift(entry);
+      }
+      // 保留最近100条
+      if (history.length > 100) history.length = 100;
+      localStorage.setItem('copyHistory', JSON.stringify(history));
+      renderHistory();
+    }
+
+    function searchHistory() {
+      var filter = (document.getElementById('historySearch').value || '').trim().toLowerCase();
+      renderHistory(filter);
+    }
+
+    function renderHistory(filterText) {
+      const raw = JSON.parse(localStorage.getItem('copyHistory') || '[]');
+      // 过滤损坏记录
+      const history = raw.filter(function(h) { return h && h.day != null && h.dateKey && h.savedAt; });
+      if (history.length !== raw.length) localStorage.setItem('copyHistory', JSON.stringify(history));
+      
+      // 搜索过滤
+      var filtered = history;
+      if (filterText) {
+        filtered = history.filter(function(h) {
+          var searchTarget = (h.copy || '') + ' ' + (h.preview || '') + ' ' + (h.dateKey || '') + ' ' + (DAY_NAMES[h.day] || '');
+          return searchTarget.toLowerCase().indexOf(filterText) >= 0;
+        });
+      }
+
+      const list = document.getElementById('historyList');
+      const countEl = document.getElementById('historyCount');
+      const clearBtn = document.getElementById('historyClear');
+
+      if (countEl) countEl.textContent = filterText 
+        ? '（' + filtered.length + '条匹配 / 共' + history.length + '条）'
+        : '（' + history.length + '/100）';
+      if (clearBtn) clearBtn.style.display = history.length > 0 ? 'block' : 'none';
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="no-result">' + (filterText ? '🔍 没有匹配「' + filterText + '」的记录' : '还没有生成记录') + '</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.slice(0, 20).map(function(h) {
+        var timeStr = '--:--';
+        try { timeStr = new Date(h.savedAt).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}); } catch(e) {}
+        return '<div class="history-item" onclick="loadHistory(\'' + h.dateKey + '\',' + h.day + ')">' +
+          '<span class="date">' + (h.dateKey || '') + ' ' + (DAY_NAMES[h.day] || '') + '</span>' +
+          '<span class="preview">' + (h.preview || '') + '</span>' +
+          '<span style="font-size:11px;color:#999">' + timeStr + '</span>' +
+          '</div>';
+      }).join('');
+    }
+
+    function loadHistory(dateKey, day) {
+      const history = JSON.parse(localStorage.getItem('copyHistory') || '[]');
+      const h = history.find(function(e) { return e.dateKey === dateKey && e.day === day; });
+      if (h) {
+        document.getElementById('datePicker').value = h.dateKey;
+        updateDayInfo();
+        showOutput(h.copy, h.prompt, h.day);
+      }
+    }
+
+    function clearHistory() {
+      if (confirm('确定清空全部历史记录？当前文案不受影响。')) {
+        localStorage.removeItem('copyHistory');
+        renderHistory();
+      }
+    }
+
+    // 按日期回填表单
+    function fillFormFromHistory(match) {
+      // 表单已由 renderInputForm 渲染，这里不做额外填充
+      // 保留给未来扩展（如在表单中显示"已有记录"标记）
+    }
+
+    // ==================== 辅助函数 ====================
+    function getSeasonalProduct() {
+      const m = today.getMonth() + 1;
+      if (m >= 6 && m <= 8) return '冰镇西瓜切🍉';
+      if (m >= 3 && m <= 5) return '当季草莓碗🍓';
+      if (m >= 9 && m <= 11) return '蜜柚鲜切🍊';
+      return '暖冬鲜果切🍎';
+    }
+
+    // ==================== PWA Service Worker ====================
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js?v=11', { updateViaCache: 'none' }).then(function(reg) {
+        reg.addEventListener('updatefound', function() {
+          var newWorker = reg.installing;
+          newWorker.addEventListener('statechange', function() {
+            if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+              location.reload();
+            }
+          });
+        });
+      }).catch(function() {});
+    }
+
+    // ==================== 启动 ====================
+    init();
+  </script>
+  </div>
+</body>
+</html>

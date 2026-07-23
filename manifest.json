@@ -1,0 +1,19 @@
+{
+  "name": "私域运营工具箱",
+  "short_name": "私域运营箱",
+  "description": "切果NOW · 社群文案+AI配图+舆情监测 · 三合一私域运营工具箱",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8faf8",
+  "theme_color": "#2d8a4e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

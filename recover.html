@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>恢复收藏数据</title>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 60px auto; padding: 20px; background: #f5f7f5; color: #263238; }
+  h2 { color: #2d8a4e; }
+  .box { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin: 20px 0; }
+  .empty { text-align: center; padding: 40px; color: #9eacac; font-size: 14px; }
+  .count { font-size: 32px; font-weight: 700; color: #2d8a4e; }
+  .items { max-height: 400px; overflow-y: auto; margin: 16px 0; border: 1px solid #e8ece8; border-radius: 8px; padding: 12px; font-size: 12px; }
+  .item { padding: 6px 0; border-bottom: 1px solid #f0f0f0; }
+  .item:last-child { border-bottom: none; }
+  .btn { background: #2d8a4e; color: #fff; border: none; border-radius: 8px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; margin: 4px; }
+  .btn:hover { background: #1b5e2f; }
+  .btn-outline { background: #fff; color: #2d8a4e; border: 2px solid #2d8a4e; }
+  .btn-outline:hover { background: #e8f5e9; }
+  .success { background: #e8f5e9; color: #2e7d32; padding: 12px 16px; border-radius: 8px; margin: 16px 0; display: none; }
+  code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; word-break: break-all; }
+</style>
+</head>
+<body>
+<h2>⭐ 收藏数据恢复工具</h2>
+<p style="color:#6b7c7c;font-size:13px">当前页面协议：<strong id="protocol"></strong> —— 请用 <code>file://</code> 协议双击打开此文件</p>
+
+<div class="box">
+  <div id="found" style="display:none">
+    <div class="count" id="starCount">0</div>
+    <div style="font-size:13px;color:#6b7c7c">条收藏记录已找到！</div>
+    <div class="items" id="itemsList"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="copyJSON()">📋 复制 JSON</button>
+      <button class="btn btn-outline" onclick="downloadJSON()">💾 下载备份文件</button>
+    </div>
+    <div class="success" id="copySuccess">✅ 已复制到剪贴板！</div>
+  </div>
+  <div id="notfound">
+    <div class="empty">
+      <div style="font-size:40px;margin-bottom:12px">📭</div>
+      <p><strong>此 origin 下未找到收藏数据</strong></p>
+      <p style="font-size:12px">请确认你正在用 <code>file://</code> 协议打开此页面（双击打开而非通过 localhost）</p>
+    </div>
+  </div>
+</div>
+
+<div class="box" id="restoreBox" style="display:none">
+  <h3>💡 如何恢复到工作台？</h3>
+  <p style="font-size:13px;color:#6b7c7c">
+    1. 先点击上面的 <strong>📋 复制 JSON</strong><br>
+    2. 打开 <code>http://localhost:8091/index.html</code><br>
+    3. 按 <code>F12</code> 打开控制台<br>
+    4. 粘贴并执行下面这条命令：
+  </p>
+  <div style="background:#263238;color:#a5d6a7;padding:12px 16px;border-radius:8px;font-size:12px;margin:12px 0;word-break:break-all;overflow-x:auto" id="restoreCmd">localStorage.setItem('qg_stars', '粘贴这里')</div>
+  <p style="font-size:12px;color:#6b7c7c">执行后刷新工作台页面，收藏就回来了 ✨</p>
+</div>
+
+<script>
+document.getElementById('protocol').textContent = location.protocol;
+
+var stars = localStorage.getItem('qg_stars');
+if (stars) {
+  try {
+    var items = JSON.parse(stars);
+    if (items.length > 0) {
+      document.getElementById('found').style.display = 'block';
+      document.getElementById('notfound').style.display = 'none';
+      document.getElementById('restoreBox').style.display = 'block';
+      document.getElementById('starCount').textContent = items.length;
+      
+      // Show items
+      var list = document.getElementById('itemsList');
+      var html = '';
+      items.sort(function(a,b){ return b.date.localeCompare(a.date); });
+      items.forEach(function(s) {
+        html += '<div class="item"><strong>' + s.date + '</strong> · ' + s.platform + ' · ' + (s.title || '(无标题)') + '</div>';
+      });
+      list.innerHTML = html;
+      
+      // Build restore command
+      var escaped = stars.replace(/'/g, "\\'");
+      document.getElementById('restoreCmd').textContent = "localStorage.setItem('qg_stars', '" + escaped + "')";
+    }
+  } catch(e) {
+    document.getElementById('notfound').innerHTML = '<div class="empty"><p>数据解析失败：' + e.message + '</p></div>';
+  }
+}
+
+function copyJSON() {
+  var stars = localStorage.getItem('qg_stars');
+  navigator.clipboard.writeText(stars).then(function() {
+    document.getElementById('copySuccess').style.display = 'block';
+    setTimeout(function() { document.getElementById('copySuccess').style.display = 'none'; }, 3000);
+  });
+}
+
+function downloadJSON() {
+  var stars = localStorage.getItem('qg_stars');
+  var blob = new Blob([stars], {type: 'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'qg_stars_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+</script>
+</body>
+</html>
