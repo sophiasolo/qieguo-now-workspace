@@ -452,6 +452,9 @@ function loadSentimentData(){
       };
       data.today_items=data.stats.today_items||[];
       data.negative_items=data.stats.negatives||data.stats.negative_items||[];
+      // 补充date字段（新格式缺失）
+      var negDate=data.stats.date||data.latest_date||'';
+      data.negative_items.forEach(function(item){if(!item.date)item.date=negDate;});
       data.generated=data.updated||'';
       // Compute last_7d from daily_trend
       if(data.daily_trend&&data.daily_trend.length>0){
