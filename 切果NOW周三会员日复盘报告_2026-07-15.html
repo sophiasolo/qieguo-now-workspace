@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>切果NOW · 周三会员日复盘报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --brand-green: #1A8A3B;
+  --brand-yellow: #FAD203;
+  --brand-white: #FFFFFF;
+  --leaf-green: #4DAF4A;
+  --bg-dark: #0f1a0f;
+  --bg-card: #1a2d1a;
+  --bg-card2: #122212;
+  --border: #2a4a2a;
+  --text: #e8f0e8;
+  --text-dim: #8aaa8a;
+  --red: #ff4757;
+  --green-arrow: #2ed573;
+  --flat: #ffa502;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text);
+  min-height: 100vh;
+}
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, var(--brand-green) 0%, #0d5a25 100%);
+  padding: 28px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 3px solid var(--brand-yellow);
+  flex-wrap: wrap; gap: 16px;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo {
+  background: var(--brand-yellow);
+  color: var(--brand-green);
+  font-weight: 900; font-size: 22px;
+  padding: 6px 16px; border-radius: 8px;
+  letter-spacing: 1px;
+}
+.logo .now { color: #FFFFFF; }
+.header h1 { font-size: 22px; font-weight: 700; color: var(--brand-white); }
+.header .sub { font-size: 12px; color: rgba(255,255,255,0.7); margin-top:2px; }
+.header-right { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ── Buttons ── */
+.btn {
+  padding: 8px 18px; border: none; border-radius: 6px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.btn-primary { background: var(--brand-yellow); color: #1a1a1a; }
+.btn-primary:hover { background: #ffe040; }
+.btn-outline { background: transparent; border: 1.5px solid var(--brand-yellow); color: var(--brand-yellow); }
+.btn-outline:hover { background: rgba(250,210,3,0.1); }
+.btn-sm { padding: 5px 12px; font-size:12px; }
+.btn-export { background: var(--leaf-green); color: #fff; }
+.btn-export:hover { background: #5cc45a; }
+
+/* ── Layout ── */
+.container { max-width: 1400px; margin: 0 auto; padding: 24px 28px; }
+
+/* ── Date Picker Bar ── */
+.date-bar {
+  background: var(--bg-card);
+  border-radius: 10px; padding: 18px 24px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.date-bar label { font-weight: 600; font-size: 13px; color: var(--brand-yellow); white-space: nowrap; }
+.date-bar input[type="date"], .date-bar input[type="text"].date-text {
+  background: var(--bg-dark); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 12px; font-size: 13px; width: 140px;
+}
+.date-bar input[type="text"].date-text::placeholder { color: #555; }
+.date-bar .vs { font-size: 16px; font-weight: 700; color: var(--brand-yellow); }
+.date-bar .date-divider { color: var(--border); font-size: 18px; margin: 0 2px; }
+.period-badge {
+  background: rgba(250,210,3,0.15); color: var(--brand-yellow);
+  padding: 4px 12px; border-radius: 20px; font-size: 12px;
+}
+
+/* ── KPI Cards ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--bg-card);
+  border-radius: 10px; padding: 16px 20px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+.kpi-card:hover { border-color: var(--brand-yellow); }
+.kpi-label { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+.kpi-values { display: flex; align-items: baseline; gap: 12px; }
+.kpi-main { font-size: 26px; font-weight: 800; color: var(--brand-white); }
+.kpi-prev { font-size: 15px; color: var(--text-dim); }
+.kpi-wow {
+  font-size: 13px; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+  margin-left: auto;
+}
+.wow-up { color: var(--red); }
+.wow-down { color: var(--green-arrow); }
+.wow-flat { color: var(--flat); }
+
+/* ── Sections ── */
+.section {
+  background: var(--bg-card);
+  border-radius: 10px; padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.section-title {
+  font-size: 17px; font-weight: 700;
+  color: var(--brand-yellow);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--leaf-green);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::before {
+  content: ''; width: 4px; height: 20px;
+  background: var(--brand-yellow); border-radius: 2px;
+}
+
+/* ── Data Table ── */
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+}
+th, td {
+  padding: 10px 14px; text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  background: var(--bg-card2);
+  color: var(--brand-yellow);
+  font-weight: 700; font-size: 12px;
+  position: sticky; top: 0;
+  white-space: nowrap;
+}
+td { color: var(--text); }
+td input {
+  width: 95px; text-align: center;
+  background: var(--bg-dark); color: var(--text);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 5px 8px; font-size: 13px;
+  transition: border-color 0.2s;
+}
+td input:focus {
+  border-color: var(--brand-yellow);
+  outline: none;
+}
+td .money-prefix { color: var(--text-dim); font-weight: 700; margin-right: 2px; }
+td input.money-input { width: 80px; }
+td input.daily-input {
+  width: 75px;
+  border: 1px dashed var(--leaf-green);
+  background: rgba(77,175,74,0.08);
+}
+td input.daily-input:focus {
+  border-color: var(--brand-yellow);
+  background: rgba(250,210,3,0.08);
+}
+td input.daily-input.filled {
+  border-style: solid;
+  background: rgba(77,175,74,0.15);
+}
+.daily-display {
+  font-weight: 700; font-size: 13px; white-space: nowrap;
+  cursor: pointer; padding: 3px 8px; border-radius: 4px;
+  transition: background 0.15s;
+}
+.daily-display:hover { background: rgba(250,210,3,0.1); }
+.daily-display.up { color: var(--red); }
+.daily-display.down { color: var(--green-arrow); }
+.daily-display.flat { color: var(--flat); }
+.daily-display.empty { color: var(--text-dim); font-weight: 400; font-style: italic; }
+.wow-cell { font-weight: 700; font-size: 13px; white-space: nowrap; }
+.wow-cell.up { color: var(--red); }
+.wow-cell.down { color: var(--green-arrow); }
+.wow-cell.flat { color: var(--flat); }
+
+/* ── Chart Builder ── */
+.chart-controls {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 12px; align-items: center;
+}
+.chart-controls select {
+  background: var(--bg-dark); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 12px; font-size: 13px;
+}
+.group-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.group-tag {
+  padding: 3px 10px; border-radius: 12px; font-size: 11px;
+  cursor: pointer; border: 1px solid var(--border);
+  color: var(--text-dim); white-space: nowrap;
+  transition: all 0.2s;
+}
+.group-tag:hover { border-color: var(--brand-yellow); color: var(--brand-yellow); }
+.group-tag.active { background: var(--brand-yellow); color: var(--brand-green); border-color: var(--brand-yellow); font-weight: 700; }
+.indicator-checkboxes {
+  display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 8px 14px;
+  background: var(--bg-dark); border-radius: 6px; border: 1px solid var(--border);
+}
+.indicator-checkboxes label {
+  font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 3px;
+  white-space: nowrap;
+}
+.indicator-checkboxes input[type="checkbox"] { accent-color: var(--brand-yellow); }
+.chart-area {
+  background: var(--bg-card2);
+  border-radius: 8px; padding: 20px;
+  min-height: 400px;
+  position: relative;
+}
+.chart-area canvas { max-height: 450px; }
+.region-btn{cursor:pointer;padding:3px 10px;border-radius:12px;font-size:10px;border:1px solid var(--border);color:var(--text-dim);background:transparent;transition:all 0.2s}
+.region-btn.active,.region-btn:hover{background:var(--brand-yellow);color:var(--brand-green);border-color:var(--brand-yellow);font-weight:700}
+.chart-note {
+  font-size: 11px; color: var(--flat); margin-top: 6px;
+  display: flex; align-items: center; gap: 4px;
+}
+.chart-note::before { content: '💡'; }
+
+/* ── Campaign Content ── */
+.campaign-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.campaign-box {
+  background: var(--bg-card2);
+  border-radius: 8px; padding: 16px;
+  border: 1px solid var(--border);
+}
+.campaign-box h4 { color: var(--brand-yellow); font-size: 14px; margin-bottom: 10px; }
+.campaign-box textarea {
+  width: 100%; min-height: 380px;
+  background: var(--bg-dark); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 14px; font-size: 13px; resize: vertical;
+  font-family: inherit; line-height: 1.7;
+  overflow-y: auto;
+}
+.campaign-box textarea:focus { border-color: var(--brand-yellow); outline: none; }
+.image-upload {
+  border: 2px dashed var(--border); border-radius: 8px;
+  padding: 8px; text-align: center; cursor: pointer;
+  color: var(--text-dim); transition: border-color 0.2s;
+  min-height: 220px; display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.image-upload:hover { border-color: var(--brand-yellow); }
+.image-upload img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; max-height: 420px; }
+.image-upload.has-image { padding: 4px; }
+.image-upload .placeholder-text { font-size: 14px; }
+.image-upload input[type="file"] { display: none; }
+
+/* ── Conclusion ── */
+.conclusion-box {
+  background: linear-gradient(135deg, rgba(26,138,59,0.15), rgba(77,175,74,0.1));
+  border: 1px solid var(--leaf-green);
+  border-radius: 10px; padding: 24px;
+  line-height: 1.8;
+  min-height: 200px;
+}
+.conclusion-box h3 { color: var(--brand-yellow); margin-bottom: 10px; }
+.conclusion-box h4 { color: var(--brand-yellow); margin: 14px 0 6px; }
+.conclusion-box ul { padding-left: 20px; }
+.conclusion-box li { margin-bottom: 6px; color: var(--text); }
+.conclusion-box .hl { color: var(--brand-yellow); font-weight: 600; }
+  outline: 2px solid var(--brand-yellow);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.conclusion-edit-hint {
+  font-size: 11px; color: var(--text-dim); margin-top: 10px;
+  text-align: right;
+}
+
+/* ── Store Tier ── */
+.store-tier-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  margin-bottom: 16px;
+}
+.tier-card {
+  background: var(--bg-card2); border-radius: 10px; padding: 18px;
+  text-align: center; border: 1px solid var(--border);
+}
+.tier-card .tier-icon { font-size: 28px; margin-bottom: 6px; }
+.tier-card .tier-label { font-size: 13px; color: var(--text-dim); margin-bottom: 4px; }
+.tier-card .tier-count { font-size: 32px; font-weight: 800; }
+.tier-card .tier-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+.tier-high .tier-count { color: var(--red); }
+.tier-mid .tier-count { color: var(--brand-yellow); }
+.tier-low .tier-count { color: var(--leaf-green); }
+
+.store-rank-table { width: 100%; margin-top: 12px; }
+.store-rank-table th { background: var(--bg-card2); color: var(--brand-yellow); font-size: 11px; padding: 8px 10px; }
+.store-rank-table td { font-size: 12px; padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.store-rank-table .rank-num { font-weight: 800; color: var(--brand-yellow); width: 30px; }
+.store-rank-table .store-name { text-align: left; }
+.store-rank-table .store-sales { color: var(--brand-white); font-weight: 600; }
+
+.community-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.community-card {
+  background: var(--bg-card2); border-radius: 8px; padding: 14px 18px;
+  border: 1px solid var(--border);
+}
+.community-card .c-label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+.community-card .c-value { font-size: 22px; font-weight: 800; color: var(--brand-white); }
+.community-card .c-derived { font-size: 22px; font-weight: 800; color: var(--brand-yellow); }
+.community-card input.c-input {
+  width: 100%; background: var(--bg-dark); color: var(--text);
+  border: 1px solid var(--border); border-radius: 5px;
+  padding: 8px 10px; font-size: 18px; font-weight: 700;
+}
+.community-card input.c-input:focus { border-color: var(--brand-yellow); outline: none; }
+.community-card input.c-input::placeholder { color: #555; font-size: 13px; }
+
+@media (max-width: 768px) {
+  .store-tier-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center; padding: 20px;
+  color: var(--text-dim); font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed; top: 20px; right: 20px;
+  background: var(--leaf-green); color: #fff;
+  padding: 10px 20px; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  opacity: 0; transform: translateY(-10px);
+  transition: all 0.3s; pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 768px) {
+  .campaign-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .header { padding: 16px 20px; }
+  .container { padding: 16px 12px; }
+}
+
+/* Map */
+.map-section{display:flex;gap:0;height:550px;position:relative}
+#mapMain{flex:1;min-width:0;position:relative}
+#mapChart{position:absolute;top:0;left:0;right:0;bottom:0}
+.map-panel{width:360px;background:var(--bg-card2);border-left:2px solid var(--border);padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;font-size:11px;flex-shrink:0}
+.mp-card{background:rgba(26,45,26,0.6);border:1px solid var(--border);border-radius:6px;padding:10px}
+.mp-card.active{border-color:var(--brand-yellow)}
+.mp-title{font-size:10px;color:var(--brand-yellow);font-weight:700;margin-bottom:6px}
+.mp-city{font-size:15px;font-weight:800;color:var(--brand-white)}
+.mp-region{font-size:10px;color:#aabbcc;margin-bottom:4px}
+.mp-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(42,74,42,0.3);font-size:10px}
+.mp-row .lbl{color:#aabbcc}
+.mp-srow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:11px}
+.mp-srow .big{font-size:13px;font-weight:800}
+.mp-store{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(42,74,42,0.2);font-size:10px;align-items:center}
+.mp-sname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 4px}
+.mp-sval{color:var(--brand-yellow);font-weight:600;margin-left:6px;white-space:nowrap}
+.mp-rank{width:22px;font-size:12px;text-align:center;flex-shrink:0}
+.mp-input{width:80px;background:var(--bg-dark);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:10px;text-align:right}
+.mp-input:focus{border-color:var(--brand-yellow);outline:none}
+.mp-empty{text-align:center;color:#4a6a4a;padding:20px;font-size:11px}
+.map-legend{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(15,26,15,0.9);border:1px solid #3a5a3a;border-radius:8px;padding:6px 14px;font-size:10px;color:#8aaa8a;z-index:10;display:flex;flex-direction:column;gap:3px;align-items:center}
+.legend-bar-row{display:flex;align-items:center;gap:0}
+.legend-bar-block{height:12px;border-radius:2px}
+.legend-threshold{width:2px;height:14px;background:#ff4757;margin:0 3px;border-radius:1px;flex-shrink:0}
+.legend-labels-row{display:flex;align-items:flex-start;width:100%;font-size:9px;color:#6a8a6a;margin-top:1px}
+.legend-label-item{text-align:center;flex:1;line-height:1.4}
+.legend-label-item strong{color:#e8f0e8;font-size:10px}
+@media(max-width:900px){.map-section{flex-direction:column}.map-panel{width:100%;max-height:300px}}
+
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">切果<span class="now">NOW</span></div>
+    <div>
+      <h1>周三会员日 · 复盘报告</h1>
+      <div class="sub">小程序 X 社群数据驱动精细化运营</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-outline btn-sm" onclick="resetAllData()">🔄 重置数据</button>
+    <button class="btn btn-outline btn-sm" onclick="exportData()">💾 导出数据</button>
+    <button class="btn btn-export btn-sm" onclick="exportFullReport()">📤 导出完整报告</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Date Picker -->
+  <div class="date-bar">
+    <label>📅 对比日期：</label>
+    <input type="text" class="date-text" id="dateAText" placeholder="如 2026-06-03" onchange="onDateTextChange('A')">
+    <input type="date" id="dateA" onchange="onDatePickerChange('A')" style="display:none">
+    <button class="btn btn-outline btn-sm" onclick="toggleDatePicker('A')" title="切换日历选择器">📆</button>
+    <span class="vs">VS</span>
+    <input type="text" class="date-text" id="dateBText" placeholder="如 2026-05-27" onchange="onDateTextChange('B')">
+    <input type="date" id="dateB" onchange="onDatePickerChange('B')" style="display:none">
+    <button class="btn btn-outline btn-sm" onclick="toggleDatePicker('B')" title="切换日历选择器">📆</button>
+    <span class="period-badge" id="periodInfo"></span>
+    <span class="date-divider">|</span>
+    <label>🔍 日环比基准日：</label>
+    <input type="text" class="date-text" id="dailyBaseText" placeholder="如 2026-06-02" onchange="onDailyBaseChange()">
+    <input type="date" id="dailyBase" onchange="onDailyBasePicker()" style="display:none">
+    <button class="btn btn-outline btn-sm" onclick="toggleDatePicker('dailyBase')" title="切换日历选择器">📆</button>
+    <span style="margin-left:auto;font-size:12px;color:var(--text-dim)">
+      已保存 <strong id="savedPeriodsCount">0</strong> 期数据
+    </span>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <!-- Editable Data Table -->
+  <div class="section">
+    <div class="section-title">📊 核心经营指标明细（可编辑） <span id="tableToggle" style="cursor:pointer;font-size:11px;color:var(--brand-yellow);margin-left:12px" onclick="toggleTable()">▶ 展开明细</span></div>
+    <div id="tableContent" style="display:none">
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>指标名称</th>
+            <th id="thA">日期A</th>
+            <th id="thB">日期B</th>
+            <th>周环比</th>
+            <th id="thDaily">日环比</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim)">
+      💡 周环比自动计算 | 日环比手动填入 % 后自动保存 | 点击单元格即可编辑 | 上方可设置日环比基准日
+    </div>
+    </div>
+  </div>
+
+  <!-- Combined -->
+  <div class="section">
+    <div class="section-title">🗺️ 门店·天气·战区综合分析</div>
+    <div class="store-tier-grid" id="storeTierGrid" style="margin-bottom:14px"></div>
+    <div class="map-section">
+      <div id="mapMain"><div id="mapChart"></div>
+        <div class="map-legend"><div class="legend-bar-row"><div class="legend-bar-block" style="background:#fac802;width:74px"></div><div class="legend-bar-block" style="background:#f5a623;width:88px"></div><div class="legend-threshold"></div><div class="legend-bar-block" style="background:#74b9ff;width:56px"></div><div class="legend-bar-block" style="background:#023e8a;width:56px"></div><span style="margin-left:8px;white-space:nowrap;font-size:9px;color:#8aaa8a">🟢光圈=销售额</span></div><div class="legend-labels-row"><div class="legend-label-item"><strong>&lt;1mm</strong><br>77城</div><div class="legend-label-item"><strong>1-10mm</strong><br>27城</div><div class="legend-label-item" style="color:#ff4757;flex:0.4">│10mm<br>阈值</div><div class="legend-label-item"><strong>10-25mm</strong><br>11城</div><div class="legend-label-item"><strong>&gt;25mm</strong><br>8城</div></div></div>
+      </div>
+      <div class="map-panel">
+        <div class="mp-empty" id="mpEmpty"><span style="font-size:30px;display:block;margin-bottom:8px">👆</span>鼠标悬停地图城市<br>查看天气+战区销售</div>
+        <div id="mpContent" style="display:none">
+          <div class="mp-card active"><div class="mp-title" id="mpRegionTitle">📊 战区销售：—</div><div class="mp-srow"><span>📦 订单</span><span class="big" id="mpOrders">—</span><span id="mpOrdersWow" style="font-size:10px"></span></div><div class="mp-srow"><span>💰 销售额</span><span class="big" id="mpSalesVal">—</span><span id="mpSalesWow" style="font-size:10px"></span></div><div class="mp-srow"><span>🏪 动销门店</span><span class="big" id="mpStores">—</span></div><div class="mp-srow" style="margin-top:4px;border-top:1px dashed #2a4a2a;padding-top:4px"><span>📉 订单较上期下滑</span><span id="mpDecline" style="color:#2ed573;font-size:12px;font-weight:700">—</span></div><div style="font-size:8px;color:#4a6a4a;margin-top:1px">※ 两期至少一期有订单的门店中，本周订单数下降的占比</div></div>
+          <div class="mp-card"><div class="mp-title">🌤️ 天气实况</div><div class="mp-city" id="mpCity">—</div><div class="mp-region" id="mpRegionLabel">—</div><div class="mp-row"><span class="lbl">🌡️ 温度</span><span id="mpTemp">—</span></div><div class="mp-row"><span class="lbl">🌧️ 天气</span><span id="mpWeatherLabel">—</span></div><div class="mp-row"><span class="lbl">💧 降雨量</span><span id="mpRain" style="color:#74b9ff">—</span></div><div class="mp-row"><span class="lbl">💨 风速/💦湿度</span><span id="mpWindHum">—</span></div></div>
+          <div class="mp-card"><div class="mp-title">🏆 战区TOP5门店 <span id="mpSortToggle" style="cursor:pointer;font-size:9px;color:var(--brand-yellow);margin-left:4px;padding:1px 6px;border:1px solid var(--border);border-radius:9px" onclick="toggleSortDim()">📦订单</span></div><div id="mpTopStores"></div></div>
+          <div class="mp-card"><div class="mp-title">🏆 全国TOP10门店 <span id="mpSortToggle2" style="cursor:pointer;font-size:9px;color:var(--brand-yellow);margin-left:4px;padding:1px 6px;border:1px solid var(--border);border-radius:9px" onclick="toggleSortDim()">📦订单</span></div><div id="mpAllTopStores"></div></div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:10px">💡 省份颜色=省内最高降雨(见左下角图例) | 🟢光圈=战区销售额 | 悬停城市→右侧面板联动</div>
+  </div>
+
+  <!-- Data Analysis -->
+  <div class="section">
+    <div class="section-title">📈 数据分析</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px">
+      <div>
+        <h4 style="color:var(--brand-yellow);font-size:13px;margin-bottom:6px">🗺️ 7大战区分组对比</h4>
+        <div class="chart-area" style="min-height:360px;height:360px"><canvas id="regionRadar"></canvas></div>
+      </div>
+      <div>
+        <h4 style="color:var(--brand-yellow);font-size:13px;margin-bottom:6px">🏆 战区TOP5门店</h4>
+        <div id="regionFilter" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+          <span class="region-btn active" data-region="东北大区">东北</span>
+          <span class="region-btn" data-region="北部大区">北部</span>
+          <span class="region-btn" data-region="华东大区">华东</span>
+          <span class="region-btn" data-region="华南大区">华南</span>
+          <span class="region-btn" data-region="中西大区">中西</span>
+          <span class="region-btn" data-region="京津大区">京津</span>
+          <span class="region-btn" data-region="上海大区">上海</span>
+          <span class="region-btn" data-region="">全部</span>
+        </div>
+        <div class="chart-area" style="min-height:300px;height:300px"><canvas id="top5Bar"></canvas></div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <h4 style="color:var(--brand-yellow);font-size:13px;margin-bottom:6px">📊 门店动销分布 · 本期 vs 上期</h4>
+      <div class="chart-area" style="min-height:260px;height:260px"><canvas id="storeDist"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="section">
+    <div class="section-title">🎯 活动结论与优化建议</div>
+    <div class="conclusion-box" id="conclusionContent" contenteditable="true">📋 2026-07-15 周三会员日复盘结论
+
+    本期会员日（7.15）对比上期（7.8），核心指标<b>量稳价跌</b>：有效订单<span class="hl">707单</span>（<span class="wow-cell flat">➡️ -0.70%</span>，基本持平），有效销售额<span class="hl">¥19,680.83</span>（<span class="wow-cell down">↓ -6.72%</span>）。销售额下跌的主因是<b>件单价和客单价双降</b>（件单价¥15.32→¥14.83，↓3.2%；客单价¥29.63→¥27.84，↓6.04%），上期团餐/大宗订单抬高基数后本期回归常态。
+
+    <h4>🔍 关键发现</h4>
+    <strong>1. 北部大区暴雨重创，济宁单日45.7mm</strong>
+    北部大区订单<span class="wow-cell down">↓ -17.5%</span>（183→151），销售额<span class="wow-cell down">↓ -30.4%</span>（¥4,322.93→¥3,009.41）。核心城市遭暴雨：济宁45.7mm、菏泽35.0mm、济南21.8mm、日照14.8mm。TOP门店唐山新城学府店从13单→5单、济南凤凰路店从10单→3单、乳山外事大学店从10单→2单，暴雨导致出行意愿骤降。
+
+    <strong>2. 华东大区逆势增长：高温+晴好驱动</strong>
+    华东大区订单<span class="wow-cell up">↑ +10.8%</span>（102→113），销售额<span class="wow-cell up">↑ +19.1%</span>（¥3,064.96→¥3,651.05）。均温31.6°C高温+11/21城无降雨，水果消费旺季叠加晴好天气。TOP门店南京江宁大学城店从1单→11单爆发，南通北翼玖玖广场店保持4单。
+
+    <strong>3. 高动销门店缩水，门店向中低活跃度迁移</strong>
+    高动销门店（≥3单）从91家降至<span class="hl">83家</span>，中动销从234升至251家。整体动销门店从325升至334（↑2.8%），但订单集中度下降。动销率从26.82%微升至<span class="hl">27.47%</span>。
+
+    <strong>4. 外卖占比回升，客单价回归均值</strong>
+    外卖订单61单（占比8.6%，上期7.9%），外卖销售额<span class="hl">¥3,473.19</span>。外卖单均从上期¥80.01回落至<span class="hl">¥56.94</span>——上期单均暴涨是团餐驱动，本期回归正常水平。
+
+    <strong>5. 券核销率微升，但使用金额下滑</strong>
+    核销率从29.92%升至<span class="hl">31.47%</span>（464领→146用），优惠券交易金额<span class="wow-cell down">↓ -11.4%</span>（¥4,912.21→¥4,354.51）。核销率略有改善但仍偏低。
+
+    <h4>💡 下周/未来优化建议</h4>
+    <strong>北部暴雨预案常态化：</strong>北部大区连续两期受降雨影响（7.8小雨→7.15暴雨），济宁/菏泽/济南为核心受灾城市。建议下期会员日前1天在北部社群推送"雨天果切到家"外卖专属活动，提前将客流转入外卖渠道。
+
+    <strong>华东高温红利放大：</strong>华东连续两期增长（+3%→+10.8%），高温天气水果需求旺盛。建议在华东战区额外投放"满¥30赠冰杯"消暑加购活动，拉高件单价。
+
+    <strong>团餐基数效应预警：</strong>上期东北2笔大宗订单（¥1,060+¥785）拉高基数，本期回归导致东北销售额看起来暴跌。后续看板中团餐异常订单应标记剔除后再做环比，结论中已有体现。
+
+    <strong>券策略回测：</strong>本期核销率31.47%虽高于上期29.92%，但仍低于7.1的33.55%。建议测试"限时2小时抢券"制造紧迫感，提升核销意愿。
+
+    <strong>⚠️ 中西大区异常预警：</strong>中西大区订单90→63单（↓30%），55%门店下滑，但天气仅9/14城小雨（总30.8mm），不存在大范围暴雨。成都环球店（10→6）、重庆上清寺（7→6）、南昌2家归零、内江/宜春/成都各1家归零，尾部归零+核心店小幅下滑叠加导致。建议排查是否有竞品促销、平台活动分流或运营动作变动等非天气因素。</div>
+    <div class="conclusion-edit-hint">✏️ 点击上方区域可直接编辑 — 失焦自动保存 <span id="conclusionSaved" style="color:var(--leaf-green);display:none">✅ 已保存</span></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  切果NOW · 小程序 X 社群周三会员日复盘系统 | 数据本地存储 · 图表即时生成 | <span id="exportTime"></span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA LAYER
+// ═══════════════════════════════════════════
+
+const INDICATORS = [
+  { id:'newMembers',    emoji:'🍎', name:'新增会员数',           unit:'人', format:'int',   group:'会员' },
+  { id:'validOrders',   emoji:'🍊', name:'有效订单数',           unit:'单', format:'int',   group:'订单' },
+  { id:'deliveryOrders',emoji:'🍋', name:'外卖订单数',           unit:'单', format:'int',   group:'订单' },
+  { id:'pickupOrders',  emoji:'🍇', name:'自取订单数',           unit:'单', format:'int',   group:'订单' },
+  { id:'validSales',    emoji:'🍑', name:'有效销售额',           unit:'¥',  format:'money', group:'销售额' },
+  { id:'deliverySales', emoji:'🥝', name:'外卖销售额',           unit:'¥',  format:'money', group:'销售额' },
+  { id:'pickupSales',   emoji:'🍒', name:'自取销售额',           unit:'¥',  format:'money', group:'销售额' },
+  { id:'unitPrice',     emoji:'🍓', name:'实付件单价',           unit:'¥',  format:'money', group:'价格' },
+  { id:'customerPrice', emoji:'🍈', name:'实付客单价',           unit:'¥',  format:'money', group:'价格' },
+  { id:'productQty',    emoji:'🥭', name:'订单商品数量',         unit:'件', format:'int',   group:'订单' },
+  { id:'activeStores',  emoji:'🍍', name:'实时营业门店数',       unit:'家', format:'int',   group:'门店' },
+  { id:'salesStores',   emoji:'🥑', name:'动销门店数(有效订单)', unit:'家', format:'int',   group:'门店' },
+  { id:'couponClaim',   emoji:'🫐', name:'优惠券领取量',         unit:'张', format:'int',   group:'优惠券' },
+  { id:'couponUse',     emoji:'🍌', name:'优惠券使用量',         unit:'张', format:'int',   group:'优惠券' },
+  { id:'couponAmount',  emoji:'🍉', name:'优惠券交易金额',       unit:'¥',  format:'money', group:'优惠券' },
+];
+
+const INDICATOR_GROUPS = ['全部', '会员', '订单', '销售额', '价格', '门店', '优惠券'];
+
+// Pre-loaded data
+const PRELOAD = {"2026-07-15":{"newMembers":702,"validOrders":707,"deliveryOrders":61,"pickupOrders":646,"validSales":19680.83,"deliverySales":3473.19,"pickupSales":16207.64,"unitPrice":14.83,"customerPrice":27.84,"productQty":1327,"activeStores":1216,"salesStores":334,"couponClaim":464,"couponUse":146,"couponAmount":4354.51}};
+
+const DEFAULT_DATE_A = '2026-07-15';
+const DEFAULT_DATE_B = '2026-07-08';
+
+// Pre-loaded store tier data (from order detail Excel analysis)
+const STORE_TIER_PRELOAD = {'2026-07-15':{high:{stores:83,orders:394,sales:10927.28},mid:{stores:251,orders:311,sales:8683.45},inactive:882,topStores:[],regions:[],prev:{high:{stores:91,orders:412,sales:10646.58},mid:{stores:234,orders:299,sales:10416.28},inactive:887}}};
+let allData = {"2026-07-15": {"newMembers": 702, "validOrders": 707, "deliveryOrders": 61, "pickupOrders": 646, "validSales": 19680.83, "deliverySales": 3473.19, "pickupSales": 16207.64, "unitPrice": 14.83, "customerPrice": 27.84, "productQty": 1327, "activeStores": 1216, "salesStores": 334, "couponClaim": 464, "couponUse": 146, "couponAmount": 4354.51}, "2026-07-08": {"newMembers": 700, "validOrders": 712, "deliveryOrders": 56, "pickupOrders": 656, "validSales": 21098.59, "deliverySales": 4480.4, "pickupSales": 16618.19, "unitPrice": 15.32, "customerPrice": 29.63, "productQty": 1377, "activeStores": 1212, "salesStores": 325, "couponClaim": 478, "couponUse": 143, "couponAmount": 4912.21}};
+let dailyWow = {};       // { date: { indicatorId: number, ... } }
+let dailyBaseDate = '';  // 日环比基准日
+let campaignCache = {};
+let conclusionCache = {};// { date: { text: htmlString } }
+let communityData = {};  // { date: { reach, messages, engaged, newMembers } }
+let currentChart = null;
+let activeGroup = '全部';
+
+// ═══════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════
+
+function loadAll() {
+  // allData is pre-baked in HTML, but dailyWow/communityData come from localStorage
+  dailyWow = JSON.parse(localStorage.getItem('qgnow_dailyWow') || '{}');
+  dailyBaseDate = localStorage.getItem('qgnow_dailyBaseDate') || '';
+  campaignCache = JSON.parse(localStorage.getItem('qgnow_campaign') || '{}');
+  conclusionCache = JSON.parse(localStorage.getItem('qgnow_conclusion') || '{}');
+  communityData = JSON.parse(localStorage.getItem('qgnow_community') || '{}');
+  if (allData && Object.keys(allData).length > 0) return;
+  allData = JSON.parse(localStorage.getItem('qgnow_data') || '{}');
+
+  for (const [date, vals] of Object.entries(PRELOAD)) {
+    if (!allData[date]) allData[date] = {};
+    for (const [k, v] of Object.entries(vals)) {
+      if (!(k in allData[date])) allData[date][k] = v;
+    }
+  }
+  saveAll();
+}
+
+function saveAll() {
+  localStorage.setItem('qgnow_data', JSON.stringify(allData));
+  localStorage.setItem('qgnow_dailyWow', JSON.stringify(dailyWow));
+  localStorage.setItem('qgnow_dailyBaseDate', dailyBaseDate);
+  localStorage.setItem('qgnow_campaign', JSON.stringify(campaignCache));
+  localStorage.setItem('qgnow_conclusion', JSON.stringify(conclusionCache));
+  localStorage.setItem('qgnow_community', JSON.stringify(communityData));
+}
+
+function autoSave(key) {
+  const dA = getDateValue('A');
+  if (key === 'campaignText') {
+    var ctEl = document.getElementById('campaignText');
+    if (!ctEl) return;
+    if (!campaignCache[dA]) campaignCache[dA] = {};
+    campaignCache[dA].text = ctEl.value;
+    localStorage.setItem('qgnow_campaign', JSON.stringify(campaignCache));
+  }
+}
+
+function autoSaveConclusion() {
+  const dA = getDateValue('A');
+  if (!conclusionCache[dA]) conclusionCache[dA] = {};
+  conclusionCache[dA].text = document.getElementById('conclusionContent').innerHTML;
+  localStorage.setItem('qgnow_conclusion', JSON.stringify(conclusionCache));
+  const badge = document.getElementById('conclusionSaved');
+  if (badge) { badge.style.display = 'inline'; setTimeout(() => { badge.style.display = 'none'; }, 2000); }
+}
+
+// ═══════════════════════════════════════════
+// DATE HELPERS (dual input: text + native picker)
+// ═══════════════════════════════════════════
+
+function getDateValue(which) {
+  if (which === 'dailyBase') {
+    const picker = document.getElementById('dailyBase');
+    const text = document.getElementById('dailyBaseText');
+    return picker.style.display !== 'none' ? picker.value : text.value.trim();
+  }
+  const picker = document.getElementById('date' + which);
+  const text = document.getElementById('date' + which + 'Text');
+  return picker.style.display !== 'none' ? picker.value : text.value.trim();
+}
+
+function setDateValue(which, val) {
+  const picker = document.getElementById('date' + which);
+  const text = document.getElementById('date' + which + 'Text');
+  picker.value = val;
+  text.value = val;
+}
+
+function setDailyBaseValue(val) {
+  document.getElementById('dailyBase').value = val;
+  document.getElementById('dailyBaseText').value = val;
+  dailyBaseDate = val;
+}
+
+function toggleDatePicker(which) {
+  const pickerId = which === 'dailyBase' ? 'dailyBase' : 'date' + which;
+  const textId = which === 'dailyBase' ? 'dailyBaseText' : 'date' + which + 'Text';
+  const picker = document.getElementById(pickerId);
+  const text = document.getElementById(textId);
+  if (picker.style.display === 'none') {
+    picker.style.display = 'inline-block';
+    text.style.display = 'none';
+    if (text.value) picker.value = text.value;
+    picker.focus();
+  } else {
+    picker.style.display = 'none';
+    text.style.display = 'inline-block';
+    if (picker.value) text.value = picker.value;
+    text.focus();
+  }
+}
+
+function onDateTextChange(which) {
+  const picker = document.getElementById('date' + which);
+  const text = document.getElementById('date' + which + 'Text');
+  if (picker.style.display !== 'none') picker.value = text.value;
+  onDateChange();
+}
+
+function onDatePickerChange(which) {
+  const picker = document.getElementById('date' + which);
+  const text = document.getElementById('date' + which + 'Text');
+  if (text.style.display !== 'none') text.value = picker.value;
+  onDateChange();
+}
+
+function onDailyBaseChange() {
+  const picker = document.getElementById('dailyBase');
+  const text = document.getElementById('dailyBaseText');
+  if (picker.style.display !== 'none') picker.value = text.value;
+  dailyBaseDate = text.value.trim();
+  saveAll();
+  renderAll();
+}
+
+function onDailyBasePicker() {
+  const picker = document.getElementById('dailyBase');
+  const text = document.getElementById('dailyBaseText');
+  if (text.style.display !== 'none') text.value = picker.value;
+  dailyBaseDate = picker.value;
+  saveAll();
+  renderAll();
+}
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+
+function fmtVal(val, format) {
+  if (val == null || isNaN(val)) return '—';
+  if (format === 'money') return '¥' + Number(val).toLocaleString('zh-CN', {minimumFractionDigits:2,maximumFractionDigits:2});
+  if (format === 'int') return Number(val).toLocaleString('zh-CN');
+  return val;
+}
+
+function fmtNum(val) {
+  return Number(val).toLocaleString('zh-CN');
+}
+
+function calcWow(a, b) {
+  if (b == null || b === 0 || isNaN(b) || isNaN(a)) return { pct: null, cls: 'flat', symbol: '➡️' };
+  const pct = ((a - b) / Math.abs(b)) * 100;
+  if (Math.abs(pct) < 0.005) return { pct: 0, cls: 'flat', symbol: '➡️' };
+  if (pct > 0) return { pct, cls: 'up', symbol: '↑' };
+  return { pct, cls: 'down', symbol: '↓' };
+}
+
+function wowHTML(wow) {
+  if (wow.pct == null) return '<span style="color:#888">—</span>';
+  const cls = wow.cls === 'up' ? 'wow-cell up' : wow.cls === 'down' ? 'wow-cell down' : 'wow-cell flat';
+  return `<span class="${cls}">${wow.symbol} ${wow.pct >= 0 ? '+' : ''}${wow.pct.toFixed(2)}%</span>`;
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function getSavedPeriods() {
+  return Object.keys(allData).sort();
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+
+function renderAll() {
+  const dA = getDateValue('A');
+  const dB = getDateValue('B');
+  document.getElementById('thA').textContent = dA || '日期A';
+  document.getElementById('thB').textContent = dB || '日期B';
+
+  const dailyHeader = dailyBaseDate ? `日环比（vs ${dailyBaseDate}）` : '日环比（手动填）';
+  document.getElementById('thDaily').textContent = dailyHeader;
+
+  const dataA = allData[dA] || {};
+  const dataB = allData[dB] || {};
+
+  document.getElementById('periodInfo').textContent = dA && dB ? `${dA} vs ${dB}` : '请选择日期';
+  document.getElementById('savedPeriodsCount').textContent = getSavedPeriods().length;
+  document.getElementById('exportTime').textContent = '生成时间: ' + new Date().toLocaleString('zh-CN');
+
+  renderKPIs(dataA, dataB);
+  renderTable(dataA, dataB, dA, dB);
+  renderStoreTier(dA);
+  renderCampaign(dA);
+  renderConclusion(dataA, dataB, dA, dB);
+  renderAllCharts();
+}
+
+function renderKPIs(dataA, dataB) {
+  const grid = document.getElementById('kpiGrid');
+  let html = '';
+  for (const ind of INDICATORS) {
+    const a = dataA[ind.id];
+    const b = dataB[ind.id];
+    const wow = calcWow(a, b);
+    html += `
+      <div class="kpi-card">
+        <div class="kpi-label">${ind.emoji} ${ind.name}</div>
+        <div class="kpi-values">
+          <span class="kpi-main">${fmtVal(a, ind.format)}</span>
+          <span class="kpi-prev">${fmtVal(b, ind.format)}</span>
+          <span class="kpi-wow ${wow.cls === 'up' ? 'wow-up' : wow.cls === 'down' ? 'wow-down' : 'wow-flat'}">
+            ${wowHTML(wow)}
+          </span>
+        </div>
+      </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function renderTable(dataA, dataB, dA, dB) {
+  const tbody = document.getElementById('tableBody');
+  let html = '';
+  for (const ind of INDICATORS) {
+    const a = dataA[ind.id];
+    const b = dataB[ind.id];
+    const wow = calcWow(a, b);
+    const isMoney = ind.format === 'money';
+    const dailyVal = (dailyWow[dA] && dailyWow[dA][ind.id] != null) ? dailyWow[dA][ind.id] : null;
+    const dailyDisplayHTML = formatDailyDisplay(dailyVal, dA, ind.id);
+
+    const cellAContent = isMoney
+      ? `<span class="money-prefix">¥</span><input type="text" class="money-input" value="${a ?? ''}" data-date="${dA}" data-id="${ind.id}" data-type="${ind.format}" onchange="onCellEdit(this)" onfocus="this.select()">`
+      : `<input type="text" value="${a ?? ''}" data-date="${dA}" data-id="${ind.id}" data-type="${ind.format}" onchange="onCellEdit(this)" onfocus="this.select()">`;
+
+    const cellBContent = isMoney
+      ? `<span class="money-prefix">¥</span><input type="text" class="money-input" value="${b ?? ''}" data-date="${dB}" data-id="${ind.id}" data-type="${ind.format}" onchange="onCellEdit(this)" onfocus="this.select()">`
+      : `<input type="text" value="${b ?? ''}" data-date="${dB}" data-id="${ind.id}" data-type="${ind.format}" onchange="onCellEdit(this)" onfocus="this.select()">`;
+
+    html += `<tr>
+      <td style="text-align:left;font-weight:600">${ind.emoji} ${ind.name}</td>
+      <td>${cellAContent}</td>
+      <td>${cellBContent}</td>
+      <td>${wowHTML(wow)}</td>
+      <td>${dailyDisplayHTML}</td>
+    </tr>`;
+  }
+  tbody.innerHTML = html;
+}
+
+function onCellEdit(el) {
+  const date = el.dataset.date;
+  const id = el.dataset.id;
+  const type = el.dataset.type;
+  let val = el.value.trim().replace(/^¥/, '');
+  if (val === '') {
+    if (allData[date]) delete allData[date][id];
+  } else {
+    val = type === 'money' ? parseFloat(val) : parseInt(val);
+    if (isNaN(val)) { toast('请输入有效数字'); renderAll(); return; }
+    if (!allData[date]) allData[date] = {};
+    allData[date][id] = val;
+  }
+  saveAll();
+  renderAll();
+  toast('✅ 数据已保存');
+}
+
+function renderStoreTier(dA) {
+  const tier = STORE_TIER_PRELOAD[dA];
+  const grid = document.getElementById('storeTierGrid');
+  const topBody = document.getElementById('topStoresBody');
+  const regionBody = document.getElementById('regionRankBody');
+  if (topBody) if (topBody) topBody.parentElement.parentElement.querySelector('thead').innerHTML = '<tr><th>#</th><th>门店</th><th>战区</th><th>订单</th><th>销售额</th><th>趋势</th></tr>'; if (regionBody) if (regionBody) regionBody.parentElement.parentElement.querySelector('thead').innerHTML = '<tr><th>#</th><th>战区</th><th>店数</th><th>订单</th><th>销售额</th><th>趋势</th></tr>';
+  // move innerHTML guards
+
+
+  if (!tier || !tier.high) {
+    if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-dim);padding:20px">该日期暂无门店分层数据，请导入 Excel 后更新</div>';
+    if (topBody) topBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-dim)">暂无数据</td></tr>';
+    if (regionBody) regionBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-dim)">暂无数据</td></tr>';
+    return;
+  }
+
+  const p = tier.prev;
+  const totalActive = tier.high.stores + tier.mid.stores + tier.inactive;
+
+  function trendHTML(cur, prev) {
+    if (prev == null) return '<span style="color:#888">—</span>';
+    if (cur > prev) return '<span class="wow-cell up">↑</span>';
+    if (cur < prev) return '<span class="wow-cell down">↓</span>';
+    return '<span class="wow-cell flat">➡️</span>';
+  }
+
+  function tierTrend(cur, prev, label) {
+    if (!prev) return '';
+    const diff = cur - prev;
+    const sign = diff > 0 ? '+' : '';
+    const cls = diff > 0 ? 'wow-cell up' : diff < 0 ? 'wow-cell down' : 'wow-cell flat';
+    const sym = diff > 0 ? '↑' : diff < 0 ? '↓' : '➡️';
+    return `<span style="font-size:10px;${cls==='wow-cell up'?'color:var(--red)':cls==='wow-cell down'?'color:var(--green-arrow)':'color:var(--flat)'}">${sym} 上期${prev}${label}</span>`;
+  }
+
+  grid.innerHTML = `
+    <div class="tier-card tier-high">
+      <div class="tier-icon">🔥</div>
+      <div class="tier-label">高动销门店（≥3单）</div>
+      <div class="tier-count">${tier.high.stores} ${trendHTML(tier.high.stores, p?.high?.stores)}</div>
+      <div class="tier-sub">${(tier.high.stores/totalActive*100).toFixed(1)}% · 贡献${tier.high.orders}单 ¥${fmtNum(tier.high.sales.toFixed(0))}</div>
+      <div class="tier-sub">${tierTrend(tier.high.stores, p?.high?.stores, '家')}</div>
+    </div>
+    <div class="tier-card tier-mid">
+      <div class="tier-icon">🌱</div>
+      <div class="tier-label">低动销门店（1-2单）</div>
+      <div class="tier-count">${tier.mid.stores} ${trendHTML(tier.mid.stores, p?.mid?.stores)}</div>
+      <div class="tier-sub">${(tier.mid.stores/totalActive*100).toFixed(1)}% · 贡献${tier.mid.orders}单 ¥${fmtNum(tier.mid.sales.toFixed(0))}</div>
+      <div class="tier-sub">${tierTrend(tier.mid.stores, p?.mid?.stores, '家')}</div>
+    </div>
+    <div class="tier-card tier-low">
+      <div class="tier-icon">❄️</div>
+      <div class="tier-label">未动销门店</div>
+      <div class="tier-count">${tier.inactive} ${trendHTML(tier.inactive, p?.inactive)}</div>
+      <div class="tier-sub">${(tier.inactive/totalActive*100).toFixed(1)}% · 0单 0元</div>
+      <div class="tier-sub">${tierTrend(tier.inactive, p?.inactive, '家')}</div>
+    </div>`;
+
+  if (topBody) {
+    topBody.innerHTML = tier.topStores.map((s, i) => {
+      const t = trendHTML(s.orders, s.prevOrders);
+      return `
+    <tr>
+      <td class="rank-num">${i+1}</td>
+      <td class="store-name">${s.name}</td>
+      <td>${s.region}</td>
+      <td>${s.orders}单</td>
+      <td class="store-sales">¥${s.sales.toFixed(2)}</td>
+      <td style="font-size:16px">${t}</td>
+    </tr>`;
+    }).join('');
+
+    if (topBody) topBody.parentElement.parentElement.querySelector('thead').innerHTML =
+      '<tr><th>#</th><th>门店</th><th>战区</th><th>订单</th><th>销售额</th><th>趋势</th></tr>';
+  }
+
+  if (regionBody) {
+    regionBody.innerHTML = tier.regions.map((r, i) => {
+      const t = trendHTML(r.orders, r.prevOrders);
+      return `
+    <tr>
+      <td class="rank-num">${i+1}</td>
+      <td>${r.name}</td>
+      <td>${r.stores}店</td>
+      <td>${r.orders}单</td>
+      <td class="store-sales">¥${fmtNum(r.sales.toFixed(0))}</td>
+      <td style="font-size:16px">${t}</td>
+    </tr>`;
+    }).join('');
+
+    if (regionBody) regionBody.parentElement.parentElement.querySelector('thead').innerHTML =
+      '<tr><th>#</th><th>战区</th><th>店数</th><th>订单</th><th>销售额</th><th>趋势</th></tr>';
+  }
+}
+
+function renderCommunityMetrics(dA, dataA) {
+  const grid = document.getElementById('communityGrid');
+  const cd = communityData[dA] || {};
+    const storeReach = cd.storeReach != null ? cd.storeReach : '';
+    const reachedStores = cd.reachedStores != null ? cd.reachedStores : '';
+    const pushGroups = cd.pushGroups != null ? cd.pushGroups : '';
+
+    const orders = dataA.validOrders || 0;
+    const couponClaim = dataA.couponClaim || 0;
+    const couponUse = dataA.couponUse || 0;
+
+    const reach = storeReach !== '' ? parseInt(storeReach) : null;
+    const groups = pushGroups !== '' ? parseInt(pushGroups) : null;
+
+    // 群均触达
+    const avgPerGroup = reach && groups && groups > 0 ? Math.round(reach / groups) : null;
+    // 转化漏斗
+    const claimRate = reach && couponClaim ? (couponClaim / reach * 100).toFixed(1) : null;
+    const orderRate = reach && orders ? (orders / reach * 100).toFixed(1) : null;
+    // 券核销率
+    const couponUseRate = couponClaim ? (couponUse / couponClaim * 100).toFixed(1) : null;
+
+    grid.innerHTML = `
+      <div class="community-card">
+        <div class="c-label">📢 社群预估触达人数</div>
+        <input type="number" class="c-input" value="${storeReach}" placeholder="输入人数" data-date="${dA}" data-field="storeReach" onchange="saveCommunityField(this)">
+      </div>
+      <div class="community-card">
+        <div class="c-label">📣 推送群数</div>
+        <input type="number" class="c-input" value="${pushGroups}" placeholder="输入群数" data-date="${dA}" data-field="pushGroups" onchange="saveCommunityField(this)">
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px">${avgPerGroup ? '群均 <span style="color:var(--brand-yellow)">'+avgPerGroup+'</span> 人' : '填群数后自动算'}</div>
+      </div>
+      <div class="community-card">
+        <div class="c-label">🏪 社群触达门店总数</div>
+        <input type="number" class="c-input" value="${reachedStores}" placeholder="输入门店数" data-date="${dA}" data-field="reachedStores" onchange="saveCommunityField(this)">
+      </div>
+      <div class="community-card" style="grid-column:1/-1">
+        <div class="c-label">📊 社群转化漏斗</div>
+        <div style="display:flex;gap:16px;margin-top:8px;font-size:12px">
+          <div style="flex:1;text-align:center;background:rgba(26,45,26,0.6);border-radius:6px;padding:8px">
+            <div style="color:var(--text-dim);font-size:10px">触达 → 领券</div>
+            <div style="color:var(--brand-yellow);font-size:18px;font-weight:700">${claimRate ? claimRate+'%' : '—'}</div>
+            <div style="color:var(--text-dim);font-size:9px">${reach && couponClaim ? couponClaim+'领 / '+reach+'触达' : '待填触达'}</div>
+          </div>
+          <div style="flex:1;text-align:center;background:rgba(26,45,26,0.6);border-radius:6px;padding:8px">
+            <div style="color:var(--text-dim);font-size:10px">触达 → 下单</div>
+            <div style="color:#4DAF4A;font-size:18px;font-weight:700">${orderRate ? orderRate+'%' : '—'}</div>
+            <div style="color:var(--text-dim);font-size:9px">${reach && orders ? orders+'单 / '+reach+'触达' : '待填触达'}</div>
+          </div>
+          <div style="flex:1;text-align:center;background:rgba(26,45,26,0.6);border-radius:6px;padding:8px">
+            <div style="color:var(--text-dim);font-size:10px">券核销率</div>
+            <div style="color:#ffa502;font-size:18px;font-weight:700">${couponUseRate ? couponUseRate+'%' : '—'}</div>
+            <div style="color:var(--text-dim);font-size:9px">${couponUse}用 / ${couponClaim}领</div>
+          </div>
+        </div>
+      </div>`;
+}
+
+function saveCommunityField(el) {
+  const date = el.dataset.date;
+  const field = el.dataset.field;
+  const val = el.value.trim();
+  if (!communityData[date]) communityData[date] = {};
+  if (val === '') {
+    delete communityData[date][field];
+  } else {
+    communityData[date][field] = parseInt(val);
+  }
+  saveAll();
+  renderAll();
+  toast('✅ 社群数据已保存');
+}
+
+function formatDailyDisplay(val, date, id) {
+  if (val == null || val === '') return `<span class="daily-display empty" data-date="${date}" data-id="${id}" onclick="editDaily(this)">点击填入%</span>`;
+  const pct = parseFloat(val);
+  if (isNaN(pct)) return `<span class="daily-display empty" data-date="${date}" data-id="${id}" onclick="editDaily(this)">点击填入%</span>`;
+  let cls, symbol;
+  if (Math.abs(pct) < 0.005) { cls = 'flat'; symbol = '➡️'; }
+  else if (pct > 0) { cls = 'up'; symbol = '↑'; }
+  else { cls = 'down'; symbol = '↓'; }
+  const sign = pct >= 0 ? '+' : '';
+  return `<span class="daily-display ${cls}" data-date="${date}" data-id="${id}" data-val="${val}" onclick="editDaily(this)">${symbol} ${sign}${pct.toFixed(2)}%</span>`;
+}
+
+function editDaily(span) {
+  const val = span.dataset.val || '';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'daily-input';
+  input.value = val;
+  input.style.width = '65px';
+  input.dataset.date = span.dataset.date;
+  input.dataset.id = span.dataset.id;
+  input.onblur = function() { saveDailyEdit(input); };
+  input.onkeydown = function(e) { if (e.key === 'Enter') input.blur(); };
+  span.replaceWith(input);
+  input.focus();
+  input.select();
+}
+
+function saveDailyEdit(input) {
+  const date = input.dataset.date;
+  const id = input.dataset.id;
+  const raw = input.value.trim();
+  if (!dailyWow[date]) dailyWow[date] = {};
+  if (raw === '') {
+    delete dailyWow[date][id];
+  } else {
+    const num = parseFloat(raw);
+    if (isNaN(num)) { toast('请输入有效百分比数字（如 -5.2）'); return; }
+    dailyWow[date][id] = num;
+  }
+  saveAll();
+  renderAll();
+  toast('✅ 日环比已保存');
+}
+
+function onDailyEdit(el) {
+  // Kept for backward compatibility; uses saveDailyEdit internally
+  saveDailyEdit(el);
+}
+
+// ═══════════════════════════════════════════
+// DATA ANALYSIS CHARTS
+// ═══════════════════════════════════════════
+
+var REGION_DECLINE={"东北大区": {"declined": 29, "improved": 42, "total": 86}, "北部大区": {"declined": 52, "improved": 38, "total": 106}, "华东大区": {"declined": 44, "improved": 49, "total": 96}, "华南大区": {"declined": 15, "improved": 17, "total": 34}, "中西大区": {"declined": 36, "improved": 22, "total": 66}, "京津大区": {"declined": 17, "improved": 24, "total": 47}, "上海大区": {"declined": 17, "improved": 18, "total": 38}};
+
+var regionRadarChart=null;var top5BarChart=null;var storeDistChart=null;
+
+function renderAllCharts(){if(typeof Chart==='undefined'){setTimeout(renderAllCharts,100);return;}renderRegionRadar();renderTop5Bar('东北大区');renderStoreDist();}
+
+function renderRegionRadar(){
+if(regionRadarChart){regionRadarChart.destroy();regionRadarChart=null;}
+var regions=['东北大区','北部大区','华东大区','华南大区','中西大区','京津大区','上海大区'];
+var labels=['📦订单','💰销售额(÷100)','🏪动销门店','📊店均订单'];
+var colors=['#FAD203','#4DAF4A','#ff6b6b','#70a1ff','#ffa502','#1e90ff','#eccc68'];
+var datasets=regions.map(function(r,i){var rs=MAP_REGION_SALES[r];if(!rs)return null;var avg=rs.stores>0?(rs.orders/rs.stores).toFixed(1):0;return{label:r,data:[rs.orders,(rs.sales/100).toFixed(1),rs.stores,parseFloat(avg)],borderColor:colors[i],backgroundColor:colors[i],borderColor:colors[i],borderWidth:1,borderRadius:3};}).filter(Boolean);
+var ctx=document.getElementById('regionRadar').getContext('2d');
+regionRadarChart=new Chart(ctx,{type:'bar',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{color:'#e8f0e8',font:{size:10}},grid:{color:'#2a4a2a'}},y:{ticks:{color:'#8aaa8a',font:{size:9}},grid:{color:'#2a4a2a'},beginAtZero:true}},plugins:{legend:{position:'bottom',labels:{color:'#e8f0e8',font:{size:10},usePointStyle:true,padding:10}}}}});
+}
+
+function renderTop5Bar(region){
+if(!region){var tEl=document.getElementById('top5Bar');if(tEl){var p=tEl.parentElement;p.innerHTML='<canvas id="top5Bar"></canvas><div style="text-align:center;color:#4a6a4a;padding-top:120px;font-size:13px">👆 悬停地图城市<br>查看战区TOP5门店</div>';}return;}
+if(top5BarChart){top5BarChart.destroy();top5BarChart=null;}
+var canvas=document.getElementById('top5Bar');if(!canvas)return;
+var rStores=(REGION_TOP_STORES[region]||[]).slice(0,5);
+var topList=[];
+for(var j=0;j<rStores.length;j++){var s=rStores[j];s.region=region;topList.push(s);}
+topList.sort(function(a,b){return b.sales-a.sales;});
+if(topList.length===0){canvas.parentElement.innerHTML='<canvas id="top5Bar"></canvas><div style="text-align:center;color:#4a6a4a;padding-top:120px;font-size:13px">'+region+'<br>暂无门店数据</div>';return;}
+canvas.parentElement.innerHTML='<canvas id="top5Bar"></canvas>';
+canvas=document.getElementById('top5Bar');
+var names=topList.map(function(s){return s.name.length>10?s.name.substring(0,9)+'…':s.name;});
+var orders=topList.map(function(s){return s.orders;});
+var sales=topList.map(function(s){return s.sales;});
+var ctx=canvas.getContext('2d');
+top5BarChart=new Chart(ctx,{type:'bar',data:{labels:names,datasets:[{label:'订单(单)',data:orders,backgroundColor:'#FAD20399',borderColor:'#FAD203',borderWidth:1.5,yAxisID:'y'},{label:'销售额(¥)',data:sales,backgroundColor:'#4DAF4A66',borderColor:'#4DAF4A',borderWidth:1.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{color:'#e8f0e8',font:{size:8},maxRotation:45},grid:{display:false}},y:{type:'linear',display:true,position:'left',ticks:{color:'#8aaa8a',font:{size:9}},grid:{color:'#2a4a2a'},title:{display:true,text:'单',color:'#8aaa8a'}},y1:{type:'linear',display:true,position:'right',ticks:{color:'#4DAF4A',font:{size:9}},grid:{drawOnChartArea:false},title:{display:true,text:'¥',color:'#4DAF4A'}}},plugins:{legend:{labels:{color:'#e8f0e8',font:{size:10},usePointStyle:true}}}}});
+}
+
+function renderStoreDist(){
+if(storeDistChart){storeDistChart.destroy();storeDistChart=null;}
+var dist17=[882,191,60,65,18];var dist10=[887,169,65,75,16];
+var buckets=['0单','1单','2单','3-5单','6单+'];
+var ctx=document.getElementById('storeDist').getContext('2d');
+storeDistChart=new Chart(ctx,{type:'bar',data:{labels:buckets,datasets:[{label:'2026-07-15',data:dist17,backgroundColor:'#FAD20399',borderColor:'#FAD203',borderWidth:1.5,borderRadius:4},{label:'2026-07-08',data:dist10,backgroundColor:'#4DAF4A66',borderColor:'#4DAF4A',borderWidth:1.5,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{color:'#8aaa8a',font:{size:10}},grid:{color:'#2a4a2a'}},y:{ticks:{color:'#8aaa8a',font:{size:10}},grid:{color:'#2a4a2a'},title:{display:true,text:'门店数',color:'#8aaa8a'}}},plugins:{legend:{labels:{color:'#e8f0e8',font:{size:11},usePointStyle:true}},tooltip:{callbacks:{label:function(ctx){return ctx.dataset.label+': '+ctx.raw+'家';}}}}}});
+}
+
+// ═══════════════════════════════════════════
+// CAMPAIGN
+// ═══════════════════════════════════════════
+
+function renderCampaign(dA) {
+  var ctEl = document.getElementById('campaignText');
+  if (!ctEl) return; // campaign section removed
+  const cache = campaignCache[dA] || {};
+  ctEl.value = cache.text || '';
+  const img = document.getElementById('imgPreview');
+  const placeholder = document.getElementById('imgPlaceholder');
+  const uploadDiv = document.getElementById('imageUpload');
+  if (cache.imageBase64) {
+    img.src = cache.imageBase64;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+    uploadDiv.classList.add('has-image');
+  } else {
+    img.style.display = 'none';
+    placeholder.style.display = 'block';
+    uploadDiv.classList.remove('has-image');
+  }
+}
+
+function handleImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const dA = getDateValue('A');
+    if (!campaignCache[dA]) campaignCache[dA] = {};
+    campaignCache[dA].imageBase64 = ev.target.result;
+    localStorage.setItem('qgnow_campaign', JSON.stringify(campaignCache));
+    renderCampaign(dA);
+    toast('✅ 图片已保存');
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  const dA = getDateValue('A');
+  if (campaignCache[dA]) delete campaignCache[dA].imageBase64;
+  localStorage.setItem('qgnow_campaign', JSON.stringify(campaignCache));
+  renderCampaign(dA);
+  toast('图片已清除');
+}
+
+// ═══════════════════════════════════════════
+// CONCLUSION (editable with auto-save)
+// ═══════════════════════════════════════════
+
+function generateDefaultConclusion(dataA, dataB, dA, dB) {
+  const a = dataA, b = dataB;
+  const salesWow = calcWow(a.validSales, b.validSales);
+  const ordersWow = calcWow(a.validOrders, b.validOrders);
+  const membersWow = calcWow(a.newMembers, b.newMembers);
+  const couponRateA = a.couponClaim ? ((a.couponUse||0)/a.couponClaim*100).toFixed(2) : '—';
+  const couponRateB = b.couponClaim ? ((b.couponUse||0)/b.couponClaim*100).toFixed(2) : '—';
+  const deliveryRatioA = a.validOrders ? ((a.deliveryOrders||0)/a.validOrders*100).toFixed(1) : '—';
+  const deliveryRatioB = b.validOrders ? ((b.deliveryOrders||0)/b.validOrders*100).toFixed(1) : '—';
+  const storeRateA = a.activeStores ? ((a.salesStores||0)/a.activeStores*100).toFixed(2) : '—';
+  const storeRateB = b.activeStores ? ((b.salesStores||0)/b.activeStores*100).toFixed(2) : '—';
+  const trend = salesWow.cls === 'up' ? '增长' : '下降';
+
+  return `<h3>📋 ${dA} 周三会员日复盘结论</h3>
+<p style="margin-bottom:16px">
+  本期会员日（${dA}）对比上期（${dB}），核心经营指标整体呈<strong style="color:${salesWow.cls==='up'?'var(--red)':'var(--green-arrow)'}">${trend}趋势</strong>。
+  有效销售额<strong>${fmtVal(a.validSales,'money')}</strong>，周环比${wowHTML(salesWow)}；
+  有效订单数<strong>${a.validOrders||'—'}单</strong>，周环比${wowHTML(ordersWow)}；
+  新增会员<strong>${a.newMembers||'—'}人</strong>，周环比${wowHTML(membersWow)}。
+</p>
+
+<h4>🔍 关键发现</h4>
+<ul>
+  <li><strong>订单结构：</strong>外卖占比 ${deliveryRatioA}%（上期 ${deliveryRatioB}%），自取仍为主力渠道。${parseFloat(deliveryRatioA) > parseFloat(deliveryRatioB) ? '外卖占比略有提升，可继续强化外卖场景运营。' : '外卖占比微降，需关注外卖渠道推广力度。'}</li>
+  <li><strong>优惠券效率：</strong>领取 ${a.couponClaim||'—'} 张 → 使用 ${a.couponUse||'—'} 张，核销率 <strong>${couponRateA}%</strong>（上期 ${couponRateB}%）。${parseFloat(couponRateA) >= parseFloat(couponRateB) ? '核销率提升，优惠券策略有效。' : '核销率下降，建议优化优惠券面额或使用门槛。'}</li>
+  <li><strong>门店动销：</strong>动销率 ${storeRateA}%（${a.salesStores||'—'}/${a.activeStores||'—'}），上期 ${storeRateB}%。${parseFloat(storeRateA) >= parseFloat(storeRateB) ? '门店参与度稳定。' : '动销门店数减少，需排查沉睡门店并制定激活策略。'}</li>
+  <li><strong>客单价：</strong>本期 ¥${a.customerPrice||'—'} vs 上期 ¥${b.customerPrice||'—'}，${((a.customerPrice||0) >= (b.customerPrice||0)) ? '客单价保持稳定。' : '客单价下滑，建议增加满减/凑单引导。'}</li>
+  <li><strong>件单价：</strong>本期 ¥${a.unitPrice||'—'} vs 上期 ¥${b.unitPrice||'—'}，商品定价策略需持续关注。</li>
+</ul>
+
+<h4>💡 下周/未来优化建议</h4>
+<ul>
+  <li><strong>会员拉新：</strong>${membersWow.cls==='down' ? '新增会员下滑明显，建议下期增加裂变拉新活动（如邀请有礼、拼团），并在社群前置预热。' : '会员增长态势良好，可乘势推出会员专属权益，提升留存。'}</li>
+  <li><strong>优惠券优化：</strong>${parseFloat(couponRateA) < 20 ? '核销率偏低（<20%），建议：①降低使用门槛 ②增加推送频次 ③在社群做优惠券使用教程。' : '核销率尚可，可尝试定向券（高价值用户大额券、沉睡用户唤醒券）进一步提效。'}</li>
+  <li><strong>外卖渠道：</strong>外卖订单占比仅 ${deliveryRatioA}%，建议联合外卖平台做会员日专属满减，社群推送外卖直达链接。</li>
+  <li><strong>门店激活：</strong>动销门店 ${a.salesStores||'—'} 家，占营业门店 ${storeRateA}%。建议对未动销门店发活动通知 + 门店物料支持，提升参与率。</li>
+  <li><strong>数据沉淀：</strong>建议每次会员日后 48 小时内录入数据至本系统，积累多期后可做趋势分析和同比对比。</li>
+</ul>`;
+}
+
+function renderConclusion(dataA, dataB, dA, dB) {
+  const el = document.getElementById('conclusionContent');
+  const cache = conclusionCache[dA];
+  if (cache && cache.text) {
+    el.innerHTML = cache.text;
+  } else if (el.innerHTML.trim() && el.innerHTML.indexOf('📋') >= 0) {
+    // Static pre-written conclusion, don't overwrite
+    return;
+  } else {
+    el.innerHTML = generateDefaultConclusion(dataA, dataB, dA, dB);
+    // Auto-save default
+    if (!conclusionCache[dA]) conclusionCache[dA] = {};
+    conclusionCache[dA].text = el.innerHTML;
+    localStorage.setItem('qgnow_conclusion', JSON.stringify(conclusionCache));
+  }
+}
+
+// ═══════════════════════════════════════════
+// DATE CHANGE
+// ═══════════════════════════════════════════
+
+function onDateChange() {
+  const dA = getDateValue('A');
+  const dB = getDateValue('B');
+  if (!allData[dA]) { allData[dA] = {}; saveAll(); }
+  if (!allData[dB]) { allData[dB] = {}; saveAll(); }
+  renderAll();
+}
+
+function populateDateOptions() {
+  const dates = getSavedPeriods();
+  if (dates.length >= 2) {
+    const valA = dates.includes(DEFAULT_DATE_A) ? DEFAULT_DATE_A : dates[dates.length-1];
+    const valB = dates.includes(DEFAULT_DATE_B) ? DEFAULT_DATE_B : (dates.length >= 2 ? dates[dates.length-2] : dates[0]);
+    setDateValue('A', valA);
+    setDateValue('B', valB);
+  } else {
+    setDateValue('A', DEFAULT_DATE_A);
+    setDateValue('B', DEFAULT_DATE_B);
+  }
+  setDailyBaseValue(dailyBaseDate || '');
+  // Default: text visible, picker hidden
+  document.getElementById('dateA').style.display = 'none';
+  document.getElementById('dateAText').style.display = 'inline-block';
+  document.getElementById('dateB').style.display = 'none';
+  document.getElementById('dateBText').style.display = 'inline-block';
+  document.getElementById('dailyBase').style.display = 'none';
+  document.getElementById('dailyBaseText').style.display = 'inline-block';
+}
+
+// ═══════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════
+
+function exportData() {
+  const blob = new Blob([JSON.stringify({ allData, dailyWow, dailyBaseDate, campaignCache, conclusionCache, communityData }, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = '切果NOW_复盘数据_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📥 数据已导出');
+}
+
+function exportFullReport() {
+  autoSaveConclusion();
+  saveAll();
+  var dA = getDateValue('A');
+  var h = document.documentElement.outerHTML;
+  h = h.replace(/let allData = \{\};/g, 'let allData = ' + JSON.stringify(allData) + ';');
+  h = h.replace(/let dailyWow = \{\};/g, 'let dailyWow = ' + JSON.stringify(dailyWow) + ';');
+  h = h.replace(/let dailyBaseDate = '';/g, 'let dailyBaseDate = ' + JSON.stringify(dailyBaseDate) + ';');
+  h = h.replace(/let campaignCache = \{\};/g, 'let campaignCache = ' + JSON.stringify(campaignCache) + ';');
+  h = h.replace(/let conclusionCache = \{\};/g, 'let conclusionCache = ' + JSON.stringify(conclusionCache) + ';');
+  h = h.replace(/let communityData = \{\};/g, 'let communityData = ' + JSON.stringify(communityData) + ';');
+  h = h.replace(/function saveAll\(\) \{/g, 'function saveAll() { return;');
+  h = h.replace(/function autoSave\(key\) \{/g, 'function autoSave(key) { return;');
+  h = h.replace(/function autoSaveConclusion\(\) \{/g, 'function autoSaveConclusion() { return;');
+  var blob = new Blob([h], {type:'text/html;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'QGNOW_周三会员日Share_' + dA + '.html';
+  a.click();
+}
+
+function resetAllData() {
+  if (!confirm('OK?')) return;
+  localStorage.clear();
+  location.reload();
+}
+
+loadAll();
+populateDateOptions();
+renderAll();
+document.getElementById('conclusionContent').addEventListener('blur', function(){autoSaveConclusion()});
+window.addEventListener('beforeunload', function(){autoSaveConclusion();saveAll()});
+function toggleTable(){var c=document.getElementById('tableContent');var t=document.getElementById('tableToggle');if(!c||!t)return;if(c.style.display==='none'){c.style.display='';t.textContent='▼ 收起明细';}else{c.style.display='none';t.textContent='▶ 展开明细';}}
+</script>
+<script>
+const CITIES = [{"c": "七台河", "r": "东北大区", "lat": 45.7713, "lon": 131.0031, "x": 27.6, "n": 18.6, "a": 23.1, "p": 7.8, "e": "🌧️", "l": "中雨", "w": 14.4, "h": 84}, {"c": "伊春", "r": "东北大区", "lat": 47.7275, "lon": 128.8412, "x": 26.4, "n": 16.5, "a": 21.4, "p": 4.1, "e": "🌦️", "l": "大毛毛雨", "w": 15.4, "h": 84}, {"c": "佳木斯", "r": "东北大区", "lat": 46.7971, "lon": 130.3112, "x": 29.0, "n": 20.6, "a": 24.8, "p": 1.0, "e": "🌦️", "l": "小毛毛雨", "w": 16.1, "h": 79}, {"c": "兴安", "r": "东北大区", "lat": 46.0821, "lon": 122.0382, "x": 25.6, "n": 16.9, "a": 21.2, "p": 0.0, "e": "☁️", "l": "阴", "w": 28.1, "h": 62}, {"c": "兴安盟", "r": "东北大区", "lat": 46.0821, "lon": 122.0382, "x": 25.6, "n": 16.9, "a": 21.2, "p": 0.0, "e": "☁️", "l": "阴", "w": 28.1, "h": 62}, {"c": "吉林", "r": "东北大区", "lat": 43.8378, "lon": 126.5495, "x": 27.6, "n": 18.8, "a": 23.2, "p": 1.9, "e": "🌧️", "l": "雨", "w": 13.6, "h": null}, {"c": "哈尔滨", "r": "东北大区", "lat": 45.75, "lon": 126.65, "x": 27.1, "n": 20.0, "a": 23.6, "p": 0.8, "e": "🌦️", "l": "毛毛雨", "w": 20.4, "h": 67}, {"c": "四平", "r": "东北大区", "lat": 43.1664, "lon": 124.3504, "x": 27.7, "n": 18.1, "a": 22.9, "p": 10.5, "e": "🌧️", "l": "中雨", "w": 16.5, "h": 83}, {"c": "大庆", "r": "东北大区", "lat": 46.5833, "lon": 125.0, "x": 26.7, "n": 19.1, "a": 22.9, "p": 0.9, "e": "🌦️", "l": "小毛毛雨", "w": 21.9, "h": 64}, {"c": "大连", "r": "东北大区", "lat": 38.9137, "lon": 121.6148, "x": 32.4, "n": 23.3, "a": 27.9, "p": 0.0, "e": "☁️", "l": "阴", "w": 17.6, "h": 74}, {"c": "延边", "r": "东北大区", "lat": 42.9048, "lon": 129.5134, "x": 30.0, "n": 21.7, "a": 25.9, "p": 6.4, "e": "🌧️", "l": "小雨", "w": 12.9, "h": 80}, {"c": "朝阳", "r": "东北大区", "lat": 41.5737, "lon": 120.4506, "x": 32.7, "n": 17.7, "a": 25.2, "p": 0.0, "e": "☁️", "l": "阴", "w": 12.4, "h": 69}, {"c": "松原", "r": "东北大区", "lat": 45.1411, "lon": 124.8251, "x": 27.6, "n": 18.5, "a": 23.1, "p": 0.3, "e": "🌦️", "l": "小毛毛雨", "w": 17.6, "h": 70}, {"c": "沈阳", "r": "东北大区", "lat": 41.7922, "lon": 123.4328, "x": 30.0, "n": 20.9, "a": 25.4, "p": 0.0, "e": "⛅", "l": "多云", "w": 11.3, "h": null}, {"c": "牡丹江", "r": "东北大区", "lat": 44.548, "lon": 129.6259, "x": 28.4, "n": 19.8, "a": 24.1, "p": 3.7, "e": "🌧️", "l": "小雨", "w": 14.2, "h": 84}, {"c": "白城", "r": "东北大区", "lat": 45.6175, "lon": 122.833, "x": 27.0, "n": 18.5, "a": 22.8, "p": 0.4, "e": "🌦️", "l": "小毛毛雨", "w": 22.4, "h": 64}, {"c": "盘锦", "r": "东北大区", "lat": 41.1199, "lon": 122.0707, "x": 30.2, "n": 20.4, "a": 25.3, "p": 0.0, "e": "⛅", "l": "多云", "w": 12.5, "h": null}, {"c": "绥化", "r": "东北大区", "lat": 46.6481, "lon": 126.9666, "x": 25.5, "n": 17.9, "a": 21.7, "p": 1.9, "e": "🌦️", "l": "大毛毛雨", "w": 18.1, "h": 73}, {"c": "葫芦岛", "r": "东北大区", "lat": 40.711, "lon": 120.8368, "x": 30.0, "n": 21.4, "a": 25.7, "p": 0.0, "e": "⛅", "l": "多云", "w": 16.4, "h": null}, {"c": "赤峰", "r": "东北大区", "lat": 42.2683, "lon": 118.9636, "x": 32.0, "n": 19.0, "a": 25.5, "p": 0.0, "e": "⛅", "l": "多云", "w": 20.6, "h": 56}, {"c": "辽阳", "r": "东北大区", "lat": 41.2681, "lon": 123.2374, "x": 30.4, "n": 20.1, "a": 25.2, "p": 0.0, "e": "⛅", "l": "多云", "w": 11.3, "h": null}, {"c": "通化", "r": "东北大区", "lat": 41.7286, "lon": 125.9399, "x": 28.7, "n": 19.9, "a": 24.3, "p": 0.9, "e": "🌦️", "l": "毛毛雨", "w": 10.6, "h": 84}, {"c": "铁岭", "r": "东北大区", "lat": 42.2238, "lon": 123.726, "x": 29.1, "n": 19.5, "a": 24.3, "p": 0.0, "e": "☁️", "l": "阴", "w": 14.1, "h": 85}, {"c": "锦州", "r": "东北大区", "lat": 41.0951, "lon": 121.127, "x": 32.8, "n": 19.9, "a": 26.3, "p": 0.0, "e": "☁️", "l": "阴", "w": 13.8, "h": 73}, {"c": "长春", "r": "东北大区", "lat": 43.8868, "lon": 125.3245, "x": 27.8, "n": 18.5, "a": 23.1, "p": 0.8, "e": "🌦️", "l": "毛毛雨", "w": 13.7, "h": 75}, {"c": "阜新", "r": "东北大区", "lat": 42.0216, "lon": 121.6701, "x": 30.7, "n": 17.8, "a": 24.2, "p": 0.0, "e": "⛅", "l": "多云", "w": 12.9, "h": null}, {"c": "鞍山", "r": "东北大区", "lat": 41.1078, "lon": 122.9946, "x": 30.2, "n": 20.4, "a": 25.3, "p": 0.0, "e": "☁️", "l": "阴", "w": 14.1, "h": 79}, {"c": "齐齐哈尔", "r": "东北大区", "lat": 47.3392, "lon": 123.9615, "x": 25.5, "n": 17.9, "a": 21.7, "p": 1.3, "e": "🌧️", "l": "雨", "w": 23.0, "h": null}, {"c": "临沂", "r": "北部大区", "lat": 35.0631, "lon": 118.3428, "x": 27.5, "n": 23.6, "a": 25.6, "p": 18.8, "e": "🌧️", "l": "中雨", "w": 11.3, "h": 94}, {"c": "乌鲁木齐", "r": "北部大区", "lat": 43.8256, "lon": 87.6168, "x": 33.4, "n": 23.5, "a": 28.4, "p": 0.2, "e": "🌦️", "l": "小毛毛雨", "w": 16.8, "h": 31}, {"c": "保定", "r": "北部大区", "lat": 38.8739, "lon": 115.4646, "x": 34.9, "n": 23.6, "a": 29.2, "p": 0.2, "e": "🌧️", "l": "雨", "w": 13.6, "h": null}, {"c": "信阳", "r": "北部大区", "lat": 32.123, "lon": 114.0689, "x": 35.4, "n": 29.6, "a": 32.5, "p": 0.2, "e": "🌦️", "l": "小毛毛雨", "w": 14.5, "h": 71}, {"c": "兰州", "r": "北部大区", "lat": 36.057, "lon": 103.8399, "x": 28.5, "n": 18.5, "a": 23.5, "p": 0.0, "e": "☁️", "l": "阴", "w": 14.3, "h": 66}, {"c": "咸阳", "r": "北部大区", "lat": 34.3293, "lon": 108.7094, "x": 31.8, "n": 24.4, "a": 28.1, "p": 0.0, "e": "⛅", "l": "多云", "w": 16.4, "h": null}, {"c": "唐山", "r": "北部大区", "lat": 39.6305, "lon": 118.1802, "x": 33.7, "n": 24.7, "a": 29.2, "p": 0.0, "e": "⛅", "l": "多云", "w": 13.5, "h": null}, {"c": "塔城", "r": "北部大区", "lat": 46.7454, "lon": 82.9585, "x": 35.1, "n": 20.1, "a": 27.6, "p": 0.0, "e": "☁️", "l": "阴", "w": 17.7, "h": 29}, {"c": "太原", "r": "北部大区", "lat": 37.8706, "lon": 112.5489, "x": 32.0, "n": 18.5, "a": 25.2, "p": 0.0, "e": "☁️", "l": "阴", "w": 10.4, "h": 61}, {"c": "威海", "r": "北部大区", "lat": 37.5091, "lon": 122.1136, "x": 30.9, "n": 22.6, "a": 26.8, "p": 0.0, "e": "☁️", "l": "阴", "w": 20.2, "h": 78}, {"c": "安康", "r": "北部大区", "lat": 32.6853, "lon": 109.029, "x": 40.4, "n": 28.6, "a": 34.5, "p": 0.1, "e": "🌦️", "l": "小毛毛雨", "w": 12.6, "h": 63}, {"c": "库尔勒", "r": "北部大区", "lat": 41.7606, "lon": 86.1523, "x": 38.5, "n": 22.3, "a": 30.4, "p": 0.0, "e": "☁️", "l": "阴", "w": 20.0, "h": 28}, {"c": "廊坊", "r": "北部大区", "lat": 39.5209, "lon": 116.6838, "x": 34.5, "n": 24.2, "a": 29.4, "p": 0.0, "e": "☁️", "l": "阴", "w": 17.6, "h": 68}, {"c": "开封", "r": "北部大区", "lat": 34.7975, "lon": 114.3076, "x": 31.1, "n": 26.1, "a": 28.6, "p": 18.8, "e": "🌧️", "l": "中雨", "w": 13.0, "h": 84}, {"c": "德州", "r": "北部大区", "lat": 37.4359, "lon": 116.3593, "x": 33.4, "n": 26.3, "a": 29.9, "p": 1.1, "e": "🌦️", "l": "毛毛雨", "w": 11.3, "h": 72}, {"c": "日照", "r": "北部大区", "lat": 35.4141, "lon": 119.5291, "x": 27.1, "n": 23.3, "a": 25.2, "p": 14.8, "e": "🌧️", "l": "雨", "w": 12.5, "h": null}, {"c": "晋城", "r": "北部大区", "lat": 35.4904, "lon": 112.8518, "x": 29.6, "n": 22.7, "a": 26.1, "p": 26.6, "e": "🌧️", "l": "中雨", "w": 9.7, "h": 85}, {"c": "汉中", "r": "北部大区", "lat": 33.0676, "lon": 107.0238, "x": 37.1, "n": 25.4, "a": 31.2, "p": 0.2, "e": "🌦️", "l": "小毛毛雨", "w": 10.6, "h": 65}, {"c": "济南", "r": "北部大区", "lat": 36.6683, "lon": 116.9972, "x": 29.1, "n": 25.6, "a": 27.4, "p": 21.8, "e": "🌧️", "l": "雨", "w": 10.9, "h": null}, {"c": "济宁", "r": "北部大区", "lat": 35.405, "lon": 116.5814, "x": 28.5, "n": 25.9, "a": 27.2, "p": 45.7, "e": "🌧️", "l": "雨", "w": 10.2, "h": null}, {"c": "淄博", "r": "北部大区", "lat": 36.8135, "lon": 118.055, "x": 28.5, "n": 24.2, "a": 26.4, "p": 42.5, "e": "🌧️", "l": "大雨", "w": 10.8, "h": 84}, {"c": "滨州", "r": "北部大区", "lat": 37.382, "lon": 118.0045, "x": 31.1, "n": 25.0, "a": 28.1, "p": 0.5, "e": "🌧️", "l": "雨", "w": 13.9, "h": null}, {"c": "潍坊", "r": "北部大区", "lat": 36.71, "lon": 119.1019, "x": 27.8, "n": 23.4, "a": 25.6, "p": 28.2, "e": "🌧️", "l": "大雨", "w": 12.6, "h": 84}, {"c": "烟台", "r": "北部大区", "lat": 37.5366, "lon": 121.3926, "x": 33.1, "n": 22.6, "a": 27.9, "p": 0.0, "e": "☁️", "l": "阴", "w": 20.6, "h": 72}, {"c": "石家庄", "r": "北部大区", "lat": 38.0414, "lon": 114.4786, "x": 35.6, "n": 25.7, "a": 30.6, "p": 0.1, "e": "🌦️", "l": "小毛毛雨", "w": 12.4, "h": 65}, {"c": "菏泽", "r": "北部大区", "lat": 35.2393, "lon": 115.4736, "x": 30.2, "n": 25.5, "a": 27.9, "p": 35.0, "e": "🌧️", "l": "雨", "w": 10.3, "h": null}, {"c": "西安", "r": "北部大区", "lat": 34.2583, "lon": 108.9286, "x": 32.3, "n": 23.8, "a": 28.0, "p": 0.9, "e": "🌧️", "l": "雨", "w": 11.8, "h": null}, {"c": "许昌", "r": "北部大区", "lat": 34.0226, "lon": 113.852, "x": 34.4, "n": 25.3, "a": 29.9, "p": 5.7, "e": "🌧️", "l": "雨", "w": 11.8, "h": null}, {"c": "邢台", "r": "北部大区", "lat": 37.0708, "lon": 114.5047, "x": 31.2, "n": 24.0, "a": 27.6, "p": 41.6, "e": "🌧️", "l": "大雨", "w": 12.4, "h": 82}, {"c": "邯郸", "r": "北部大区", "lat": 36.61, "lon": 114.4876, "x": 30.8, "n": 24.4, "a": 27.6, "p": 9.5, "e": "🌧️", "l": "中雨", "w": 12.9, "h": 79}, {"c": "郑州", "r": "北部大区", "lat": 34.7578, "lon": 113.6486, "x": 31.8, "n": 26.0, "a": 28.9, "p": 26.8, "e": "🌧️", "l": "中雨", "w": 9.2, "h": 83}, {"c": "银川", "r": "北部大区", "lat": 38.4681, "lon": 106.2731, "x": 29.3, "n": 17.1, "a": 23.2, "p": 0.0, "e": "☁️", "l": "阴", "w": 10.5, "h": 69}, {"c": "阿克苏", "r": "北部大区", "lat": 41.1842, "lon": 80.2792, "x": 33.7, "n": 21.9, "a": 27.8, "p": 0.3, "e": "🌦️", "l": "小毛毛雨", "w": 16.8, "h": 37}, {"c": "青岛", "r": "北部大区", "lat": 36.0671, "lon": 120.3826, "x": 28.4, "n": 22.8, "a": 25.6, "p": 15.4, "e": "🌧️", "l": "大雨", "w": 12.2, "h": 87}, {"c": "驻马店", "r": "北部大区", "lat": 32.974, "lon": 114.0246, "x": 35.0, "n": 28.9, "a": 31.9, "p": 1.5, "e": "🌦️", "l": "小毛毛雨", "w": 13.5, "h": 76}, {"c": "亳州", "r": "华东大区", "lat": 33.8772, "lon": 115.7703, "x": 36.2, "n": 26.8, "a": 31.5, "p": 2.0, "e": "🌦️", "l": "毛毛雨", "w": 12.0, "h": 76}, {"c": "南京", "r": "华东大区", "lat": 32.0617, "lon": 118.7778, "x": 34.4, "n": 28.9, "a": 31.6, "p": 0.0, "e": "☁️", "l": "阴", "w": 18.9, "h": 74}, {"c": "南通", "r": "华东大区", "lat": 32.0303, "lon": 120.8747, "x": 36.2, "n": 30.3, "a": 33.2, "p": 0.6, "e": "🌧️", "l": "雨", "w": 12.5, "h": null}, {"c": "台州", "r": "华东大区", "lat": 28.6627, "lon": 121.4331, "x": 33.3, "n": 27.4, "a": 30.3, "p": 0.0, "e": "☁️", "l": "阴", "w": 20.2, "h": 77}, {"c": "合肥", "r": "华东大区", "lat": 31.8639, "lon": 117.2808, "x": 34.1, "n": 29.3, "a": 31.7, "p": 0.0, "e": "⛅", "l": "多云", "w": 18.2, "h": null}, {"c": "嘉兴", "r": "华东大区", "lat": 30.7522, "lon": 120.75, "x": 36.2, "n": 28.7, "a": 32.5, "p": 0.1, "e": "🌧️", "l": "雨", "w": 14.9, "h": null}, {"c": "宁波", "r": "华东大区", "lat": 29.8782, "lon": 121.5494, "x": 38.2, "n": 26.9, "a": 32.5, "p": 0.0, "e": "☁️", "l": "阴", "w": 15.6, "h": 69}, {"c": "安庆", "r": "华东大区", "lat": 30.5425, "lon": 117.0636, "x": 33.5, "n": 29.3, "a": 31.4, "p": 0.0, "e": "☁️", "l": "阴", "w": 22.3, "h": 71}, {"c": "宣城", "r": "华东大区", "lat": 30.9407, "lon": 118.7588, "x": 35.6, "n": 28.3, "a": 32.0, "p": 0.0, "e": "☁️", "l": "阴", "w": 14.6, "h": 70}, {"c": "宿迁", "r": "华东大区", "lat": 33.9619, "lon": 118.2756, "x": 34.2, "n": 27.3, "a": 30.8, "p": 8.6, "e": "🌧️", "l": "中雨", "w": 9.8, "h": 88}, {"c": "常州", "r": "华东大区", "lat": 31.8101, "lon": 119.9741, "x": 36.1, "n": 29.7, "a": 32.9, "p": 0.4, "e": "🌦️", "l": "小毛毛雨", "w": 13.2, "h": 70}, {"c": "徐州", "r": "华东大区", "lat": 34.2058, "lon": 117.2841, "x": 34.2, "n": 26.4, "a": 30.3, "p": 13.6, "e": "🌧️", "l": "中雨", "w": 11.6, "h": 92}, {"c": "扬州", "r": "华东大区", "lat": 32.3942, "lon": 119.4129, "x": 35.2, "n": 29.0, "a": 32.1, "p": 0.1, "e": "🌧️", "l": "雨", "w": 17.4, "h": null}, {"c": "无锡", "r": "华东大区", "lat": 31.5689, "lon": 120.2886, "x": 36.2, "n": 30.2, "a": 33.2, "p": 0.2, "e": "🌦️", "l": "小毛毛雨", "w": 12.1, "h": 70}, {"c": "杭州", "r": "华东大区", "lat": 30.2936, "lon": 120.1614, "x": 37.1, "n": 28.4, "a": 32.8, "p": 0.0, "e": "☁️", "l": "阴", "w": 13.6, "h": 64}, {"c": "淮安", "r": "华东大区", "lat": 33.5515, "lon": 119.1132, "x": 34.4, "n": 28.2, "a": 31.3, "p": 1.6, "e": "🌦️", "l": "大毛毛雨", "w": 14.4, "h": 82}, {"c": "温州", "r": "华东大区", "lat": 27.9938, "lon": 120.6993, "x": 34.5, "n": 26.9, "a": 30.7, "p": 0.1, "e": "🌦️", "l": "小毛毛雨", "w": 13.2, "h": 75}, {"c": "湖州", "r": "华东大区", "lat": 30.8931, "lon": 120.0868, "x": 36.3, "n": 28.0, "a": 32.1, "p": 0.6, "e": "🌦️", "l": "小毛毛雨", "w": 12.1, "h": 69}, {"c": "滁州", "r": "华东大区", "lat": 32.3219, "lon": 118.2978, "x": 33.8, "n": 28.8, "a": 31.3, "p": 0.0, "e": "☁️", "l": "阴", "w": 20.6, "h": 77}, {"c": "盐城", "r": "华东大区", "lat": 33.3575, "lon": 120.1573, "x": 35.1, "n": 27.8, "a": 31.5, "p": 0.8, "e": "🌦️", "l": "小毛毛雨", "w": 16.5, "h": 80}, {"c": "绍兴", "r": "华东大区", "lat": 30.0297, "lon": 120.5803, "x": 36.3, "n": 28.9, "a": 32.6, "p": 0.2, "e": "🌦️", "l": "小毛毛雨", "w": 14.5, "h": 65}, {"c": "舟山", "r": "华东大区", "lat": 29.9853, "lon": 122.2072, "x": 31.4, "n": 27.8, "a": 29.6, "p": 0.0, "e": "☁️", "l": "阴", "w": 29.1, "h": 82}, {"c": "芜湖", "r": "华东大区", "lat": 31.3526, "lon": 118.4331, "x": 34.9, "n": 28.6, "a": 31.8, "p": 0.0, "e": "⛅", "l": "多云", "w": 15.4, "h": null}, {"c": "苏州", "r": "华东大区", "lat": 31.3041, "lon": 120.5954, "x": 37.0, "n": 29.6, "a": 33.3, "p": 0.0, "e": "☁️", "l": "阴", "w": 11.3, "h": 65}, {"c": "金华", "r": "华东大区", "lat": 29.1068, "lon": 119.6442, "x": 34.2, "n": 26.8, "a": 30.5, "p": 0.8, "e": "🌦️", "l": "小毛毛雨", "w": 10.4, "h": 76}, {"c": "镇江", "r": "华东大区", "lat": 32.2109, "lon": 119.4551, "x": 35.1, "n": 28.8, "a": 32.0, "p": 0.7, "e": "🌦️", "l": "毛毛雨", "w": 18.0, "h": 75}, {"c": "佛山", "r": "华南大区", "lat": 23.0218, "lon": 113.1219, "x": 29.1, "n": 25.3, "a": 27.2, "p": 25.4, "e": "🌧️", "l": "中雨", "w": 16.1, "h": 89}, {"c": "厦门", "r": "华南大区", "lat": 24.4798, "lon": 118.0894, "x": 30.7, "n": 26.5, "a": 28.6, "p": 5.4, "e": "🌧️", "l": "雨", "w": 21.5, "h": null}, {"c": "广州", "r": "华南大区", "lat": 23.1291, "lon": 113.2644, "x": 29.2, "n": 25.2, "a": 27.2, "p": 17.9, "e": "🌧️", "l": "中雨", "w": 14.6, "h": 88}, {"c": "汕尾", "r": "华南大区", "lat": 22.782, "lon": 115.3475, "x": 29.8, "n": 26.0, "a": 27.9, "p": 14.6, "e": "🌧️", "l": "雨", "w": 21.5, "h": null}, {"c": "泉州", "r": "华南大区", "lat": 24.8741, "lon": 118.6759, "x": 32.3, "n": 25.8, "a": 29.0, "p": 5.5, "e": "🌧️", "l": "雨", "w": 20.5, "h": null}, {"c": "深圳", "r": "华南大区", "lat": 22.5455, "lon": 114.0683, "x": 27.5, "n": 25.3, "a": 26.4, "p": 14.3, "e": "🌧️", "l": "中雨", "w": 16.4, "h": 91}, {"c": "漳州", "r": "华南大区", "lat": 24.513, "lon": 117.6473, "x": 32.6, "n": 25.7, "a": 29.1, "p": 3.4, "e": "🌧️", "l": "小雨", "w": 15.9, "h": 80}, {"c": "福州", "r": "华南大区", "lat": 26.0771, "lon": 119.2915, "x": 33.9, "n": 25.7, "a": 29.8, "p": 1.8, "e": "🌦️", "l": "毛毛雨", "w": 17.5, "h": 71}, {"c": "莆田", "r": "华南大区", "lat": 25.454, "lon": 119.0077, "x": 33.0, "n": 27.2, "a": 30.1, "p": 2.0, "e": "🌦️", "l": "毛毛雨", "w": 23.6, "h": 71}, {"c": "龙岩", "r": "华南大区", "lat": 25.0749, "lon": 117.0178, "x": 32.3, "n": 23.8, "a": 28.0, "p": 4.6, "e": "🌧️", "l": "小雨", "w": 14.1, "h": 84}, {"c": "上饶", "r": "中西大区", "lat": 28.4518, "lon": 117.9429, "x": 34.7, "n": 27.3, "a": 31.0, "p": 0.8, "e": "🌦️", "l": "小毛毛雨", "w": 10.3, "h": 71}, {"c": "内江", "r": "中西大区", "lat": 29.5801, "lon": 105.0584, "x": 38.0, "n": 27.7, "a": 32.9, "p": 1.5, "e": "🌧️", "l": "雨", "w": 18.4, "h": null}, {"c": "凉山", "r": "中西大区", "lat": 27.8816, "lon": 102.2675, "x": 31.8, "n": 22.2, "a": 27.0, "p": 0.0, "e": "⛅", "l": "多云", "w": 5.6, "h": null}, {"c": "南昌", "r": "中西大区", "lat": 28.684, "lon": 115.8531, "x": 33.5, "n": 28.1, "a": 30.8, "p": 0.0, "e": "⛅", "l": "多云", "w": 19.0, "h": null}, {"c": "岳阳", "r": "中西大区", "lat": 29.3678, "lon": 113.1202, "x": 35.6, "n": 29.5, "a": 32.5, "p": 0.0, "e": "☁️", "l": "阴", "w": 18.6, "h": 61}, {"c": "怀化", "r": "中西大区", "lat": 27.5494, "lon": 109.9597, "x": 36.0, "n": 27.3, "a": 31.6, "p": 1.3, "e": "🌧️", "l": "雨", "w": 6.5, "h": null}, {"c": "成都", "r": "中西大区", "lat": 30.5728, "lon": 104.0668, "x": 37.0, "n": 26.3, "a": 31.6, "p": 3.0, "e": "🌦️", "l": "大毛毛雨", "w": 16.6, "h": 64}, {"c": "昆明", "r": "中西大区", "lat": 25.0389, "lon": 102.7183, "x": 26.8, "n": 18.4, "a": 22.6, "p": 11.7, "e": "🌧️", "l": "中雨", "w": 9.7, "h": 77}, {"c": "株洲", "r": "中西大区", "lat": 27.8277, "lon": 113.134, "x": 36.4, "n": 28.2, "a": 32.3, "p": 0.0, "e": "☁️", "l": "阴", "w": 20.2, "h": 58}, {"c": "楚雄", "r": "中西大区", "lat": 25.0329, "lon": 101.5456, "x": 27.7, "n": 18.6, "a": 23.1, "p": 0.7, "e": "🌦️", "l": "小毛毛雨", "w": 13.3, "h": 79}, {"c": "武汉", "r": "中西大区", "lat": 30.5833, "lon": 114.2667, "x": 37.6, "n": 31.0, "a": 34.3, "p": 0.9, "e": "🌦️", "l": "小毛毛雨", "w": 14.6, "h": 58}, {"c": "湘潭", "r": "中西大区", "lat": 27.8297, "lon": 112.9441, "x": 34.9, "n": 28.4, "a": 31.6, "p": 0.0, "e": "⛅", "l": "多云", "w": 20.9, "h": null}, {"c": "玉溪", "r": "中西大区", "lat": 24.3518, "lon": 102.5466, "x": 28.6, "n": 18.7, "a": 23.6, "p": 9.5, "e": "🌧️", "l": "中雨", "w": 10.9, "h": 81}, {"c": "荆州", "r": "中西大区", "lat": 30.3347, "lon": 112.2397, "x": 35.6, "n": 29.8, "a": 32.7, "p": 0.0, "e": "⛅", "l": "多云", "w": 17.7, "h": null}, {"c": "贵阳", "r": "中西大区", "lat": 26.5833, "lon": 106.7167, "x": 32.2, "n": 21.0, "a": 26.6, "p": 0.4, "e": "🌧️", "l": "雨", "w": 13.0, "h": null}, {"c": "资阳", "r": "中西大区", "lat": 30.1244, "lon": 104.6276, "x": 39.9, "n": 27.7, "a": 33.8, "p": 1.9, "e": "🌦️", "l": "毛毛雨", "w": 17.9, "h": 54}, {"c": "赣州", "r": "中西大区", "lat": 25.831, "lon": 114.935, "x": 34.7, "n": 26.2, "a": 30.5, "p": 2.0, "e": "🌦️", "l": "毛毛雨", "w": 22.2, "h": 67}, {"c": "遵义", "r": "中西大区", "lat": 27.7214, "lon": 106.9273, "x": 33.7, "n": 24.2, "a": 29.0, "p": 0.0, "e": "⛅", "l": "多云", "w": 12.1, "h": 67}, {"c": "重庆", "r": "中西大区", "lat": 29.563, "lon": 106.5516, "x": 41.2, "n": 29.9, "a": 35.5, "p": 0.0, "e": "☁️", "l": "阴", "w": 11.1, "h": 48}, {"c": "长沙", "r": "中西大区", "lat": 28.2282, "lon": 112.9388, "x": 37.2, "n": 29.5, "a": 33.4, "p": 0.0, "e": "☁️", "l": "阴", "w": 18.8, "h": 55}, {"c": "黄石", "r": "中西大区", "lat": 30.1995, "lon": 115.0389, "x": 35.1, "n": 29.0, "a": 32.0, "p": 0.3, "e": "🌦️", "l": "小毛毛雨", "w": 12.8, "h": 69}, {"c": "北京", "r": "京津大区", "lat": 39.9075, "lon": 116.3972, "x": 35.4, "n": 25.0, "a": 30.2, "p": 0.0, "e": "⛅", "l": "多云", "w": 12.6, "h": null}, {"c": "天津", "r": "京津大区", "lat": 39.1422, "lon": 117.1767, "x": 35.0, "n": 24.9, "a": 29.9, "p": 0.0, "e": "☁️", "l": "阴", "w": 12.6, "h": 63}, {"c": "上海", "r": "上海大区", "lat": 31.2304, "lon": 121.4737, "x": 39.4, "n": 29.4, "a": 34.4, "p": 0.6, "e": "🌦️", "l": "毛毛雨", "w": 10.7, "h": 58}];
+var MAP_REGIONS=[{"name":"黑龙江省","itemStyle":{"areaColor":"#f5a623"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"吉林省","itemStyle":{"areaColor":"#74b9ff"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"辽宁省","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"内蒙古自治区","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"河北省","itemStyle":{"areaColor":"#023e8a"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"河南省","itemStyle":{"areaColor":"#023e8a"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"山东省","itemStyle":{"areaColor":"#023e8a"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"山西省","itemStyle":{"areaColor":"#023e8a"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"陕西省","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"甘肃省","itemStyle":{"areaColor":"#fac802"},"label":{"show":false,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"宁夏回族自治区","itemStyle":{"areaColor":"#fac802"},"label":{"show":false,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"新疆维吾尔自治区","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"江苏省","itemStyle":{"areaColor":"#74b9ff"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"浙江省","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"安徽省","itemStyle":{"areaColor":"#f5a623"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"广东省","itemStyle":{"areaColor":"#023e8a"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"福建省","itemStyle":{"areaColor":"#f5a623"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"广西壮族自治区","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"海南省","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"四川省","itemStyle":{"areaColor":"#f5a623"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"重庆市","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"湖北省","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"湖南省","itemStyle":{"areaColor":"#f5a623"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"江西省","itemStyle":{"areaColor":"#f5a623"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"贵州省","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"云南省","itemStyle":{"areaColor":"#74b9ff"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"北京市","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"天津市","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}},{"name":"上海市","itemStyle":{"areaColor":"#fac802"},"label":{"show":true,"color":"rgba(160,180,160,0.55)","fontSize":9}}];
+var MAP_REGION_SALES={"东北大区": {"orders": 199, "sales": 5618.95, "stores": 71, "prevOrders": 167}, "北部大区": {"orders": 146, "sales": 3421.91, "stores": 74, "prevOrders": 183}, "华东大区": {"orders": 106, "sales": 3586.4, "stores": 58, "prevOrders": 102}, "华南大区": {"orders": 50, "sales": 1619.42, "stores": 25, "prevOrders": 41}, "中西大区": {"orders": 63, "sales": 1696.32, "stores": 39, "prevOrders": 90}, "京津大区": {"orders": 79, "sales": 1901.65, "stores": 37, "prevOrders": 68}, "上海大区": {"orders": 53, "sales": 1616.7, "stores": 28, "prevOrders": 59}};
+var MAP_TOP_STORES=[{"name": "赤峰安美翰林苑店", "region": "东北大区", "orders": 19, "sales": 418.12, "prevOrders": 11}, {"name": "济南凤凰路店", "region": "北部大区", "orders": 15, "sales": 217.48, "prevOrders": 10}, {"name": "深圳富通海智店", "region": "华南大区", "orders": 10, "sales": 463.16, "prevOrders": 4}, {"name": "佳木斯富锦向阳路店", "region": "东北大区", "orders": 9, "sales": 211.38, "prevOrders": 5}, {"name": "北京启迪香山店", "region": "京津大区", "orders": 9, "sales": 244.7, "prevOrders": 2}, {"name": "阜新西市场店", "region": "东北大区", "orders": 8, "sales": 302.1, "prevOrders": 8}, {"name": "邢台澳林店", "region": "北部大区", "orders": 8, "sales": 159.27, "prevOrders": 5}, {"name": "唐山新城学府店", "region": "北部大区", "orders": 7, "sales": 169.9, "prevOrders": 13}, {"name": "延吉红太阳店", "region": "东北大区", "orders": 7, "sales": 231.1, "prevOrders": 5}, {"name": "上海浦东店", "region": "上海大区", "orders": 7, "sales": 224.3, "prevOrders": 11}, {"name": "朝阳兴隆街店", "region": "东北大区", "orders": 6, "sales": 314.33, "prevOrders": 5}, {"name": "洛阳洛阳城店", "region": "北部大区", "orders": 6, "sales": 155.89, "prevOrders": null}, {"name": "铁岭调兵山街店", "region": "东北大区", "orders": 6, "sales": 194.3, "prevOrders": 4}, {"name": "重庆上清寺店", "region": "中西大区", "orders": 6, "sales": 144.2, "prevOrders": 7}, {"name": "宁波城市嘉苑店", "region": "华东大区", "orders": 6, "sales": 115.98, "prevOrders": 1}, {"name": "成都环球店", "region": "中西大区", "orders": 6, "sales": 163.43, "prevOrders": 10}, {"name": "铁岭银州店", "region": "东北大区", "orders": 6, "sales": 135.96, "prevOrders": 2}, {"name": "潍坊谷德广场店", "region": "北部大区", "orders": 5, "sales": 143.65, "prevOrders": 3}, {"name": "霸州兴华店", "region": "北部大区", "orders": 5, "sales": 130.0, "prevOrders": 1}, {"name": "济南世购广场店", "region": "北部大区", "orders": 5, "sales": 182.2, "prevOrders": 1}, {"name": "珲春沿河西街店", "region": "东北大区", "orders": 5, "sales": 109.14, "prevOrders": 10}, {"name": "余杭良渚店", "region": "华东大区", "orders": 5, "sales": 111.5, "prevOrders": 3}, {"name": "义乌浙四店", "region": "华东大区", "orders": 5, "sales": 179.68, "prevOrders": 4}, {"name": "镇江丹阳八佰伴店", "region": "华东大区", "orders": 5, "sales": 146.65, "prevOrders": 3}, {"name": "北京天通苑店", "region": "京津大区", "orders": 5, "sales": 142.88, "prevOrders": 8}, {"name": "乌兰浩特万达店", "region": "东北大区", "orders": 5, "sales": 147.1, "prevOrders": 6}, {"name": "赤峰宁城店", "region": "东北大区", "orders": 5, "sales": 97.8, "prevOrders": 3}, {"name": "鞍山北关店", "region": "东北大区", "orders": 5, "sales": 121.24, "prevOrders": 5}, {"name": "北京旭辉店", "region": "京津大区", "orders": 5, "sales": 76.7, "prevOrders": 3}, {"name": "长春德惠住邦城市广场店", "region": "东北大区", "orders": 5, "sales": 288.85, "prevOrders": null}];
+var REGION_TOP_STORES={"东北大区": [{"name": "赤峰安美翰林苑店", "orders": 19, "sales": 418.12, "prevOrders": 11}, {"name": "佳木斯富锦向阳路店", "orders": 9, "sales": 211.38, "prevOrders": 5}, {"name": "阜新西市场店", "orders": 8, "sales": 302.1, "prevOrders": 8}, {"name": "延吉红太阳店", "orders": 7, "sales": 231.1, "prevOrders": 5}, {"name": "朝阳兴隆街店", "orders": 6, "sales": 314.33, "prevOrders": 5}, {"name": "铁岭调兵山街店", "orders": 6, "sales": 194.3, "prevOrders": 4}, {"name": "铁岭银州店", "orders": 6, "sales": 135.96, "prevOrders": 2}, {"name": "珲春沿河西街店", "orders": 5, "sales": 109.14, "prevOrders": 10}, {"name": "乌兰浩特万达店", "orders": 5, "sales": 147.1, "prevOrders": 6}, {"name": "赤峰宁城店", "orders": 5, "sales": 97.8, "prevOrders": 3}, {"name": "鞍山北关店", "orders": 5, "sales": 121.24, "prevOrders": 5}, {"name": "长春德惠住邦城市广场店", "orders": 5, "sales": 288.85, "prevOrders": null}, {"name": "绥化万达店", "orders": 5, "sales": 178.19, "prevOrders": 1}, {"name": "哈尔滨松北万象汇店", "orders": 4, "sales": 100.5, "prevOrders": 5}, {"name": "哈尔滨南岗店", "orders": 4, "sales": 183.7, "prevOrders": 3}, {"name": "牡丹江爱民区店", "orders": 4, "sales": 88.82, "prevOrders": 6}, {"name": "朝阳东方银座店", "orders": 4, "sales": 160.4, "prevOrders": 5}, {"name": "吉林新华街店", "orders": 4, "sales": 117.6, "prevOrders": null}, {"name": "葫芦岛昌盛广场店", "orders": 4, "sales": 82.0, "prevOrders": 4}, {"name": "长春天富路店", "orders": 4, "sales": 67.66, "prevOrders": null}, {"name": "佳木斯万达店", "orders": 4, "sales": 83.74, "prevOrders": 5}, {"name": "七台河朝阳小区店", "orders": 3, "sales": 55.4, "prevOrders": 2}, {"name": "长春硅谷大街店", "orders": 3, "sales": 41.26, "prevOrders": 2}, {"name": "哈尔滨学府路店", "orders": 3, "sales": 69.96, "prevOrders": null}, {"name": "长春南部新城店", "orders": 3, "sales": 45.38, "prevOrders": null}, {"name": "佳木斯向阳店", "orders": 3, "sales": 83.0, "prevOrders": 1}, {"name": "长春文化宫店", "orders": 2, "sales": 85.2, "prevOrders": 3}, {"name": "齐齐哈尔建华万达店", "orders": 2, "sales": 30.4, "prevOrders": 3}, {"name": "齐齐哈尔工程学院店", "orders": 2, "sales": 100.34, "prevOrders": 3}, {"name": "七台河北岸店", "orders": 2, "sales": 43.6, "prevOrders": 1}, {"name": "长春经开店", "orders": 2, "sales": 34.6, "prevOrders": 4}, {"name": "长春荣光路店", "orders": 2, "sales": 38.5, "prevOrders": 2}, {"name": "长春迅驰广场店", "orders": 2, "sales": 38.5, "prevOrders": 1}, {"name": "铁岭新区店", "orders": 2, "sales": 45.1, "prevOrders": 1}, {"name": "长春宽城店", "orders": 2, "sales": 75.0, "prevOrders": null}, {"name": "绥化幸福庄园店", "orders": 2, "sales": 44.5, "prevOrders": 2}, {"name": "吉林白城店", "orders": 2, "sales": 55.3, "prevOrders": 2}, {"name": "沈阳国瑞城店", "orders": 2, "sales": 67.1, "prevOrders": null}, {"name": "松原江北店", "orders": 2, "sales": 40.5, "prevOrders": 1}, {"name": "吉林延吉店", "orders": 2, "sales": 50.4, "prevOrders": 1}, {"name": "抚顺商业城店", "orders": 2, "sales": 52.2, "prevOrders": 1}, {"name": "延边敦化步行街店", "orders": 2, "sales": 57.0, "prevOrders": 1}, {"name": "嫩江墨尔根大街店", "orders": 1, "sales": 35.8, "prevOrders": null}, {"name": "松原欧亚店", "orders": 1, "sales": 52.2, "prevOrders": 1}, {"name": "梅河口华阳店", "orders": 1, "sales": 20.6, "prevOrders": 2}, {"name": "沈阳世纪新城店", "orders": 1, "sales": 24.7, "prevOrders": null}, {"name": "沈阳北海合作街店", "orders": 1, "sales": 32.6, "prevOrders": null}, {"name": "哈尔滨工农大街店", "orders": 1, "sales": 22.8, "prevOrders": 1}, {"name": "哈尔滨红旗大街店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "哈尔滨香坊万达店", "orders": 1, "sales": 9.9, "prevOrders": null}, {"name": "大连紫阳丽景店", "orders": 1, "sales": 35.4, "prevOrders": 1}, {"name": "大连辽师店", "orders": 1, "sales": 16.8, "prevOrders": 2}, {"name": "沈阳辽河大街店", "orders": 1, "sales": 38.54, "prevOrders": 1}, {"name": "沈阳银亿店", "orders": 1, "sales": 19.54, "prevOrders": null}, {"name": "海城西柳店", "orders": 1, "sales": 33.5, "prevOrders": null}, {"name": "哈尔滨哈理工店", "orders": 1, "sales": 32.6, "prevOrders": 3}, {"name": "哈尔滨哈西万达店", "orders": 1, "sales": 34.4, "prevOrders": null}, {"name": "盘锦油田店", "orders": 1, "sales": 41.6, "prevOrders": null}, {"name": "绥化安达万达店", "orders": 1, "sales": 14.8, "prevOrders": null}, {"name": "葫芦岛龙港店", "orders": 1, "sales": 27.6, "prevOrders": 1}, {"name": "赤峰维多利店", "orders": 1, "sales": 66.0, "prevOrders": null}, {"name": "辽宁大连华南店", "orders": 1, "sales": 23.8, "prevOrders": null}, {"name": "锦州南广场店", "orders": 1, "sales": 13.9, "prevOrders": 1}, {"name": "锦州辽西店", "orders": 1, "sales": 53.0, "prevOrders": null}, {"name": "长春二道店", "orders": 1, "sales": 9.9, "prevOrders": 1}, {"name": "长春人民广场店", "orders": 1, "sales": 35.6, "prevOrders": 1}, {"name": "乌兰浩特五一广场店", "orders": 1, "sales": 19.8, "prevOrders": 5}, {"name": "长春卫星路店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "长春桂林路店", "orders": 1, "sales": 30.6, "prevOrders": 1}, {"name": "长春欧亚卖场店", "orders": 1, "sales": 29.4, "prevOrders": null}, {"name": "长春范家屯店", "orders": 1, "sales": 24.7, "prevOrders": null}], "北部大区": [{"name": "济南凤凰路店", "orders": 15, "sales": 217.48, "prevOrders": 10}, {"name": "邢台澳林店", "orders": 8, "sales": 159.27, "prevOrders": 5}, {"name": "唐山新城学府店", "orders": 7, "sales": 169.9, "prevOrders": 13}, {"name": "洛阳洛阳城店", "orders": 6, "sales": 155.89, "prevOrders": null}, {"name": "潍坊谷德广场店", "orders": 5, "sales": 143.65, "prevOrders": 3}, {"name": "霸州兴华店", "orders": 5, "sales": 130.0, "prevOrders": 1}, {"name": "济南世购广场店", "orders": 5, "sales": 182.2, "prevOrders": 1}, {"name": "青岛市南万象城店", "orders": 3, "sales": 54.92, "prevOrders": 2}, {"name": "唐山路南店", "orders": 3, "sales": 61.78, "prevOrders": 3}, {"name": "德州东风路店", "orders": 3, "sales": 40.06, "prevOrders": 1}, {"name": "青岛高新世贸店", "orders": 3, "sales": 125.7, "prevOrders": null}, {"name": "阿克苏东湖店", "orders": 3, "sales": 102.13, "prevOrders": 2}, {"name": "西安北大街店", "orders": 3, "sales": 65.3, "prevOrders": null}, {"name": "保定世纪广场店", "orders": 3, "sales": 104.83, "prevOrders": 5}, {"name": "乳山外事大学店", "orders": 3, "sales": 58.2, "prevOrders": 10}, {"name": "银川大阅城店", "orders": 3, "sales": 42.4, "prevOrders": null}, {"name": "郑州橡树玫瑰城店", "orders": 2, "sales": 36.14, "prevOrders": 1}, {"name": "许昌曹魏古城店", "orders": 2, "sales": 29.6, "prevOrders": 4}, {"name": "潍坊和平街店", "orders": 2, "sales": 35.6, "prevOrders": 4}, {"name": "唐山恒大御庭店", "orders": 2, "sales": 49.3, "prevOrders": 1}, {"name": "滨州博兴店", "orders": 2, "sales": 33.58, "prevOrders": null}, {"name": "淄博临淄店", "orders": 2, "sales": 55.0, "prevOrders": 3}, {"name": "塔城鑫都华庭店", "orders": 2, "sales": 73.4, "prevOrders": 3}, {"name": "青岛九水东路店", "orders": 2, "sales": 67.36, "prevOrders": null}, {"name": "山东乐陵店", "orders": 2, "sales": 50.3, "prevOrders": 1}, {"name": "青岛市北店", "orders": 2, "sales": 26.92, "prevOrders": 1}, {"name": "青岛东方影都店", "orders": 1, "sales": 8.62, "prevOrders": 1}, {"name": "青岛中央商务区店", "orders": 1, "sales": 11.8, "prevOrders": 1}, {"name": "青岛中铁世博城店", "orders": 1, "sales": 19.1, "prevOrders": null}, {"name": "青岛李沧店", "orders": 1, "sales": 15.8, "prevOrders": 1}, {"name": "青岛浮山后店", "orders": 1, "sales": 19.6, "prevOrders": 2}, {"name": "青岛黄岛店", "orders": 1, "sales": 14.8, "prevOrders": null}, {"name": "山东济宁店", "orders": 1, "sales": 17.8, "prevOrders": 1}, {"name": "山东烟台店", "orders": 1, "sales": 80.26, "prevOrders": 3}, {"name": "库尔勒石化大道店", "orders": 1, "sales": 24.8, "prevOrders": 1}, {"name": "廊坊固安店", "orders": 1, "sales": 27.8, "prevOrders": 1}, {"name": "开封中心医院店", "orders": 1, "sales": 14.8, "prevOrders": null}, {"name": "太原康宁街店", "orders": 1, "sales": 15.8, "prevOrders": 2}, {"name": "宁夏银川万达店", "orders": 1, "sales": 15.66, "prevOrders": null}, {"name": "梁山伦达广场店", "orders": 1, "sales": 17.8, "prevOrders": 3}, {"name": "唐山茂华中心店", "orders": 1, "sales": 52.1, "prevOrders": 4}, {"name": "唐山路北店", "orders": 1, "sales": 9.9, "prevOrders": 1}, {"name": "济南大明湖店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "济南弘阳广场店", "orders": 1, "sales": 24.6, "prevOrders": 1}, {"name": "济南环宇城店", "orders": 1, "sales": 13.02, "prevOrders": null}, {"name": "济南翡翠雅郡店", "orders": 1, "sales": 16.54, "prevOrders": 2}, {"name": "济南高新万达店", "orders": 1, "sales": 8.8, "prevOrders": null}, {"name": "济宁南池店", "orders": 1, "sales": 49.5, "prevOrders": null}, {"name": "潍坊中都财富广场店", "orders": 1, "sales": 21.6, "prevOrders": null}, {"name": "潍坊泰华店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "烟台蓬莱阁店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "石家庄富泰店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "石家庄开元寺店", "orders": 1, "sales": 33.6, "prevOrders": 1}, {"name": "秦皇岛万象城店", "orders": 1, "sales": 26.7, "prevOrders": null}, {"name": "秦皇岛人民广场店", "orders": 1, "sales": 18.8, "prevOrders": 1}, {"name": "西安昆明池店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "西安电视塔店", "orders": 1, "sales": 27.5, "prevOrders": 1}, {"name": "邯郸新世纪店", "orders": 1, "sales": 35.9, "prevOrders": 2}, {"name": "郑州二七广场店", "orders": 1, "sales": 63.6, "prevOrders": 3}, {"name": "郑州农业路店", "orders": 1, "sales": 15.8, "prevOrders": 1}, {"name": "郑州北大学城店", "orders": 1, "sales": 9.8, "prevOrders": null}, {"name": "郑州国贸360店", "orders": 1, "sales": 25.6, "prevOrders": 2}, {"name": "郑州江泰天宇店", "orders": 1, "sales": 15.8, "prevOrders": 5}, {"name": "郑州龙子湖店", "orders": 1, "sales": 15.8, "prevOrders": 1}, {"name": "保定火车站店", "orders": 1, "sales": 17.8, "prevOrders": null}, {"name": "信阳固始店", "orders": 1, "sales": 25.6, "prevOrders": null}, {"name": "兰州东欧店", "orders": 1, "sales": 24.6, "prevOrders": null}, {"name": "兰州满城里店", "orders": 1, "sales": 16.8, "prevOrders": 1}, {"name": "银川悠阅城店", "orders": 1, "sales": 26.6, "prevOrders": null}, {"name": "银川玺云台店", "orders": 1, "sales": 56.1, "prevOrders": 1}, {"name": "临沂南坊店", "orders": 1, "sales": 17.8, "prevOrders": 2}, {"name": "临沂平邑店", "orders": 1, "sales": 35.8, "prevOrders": null}, {"name": "临沂新华路店", "orders": 1, "sales": 29.5, "prevOrders": 2}, {"name": "临沂蒙阴店", "orders": 1, "sales": 35.8, "prevOrders": 5}], "华东大区": [{"name": "宁波城市嘉苑店", "orders": 6, "sales": 115.98, "prevOrders": 1}, {"name": "余杭良渚店", "orders": 5, "sales": 111.5, "prevOrders": 3}, {"name": "义乌浙四店", "orders": 5, "sales": 179.68, "prevOrders": 4}, {"name": "镇江丹阳八佰伴店", "orders": 5, "sales": 146.65, "prevOrders": 3}, {"name": "杭州西湖区店", "orders": 4, "sales": 96.0, "prevOrders": 3}, {"name": "无锡锡师附小店", "orders": 4, "sales": 86.9, "prevOrders": 1}, {"name": "南京中山门店", "orders": 4, "sales": 167.99, "prevOrders": 1}, {"name": "绍兴凤林西路店", "orders": 4, "sales": 107.4, "prevOrders": null}, {"name": "常州潞城店", "orders": 4, "sales": 245.7, "prevOrders": 1}, {"name": "南京奥体店", "orders": 3, "sales": 40.5, "prevOrders": 2}, {"name": "杭州江南大道店", "orders": 3, "sales": 281.67, "prevOrders": 2}, {"name": "南京江宁大学城店", "orders": 2, "sales": 69.1, "prevOrders": null}, {"name": "盐城第一人民医院店", "orders": 2, "sales": 46.5, "prevOrders": null}, {"name": "兴化丰收店", "orders": 2, "sales": 59.3, "prevOrders": null}, {"name": "舟山临城店", "orders": 2, "sales": 79.34, "prevOrders": 1}, {"name": "盐城盐都万达店", "orders": 2, "sales": 68.4, "prevOrders": null}, {"name": "滁州世贸店", "orders": 2, "sales": 38.31, "prevOrders": 3}, {"name": "温州乐清城东店", "orders": 2, "sales": 33.4, "prevOrders": 1}, {"name": "滁州苏宁广场店", "orders": 2, "sales": 69.66, "prevOrders": null}, {"name": "扬州宝带新村店", "orders": 2, "sales": 45.4, "prevOrders": null}, {"name": "无锡华夏店", "orders": 2, "sales": 235.41, "prevOrders": 2}, {"name": "宁波余姚银泰店", "orders": 2, "sales": 53.42, "prevOrders": 5}, {"name": "常州飞龙吾悦店", "orders": 2, "sales": 51.2, "prevOrders": null}, {"name": "安徽蚌埠弋江店", "orders": 1, "sales": 30.8, "prevOrders": null}, {"name": "宣城华贝广场店", "orders": 1, "sales": 20.8, "prevOrders": null}, {"name": "嵊州芸景店", "orders": 1, "sales": 17.6, "prevOrders": 1}, {"name": "常州腾龙店", "orders": 1, "sales": 8.71, "prevOrders": null}, {"name": "徐州鼓楼广场店", "orders": 1, "sales": 50.2, "prevOrders": null}, {"name": "宁波鄞州会展中心店", "orders": 1, "sales": 37.5, "prevOrders": 7}, {"name": "杭州三墩店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "杭州上城天街店", "orders": 1, "sales": 12.8, "prevOrders": null}, {"name": "杭州义蓬永旺店", "orders": 1, "sales": 19.8, "prevOrders": null}, {"name": "杭州奥体中心店", "orders": 1, "sales": 325.07, "prevOrders": null}, {"name": "杭州奥莱店", "orders": 1, "sales": 14.8, "prevOrders": null}, {"name": "杭州新街店", "orders": 1, "sales": 23.6, "prevOrders": null}, {"name": "江滨北路店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "淮安世纪景湾店", "orders": 1, "sales": 25.6, "prevOrders": 2}, {"name": "温州瓯海娄桥店", "orders": 1, "sales": 74.4, "prevOrders": null}, {"name": "温州瓯海龙霞店", "orders": 1, "sales": 68.0, "prevOrders": null}, {"name": "温州鹿城店", "orders": 1, "sales": 25.6, "prevOrders": null}, {"name": "滁州蓝天路店", "orders": 1, "sales": 17.8, "prevOrders": null}, {"name": "南通北翼玖玖广场店", "orders": 1, "sales": 12.14, "prevOrders": 4}, {"name": "台州九龙店", "orders": 1, "sales": 21.7, "prevOrders": null}, {"name": "合肥万象城店", "orders": 1, "sales": 16.54, "prevOrders": null}, {"name": "合肥开发区明珠广场店", "orders": 1, "sales": 14.78, "prevOrders": null}, {"name": "合肥新站店", "orders": 1, "sales": 16.8, "prevOrders": null}, {"name": "盐城东进路店", "orders": 1, "sales": 26.6, "prevOrders": 1}, {"name": "南京万汇城店", "orders": 1, "sales": 24.7, "prevOrders": null}, {"name": "南京仙鹤门店", "orders": 1, "sales": 33.5, "prevOrders": null}, {"name": "南京夫子庙店", "orders": 1, "sales": 34.5, "prevOrders": null}, {"name": "南京奥体西店", "orders": 1, "sales": 24.6, "prevOrders": null}, {"name": "南京弘阳店", "orders": 1, "sales": 30.45, "prevOrders": null}, {"name": "南京软件大道店", "orders": 1, "sales": 17.8, "prevOrders": null}, {"name": "南京鼓楼店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "南通万象城店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "绍兴东兴路店", "orders": 1, "sales": 17.8, "prevOrders": 2}, {"name": "苏州东环店", "orders": 1, "sales": 16.8, "prevOrders": null}, {"name": "义乌青口店", "orders": 1, "sales": 15.8, "prevOrders": null}], "华南大区": [{"name": "深圳富通海智店", "orders": 10, "sales": 463.16, "prevOrders": 4}, {"name": "泉州滨海店", "orders": 4, "sales": 72.94, "prevOrders": 3}, {"name": "深圳科技园店", "orders": 4, "sales": 62.3, "prevOrders": null}, {"name": "广东海丰店", "orders": 4, "sales": 132.89, "prevOrders": null}, {"name": "龙岩玖峯台店", "orders": 3, "sales": 50.1, "prevOrders": null}, {"name": "福州五四店", "orders": 2, "sales": 41.4, "prevOrders": 3}, {"name": "佛山绿岛广场店", "orders": 2, "sales": 36.5, "prevOrders": 3}, {"name": "佛山狮山店", "orders": 2, "sales": 88.26, "prevOrders": null}, {"name": "漳州龙文福隆城店", "orders": 2, "sales": 56.3, "prevOrders": null}, {"name": "厦门马銮湾店", "orders": 2, "sales": 39.37, "prevOrders": 1}, {"name": "广州岗顶店", "orders": 1, "sales": 72.4, "prevOrders": null}, {"name": "广州番禺店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "广州越秀店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "汕尾陆丰东海店", "orders": 1, "sales": 41.4, "prevOrders": 4}, {"name": "泉州东海店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "深圳大中华广场店", "orders": 1, "sales": 18.8, "prevOrders": 3}, {"name": "深圳宝安中心城店", "orders": 1, "sales": 23.7, "prevOrders": null}, {"name": "深圳新洲文化广场店", "orders": 1, "sales": 18.9, "prevOrders": null}, {"name": "深圳桃园店", "orders": 1, "sales": 191.8, "prevOrders": null}, {"name": "漳州芗城大学城店", "orders": 1, "sales": 28.7, "prevOrders": 1}, {"name": "厦门五缘湾店", "orders": 1, "sales": 18.8, "prevOrders": 3}, {"name": "厦门阳光小镇店", "orders": 1, "sales": 35.4, "prevOrders": null}, {"name": "厦门集美嘉庚店", "orders": 1, "sales": 35.4, "prevOrders": 2}, {"name": "佛山南海万达店", "orders": 1, "sales": 31.6, "prevOrders": null}, {"name": "龙岩登高西路店", "orders": 1, "sales": 13.8, "prevOrders": 1}], "中西大区": [{"name": "重庆上清寺店", "orders": 6, "sales": 144.2, "prevOrders": 7}, {"name": "成都环球店", "orders": 6, "sales": 163.43, "prevOrders": 10}, {"name": "武汉街道口店", "orders": 3, "sales": 81.11, "prevOrders": null}, {"name": "长沙凯通店", "orders": 3, "sales": 51.68, "prevOrders": null}, {"name": "兴义桔山店", "orders": 3, "sales": 60.0, "prevOrders": null}, {"name": "成都玉林店", "orders": 3, "sales": 123.8, "prevOrders": 6}, {"name": "成都九眼桥店", "orders": 3, "sales": 134.82, "prevOrders": 1}, {"name": "长沙岳麓山大学城店", "orders": 2, "sales": 29.7, "prevOrders": 1}, {"name": "成都金沙店", "orders": 2, "sales": 45.97, "prevOrders": 2}, {"name": "成都西南财大店", "orders": 2, "sales": 18.61, "prevOrders": null}, {"name": "长沙白沙路店", "orders": 2, "sales": 127.0, "prevOrders": null}, {"name": "长沙银盆岭店", "orders": 1, "sales": 13.8, "prevOrders": null}, {"name": "怀化晃山新城店", "orders": 1, "sales": 19.8, "prevOrders": null}, {"name": "成都万科魅力店", "orders": 1, "sales": 9.9, "prevOrders": 1}, {"name": "成都世纪城店", "orders": 1, "sales": 20.8, "prevOrders": 1}, {"name": "成都中和店", "orders": 1, "sales": 15.8, "prevOrders": 2}, {"name": "成都云凤店", "orders": 1, "sales": 37.8, "prevOrders": null}, {"name": "成都光华店", "orders": 1, "sales": 45.2, "prevOrders": 3}, {"name": "成都宽窄巷子店", "orders": 1, "sales": 22.6, "prevOrders": null}, {"name": "成都金牛万达店", "orders": 1, "sales": 13.8, "prevOrders": 4}, {"name": "成都高新七中店", "orders": 1, "sales": 26.6, "prevOrders": null}, {"name": "昆明丰宁店", "orders": 1, "sales": 23.7, "prevOrders": null}, {"name": "株洲株洲店", "orders": 1, "sales": 13.8, "prevOrders": 1}, {"name": "武汉中南店", "orders": 1, "sales": 14.8, "prevOrders": null}, {"name": "武汉中建东湖锦城店", "orders": 1, "sales": 19.89, "prevOrders": 2}, {"name": "武汉金色港湾店", "orders": 1, "sales": 32.5, "prevOrders": 1}, {"name": "江西南昌象湖店", "orders": 1, "sales": 25.6, "prevOrders": 1}, {"name": "湖南衡阳店", "orders": 1, "sales": 26.6, "prevOrders": null}, {"name": "南昌紫阳大道店", "orders": 1, "sales": 27.8, "prevOrders": 2}, {"name": "遵义新蒲林达店", "orders": 1, "sales": 142.0, "prevOrders": null}, {"name": "鄂州长城店", "orders": 1, "sales": 30.6, "prevOrders": null}, {"name": "重庆大竹林店", "orders": 1, "sales": 16.7, "prevOrders": null}, {"name": "重庆弹子石店", "orders": 1, "sales": 18.8, "prevOrders": 1}, {"name": "重庆渝北店", "orders": 1, "sales": 18.8, "prevOrders": null}, {"name": "重庆礼嘉店", "orders": 1, "sales": 13.9, "prevOrders": 2}, {"name": "重庆茶园店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "长沙梅溪湖店", "orders": 1, "sales": 13.8, "prevOrders": null}, {"name": "长沙河西店", "orders": 1, "sales": 15.8, "prevOrders": 1}, {"name": "黄石万达店", "orders": 1, "sales": 19.01, "prevOrders": null}], "京津大区": [{"name": "北京启迪香山店", "orders": 9, "sales": 244.7, "prevOrders": 2}, {"name": "北京天通苑店", "orders": 5, "sales": 142.88, "prevOrders": 8}, {"name": "北京旭辉店", "orders": 5, "sales": 76.7, "prevOrders": 3}, {"name": "天津双港店", "orders": 4, "sales": 89.8, "prevOrders": 1}, {"name": "北京北沙滩店", "orders": 4, "sales": 82.6, "prevOrders": null}, {"name": "天津金明里店", "orders": 4, "sales": 165.61, "prevOrders": 2}, {"name": "天津精武大学城店", "orders": 3, "sales": 78.3, "prevOrders": 1}, {"name": "北京辉煌国际店", "orders": 3, "sales": 40.62, "prevOrders": 1}, {"name": "北京云集中心店", "orders": 3, "sales": 90.29, "prevOrders": 5}, {"name": "天津和平店", "orders": 3, "sales": 84.0, "prevOrders": 2}, {"name": "北京云岗店", "orders": 2, "sales": 37.2, "prevOrders": 4}, {"name": "北京后沙峪店", "orders": 2, "sales": 76.48, "prevOrders": 1}, {"name": "北京古城金融街店", "orders": 2, "sales": 84.26, "prevOrders": 3}, {"name": "北京安贞店", "orders": 2, "sales": 36.6, "prevOrders": 1}, {"name": "北京回龙观店", "orders": 2, "sales": 100.2, "prevOrders": null}, {"name": "北京知春路店", "orders": 2, "sales": 45.5, "prevOrders": 2}, {"name": "北京永定门店", "orders": 2, "sales": 39.5, "prevOrders": 1}, {"name": "天津南开店", "orders": 2, "sales": 53.3, "prevOrders": null}, {"name": "天津生态城店", "orders": 2, "sales": 39.4, "prevOrders": null}, {"name": "天津咸水沽店", "orders": 1, "sales": 17.6, "prevOrders": 3}, {"name": "天津建邦广场店", "orders": 1, "sales": 14.8, "prevOrders": 1}, {"name": "天津河西店", "orders": 1, "sales": 22.7, "prevOrders": 1}, {"name": "天津滨海新区店", "orders": 1, "sales": 16.46, "prevOrders": null}, {"name": "天津解放南路店", "orders": 1, "sales": 14.8, "prevOrders": 2}, {"name": "天津辛庄店", "orders": 1, "sales": 11.8, "prevOrders": null}, {"name": "天津万科时代店", "orders": 1, "sales": 21.7, "prevOrders": null}, {"name": "天津东兴道店", "orders": 1, "sales": 9.9, "prevOrders": 4}, {"name": "北京西红门店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "北京长安天街店", "orders": 1, "sales": 13.02, "prevOrders": null}, {"name": "北京青年城店", "orders": 1, "sales": 30.6, "prevOrders": null}, {"name": "融创滨海中心店", "orders": 1, "sales": 16.8, "prevOrders": null}, {"name": "北京亚运村店", "orders": 1, "sales": 8.8, "prevOrders": null}, {"name": "北京北工大店", "orders": 1, "sales": 13.02, "prevOrders": null}, {"name": "北京大兴庄店", "orders": 1, "sales": 8.71, "prevOrders": null}, {"name": "北京广渠门内店", "orders": 1, "sales": 17.7, "prevOrders": 1}, {"name": "北京苹果园店", "orders": 1, "sales": 27.6, "prevOrders": 1}, {"name": "北京三里屯店", "orders": 1, "sales": 13.8, "prevOrders": 1}], "上海大区": [{"name": "上海浦东店", "orders": 7, "sales": 224.3, "prevOrders": 11}, {"name": "上海迪士尼店", "orders": 4, "sales": 127.84, "prevOrders": 6}, {"name": "上海明基广场店", "orders": 4, "sales": 87.0, "prevOrders": 5}, {"name": "上海黄浦店", "orders": 4, "sales": 228.01, "prevOrders": 2}, {"name": "上海恒生广场店", "orders": 3, "sales": 35.3, "prevOrders": 1}, {"name": "上海吴淞店", "orders": 3, "sales": 78.59, "prevOrders": 3}, {"name": "上海长寿路店", "orders": 3, "sales": 48.12, "prevOrders": 6}, {"name": "上海中环百联店", "orders": 2, "sales": 35.2, "prevOrders": null}, {"name": "上海南翔店", "orders": 2, "sales": 34.5, "prevOrders": null}, {"name": "上海曹杨店", "orders": 2, "sales": 31.6, "prevOrders": 5}, {"name": "上海国家会展中心店", "orders": 2, "sales": 29.7, "prevOrders": 1}, {"name": "上海友谊路店", "orders": 1, "sales": 18.8, "prevOrders": null}, {"name": "上海大宁久光店", "orders": 1, "sales": 14.61, "prevOrders": null}, {"name": "上海天华大学店", "orders": 1, "sales": 14.78, "prevOrders": null}, {"name": "上海奉贤百联店", "orders": 1, "sales": 46.9, "prevOrders": null}, {"name": "上海宝山店", "orders": 1, "sales": 148.37, "prevOrders": null}, {"name": "上海徐汇万科店", "orders": 1, "sales": 12.8, "prevOrders": 2}, {"name": "上海曲阳百联店", "orders": 1, "sales": 26.6, "prevOrders": null}, {"name": "上海曹路店", "orders": 1, "sales": 65.12, "prevOrders": null}, {"name": "上海桃浦店", "orders": 1, "sales": 69.2, "prevOrders": null}, {"name": "上海洋泾店", "orders": 1, "sales": 15.66, "prevOrders": null}, {"name": "上海淞南店", "orders": 1, "sales": 16.8, "prevOrders": null}, {"name": "上海绿城店", "orders": 1, "sales": 117.4, "prevOrders": null}, {"name": "上海长宁国际店", "orders": 1, "sales": 17.6, "prevOrders": 1}, {"name": "上海阳光天地店", "orders": 1, "sales": 19.8, "prevOrders": null}, {"name": "上海凉城店", "orders": 1, "sales": 23.6, "prevOrders": null}, {"name": "上海五角场店", "orders": 1, "sales": 9.9, "prevOrders": 2}, {"name": "上海万科翡翠公园店", "orders": 1, "sales": 18.6, "prevOrders": 1}]};
+var CITY_TOP_STORES={"七台河": [{"name": "七台河朝阳小区店", "orders": 3, "sales": 55.4, "prevOrders": 2}, {"name": "七台河北岸店", "orders": 2, "sales": 43.6, "prevOrders": 1}], "上海": [{"name": "上海浦东店", "orders": 7, "sales": 224.3, "prevOrders": 11}, {"name": "上海明基广场店", "orders": 4, "sales": 87.0, "prevOrders": 5}, {"name": "上海迪士尼店", "orders": 4, "sales": 127.84, "prevOrders": 6}, {"name": "上海黄浦店", "orders": 4, "sales": 228.01, "prevOrders": 2}, {"name": "上海吴淞店", "orders": 3, "sales": 78.59, "prevOrders": 3}], "临沂": [{"name": "临沂南坊店", "orders": 1, "sales": 17.8, "prevOrders": 2}, {"name": "临沂平邑店", "orders": 1, "sales": 35.8, "prevOrders": null}, {"name": "临沂新华路店", "orders": 1, "sales": 29.5, "prevOrders": 2}, {"name": "临沂蒙阴店", "orders": 1, "sales": 35.8, "prevOrders": 5}], "佛山": [{"name": "佛山狮山店", "orders": 2, "sales": 88.26, "prevOrders": null}, {"name": "佛山绿岛广场店", "orders": 2, "sales": 36.5, "prevOrders": 3}, {"name": "佛山南海万达店", "orders": 1, "sales": 31.6, "prevOrders": null}], "佳木斯": [{"name": "佳木斯富锦向阳路店", "orders": 9, "sales": 211.38, "prevOrders": 5}, {"name": "佳木斯万达店", "orders": 4, "sales": 83.74, "prevOrders": 5}, {"name": "佳木斯向阳店", "orders": 3, "sales": 83.0, "prevOrders": 1}], "保定": [{"name": "保定世纪广场店", "orders": 3, "sales": 104.83, "prevOrders": 5}, {"name": "保定火车站店", "orders": 1, "sales": 17.8, "prevOrders": null}], "信阳": [{"name": "信阳固始店", "orders": 1, "sales": 25.6, "prevOrders": null}], "兰州": [{"name": "兰州东欧店", "orders": 1, "sales": 24.6, "prevOrders": null}, {"name": "兰州满城里店", "orders": 1, "sales": 16.8, "prevOrders": 1}], "兴安": [{"name": "乌兰浩特万达店", "orders": 5, "sales": 147.1, "prevOrders": 6}, {"name": "乌兰浩特五一广场店", "orders": 1, "sales": 19.8, "prevOrders": 5}], "北京": [{"name": "北京启迪香山店", "orders": 9, "sales": 244.7, "prevOrders": 2}, {"name": "北京天通苑店", "orders": 5, "sales": 142.88, "prevOrders": 8}, {"name": "北京旭辉店", "orders": 5, "sales": 76.7, "prevOrders": 3}, {"name": "北京北沙滩店", "orders": 4, "sales": 82.6, "prevOrders": null}, {"name": "北京云集中心店", "orders": 3, "sales": 90.29, "prevOrders": 5}], "南京": [{"name": "南京中山门店", "orders": 4, "sales": 167.99, "prevOrders": 1}, {"name": "南京奥体店", "orders": 3, "sales": 40.5, "prevOrders": 2}, {"name": "南京江宁大学城店", "orders": 2, "sales": 69.1, "prevOrders": null}, {"name": "南京万汇城店", "orders": 1, "sales": 24.7, "prevOrders": null}, {"name": "南京仙鹤门店", "orders": 1, "sales": 33.5, "prevOrders": null}], "南昌": [{"name": "南昌紫阳大道店", "orders": 1, "sales": 27.8, "prevOrders": 2}, {"name": "江西南昌象湖店", "orders": 1, "sales": 25.6, "prevOrders": 1}], "南通": [{"name": "南通万象城店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "南通北翼玖玖广场店", "orders": 1, "sales": 12.14, "prevOrders": 4}], "厦门": [{"name": "厦门马銮湾店", "orders": 2, "sales": 39.37, "prevOrders": 1}, {"name": "厦门五缘湾店", "orders": 1, "sales": 18.8, "prevOrders": 3}, {"name": "厦门阳光小镇店", "orders": 1, "sales": 35.4, "prevOrders": null}, {"name": "厦门集美嘉庚店", "orders": 1, "sales": 35.4, "prevOrders": 2}], "台州": [{"name": "台州九龙店", "orders": 1, "sales": 21.7, "prevOrders": null}], "合肥": [{"name": "合肥万象城店", "orders": 1, "sales": 16.54, "prevOrders": null}, {"name": "合肥开发区明珠广场店", "orders": 1, "sales": 14.78, "prevOrders": null}, {"name": "合肥新站店", "orders": 1, "sales": 16.8, "prevOrders": null}], "吉林": [{"name": "吉林新华街店", "orders": 4, "sales": 117.6, "prevOrders": null}], "哈尔滨": [{"name": "哈尔滨南岗店", "orders": 4, "sales": 183.7, "prevOrders": 3}, {"name": "哈尔滨松北万象汇店", "orders": 4, "sales": 100.5, "prevOrders": 5}, {"name": "哈尔滨学府路店", "orders": 3, "sales": 69.96, "prevOrders": null}, {"name": "哈尔滨哈理工店", "orders": 1, "sales": 32.6, "prevOrders": 3}, {"name": "哈尔滨哈西万达店", "orders": 1, "sales": 34.4, "prevOrders": null}], "唐山": [{"name": "唐山新城学府店", "orders": 7, "sales": 169.9, "prevOrders": 13}, {"name": "唐山路南店", "orders": 3, "sales": 61.78, "prevOrders": 3}, {"name": "唐山恒大御庭店", "orders": 2, "sales": 49.3, "prevOrders": 1}, {"name": "唐山茂华中心店", "orders": 1, "sales": 52.1, "prevOrders": 4}, {"name": "唐山路北店", "orders": 1, "sales": 9.9, "prevOrders": 1}], "塔城": [{"name": "塔城鑫都华庭店", "orders": 2, "sales": 73.4, "prevOrders": 3}], "大连": [{"name": "大连紫阳丽景店", "orders": 1, "sales": 35.4, "prevOrders": 1}, {"name": "大连辽师店", "orders": 1, "sales": 16.8, "prevOrders": 2}, {"name": "辽宁大连华南店", "orders": 1, "sales": 23.8, "prevOrders": null}], "天津": [{"name": "天津双港店", "orders": 4, "sales": 89.8, "prevOrders": 1}, {"name": "天津金明里店", "orders": 4, "sales": 165.61, "prevOrders": 2}, {"name": "天津和平店", "orders": 3, "sales": 84.0, "prevOrders": 2}, {"name": "天津精武大学城店", "orders": 3, "sales": 78.3, "prevOrders": 1}, {"name": "天津南开店", "orders": 2, "sales": 53.3, "prevOrders": null}], "太原": [{"name": "太原康宁街店", "orders": 1, "sales": 15.8, "prevOrders": 2}], "威海": [{"name": "乳山外事大学店", "orders": 3, "sales": 58.2, "prevOrders": 10}], "宁波": [{"name": "宁波城市嘉苑店", "orders": 6, "sales": 115.98, "prevOrders": 1}, {"name": "宁波余姚银泰店", "orders": 2, "sales": 53.42, "prevOrders": 5}, {"name": "宁波鄞州会展中心店", "orders": 1, "sales": 37.5, "prevOrders": 7}], "宣城": [{"name": "宣城华贝广场店", "orders": 1, "sales": 20.8, "prevOrders": null}], "巴州": [{"name": "库尔勒石化大道店", "orders": 1, "sales": 24.8, "prevOrders": 1}], "常州": [{"name": "常州潞城店", "orders": 4, "sales": 245.7, "prevOrders": 1}, {"name": "常州飞龙吾悦店", "orders": 2, "sales": 51.2, "prevOrders": null}, {"name": "常州腾龙店", "orders": 1, "sales": 8.71, "prevOrders": null}], "广州": [{"name": "广州岗顶店", "orders": 1, "sales": 72.4, "prevOrders": null}, {"name": "广州番禺店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "广州越秀店", "orders": 1, "sales": 13.9, "prevOrders": null}], "廊坊": [{"name": "霸州兴华店", "orders": 5, "sales": 130.0, "prevOrders": 1}, {"name": "廊坊固安店", "orders": 1, "sales": 27.8, "prevOrders": 1}], "延边": [{"name": "延吉红太阳店", "orders": 7, "sales": 231.1, "prevOrders": 5}, {"name": "珲春沿河西街店", "orders": 5, "sales": 109.14, "prevOrders": 10}, {"name": "吉林延吉店", "orders": 2, "sales": 50.4, "prevOrders": 1}, {"name": "延边敦化步行街店", "orders": 2, "sales": 57.0, "prevOrders": 1}], "开封": [{"name": "开封中心医院店", "orders": 1, "sales": 14.8, "prevOrders": null}], "徐州": [{"name": "徐州鼓楼广场店", "orders": 1, "sales": 50.2, "prevOrders": null}], "德州": [{"name": "德州东风路店", "orders": 3, "sales": 40.06, "prevOrders": 1}, {"name": "山东乐陵店", "orders": 2, "sales": 50.3, "prevOrders": 1}], "怀化": [{"name": "怀化晃山新城店", "orders": 1, "sales": 19.8, "prevOrders": null}], "成都": [{"name": "成都环球店", "orders": 6, "sales": 163.43, "prevOrders": 10}, {"name": "成都九眼桥店", "orders": 3, "sales": 134.82, "prevOrders": 1}, {"name": "成都玉林店", "orders": 3, "sales": 123.8, "prevOrders": 6}, {"name": "成都西南财大店", "orders": 2, "sales": 18.61, "prevOrders": null}, {"name": "成都金沙店", "orders": 2, "sales": 45.97, "prevOrders": 2}], "扬州": [{"name": "扬州宝带新村店", "orders": 2, "sales": 45.4, "prevOrders": null}], "无锡": [{"name": "无锡锡师附小店", "orders": 4, "sales": 86.9, "prevOrders": 1}, {"name": "无锡华夏店", "orders": 2, "sales": 235.41, "prevOrders": 2}], "昆明": [{"name": "昆明丰宁店", "orders": 1, "sales": 23.7, "prevOrders": null}], "朝阳": [{"name": "朝阳兴隆街店", "orders": 6, "sales": 314.33, "prevOrders": 5}, {"name": "朝阳东方银座店", "orders": 4, "sales": 160.4, "prevOrders": 5}], "杭州": [{"name": "余杭良渚店", "orders": 5, "sales": 111.5, "prevOrders": 3}, {"name": "杭州西湖区店", "orders": 4, "sales": 96.0, "prevOrders": 3}, {"name": "杭州江南大道店", "orders": 3, "sales": 281.67, "prevOrders": 2}, {"name": "杭州三墩店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "杭州上城天街店", "orders": 1, "sales": 12.8, "prevOrders": null}], "松原": [{"name": "松原江北店", "orders": 2, "sales": 40.5, "prevOrders": 1}, {"name": "松原欧亚店", "orders": 1, "sales": 52.2, "prevOrders": 1}], "株洲": [{"name": "株洲株洲店", "orders": 1, "sales": 13.8, "prevOrders": 1}], "武汉": [{"name": "武汉街道口店", "orders": 3, "sales": 81.11, "prevOrders": null}, {"name": "武汉中南店", "orders": 1, "sales": 14.8, "prevOrders": null}, {"name": "武汉中建东湖锦城店", "orders": 1, "sales": 19.89, "prevOrders": 2}, {"name": "武汉金色港湾店", "orders": 1, "sales": 32.5, "prevOrders": 1}], "汕尾": [{"name": "广东海丰店", "orders": 4, "sales": 132.89, "prevOrders": null}, {"name": "汕尾陆丰东海店", "orders": 1, "sales": 41.4, "prevOrders": 4}], "沈阳": [{"name": "沈阳国瑞城店", "orders": 2, "sales": 67.1, "prevOrders": null}, {"name": "沈阳世纪新城店", "orders": 1, "sales": 24.7, "prevOrders": null}, {"name": "沈阳北海合作街店", "orders": 1, "sales": 32.6, "prevOrders": null}, {"name": "沈阳辽河大街店", "orders": 1, "sales": 38.54, "prevOrders": 1}, {"name": "沈阳银亿店", "orders": 1, "sales": 19.54, "prevOrders": null}], "泉州": [{"name": "泉州滨海店", "orders": 4, "sales": 72.94, "prevOrders": 3}, {"name": "泉州东海店", "orders": 1, "sales": 15.8, "prevOrders": null}], "泰州": [{"name": "兴化丰收店", "orders": 2, "sales": 59.3, "prevOrders": null}], "济南": [{"name": "济南凤凰路店", "orders": 15, "sales": 217.48, "prevOrders": 10}, {"name": "济南世购广场店", "orders": 5, "sales": 182.2, "prevOrders": 1}, {"name": "济南大明湖店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "济南弘阳广场店", "orders": 1, "sales": 24.6, "prevOrders": 1}, {"name": "济南环宇城店", "orders": 1, "sales": 13.02, "prevOrders": null}], "济宁": [{"name": "山东济宁店", "orders": 1, "sales": 17.8, "prevOrders": 1}, {"name": "梁山伦达广场店", "orders": 1, "sales": 17.8, "prevOrders": 3}, {"name": "济宁南池店", "orders": 1, "sales": 49.5, "prevOrders": null}], "淄博": [{"name": "淄博临淄店", "orders": 2, "sales": 55.0, "prevOrders": 3}], "淮安": [{"name": "淮安世纪景湾店", "orders": 1, "sales": 25.6, "prevOrders": 2}], "深圳": [{"name": "深圳富通海智店", "orders": 10, "sales": 463.16, "prevOrders": 4}, {"name": "深圳科技园店", "orders": 4, "sales": 62.3, "prevOrders": null}, {"name": "深圳大中华广场店", "orders": 1, "sales": 18.8, "prevOrders": 3}, {"name": "深圳宝安中心城店", "orders": 1, "sales": 23.7, "prevOrders": null}, {"name": "深圳新洲文化广场店", "orders": 1, "sales": 18.9, "prevOrders": null}], "温州": [{"name": "温州乐清城东店", "orders": 2, "sales": 33.4, "prevOrders": 1}, {"name": "温州瓯海娄桥店", "orders": 1, "sales": 74.4, "prevOrders": null}, {"name": "温州瓯海龙霞店", "orders": 1, "sales": 68.0, "prevOrders": null}, {"name": "温州鹿城店", "orders": 1, "sales": 25.6, "prevOrders": null}], "滁州": [{"name": "滁州世贸店", "orders": 2, "sales": 38.31, "prevOrders": 3}, {"name": "滁州苏宁广场店", "orders": 2, "sales": 69.66, "prevOrders": null}, {"name": "滁州蓝天路店", "orders": 1, "sales": 17.8, "prevOrders": null}], "滨州": [{"name": "滨州博兴店", "orders": 2, "sales": 33.58, "prevOrders": null}], "漳州": [{"name": "漳州龙文福隆城店", "orders": 2, "sales": 56.3, "prevOrders": null}, {"name": "漳州芗城大学城店", "orders": 1, "sales": 28.7, "prevOrders": 1}], "潍坊": [{"name": "潍坊谷德广场店", "orders": 5, "sales": 143.65, "prevOrders": 3}, {"name": "潍坊和平街店", "orders": 2, "sales": 35.6, "prevOrders": 4}, {"name": "潍坊中都财富广场店", "orders": 1, "sales": 21.6, "prevOrders": null}, {"name": "潍坊泰华店", "orders": 1, "sales": 13.9, "prevOrders": null}], "烟台": [{"name": "山东烟台店", "orders": 1, "sales": 80.26, "prevOrders": 3}, {"name": "烟台蓬莱阁店", "orders": 1, "sales": 15.8, "prevOrders": null}], "牡丹江": [{"name": "牡丹江爱民区店", "orders": 4, "sales": 88.82, "prevOrders": 6}], "白城": [{"name": "吉林白城店", "orders": 2, "sales": 55.3, "prevOrders": 2}], "盐城": [{"name": "盐城盐都万达店", "orders": 2, "sales": 68.4, "prevOrders": null}, {"name": "盐城第一人民医院店", "orders": 2, "sales": 46.5, "prevOrders": null}, {"name": "盐城东进路店", "orders": 1, "sales": 26.6, "prevOrders": 1}], "盘锦": [{"name": "盘锦油田店", "orders": 1, "sales": 41.6, "prevOrders": null}], "石家庄": [{"name": "石家庄富泰店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "石家庄开元寺店", "orders": 1, "sales": 33.6, "prevOrders": 1}], "福州": [{"name": "福州五四店", "orders": 2, "sales": 41.4, "prevOrders": 3}], "秦皇岛": [{"name": "秦皇岛万象城店", "orders": 1, "sales": 26.7, "prevOrders": null}, {"name": "秦皇岛人民广场店", "orders": 1, "sales": 18.8, "prevOrders": 1}], "绍兴": [{"name": "绍兴凤林西路店", "orders": 4, "sales": 107.4, "prevOrders": null}, {"name": "嵊州芸景店", "orders": 1, "sales": 17.6, "prevOrders": 1}, {"name": "绍兴东兴路店", "orders": 1, "sales": 17.8, "prevOrders": 2}], "绥化": [{"name": "绥化万达店", "orders": 5, "sales": 178.19, "prevOrders": 1}, {"name": "绥化幸福庄园店", "orders": 2, "sales": 44.5, "prevOrders": 2}, {"name": "绥化安达万达店", "orders": 1, "sales": 14.8, "prevOrders": null}], "舟山": [{"name": "舟山临城店", "orders": 2, "sales": 79.34, "prevOrders": 1}], "芜湖": [{"name": "安徽蚌埠弋江店", "orders": 1, "sales": 30.8, "prevOrders": null}], "苏州": [{"name": "苏州东环店", "orders": 1, "sales": 16.8, "prevOrders": null}], "葫芦岛": [{"name": "葫芦岛昌盛广场店", "orders": 4, "sales": 82.0, "prevOrders": 4}, {"name": "葫芦岛龙港店", "orders": 1, "sales": 27.6, "prevOrders": 1}], "衡阳": [{"name": "湖南衡阳店", "orders": 1, "sales": 26.6, "prevOrders": null}], "西安": [{"name": "西安北大街店", "orders": 3, "sales": 65.3, "prevOrders": null}, {"name": "西安昆明池店", "orders": 1, "sales": 13.9, "prevOrders": null}, {"name": "西安电视塔店", "orders": 1, "sales": 27.5, "prevOrders": 1}], "许昌": [{"name": "许昌曹魏古城店", "orders": 2, "sales": 29.6, "prevOrders": 4}], "赤峰": [{"name": "赤峰安美翰林苑店", "orders": 19, "sales": 418.12, "prevOrders": 11}, {"name": "赤峰宁城店", "orders": 5, "sales": 97.8, "prevOrders": 3}, {"name": "赤峰维多利店", "orders": 1, "sales": 66.0, "prevOrders": null}], "辽阳": [{"name": "抚顺商业城店", "orders": 2, "sales": 52.2, "prevOrders": 1}], "通化": [{"name": "梅河口华阳店", "orders": 1, "sales": 20.6, "prevOrders": 2}], "遵义": [{"name": "遵义新蒲林达店", "orders": 1, "sales": 142.0, "prevOrders": null}], "邢台": [{"name": "邢台澳林店", "orders": 8, "sales": 159.27, "prevOrders": 5}], "邯郸": [{"name": "邯郸新世纪店", "orders": 1, "sales": 35.9, "prevOrders": 2}], "郑州": [{"name": "洛阳洛阳城店", "orders": 6, "sales": 155.89, "prevOrders": null}, {"name": "郑州橡树玫瑰城店", "orders": 2, "sales": 36.14, "prevOrders": 1}, {"name": "郑州二七广场店", "orders": 1, "sales": 63.6, "prevOrders": 3}, {"name": "郑州农业路店", "orders": 1, "sales": 15.8, "prevOrders": 1}, {"name": "郑州北大学城店", "orders": 1, "sales": 9.8, "prevOrders": null}], "鄂州": [{"name": "鄂州长城店", "orders": 1, "sales": 30.6, "prevOrders": null}], "重庆": [{"name": "重庆上清寺店", "orders": 6, "sales": 144.2, "prevOrders": 7}, {"name": "重庆大竹林店", "orders": 1, "sales": 16.7, "prevOrders": null}, {"name": "重庆弹子石店", "orders": 1, "sales": 18.8, "prevOrders": 1}, {"name": "重庆渝北店", "orders": 1, "sales": 18.8, "prevOrders": null}, {"name": "重庆礼嘉店", "orders": 1, "sales": 13.9, "prevOrders": 2}], "金华": [{"name": "义乌浙四店", "orders": 5, "sales": 179.68, "prevOrders": 4}, {"name": "义乌青口店", "orders": 1, "sales": 15.8, "prevOrders": null}, {"name": "江滨北路店", "orders": 1, "sales": 15.8, "prevOrders": null}], "铁岭": [{"name": "铁岭调兵山街店", "orders": 6, "sales": 194.3, "prevOrders": 4}, {"name": "铁岭银州店", "orders": 6, "sales": 135.96, "prevOrders": 2}, {"name": "铁岭新区店", "orders": 2, "sales": 45.1, "prevOrders": 1}], "银川": [{"name": "银川大阅城店", "orders": 3, "sales": 42.4, "prevOrders": null}, {"name": "宁夏银川万达店", "orders": 1, "sales": 15.66, "prevOrders": null}, {"name": "银川悠阅城店", "orders": 1, "sales": 26.6, "prevOrders": null}, {"name": "银川玺云台店", "orders": 1, "sales": 56.1, "prevOrders": 1}], "锦州": [{"name": "锦州南广场店", "orders": 1, "sales": 13.9, "prevOrders": 1}, {"name": "锦州辽西店", "orders": 1, "sales": 53.0, "prevOrders": null}], "镇江": [{"name": "镇江丹阳八佰伴店", "orders": 5, "sales": 146.65, "prevOrders": 3}], "长春": [{"name": "长春德惠住邦城市广场店", "orders": 5, "sales": 288.85, "prevOrders": null}, {"name": "长春天富路店", "orders": 4, "sales": 67.66, "prevOrders": null}, {"name": "长春南部新城店", "orders": 3, "sales": 45.38, "prevOrders": null}, {"name": "长春硅谷大街店", "orders": 3, "sales": 41.26, "prevOrders": 2}, {"name": "长春宽城店", "orders": 2, "sales": 75.0, "prevOrders": null}], "长沙": [{"name": "长沙凯通店", "orders": 3, "sales": 51.68, "prevOrders": null}, {"name": "长沙岳麓山大学城店", "orders": 2, "sales": 29.7, "prevOrders": 1}, {"name": "长沙白沙路店", "orders": 2, "sales": 127.0, "prevOrders": null}, {"name": "长沙梅溪湖店", "orders": 1, "sales": 13.8, "prevOrders": null}, {"name": "长沙河西店", "orders": 1, "sales": 15.8, "prevOrders": 1}], "阜新": [{"name": "阜新西市场店", "orders": 8, "sales": 302.1, "prevOrders": 8}], "阿克苏": [{"name": "阿克苏东湖店", "orders": 3, "sales": 102.13, "prevOrders": 2}], "青岛": [{"name": "青岛市南万象城店", "orders": 3, "sales": 54.92, "prevOrders": 2}, {"name": "青岛高新世贸店", "orders": 3, "sales": 125.7, "prevOrders": null}, {"name": "青岛九水东路店", "orders": 2, "sales": 67.36, "prevOrders": null}, {"name": "青岛市北店", "orders": 2, "sales": 26.92, "prevOrders": 1}, {"name": "青岛东方影都店", "orders": 1, "sales": 8.62, "prevOrders": 1}], "鞍山": [{"name": "鞍山北关店", "orders": 5, "sales": 121.24, "prevOrders": 5}, {"name": "海城西柳店", "orders": 1, "sales": 33.5, "prevOrders": null}], "黄石": [{"name": "黄石万达店", "orders": 1, "sales": 19.01, "prevOrders": null}], "黑河": [{"name": "嫩江墨尔根大街店", "orders": 1, "sales": 35.8, "prevOrders": null}], "黔西南": [{"name": "兴义桔山店", "orders": 3, "sales": 60.0, "prevOrders": null}], "齐齐哈尔": [{"name": "齐齐哈尔工程学院店", "orders": 2, "sales": 100.34, "prevOrders": 3}, {"name": "齐齐哈尔建华万达店", "orders": 2, "sales": 30.4, "prevOrders": 3}], "龙岩": [{"name": "龙岩玖峯台店", "orders": 3, "sales": 50.1, "prevOrders": null}, {"name": "龙岩登高西路店", "orders": 1, "sales": 13.8, "prevOrders": 1}]};
+var CITY_SALES={"东北大区": 79.14, "北部大区": 46.24, "华东大区": 61.83, "华南大区": 64.78, "中西大区": 43.5, "京津大区": 51.4, "上海大区": 57.74};
+var mapChart=null;var mapGeoLoaded=false;var mpSortDim='orders';function toggleSortDim(){mpSortDim=mpSortDim==='orders'?'sales':'orders';var lb=mpSortDim==='orders'?'📦订单':'💰销售';var t1=document.getElementById('mpSortToggle');if(t1)t1.textContent=lb;var t2=document.getElementById('mpSortToggle2');if(t2)t2.textContent=lb;if(window._lastCity)updateMapPanel(window._lastCity);}
+function mapSalesSize(s){return 6+Math.min(s/150,22);}
+function mapSalesColor(){return "#4DAF4A";}
+
+function updateMapPanel(c){
+window._lastCity=c;
+var g=function(id){return document.getElementById(id);};
+var s=function(id,v){var el=g(id);if(el)el.textContent=v;};
+var h=function(id,v){var el=g(id);if(el)el.innerHTML=v;};
+var emptyEl=g("mpEmpty");if(emptyEl)emptyEl.style.display="none";
+var contentEl=g("mpContent");if(contentEl)contentEl.style.display="block";
+s("mpCity",c.c);s("mpRegionLabel",c.r);s("mpRegionTitle","📊 战区销售："+c.r);
+h("mpTemp","<strong>"+c.a+"&deg;C</strong> ("+c.x+"/"+c.n+"&deg;)");
+var we=g("mpWeatherLabel");if(we)we.textContent=c.e+" "+c.l;
+var re=g("mpRain");if(re){re.textContent=c.p.toFixed(1)+"mm";re.style.color=c.p>5?"#74b9ff":"#8aaa8a";}
+s("mpWindHum",c.w.toFixed(1)+"km/h | "+c.h+"%");
+var rs=MAP_REGION_SALES[c.r];
+if(rs){
+s("mpOrders",rs.orders+" 单");
+s("mpSalesVal","¥"+rs.sales.toLocaleString("zh-CN",{minimumFractionDigits:2}));
+s("mpStores",rs.stores+" 家");
+var rd=REGION_DECLINE[c.r];if(rd){s("mpDecline",rd.declined+"家（"+Math.round(rd.declined/rd.total*100)+"%）");}
+var wo=g("mpOrdersWow");if(wo){
+var diffO=rs.orders-rs.prevOrders;
+var pctO=rs.prevOrders?((diffO/rs.prevOrders)*100).toFixed(1):"0";
+if(diffO>0)wo.innerHTML="<span class='wow-cell up'>↑ +"+diffO+"单 (+"+pctO+"%)</span>";
+else if(diffO<0)wo.innerHTML="<span class='wow-cell down'>↓ "+Math.abs(diffO)+"单 ("+pctO+"%)</span>";
+else wo.innerHTML="<span class='wow-cell flat'>➡️ 持平</span>";
+}
+var ws=g("mpSalesWow");if(ws){
+var ratio=rs.prevOrders?rs.orders/rs.prevOrders:1;
+var prevSales=rs.sales/ratio;
+var diffS=rs.sales-prevSales;
+var pctS=prevSales?((diffS/prevSales)*100).toFixed(1):"0";
+if(Math.abs(diffS)>1)ws.innerHTML=diffS>0?"<span class='wow-cell up'>↑ +¥"+Math.abs(diffS).toFixed(0)+" (+"+pctS+"%)</span>":"<span class='wow-cell down'>↓ ¥"+Math.abs(diffS).toFixed(0)+" ("+pctS+"%)</span>";
+else ws.innerHTML="<span class='wow-cell flat'>➡️ 持平</span>";
+}
+}else{s("mpOrders","—");s("mpSalesVal","—");s("mpStores","—");}
+var rStores=(REGION_TOP_STORES[c.r]||[]).slice(0,5);
+var topList=[];
+for(var j=0;j<rStores.length;j++){var s=rStores[j];s.region=c.r;topList.push(s);}
+if(mpSortDim==='orders'){topList.sort(function(a,b){return b.orders-a.orders;});}else{topList.sort(function(a,b){return b.sales-a.sales;});}
+var medals=["🥇","🥈","🥉"];
+var th="";
+topList.forEach(function(s,i){
+var rank=medals[i]||("#"+(i+1));
+var sw="";
+if(mpSortDim==='orders'){
+if(s.prevOrders!=null&&s.prevOrders>0){var sd=s.orders-s.prevOrders;var sp=((sd/s.prevOrders)*100).toFixed(0);sw=sd>0?" <span class='wow-cell up'>↑+"+sd+"单 +"+sp+"%":sd<0?" <span class='wow-cell down'>↓"+Math.abs(sd)+"单 "+sp+"%":" <span class='wow-cell flat'>➡️ 持平";}
+else if(s.prevOrders===0){sw=" <span class='wow-cell up'>↑+"+s.orders+"单 上期0";}
+else{sw=" <span class='wow-cell flat'>上期未开单";}
+th+="<div class=mp-store><span class=mp-rank>"+rank+"</span><span class=mp-sname>"+s.name+"</span><span class=mp-sval>"+s.orders+"单 "+sw+"</span></span></div>";
+}else{
+if(s.prevOrders!=null&&s.prevOrders>0){var r2=s.orders/s.prevOrders;var pv=s.sales/r2;var sd=s.sales-pv;var sp=pv?((sd/pv)*100).toFixed(0):"0";sw=sd>0?" <span class='wow-cell up'>↑+¥"+Math.abs(sd).toFixed(0)+" +"+sp+"%":sd<0?" <span class='wow-cell down'>↓¥"+Math.abs(sd).toFixed(0)+" "+sp+"%":" <span class='wow-cell flat'>➡️ 持平";}
+else if(s.prevOrders===0){sw=" <span class='wow-cell up'>↑+¥"+s.sales.toFixed(0)+" 上期0";}
+else{sw=" <span class='wow-cell flat'>上期未开单";}
+th+="<div class=mp-store><span class=mp-rank>"+rank+"</span><span class=mp-sname>"+s.name+"</span><span class=mp-sval>¥"+s.sales.toFixed(0)+" "+sw+"</span></span></div>";
+}
+});
+var tEl=g("mpTopStores");if(tEl)tEl.innerHTML=th||"<div style=color:#4a6a4a>暂无</div>";
+var allTop=MAP_TOP_STORES.slice();
+if(mpSortDim==='orders'){allTop.sort(function(a,b){return b.orders-a.orders;});}else{allTop.sort(function(a,b){return b.sales-a.sales;});}
+allTop=allTop.slice(0,10);
+var ath="";
+allTop.forEach(function(s,i){
+var rank=medals[i]||("#"+(i+1));
+var nw="";
+if(mpSortDim==='orders'){
+if(s.prevOrders!=null&&s.prevOrders>0){var nd=s.orders-s.prevOrders;var np=((nd/s.prevOrders)*100).toFixed(0);nw=nd>0?" <span class='wow-cell up'>↑+"+nd+"单 +"+np+"%":nd<0?" <span class='wow-cell down'>↓"+Math.abs(nd)+"单 "+np+"%":" <span class='wow-cell flat'>➡️ 持平";}
+else if(s.prevOrders===0){nw=" <span class='wow-cell up'>↑+"+s.orders+"单 上期0";}
+else{nw=" <span class='wow-cell flat'>上期未开单";}
+ath+="<div class=mp-store><span class=mp-rank>"+rank+"</span><span class=mp-sname>"+s.name+"</span><span style=font-size:9px;color:var(--text-dim)>"+s.region+"</span><span class=mp-sval>"+s.orders+"单 "+nw+"</span></span></div>";
+}else{
+if(s.prevOrders!=null&&s.prevOrders>0){var r2=s.orders/s.prevOrders;var pv=s.sales/r2;var nd=s.sales-pv;var np=pv?((nd/pv)*100).toFixed(0):"0";nw=nd>0?" <span class='wow-cell up'>↑+¥"+Math.abs(nd).toFixed(0)+" +"+np+"%":nd<0?" <span class='wow-cell down'>↓¥"+Math.abs(nd).toFixed(0)+" "+np+"%":" <span class='wow-cell flat'>➡️ 持平";}
+else if(s.prevOrders===0){nw=" <span class='wow-cell up'>↑+¥"+s.sales.toFixed(0)+" 上期0";}
+else{nw=" <span class='wow-cell flat'>上期未开单";}
+ath+="<div class=mp-store><span class=mp-rank>"+rank+"</span><span class=mp-sname>"+s.name+"</span><span style=font-size:9px;color:var(--text-dim)>"+s.region+"</span><span class=mp-sval>¥"+s.sales.toFixed(0)+" "+nw+"</span></span></div>";
+}
+});
+var aEl=g("mpAllTopStores");if(aEl)aEl.innerHTML=ath;
+}
+
+function renderMapSeries(){
+if(!mapChart)return;
+var dd=CITIES.map(function(c){
+return{name:c.c,cityData:c,value:[c.lon,c.lat,c.p,c.a,c.e,c.l,c.w,c.h,c.r],symbolSize:mapSalesSize(CITY_SALES[c.r]||200),itemStyle:{color:mapSalesColor(),borderColor:"rgba(255,255,255,0.4)",borderWidth:1.5,shadowBlur:8,shadowColor:"rgba(26,138,59,0.3)"},emphasis:{scale:2.2,itemStyle:{shadowBlur:24,shadowColor:"rgba(77,175,74,0.8)"},label:{show:true,formatter:function(p){return p.data.cityData.c;},position:"top",color:"#FAD203",fontSize:13,fontWeight:"bold"}}};
+});
+mapChart.setOption({backgroundColor:"transparent",tooltip:{show:false},geo:{map:"china",roam:true,zoom:1.2,center:[104.5,36],regions:MAP_REGIONS,label:{show:true,color:"rgba(160,180,160,0.55)",fontSize:9},itemStyle:{borderColor:"#1a3a1a",borderWidth:1},emphasis:{label:{show:true,color:"#FAD203",fontSize:10},itemStyle:{borderColor:"#FAD203",borderWidth:2}}},series:[{type:"scatter",coordinateSystem:"geo",data:dd,zlevel:1,label:{show:false}}]});
+mapChart.off("mouseover");mapChart.off("click");
+mapChart.on("mouseover",function(p){if(p.data&&p.data.cityData){updateMapPanel(p.data.cityData);renderTop5Bar(p.data.cityData.r);}});
+mapChart.on("click",function(p){if(p.data&&p.data.cityData){updateMapPanel(p.data.cityData);renderTop5Bar(p.data.cityData.r);var ac=document.querySelector("#mpContent .mp-card.active");if(ac)ac.classList.remove("active");var sc=document.querySelector("#mpContent .mp-card");if(sc)sc.classList.add("active");}});
+}
+
+function initMap(){
+if(mapChart)return;
+var dom=document.getElementById("mapChart");
+if(!dom||dom.offsetWidth===0){setTimeout(initMap,200);return;}
+if(typeof echarts==="undefined"){setTimeout(initMap,200);return;}
+mapChart=echarts.init(dom);
+if(mapGeoLoaded){renderMapSeries();}
+else{fetch("https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json").then(function(r){return r.json();}).then(function(g){echarts.registerMap("china",g);mapGeoLoaded=true;renderMapSeries();});}
+}
+window.addEventListener("resize",function(){if(mapChart)mapChart.resize();});
+</script>
+
+<script>setTimeout(function(){if(typeof initMap==="function")initMap();if(typeof renderAllCharts==="function")renderAllCharts();},300);
+document.getElementById('regionFilter').addEventListener('click',function(e){if(e.target.classList.contains('region-btn')){var btns=this.querySelectorAll('.region-btn');for(var i=0;i<btns.length;i++)btns[i].classList.remove('active');e.target.classList.add('active');renderTop5Bar(e.target.dataset.region||undefined);}});</script>
+</body>
+</html>
