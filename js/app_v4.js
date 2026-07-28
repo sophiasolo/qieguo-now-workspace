@@ -457,7 +457,9 @@ function loadHistoricalItems(dateKey){
 function renderHistorical(dateKey){
   var y=dateKey.substring(0,4),m=dateKey.substring(4,6),dd=dateKey.substring(6,8);
   document.getElementById('sentimentItemTime').textContent='历史数据 · '+y+'-'+m+'-'+dd;
-  var items=historicalItems;
+  // 过滤已隐藏
+  var hidden=getHidden();
+  var items=historicalItems.filter(function(i){return !hidden[i.date+'||'+i.title];});
   if(historicalFilter==='pos')items=items.filter(function(i){return i.sentiment==='pos'});
   else if(historicalFilter==='neg')items=items.filter(function(i){return i.sentiment==='neg'});
   document.getElementById('sentimentItemCount').textContent=items.length;
@@ -466,14 +468,19 @@ function renderHistorical(dateKey){
   var list=document.getElementById('sentimentItemsList');
   if(items.length===0){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">暂无明细数据</div>';return;}
   var html='';items.forEach(function(item){
+    var key=item.date+'||'+item.title;
     html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start">'+
       '<span style="font-size:16px;flex-shrink:0">📌</span>'+
       '<div style="flex:1;min-width:0"><div style="font-weight:600;color:var(--text)">'+item.title+'</div>'+
       '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
       (item.url?'<a href="'+item.url+'" target="_blank" style="font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none">原帖 ↗</a>':'')+
       '<span onclick="quickStar(this)" data-date="'+item.date+'" data-title="'+item.title.replace(/"/g,'&quot;')+'" data-platform="'+item.platform+'" data-author="'+(item.author||'')+'" data-url="'+(item.url||'')+'" class="star-btn'+(isStarred(item.date,item.title)?' active':'')+'" title="收藏/取消">⭐</span>'+
+      '<span onclick="hideItem(\''+key.replace(/'/g,"\\'")+'\');renderHistorical(\''+dateKey+'\')" style="cursor:pointer;flex-shrink:0;font-size:12px;opacity:0.3" title="隐藏此条">🚫</span>'+
     '</div>';
   });list.innerHTML=html;}
+
+function getHidden(){try{return JSON.parse(localStorage.getItem('qg_hidden')||'{}');}catch(e){return{};}}
+function hideItem(key){var h=getHidden();h[key]=Date.now();localStorage.setItem('qg_hidden',JSON.stringify(h));toast('🚫 已隐藏');}
 
 // ═══════ STAR ═══════
 function getStars(){try{return JSON.parse(localStorage.getItem('qg_stars')||'[]');}catch(e){return[];}}
