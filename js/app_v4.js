@@ -242,6 +242,23 @@ function exportScheduleToExcel(){
   toast('📥 已导出CSV');
 }
 
+function clearScheduleEdits(){
+  if(!confirm('清除当前月份所有手动编辑？将恢复默认排期。'))return;
+  var overrides={};
+  try{overrides=JSON.parse(localStorage.getItem('qg_schedule_overrides')||'{}');}catch(e){}
+  // Get current visible month
+  var btns=document.querySelectorAll('#scheduleMonthNav button');
+  var month=1;
+  btns.forEach(function(b,i){if(b.classList.contains('btn-primary'))month=i+1;});
+  var yr=new Date().getFullYear();
+  var prefix=yr+'-'+String(month).padStart(2,'0')+'-';
+  var cleared=0;
+  for(var k in overrides){if(k.indexOf(prefix)===0){delete overrides[k];cleared++;}}
+  localStorage.setItem('qg_schedule_overrides',JSON.stringify(overrides));
+  renderSchedule();
+  toast('🔄 已清除 '+cleared+' 条编辑，恢复默认');
+}
+
 // ═══════ OVERVIEW INIT ═══════
 function initOverview(){
   updateOverviewSentimentData();
