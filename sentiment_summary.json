@@ -1,262 +1,1068 @@
 {
-  "updated": "20260726",
-  "latest_date": "20260726",
-  "latest_label": "7月26日",
+  "updated": "20260727",
+  "latest_date": "20260727",
+  "latest_label": "7月27日",
   "stats": {
-    "date": "20260726",
-    "label": "7月26日",
-    "total": 23,
-    "pos": 20,
+    "date": "20260727",
+    "label": "7月27日",
+    "total": 58,
+    "pos": 56,
     "neg": 2,
-    "neu": 1,
-    "pos_pct": 87.0,
-    "neg_pct": 8.7,
-    "neu_pct": 4.3,
+    "neu": 0,
+    "pos_pct": 96.6,
+    "neg_pct": 3.4,
+    "neu_pct": 0.0,
     "negatives": [
       {
-        "time": "16:39",
+        "time": "02:05",
         "platform": "抖音",
-        "title": "避雷济宁任城切果NOW！从7月15号到现在都没有解决",
-        "summary": "消费者避雷投诉",
-        "url": "https://www.iesdouyin.com/share/video/7666753468673864626",
-        "category": "消费避雷",
-        "city": "山东-济宁"
+        "title": "切果now我恨你一辈子",
+        "summary": "P4:极端负面情绪-恨你一辈子",
+        "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+        "category": "",
+        "city": ""
       },
       {
-        "time": "12:01",
-        "platform": "小红书",
-        "title": "通辽的切果now为什么黄了",
-        "summary": "门店关闭舆情",
-        "url": "https://www.xiaohongshu.com/discovery/item/6a658691000000000101dcce#ocr",
-        "category": "门店关闭",
-        "city": "内蒙古自治区"
+        "time": "02:05",
+        "platform": "抖音",
+        "title": "切果now我恨你一辈子",
+        "summary": "P4:极端负面情绪-恨你一辈子",
+        "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+        "category": "",
+        "city": ""
       }
     ],
     "today_items": [
       {
-        "platform": "抖音",
-        "title": "干切果6年了，第一次遇到这样的顾客#订单纠纷",
-        "sentiment": "neu",
-        "author": "切果NOW（航天城）老桥",
-        "category": "品牌自营-商家自述纠纷",
-        "url": "https://www.iesdouyin.com/share/video/7666863540317487034#ocr"
-      },
-      {
         "platform": "新浪微博",
-        "title": "真的是连着好几天晚上都在吃西瓜",
+        "title": "在长沙一天的饭量 hjy是猪吗[拜拜][拜拜] ​​",
         "sentiment": "pos",
-        "author": "jucerlincs",
-        "category": "消费者分享日常消费",
-        "url": "https://weibo.com/5380230075/RawbsdeKR#ocr"
+        "author": "Oceanfornow_",
+        "category": "消费者主动分享",
+        "url": "https://weibo.com/7792111422/RaFtKlGzr#ocr"
       },
       {
-        "platform": "抖音",
-        "title": "感谢绥化人民对切果now万达店的热爱",
+        "platform": "快手",
+        "title": "身边朋友都在夸某东外卖，陆续上线超多热门店铺，不管聚餐简餐都合适，坐等我爱吃的小店也早日入驻。 #外卖上新宝藏店铺 #外卖新店推荐 #好吃外卖推荐 #深夜外卖宝",
         "sentiment": "pos",
-        "author": "绥化切果now万达店&三立方咖啡",
-        "category": "品牌门店推广",
-        "url": "https://www.iesdouyin.com/share/video/7666842999126011121#ocr"
+        "author": "丹纸127",
+        "category": "好评-好吃",
+        "url": "https://www.kuaishou.com/short-video/3xev4rps8tthddy#ocr"
       },
       {
-        "platform": "新浪微博",
-        "title": "第一个这么吃的是天才 我真的跪了",
+        "platform": "快手",
+        "title": "五块九抢精品香蕉！切果NOW新鲜直达，香甜软糯超值！ #团购福利官 #精品香蕉 #新鲜直达",
         "sentiment": "pos",
-        "author": "直角肩美少女",
-        "category": "消费者多次回购",
-        "url": "https://weibo.com/7350702513/RavNXdozL#ocr"
-      },
-      {
-        "platform": "新浪微博",
-        "title": "home 13",
-        "sentiment": "pos",
-        "author": "Lishu轩",
-        "category": "消费者分享消费记录",
-        "url": "https://weibo.com/5694384385/RavJcBZH2#ocr"
+        "author": "冰雪女王",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3x5bjrvgq4n6q9m#ocr"
       },
       {
         "platform": "小红书",
-        "title": "食游锦州7+好店分享",
+        "title": "：精美水果礼盒打包",
         "sentiment": "pos",
-        "author": "桐的Art乐园",
-        "category": "美食博主推荐品牌",
-        "url": "https://www.xiaohongshu.com/discovery/item/6a66099a000000000402b0e4#ocr"
+        "author": "切果now（汉中吾悦公馆店）",
+        "category": "品牌自营",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a674157000000001102e1a2"
       },
       {
         "platform": "抖音",
-        "title": "00后护士三甲医院裸辞开果切店第23天",
+        "title": "命若琴弦@小葵花盛开了",
+        "sentiment": "pos",
+        "author": "Mi_n7",
+        "category": "好评-爱",
+        "url": "https://www.iesdouyin.com/share/video/7667166725733704421#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "五块九抢精品香蕉！切果NOW新鲜直达，香甜软糯超值！ #团购福利官 #精品香蕉 #新鲜直达",
+        "sentiment": "pos",
+        "author": "剑鱼影视",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xcww8gsw24q2pm#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "切果NOW精品香蕉，低价尝鲜，香甜软糯超值！#团购福利官 #精品香蕉 #香甜软糯",
+        "sentiment": "pos",
+        "author": "牛约堡团购优惠",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xzqar5cei33cme#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "五块九抢精品香蕉！切果NOW新鲜直达，香甜软糯超值！ #团购福利官 #精品香蕉 #鲜切水果",
+        "sentiment": "pos",
+        "author": "小⑦团购",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xd5hkfn2q2gqgc#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "切果NOW精品香蕉，低价尝鲜，香甜软糯超值！#团购福利官 #精品香蕉 #香甜软糯",
+        "sentiment": "pos",
+        "author": "铸造辉煌",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xbraq793n5g7zc#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "切果NOW精品香蕉，新鲜直达，低价抢鲜！#团购福利官 #精品香蕉 #新鲜直达",
+        "sentiment": "pos",
+        "author": "金色时代化",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xfyz2uk6zdqwh2#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "切果NOW精品香蕉，低价尝鲜，香甜软糯超值！#团购福利官 #精品香蕉 #香甜软糯",
+        "sentiment": "pos",
+        "author": "楠楠优品",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xgkvgieu3y77sa#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "切果NOW精品香蕉，低价抢鲜，甜软香滑超值！#团购福利官 #精品香蕉 #低价抢鲜",
+        "sentiment": "pos",
+        "author": ",芳姐",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3x62rw8cyxnnthk#asr"
+      },
+      {
+        "platform": "快手",
+        "title": "切果NOW精品香蕉，新鲜香甜，低价抢鲜！#团购福利官 #精品香蕉 #低价抢鲜",
+        "sentiment": "pos",
+        "author": "银城团购",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xber6pcezwthsu#ocr"
+      },
+      {
+        "platform": "快手",
+        "title": "切果NOW精品香蕉，超低价抢鲜！ #团购福利官 #精品香蕉",
+        "sentiment": "pos",
+        "author": "分享美食",
+        "category": "团购推广",
+        "url": "https://www.kuaishou.com/short-video/3xazxq3xqvqc7va#asr"
+      },
+      {
+        "platform": "抖音",
+        "title": "00后护士三甲医院裸辞开果切店第24天，吃瓜吃瓜吃瓜甜滴很呐#切果now",
         "sentiment": "pos",
         "author": "切果now（汉中吾悦店）",
-        "category": "品牌门店日常推广",
-        "url": "https://www.iesdouyin.com/share/video/7666805859158692218#ocr"
-      },
-      {
-        "platform": "快手",
-        "title": "五块九抢精品香蕉！切果NOW新鲜直达",
-        "sentiment": "pos",
-        "author": "琳琳团购吃货",
-        "category": "团购达人推广",
-        "url": ""
-      },
-      {
-        "platform": "快手",
-        "title": "切果NOW水果桶新鲜直达低价尝鲜",
-        "sentiment": "pos",
-        "author": "老百姓的福利",
-        "category": "团购达人推广",
-        "url": ""
-      },
-      {
-        "platform": "快手",
-        "title": "切果NOW彩虹酸奶捞低价尝鲜",
-        "sentiment": "pos",
-        "author": "短视频带货",
-        "category": "团购达人推广",
-        "url": ""
-      },
-      {
-        "platform": "快手",
-        "title": "切果NOW精品香蕉新鲜直达低价抢鲜",
-        "sentiment": "pos",
-        "author": "哼哈兄",
-        "category": "团购达人推广",
-        "url": ""
-      },
-      {
-        "platform": "快手",
-        "title": "切果NOW精品香蕉新鲜直达低价抢鲜",
-        "sentiment": "pos",
-        "author": "不忘初心",
-        "category": "团购达人推广",
-        "url": ""
-      },
-      {
-        "platform": "快手",
-        "title": "切果NOW水果桶新鲜直达低价尝鲜",
-        "sentiment": "pos",
-        "author": "暖暖吃喝玩乐",
-        "category": "团购达人推广",
-        "url": ""
+        "category": "品牌自营",
+        "url": "https://www.iesdouyin.com/share/video/7667150456805121714"
       },
       {
         "platform": "抖音",
-        "title": "避雷济宁任城切果NOW！从7月15号到现在都没有解决",
-        "sentiment": "neg",
-        "author": "是我太作了吗",
-        "category": "消费者避雷投诉",
-        "url": "https://www.iesdouyin.com/share/video/7666753468673864626"
+        "title": "懒人福音来的 #爱吃的人先享受世界 #好吃 #切果NOW #果切",
+        "sentiment": "pos",
+        "author": "丸了我又饱了",
+        "category": "好评-好吃",
+        "url": "https://www.iesdouyin.com/share/video/7667145849214775460#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "毛货街|EQNX60S|毛货街清|毛货街清真|毛货街清真古|毛货街清真古丰|毛货街清真古寺|华街清真古寺|真古丰|公|FCFP72|T|91H09V|91H09",
+        "sentiment": "pos",
+        "author": "远飞",
+        "category": "好评-爱",
+        "url": "https://www.iesdouyin.com/share/video/7667145604959563185#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "报恩榴莲来的！ #报恩榴莲 #切果NOW #榴莲",
+        "sentiment": "pos",
+        "author": "小羊妮妮",
+        "category": "好评-好吃",
+        "url": "https://www.iesdouyin.com/share/video/7667145231661408710#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "吃货没错了，榴莲真香 #blankpink演唱会 #榴莲 #切果NOW #真香",
+        "sentiment": "pos",
+        "author": "脆脆枣",
+        "category": "消费者主动分享",
+        "url": "https://www.iesdouyin.com/share/video/7667144736150586623"
+      },
+      {
+        "platform": "抖音",
+        "title": "get同款橙汁 #橙汁#切果NOW",
+        "sentiment": "pos",
+        "author": "三日今天吃什么",
+        "category": "好评-爱",
+        "url": "https://www.iesdouyin.com/share/video/7667143181495273444#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "get同款橙汁 #橙汁 #切果NOW",
+        "sentiment": "pos",
+        "author": "芝士奶罐",
+        "category": "P4:消费者分享食谱",
+        "url": "https://www.iesdouyin.com/share/video/7667142344353725951"
+      },
+      {
+        "platform": "抖音",
+        "title": "同款橙汁，天热喝好爽 #橙汁#切果NOW",
+        "sentiment": "pos",
+        "author": "牛奶秋刀鱼",
+        "category": "消费者主动分享",
+        "url": "https://www.iesdouyin.com/share/video/7667141335015682502#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "水果新鲜的肉眼可见！！切果夏天野餐必备！#水果自由 #自由搭配水果 #夏日水果切盒 #水果切盒搭配 #",
+        "sentiment": "pos",
+        "author": "好运莲子",
+        "category": "好评-新鲜",
+        "url": "https://www.iesdouyin.com/share/video/7667130067905997425#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "长沙16-16免单作业",
+        "sentiment": "pos",
+        "author": "羊羊羊",
+        "category": "消费者主动分享",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a6718ce0000000011004bf2#ocr"
       },
       {
         "platform": "新浪微博",
-        "title": "#丁禹兮超话 压力大的时候怒点五份果切",
+        "title": "和沈阳男人一年一会 可惜没听到我最想听的月和唯我懂你心 但是听到了年轮和新歌首唱 还有最近磕的CP 南京 ​",
         "sentiment": "pos",
-        "author": "今天又吃什么好吃的啦",
-        "category": "粉丝账号品牌消费",
-        "url": "https://weibo.com/6732583722/RarSR6Zng#ocr"
+        "author": "啵赞超甜",
+        "category": "好评-爱",
+        "url": "https://weibo.com/5539103807/RaCBds64g#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "切果NOW｜只做放心现切果 坏果直接丢，绝不卖给顾客#同城果切 #现切新鲜水果 #良心水果店#切果NOW",
+        "sentiment": "pos",
+        "author": "张老板（水果主理人）",
+        "category": "好评-新鲜",
+        "url": "https://www.iesdouyin.com/share/video/7667053395677158376#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "超级好吃的东北老饭盒荤素搭配均衡，口味地道，快速解决单人就餐需求",
+        "sentiment": "pos",
+        "author": "兔子",
+        "category": "好评-好吃",
+        "url": "https://www.iesdouyin.com/share/video/7667105395264998690#ocr"
       },
       {
         "platform": "小红书",
-        "title": "通辽的切果now为什么黄了",
-        "sentiment": "neg",
-        "author": "阿白",
-        "category": "门店关闭舆情",
-        "url": "https://www.xiaohongshu.com/discovery/item/6a658691000000000101dcce#ocr"
+        "title": "夏天水果怎么选？脆桃vs软桃",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "好评-新鲜",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66ffeb000000000100c583#ocr"
       },
       {
         "platform": "小红书",
-        "title": "夏天外卖推荐水果捞1r吃爽了",
+        "title": "周末午餐时光也超甜",
         "sentiment": "pos",
-        "author": "千问小助理",
-        "category": "消费者分享消费记录",
-        "url": ""
+        "author": "老吃家",
+        "category": "好评-推荐",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66fd5d00000000110058ff#ocr"
       },
       {
-        "platform": "腾讯频道-小蜗宇宙®哈工大（威海）频道",
-        "title": "哦对的对的，哦不对不对",
+        "platform": "小红书",
+        "title": "周末二人食首选",
         "sentiment": "pos",
-        "author": "‍❤️‍",
-        "category": "消费者下单分享",
-        "url": ""
+        "author": "老吃家",
+        "category": "好评-推荐",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66fd5c000000001101425c#ocr"
+      },
+      {
+        "platform": "新浪微博",
+        "title": "全世界最喜欢果切和水果夹干噎酸奶 ​",
+        "sentiment": "pos",
+        "author": "海星仁煎饼",
+        "category": "好评-喜欢",
+        "url": "https://weibo.com/7860629187/RaC4oupah#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "夏日午餐必备鲜果搭配指南",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "P4:食品指南-非负面(误判修正)",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66ef0800000000140046e4#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "挑对桃子更营养！水果省钱指南附红包",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "消费者主动分享",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66eef10000000001001d82#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "挑对桃子，吃得健康又省钱！附红包攻略",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "消费者主动分享",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66eee5000000000100da5d#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "切果NOW标准店/小店，线下实体营业数据榜单排名和线下实体陈列形象优秀门店奖励排名（7月20日～7月26日）#水果 #切果NOW #水果自由 #水果店 #推荐",
+        "sentiment": "pos",
+        "author": "切果NOW总部中心",
+        "category": "品牌自营",
+        "url": "https://www.iesdouyin.com/share/video/7667070915897681066#ocr"
+      },
+      {
+        "platform": "今日头条-微头条",
+        "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+        "sentiment": "pos",
+        "author": "果林花木集",
+        "category": "消费者主动分享",
+        "url": "https://www.toutiao.com/w/1871842982414403/#ocr"
       },
       {
         "platform": "快手",
-        "title": "#绥化切果now万达店",
+        "title": "有的时候细节决定一切昨天晚上我说我想吃芒果今天他就把我想吃的芒果榴莲都买回来了有的时候吵吵闹闹可毕竟他是个长不大的小孩 毕竟只是在我这才是小孩因为只有我会宠他 ",
         "sentiment": "pos",
-        "author": "绥化.果切.轻食李丽",
-        "category": "品牌门店日常推广",
-        "url": "https://www.kuaishou.com/short-video/3x6svuuey3egjx6#ocr"
-      },
-      {
-        "platform": "新浪微博",
-        "title": "被神人阴了一整天 安慰自己受伤的心",
-        "sentiment": "pos",
-        "author": "想掐你的脸颊肉",
-        "category": "消费者下单消费记录",
-        "url": "https://weibo.com/7784884682/RaulFqk2C#ocr"
-      },
-      {
-        "platform": "新浪微博",
-        "title": "吃了四五六七顿鸡腿饭好像真的能瘦",
-        "sentiment": "pos",
-        "author": "是乖张张张吖",
-        "category": "日常饮食含品牌消费",
-        "url": "https://weibo.com/7481260589/RatdKcaOa#ocr"
-      },
-      {
-        "platform": "新浪微博",
-        "title": "我竟然22岁了",
-        "sentiment": "pos",
-        "author": "Letsnotfallinlove__",
-        "category": "生日聚会含品牌消费",
-        "url": "https://weibo.com/6453803113/RasCCAJ8O#ocr"
+        "author": "若爱我是宿命.",
+        "category": "消费者主动分享",
+        "url": "https://www.kuaishou.com/short-video/3x5umzqm4ceawve#ocr"
       },
       {
         "platform": "小红书",
-        "title": "六月购物分享",
+        "title": "省钱又上头的青柠渍菠萝复刻成功！",
         "sentiment": "pos",
-        "author": "今天你学习了吗",
-        "category": "消费者购物分享含品牌订单",
-        "url": "https://www.xiaohongshu.com/discovery/item/6a659f490000000001031046#ocr"
+        "author": "淘点啥好吃的",
+        "category": "好评-爱",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66deb90000000004029350#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "解腻神器！青柠渍菠萝复刻成功火",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "好评-新鲜",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66deb900000000010304f8#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "夏天选对水果很重要！脆桃软桃怎么挑？",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "好评-喜欢",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66de2b000000000100fc15#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "桃子怎么选？脆桃软桃大PK",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "好评-好吃",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66de2b000000000f01c989#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "解腻神器！青柠渍菠萝复刻成功啦火",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "P4:食品指南-非负面(误判修正)",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66de1e000000001b01dd62#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "七月水果应季！三餐鲜果搭配指南",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "P4:食品指南-非负面(误判修正)",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66dd2f0000000014005119#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "省钱吃出夏日限定青柠渍菠萝！",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "好评-新鲜",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66dd13000000001101b761#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "适合特定情况的水果搭配指南",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "P4:食品指南-非负面(误判修正)",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66d955000000000f02810f#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "解腻神器！青柠渍菠萝复刻成功啦！",
+        "sentiment": "pos",
+        "author": "淘点啥好吃的",
+        "category": "P4:食品指南-非负面(误判修正)",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a66d94f00000000010022f3#ocr"
+      },
+      {
+        "platform": "快手",
+        "title": "拿命换钱的硬汉",
+        "sentiment": "pos",
+        "author": "二轩建材……轩",
+        "category": "好评-爱",
+        "url": "https://www.kuaishou.com/short-video/3x4idn4e2q9xujc#ocr"
+      },
+      {
+        "platform": "新浪微博",
+        "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+        "sentiment": "pos",
+        "author": "科技科普传播者李典",
+        "category": "消费者主动分享",
+        "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "超级好吃的东北老饭盒地道东北家常菜封装，出餐快捷，上班族午餐好选择",
+        "sentiment": "pos",
+        "author": "兔子",
+        "category": "消费者主动分享",
+        "url": "https://www.iesdouyin.com/share/video/7667038166385282319#ocr"
+      },
+      {
+        "platform": "微信",
+        "title": "别直接点外卖！每天记得领美团&淘宝闪购无门槛券，天天都能省几块！",
+        "sentiment": "pos",
+        "author": "阿券",
+        "category": "消费者主动分享",
+        "url": "http://mp.weixin.qq.com/s?__biz=Mzg3MDE0Mzk2Mg==&mid=2247484030&idx=1&sn=4dc923507ab3aa5c3a0b28ec7b5c4308#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "永康宝龙店切果 now |永康宝龙店切果now |永康宝龙店地果no",
+        "sentiment": "pos",
+        "author": "切果now永康宝龙店",
+        "category": "品牌自营",
+        "url": "https://www.iesdouyin.com/share/video/7667014772022146790#asr"
+      },
+      {
+        "platform": "抖音",
+        "title": "路要自己走 苦要自己吃 钱要自己挣 靠自己永远是最大的底气 奔跑起来",
+        "sentiment": "pos",
+        "author": "努力奋斗",
+        "category": "消费者主动分享",
+        "url": "https://www.iesdouyin.com/share/video/7667011051548514511#ocr"
+      },
+      {
+        "platform": "小红书",
+        "title": "冰箱收纳强迫症福音",
+        "sentiment": "pos",
+        "author": "好物分享杂货铺2wv",
+        "category": "好评-新鲜",
+        "url": "https://www.xiaohongshu.com/discovery/item/6a669f4b0000000001030cf3#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "是谁呀！是谁呀！哈哈！",
+        "sentiment": "pos",
+        "author": "yaoyao",
+        "category": "消费者主动分享",
+        "url": "https://www.iesdouyin.com/share/video/7666987007369182705#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "#众包日常 身体在透支，灵魂在漂泊，这大概就是内耗的常态。",
+        "sentiment": "pos",
+        "author": "A8",
+        "category": "消费者自然分享",
+        "url": "https://www.iesdouyin.com/share/video/7666904786368804442#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "切果now我恨你一辈子",
+        "sentiment": "neg",
+        "author": "我只是来地球散步的",
+        "category": "P4:极端负面情绪-恨你一辈子",
+        "url": "https://www.iesdouyin.com/share/video/7666899320012756150"
+      },
+      {
+        "platform": "快手",
+        "title": "日常",
+        "sentiment": "pos",
+        "author": ".",
+        "category": "消费者自然分享",
+        "url": "https://www.kuaishou.com/short-video/3xw7drsp7j934uc#ocr"
+      },
+      {
+        "platform": "抖音",
+        "title": "切果now我恨你一辈子",
+        "sentiment": "neg",
+        "author": "我只是来地球散步的",
+        "category": "P4:极端负面情绪-恨你一辈子",
+        "url": "https://www.iesdouyin.com/share/video/7666899320012756150"
       }
     ],
     "negative_items": [
       {
-        "time": "16:39",
+        "time": "02:05",
         "platform": "抖音",
-        "title": "避雷济宁任城切果NOW！从7月15号到现在都没有解决",
-        "summary": "消费者避雷投诉",
-        "url": "https://www.iesdouyin.com/share/video/7666753468673864626",
-        "category": "消费避雷",
-        "city": "山东-济宁"
+        "title": "切果now我恨你一辈子",
+        "summary": "P4:极端负面情绪-恨你一辈子",
+        "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+        "category": "",
+        "city": ""
       },
       {
-        "time": "12:01",
-        "platform": "小红书",
-        "title": "通辽的切果now为什么黄了",
-        "summary": "门店关闭舆情",
-        "url": "https://www.xiaohongshu.com/discovery/item/6a658691000000000101dcce#ocr",
-        "category": "门店关闭",
-        "city": "内蒙古自治区"
+        "time": "02:05",
+        "platform": "抖音",
+        "title": "切果now我恨你一辈子",
+        "summary": "P4:极端负面情绪-恨你一辈子",
+        "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+        "category": "",
+        "city": ""
       }
     ],
     "platforms": {
-      "抖音": 4,
-      "新浪微博": 7,
-      "小红书": 4,
-      "快手": 7,
-      "腾讯频道-小蜗宇宙®哈工大（威海）频道": 1
+      "新浪微博": 4,
+      "快手": 14,
+      "小红书": 18,
+      "抖音": 20,
+      "今日头条-微头条": 1,
+      "微信": 1
     }
   },
   "daily_trend": [
     {
+      "date": "20260727",
+      "label": "7月27日",
+      "total": 58,
+      "pos": 56,
+      "neg": 2,
+      "neu": 0,
+      "pos_pct": 96.6,
+      "neg_pct": 3.4,
+      "neu_pct": 0.0,
+      "negatives": [
+        {
+          "time": "02:05",
+          "platform": "抖音",
+          "title": "切果now我恨你一辈子",
+          "summary": "P4:极端负面情绪-恨你一辈子",
+          "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+          "category": "",
+          "city": ""
+        },
+        {
+          "time": "02:05",
+          "platform": "抖音",
+          "title": "切果now我恨你一辈子",
+          "summary": "P4:极端负面情绪-恨你一辈子",
+          "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+          "category": "",
+          "city": ""
+        }
+      ],
+      "today_items": [
+        {
+          "platform": "新浪微博",
+          "title": "在长沙一天的饭量 hjy是猪吗[拜拜][拜拜] ​​",
+          "sentiment": "pos",
+          "author": "Oceanfornow_",
+          "category": "消费者主动分享",
+          "url": "https://weibo.com/7792111422/RaFtKlGzr#ocr"
+        },
+        {
+          "platform": "快手",
+          "title": "身边朋友都在夸某东外卖，陆续上线超多热门店铺，不管聚餐简餐都合适，坐等我爱吃的小店也早日入驻。 #外卖上新宝藏店铺 #外卖新店推荐 #好吃外卖推荐 #深夜外卖宝",
+          "sentiment": "pos",
+          "author": "丹纸127",
+          "category": "好评-好吃",
+          "url": "https://www.kuaishou.com/short-video/3xev4rps8tthddy#ocr"
+        },
+        {
+          "platform": "快手",
+          "title": "五块九抢精品香蕉！切果NOW新鲜直达，香甜软糯超值！ #团购福利官 #精品香蕉 #新鲜直达",
+          "sentiment": "pos",
+          "author": "冰雪女王",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3x5bjrvgq4n6q9m#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "：精美水果礼盒打包",
+          "sentiment": "pos",
+          "author": "切果now（汉中吾悦公馆店）",
+          "category": "品牌自营",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a674157000000001102e1a2"
+        },
+        {
+          "platform": "抖音",
+          "title": "命若琴弦@小葵花盛开了",
+          "sentiment": "pos",
+          "author": "Mi_n7",
+          "category": "好评-爱",
+          "url": "https://www.iesdouyin.com/share/video/7667166725733704421#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "五块九抢精品香蕉！切果NOW新鲜直达，香甜软糯超值！ #团购福利官 #精品香蕉 #新鲜直达",
+          "sentiment": "pos",
+          "author": "剑鱼影视",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xcww8gsw24q2pm#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "切果NOW精品香蕉，低价尝鲜，香甜软糯超值！#团购福利官 #精品香蕉 #香甜软糯",
+          "sentiment": "pos",
+          "author": "牛约堡团购优惠",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xzqar5cei33cme#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "五块九抢精品香蕉！切果NOW新鲜直达，香甜软糯超值！ #团购福利官 #精品香蕉 #鲜切水果",
+          "sentiment": "pos",
+          "author": "小⑦团购",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xd5hkfn2q2gqgc#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "切果NOW精品香蕉，低价尝鲜，香甜软糯超值！#团购福利官 #精品香蕉 #香甜软糯",
+          "sentiment": "pos",
+          "author": "铸造辉煌",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xbraq793n5g7zc#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "切果NOW精品香蕉，新鲜直达，低价抢鲜！#团购福利官 #精品香蕉 #新鲜直达",
+          "sentiment": "pos",
+          "author": "金色时代化",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xfyz2uk6zdqwh2#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "切果NOW精品香蕉，低价尝鲜，香甜软糯超值！#团购福利官 #精品香蕉 #香甜软糯",
+          "sentiment": "pos",
+          "author": "楠楠优品",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xgkvgieu3y77sa#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "切果NOW精品香蕉，低价抢鲜，甜软香滑超值！#团购福利官 #精品香蕉 #低价抢鲜",
+          "sentiment": "pos",
+          "author": ",芳姐",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3x62rw8cyxnnthk#asr"
+        },
+        {
+          "platform": "快手",
+          "title": "切果NOW精品香蕉，新鲜香甜，低价抢鲜！#团购福利官 #精品香蕉 #低价抢鲜",
+          "sentiment": "pos",
+          "author": "银城团购",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xber6pcezwthsu#ocr"
+        },
+        {
+          "platform": "快手",
+          "title": "切果NOW精品香蕉，超低价抢鲜！ #团购福利官 #精品香蕉",
+          "sentiment": "pos",
+          "author": "分享美食",
+          "category": "团购推广",
+          "url": "https://www.kuaishou.com/short-video/3xazxq3xqvqc7va#asr"
+        },
+        {
+          "platform": "抖音",
+          "title": "00后护士三甲医院裸辞开果切店第24天，吃瓜吃瓜吃瓜甜滴很呐#切果now",
+          "sentiment": "pos",
+          "author": "切果now（汉中吾悦店）",
+          "category": "品牌自营",
+          "url": "https://www.iesdouyin.com/share/video/7667150456805121714"
+        },
+        {
+          "platform": "抖音",
+          "title": "懒人福音来的 #爱吃的人先享受世界 #好吃 #切果NOW #果切",
+          "sentiment": "pos",
+          "author": "丸了我又饱了",
+          "category": "好评-好吃",
+          "url": "https://www.iesdouyin.com/share/video/7667145849214775460#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "毛货街|EQNX60S|毛货街清|毛货街清真|毛货街清真古|毛货街清真古丰|毛货街清真古寺|华街清真古寺|真古丰|公|FCFP72|T|91H09V|91H09",
+          "sentiment": "pos",
+          "author": "远飞",
+          "category": "好评-爱",
+          "url": "https://www.iesdouyin.com/share/video/7667145604959563185#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "报恩榴莲来的！ #报恩榴莲 #切果NOW #榴莲",
+          "sentiment": "pos",
+          "author": "小羊妮妮",
+          "category": "好评-好吃",
+          "url": "https://www.iesdouyin.com/share/video/7667145231661408710#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "吃货没错了，榴莲真香 #blankpink演唱会 #榴莲 #切果NOW #真香",
+          "sentiment": "pos",
+          "author": "脆脆枣",
+          "category": "消费者主动分享",
+          "url": "https://www.iesdouyin.com/share/video/7667144736150586623"
+        },
+        {
+          "platform": "抖音",
+          "title": "get同款橙汁 #橙汁#切果NOW",
+          "sentiment": "pos",
+          "author": "三日今天吃什么",
+          "category": "好评-爱",
+          "url": "https://www.iesdouyin.com/share/video/7667143181495273444#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "get同款橙汁 #橙汁 #切果NOW",
+          "sentiment": "pos",
+          "author": "芝士奶罐",
+          "category": "P4:消费者分享食谱",
+          "url": "https://www.iesdouyin.com/share/video/7667142344353725951"
+        },
+        {
+          "platform": "抖音",
+          "title": "同款橙汁，天热喝好爽 #橙汁#切果NOW",
+          "sentiment": "pos",
+          "author": "牛奶秋刀鱼",
+          "category": "消费者主动分享",
+          "url": "https://www.iesdouyin.com/share/video/7667141335015682502#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "水果新鲜的肉眼可见！！切果夏天野餐必备！#水果自由 #自由搭配水果 #夏日水果切盒 #水果切盒搭配 #",
+          "sentiment": "pos",
+          "author": "好运莲子",
+          "category": "好评-新鲜",
+          "url": "https://www.iesdouyin.com/share/video/7667130067905997425#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "长沙16-16免单作业",
+          "sentiment": "pos",
+          "author": "羊羊羊",
+          "category": "消费者主动分享",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a6718ce0000000011004bf2#ocr"
+        },
+        {
+          "platform": "新浪微博",
+          "title": "和沈阳男人一年一会 可惜没听到我最想听的月和唯我懂你心 但是听到了年轮和新歌首唱 还有最近磕的CP 南京 ​",
+          "sentiment": "pos",
+          "author": "啵赞超甜",
+          "category": "好评-爱",
+          "url": "https://weibo.com/5539103807/RaCBds64g#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "切果NOW｜只做放心现切果 坏果直接丢，绝不卖给顾客#同城果切 #现切新鲜水果 #良心水果店#切果NOW",
+          "sentiment": "pos",
+          "author": "张老板（水果主理人）",
+          "category": "好评-新鲜",
+          "url": "https://www.iesdouyin.com/share/video/7667053395677158376#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "超级好吃的东北老饭盒荤素搭配均衡，口味地道，快速解决单人就餐需求",
+          "sentiment": "pos",
+          "author": "兔子",
+          "category": "好评-好吃",
+          "url": "https://www.iesdouyin.com/share/video/7667105395264998690#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "夏天水果怎么选？脆桃vs软桃",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "好评-新鲜",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66ffeb000000000100c583#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "周末午餐时光也超甜",
+          "sentiment": "pos",
+          "author": "老吃家",
+          "category": "好评-推荐",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66fd5d00000000110058ff#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "周末二人食首选",
+          "sentiment": "pos",
+          "author": "老吃家",
+          "category": "好评-推荐",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66fd5c000000001101425c#ocr"
+        },
+        {
+          "platform": "新浪微博",
+          "title": "全世界最喜欢果切和水果夹干噎酸奶 ​",
+          "sentiment": "pos",
+          "author": "海星仁煎饼",
+          "category": "好评-喜欢",
+          "url": "https://weibo.com/7860629187/RaC4oupah#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "夏日午餐必备鲜果搭配指南",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "P4:食品指南-非负面(误判修正)",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66ef0800000000140046e4#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "挑对桃子更营养！水果省钱指南附红包",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "消费者主动分享",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66eef10000000001001d82#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "挑对桃子，吃得健康又省钱！附红包攻略",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "消费者主动分享",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66eee5000000000100da5d#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "切果NOW标准店/小店，线下实体营业数据榜单排名和线下实体陈列形象优秀门店奖励排名（7月20日～7月26日）#水果 #切果NOW #水果自由 #水果店 #推荐",
+          "sentiment": "pos",
+          "author": "切果NOW总部中心",
+          "category": "品牌自营",
+          "url": "https://www.iesdouyin.com/share/video/7667070915897681066#ocr"
+        },
+        {
+          "platform": "今日头条-微头条",
+          "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+          "sentiment": "pos",
+          "author": "果林花木集",
+          "category": "消费者主动分享",
+          "url": "https://www.toutiao.com/w/1871842982414403/#ocr"
+        },
+        {
+          "platform": "快手",
+          "title": "有的时候细节决定一切昨天晚上我说我想吃芒果今天他就把我想吃的芒果榴莲都买回来了有的时候吵吵闹闹可毕竟他是个长不大的小孩 毕竟只是在我这才是小孩因为只有我会宠他 ",
+          "sentiment": "pos",
+          "author": "若爱我是宿命.",
+          "category": "消费者主动分享",
+          "url": "https://www.kuaishou.com/short-video/3x5umzqm4ceawve#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "省钱又上头的青柠渍菠萝复刻成功！",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "好评-爱",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66deb90000000004029350#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "解腻神器！青柠渍菠萝复刻成功火",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "好评-新鲜",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66deb900000000010304f8#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "夏天选对水果很重要！脆桃软桃怎么挑？",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "好评-喜欢",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66de2b000000000100fc15#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "桃子怎么选？脆桃软桃大PK",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "好评-好吃",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66de2b000000000f01c989#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "解腻神器！青柠渍菠萝复刻成功啦火",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "P4:食品指南-非负面(误判修正)",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66de1e000000001b01dd62#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "七月水果应季！三餐鲜果搭配指南",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "P4:食品指南-非负面(误判修正)",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66dd2f0000000014005119#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "省钱吃出夏日限定青柠渍菠萝！",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "好评-新鲜",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66dd13000000001101b761#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "适合特定情况的水果搭配指南",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "P4:食品指南-非负面(误判修正)",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66d955000000000f02810f#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "解腻神器！青柠渍菠萝复刻成功啦！",
+          "sentiment": "pos",
+          "author": "淘点啥好吃的",
+          "category": "P4:食品指南-非负面(误判修正)",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a66d94f00000000010022f3#ocr"
+        },
+        {
+          "platform": "快手",
+          "title": "拿命换钱的硬汉",
+          "sentiment": "pos",
+          "author": "二轩建材……轩",
+          "category": "好评-爱",
+          "url": "https://www.kuaishou.com/short-video/3x4idn4e2q9xujc#ocr"
+        },
+        {
+          "platform": "新浪微博",
+          "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+          "sentiment": "pos",
+          "author": "科技科普传播者李典",
+          "category": "消费者主动分享",
+          "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "超级好吃的东北老饭盒地道东北家常菜封装，出餐快捷，上班族午餐好选择",
+          "sentiment": "pos",
+          "author": "兔子",
+          "category": "消费者主动分享",
+          "url": "https://www.iesdouyin.com/share/video/7667038166385282319#ocr"
+        },
+        {
+          "platform": "微信",
+          "title": "别直接点外卖！每天记得领美团&淘宝闪购无门槛券，天天都能省几块！",
+          "sentiment": "pos",
+          "author": "阿券",
+          "category": "消费者主动分享",
+          "url": "http://mp.weixin.qq.com/s?__biz=Mzg3MDE0Mzk2Mg==&mid=2247484030&idx=1&sn=4dc923507ab3aa5c3a0b28ec7b5c4308#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "永康宝龙店切果 now |永康宝龙店切果now |永康宝龙店地果no",
+          "sentiment": "pos",
+          "author": "切果now永康宝龙店",
+          "category": "品牌自营",
+          "url": "https://www.iesdouyin.com/share/video/7667014772022146790#asr"
+        },
+        {
+          "platform": "抖音",
+          "title": "路要自己走 苦要自己吃 钱要自己挣 靠自己永远是最大的底气 奔跑起来",
+          "sentiment": "pos",
+          "author": "努力奋斗",
+          "category": "消费者主动分享",
+          "url": "https://www.iesdouyin.com/share/video/7667011051548514511#ocr"
+        },
+        {
+          "platform": "小红书",
+          "title": "冰箱收纳强迫症福音",
+          "sentiment": "pos",
+          "author": "好物分享杂货铺2wv",
+          "category": "好评-新鲜",
+          "url": "https://www.xiaohongshu.com/discovery/item/6a669f4b0000000001030cf3#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "是谁呀！是谁呀！哈哈！",
+          "sentiment": "pos",
+          "author": "yaoyao",
+          "category": "消费者主动分享",
+          "url": "https://www.iesdouyin.com/share/video/7666987007369182705#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "#众包日常 身体在透支，灵魂在漂泊，这大概就是内耗的常态。",
+          "sentiment": "pos",
+          "author": "A8",
+          "category": "消费者自然分享",
+          "url": "https://www.iesdouyin.com/share/video/7666904786368804442#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "切果now我恨你一辈子",
+          "sentiment": "neg",
+          "author": "我只是来地球散步的",
+          "category": "P4:极端负面情绪-恨你一辈子",
+          "url": "https://www.iesdouyin.com/share/video/7666899320012756150"
+        },
+        {
+          "platform": "快手",
+          "title": "日常",
+          "sentiment": "pos",
+          "author": ".",
+          "category": "消费者自然分享",
+          "url": "https://www.kuaishou.com/short-video/3xw7drsp7j934uc#ocr"
+        },
+        {
+          "platform": "抖音",
+          "title": "切果now我恨你一辈子",
+          "sentiment": "neg",
+          "author": "我只是来地球散步的",
+          "category": "P4:极端负面情绪-恨你一辈子",
+          "url": "https://www.iesdouyin.com/share/video/7666899320012756150"
+        }
+      ],
+      "negative_items": [
+        {
+          "time": "02:05",
+          "platform": "抖音",
+          "title": "切果now我恨你一辈子",
+          "summary": "P4:极端负面情绪-恨你一辈子",
+          "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+          "category": "",
+          "city": ""
+        },
+        {
+          "time": "02:05",
+          "platform": "抖音",
+          "title": "切果now我恨你一辈子",
+          "summary": "P4:极端负面情绪-恨你一辈子",
+          "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+          "category": "",
+          "city": ""
+        }
+      ],
+      "platforms": {
+        "新浪微博": 4,
+        "快手": 14,
+        "小红书": 18,
+        "抖音": 20,
+        "今日头条-微头条": 1,
+        "微信": 1
+      }
+    },
+    {
       "date": "20260726",
       "label": "7月26日",
-      "total": 23,
-      "pos": 20,
+      "total": 10,
+      "pos": 7,
       "neg": 2,
       "neu": 1,
-      "pos_pct": 87.0,
-      "neg_pct": 8.7,
-      "neu_pct": 4.3,
+      "pos_pct": 70.0,
+      "neg_pct": 20.0,
+      "neu_pct": 10.0,
       "negatives": [
         {
           "time": "16:39",
@@ -287,44 +1093,12 @@
           "url": "https://www.iesdouyin.com/share/video/7666863540317487034#ocr"
         },
         {
-          "platform": "新浪微博",
-          "title": "真的是连着好几天晚上都在吃西瓜",
-          "sentiment": "pos",
-          "author": "jucerlincs",
-          "category": "消费者分享日常消费",
-          "url": "https://weibo.com/5380230075/RawbsdeKR#ocr"
-        },
-        {
           "platform": "抖音",
           "title": "感谢绥化人民对切果now万达店的热爱",
           "sentiment": "pos",
           "author": "绥化切果now万达店&三立方咖啡",
           "category": "品牌门店推广",
           "url": "https://www.iesdouyin.com/share/video/7666842999126011121#ocr"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "第一个这么吃的是天才 我真的跪了",
-          "sentiment": "pos",
-          "author": "直角肩美少女",
-          "category": "消费者多次回购",
-          "url": "https://weibo.com/7350702513/RavNXdozL#ocr"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "home 13",
-          "sentiment": "pos",
-          "author": "Lishu轩",
-          "category": "消费者分享消费记录",
-          "url": "https://weibo.com/5694384385/RavJcBZH2#ocr"
-        },
-        {
-          "platform": "小红书",
-          "title": "食游锦州7+好店分享",
-          "sentiment": "pos",
-          "author": "桐的Art乐园",
-          "category": "美食博主推荐品牌",
-          "url": "https://www.xiaohongshu.com/discovery/item/6a66099a000000000402b0e4#ocr"
         },
         {
           "platform": "抖音",
@@ -367,36 +1141,12 @@
           "url": ""
         },
         {
-          "platform": "快手",
-          "title": "切果NOW精品香蕉新鲜直达低价抢鲜",
-          "sentiment": "pos",
-          "author": "不忘初心",
-          "category": "团购达人推广",
-          "url": ""
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW水果桶新鲜直达低价尝鲜",
-          "sentiment": "pos",
-          "author": "暖暖吃喝玩乐",
-          "category": "团购达人推广",
-          "url": ""
-        },
-        {
           "platform": "抖音",
           "title": "避雷济宁任城切果NOW！从7月15号到现在都没有解决",
           "sentiment": "neg",
           "author": "是我太作了吗",
           "category": "消费者避雷投诉",
           "url": "https://www.iesdouyin.com/share/video/7666753468673864626"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "#丁禹兮超话 压力大的时候怒点五份果切",
-          "sentiment": "pos",
-          "author": "今天又吃什么好吃的啦",
-          "category": "粉丝账号品牌消费",
-          "url": "https://weibo.com/6732583722/RarSR6Zng#ocr"
         },
         {
           "platform": "小红书",
@@ -407,60 +1157,12 @@
           "url": "https://www.xiaohongshu.com/discovery/item/6a658691000000000101dcce#ocr"
         },
         {
-          "platform": "小红书",
-          "title": "夏天外卖推荐水果捞1r吃爽了",
-          "sentiment": "pos",
-          "author": "千问小助理",
-          "category": "消费者分享消费记录",
-          "url": ""
-        },
-        {
-          "platform": "腾讯频道-小蜗宇宙®哈工大（威海）频道",
-          "title": "哦对的对的，哦不对不对",
-          "sentiment": "pos",
-          "author": "‍❤️‍",
-          "category": "消费者下单分享",
-          "url": ""
-        },
-        {
           "platform": "快手",
           "title": "#绥化切果now万达店",
           "sentiment": "pos",
           "author": "绥化.果切.轻食李丽",
           "category": "品牌门店日常推广",
           "url": "https://www.kuaishou.com/short-video/3x6svuuey3egjx6#ocr"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "被神人阴了一整天 安慰自己受伤的心",
-          "sentiment": "pos",
-          "author": "想掐你的脸颊肉",
-          "category": "消费者下单消费记录",
-          "url": "https://weibo.com/7784884682/RaulFqk2C#ocr"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "吃了四五六七顿鸡腿饭好像真的能瘦",
-          "sentiment": "pos",
-          "author": "是乖张张张吖",
-          "category": "日常饮食含品牌消费",
-          "url": "https://weibo.com/7481260589/RatdKcaOa#ocr"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "我竟然22岁了",
-          "sentiment": "pos",
-          "author": "Letsnotfallinlove__",
-          "category": "生日聚会含品牌消费",
-          "url": "https://weibo.com/6453803113/RasCCAJ8O#ocr"
-        },
-        {
-          "platform": "小红书",
-          "title": "六月购物分享",
-          "sentiment": "pos",
-          "author": "今天你学习了吗",
-          "category": "消费者购物分享含品牌订单",
-          "url": "https://www.xiaohongshu.com/discovery/item/6a659f490000000001031046#ocr"
         }
       ],
       "negative_items": [
@@ -485,48 +1187,22 @@
       ],
       "platforms": {
         "抖音": 4,
-        "新浪微博": 7,
-        "小红书": 4,
-        "快手": 7,
-        "腾讯频道-小蜗宇宙®哈工大（威海）频道": 1
+        "快手": 5,
+        "小红书": 1
       }
     },
     {
       "date": "20260725",
       "label": "7月25日",
-      "total": 32,
-      "pos": 30,
+      "total": 18,
+      "pos": 15,
       "neg": 0,
-      "neu": 2,
-      "pos_pct": 93.8,
+      "neu": 3,
+      "pos_pct": 83.3,
       "neg_pct": 0.0,
-      "neu_pct": 6.2,
+      "neu_pct": 16.7,
       "negatives": [],
       "today_items": [
-        {
-          "platform": "快手",
-          "title": "一个人工作 租房 吃饭 与其说成孤独 不如说浪漫点 我完全自由. #日常生活记录",
-          "sentiment": "pos",
-          "author": "♀️",
-          "category": "消费者自然分享-场景信号",
-          "url": "https://www.kuaishou.com/short-video/3xtmavhh2trb2i2#ocr"
-        },
-        {
-          "platform": "快手",
-          "title": "算了你骂吧 我要过你那种生活 也会对这个世界充满怨言",
-          "sentiment": "pos",
-          "author": "小阳萌集",
-          "category": "消费者好评/推荐-\"好吃\"",
-          "url": "https://www.kuaishou.com/short-video/3xtep44zhbt7wgw#ocr"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "[awsl] ​",
-          "sentiment": "pos",
-          "author": "晕晕iCity",
-          "category": "消费者好评/推荐-\"爱\"",
-          "url": "https://weibo.com/6816169257/RamHktYEo#ocr"
-        },
         {
           "platform": "快手",
           "title": "十九块九吃遍鲜果桶，切果NOW爽到飞起！ #团购福利官 #鲜果桶 #现切水果",
@@ -569,14 +1245,6 @@
         },
         {
           "platform": "快手",
-          "title": "我终于鼓起勇气 说了我爱你这个秘密 @活着不玩不如死",
-          "sentiment": "pos",
-          "author": "Tear",
-          "category": "消费者好评/推荐-\"爱\"",
-          "url": "https://www.kuaishou.com/short-video/3x5tftgwwmcaekm#ocr"
-        },
-        {
-          "platform": "快手",
           "title": "五块九抢精品香蕉！切果NOW现切现卖，香甜软糯超值！ #团购福利官 #精品香蕉 #现切水果",
           "sentiment": "pos",
           "author": "小麻雀（☆_☆）",
@@ -593,14 +1261,6 @@
         },
         {
           "platform": "抖音",
-          "title": "#年轻人的机车梦想 #机车爱好者日常 最新拿下23年奥古斯塔mv800，一万多公里。当年落地十几万，现在仅需四个多[勾引]无事故无出险#奥古斯塔mv800 #杜",
-          "sentiment": "pos",
-          "author": "杭城机车部落",
-          "category": "消费者好评/推荐-\"爱\"",
-          "url": "https://www.iesdouyin.com/share/video/7666395024523800763#ocr"
-        },
-        {
-          "platform": "抖音",
           "title": "切果now的选品是真不错，西瓜特别好吃",
           "sentiment": "pos",
           "author": "小甜胖",
@@ -610,23 +1270,15 @@
         {
           "platform": "抖音",
           "title": "桦甸【切果NOW】招人啦！ ✅工作内容： 水果清洗、削皮切块、打包装，日常店内清洁、食材整理盘点。 ✅任职要求： 做事细心，讲究卫生，手脚勤快；年龄不限，有无经",
-          "sentiment": "pos",
+          "sentiment": "neu",
           "author": "一念成诗",
           "category": "消费者自然分享-场景信号",
           "url": "https://www.iesdouyin.com/share/video/7666391839331628870"
         },
         {
           "platform": "抖音",
-          "title": "和顾客真实聊天记录招聘助教。#私影助教 #私影推荐 #招聘助教",
-          "sentiment": "pos",
-          "author": "觅兔·空间花园官方号",
-          "category": "消费者好评/推荐-\"推荐\"",
-          "url": "https://www.iesdouyin.com/share/video/7666390201837001551#ocr"
-        },
-        {
-          "platform": "抖音",
           "title": "桦甸切果now  ✅工作内容： 水果清洗、削皮切块、打包装盒；前台接单",
-          "sentiment": "pos",
+          "sentiment": "neu",
           "author": "切果now（新华街店）",
           "category": "品牌自营账号推广",
           "url": "https://www.iesdouyin.com/share/video/7666387984417569145#ocr"
@@ -638,14 +1290,6 @@
           "author": "切果NOW（康宁街店）",
           "category": "品牌自营账号推广",
           "url": "https://www.iesdouyin.com/share/video/7666381054471117497#ocr"
-        },
-        {
-          "platform": "小红书",
-          "title": "在不知名的角落，默默陪一杯，哈哈哈哈#植时",
-          "sentiment": "pos",
-          "author": "默墨漠寞",
-          "category": "消费者生活分享-含切果NOW饮品",
-          "url": "https://www.xiaohongshu.com/discovery/item/6a6464900000000011006b81#ocr"
         },
         {
           "platform": "抖音",
@@ -665,59 +1309,11 @@
         },
         {
           "platform": "抖音",
-          "title": "#上班补充能量 我躺家里躺平的话，还不用花钱哄自己上班！是不是这个道理嘛❓",
-          "sentiment": "pos",
-          "author": "宝福禄❤️",
-          "category": "消费者购买分享-切果NOW水果",
-          "url": "https://www.iesdouyin.com/share/video/7666354923915869797#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "No Title",
-          "sentiment": "pos",
-          "author": "李小东",
-          "category": "消费者外卖订单-切果NOW冰镇鲜奶",
-          "url": "https://www.iesdouyin.com/share/video/7665997695769765097####7666343458013496113#ocr"
-        },
-        {
-          "platform": "抖音",
           "title": "此刻我的青春20/h 待会儿又要去切西瓜了",
-          "sentiment": "neu",
+          "sentiment": "pos",
           "author": "都柏林",
           "category": "品牌提及-消费者关联待确认",
           "url": "https://www.iesdouyin.com/share/video/7666340835735243451#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "手绘涂鸦（速成版）整起 #果汁 #水果 #涂鸦 #高能量 #夏日必备",
-          "sentiment": "pos",
-          "author": "美式爱发呆",
-          "category": "消费者好评/推荐-\"喜欢\"",
-          "url": "https://www.iesdouyin.com/share/video/7666339358173105444#ocr"
-        },
-        {
-          "platform": "百度百家-文章",
-          "title": "听劝！不要轻易去青岛，体验超棒，但戒断反应太折磨人！",
-          "sentiment": "pos",
-          "author": "勇敢的亮光",
-          "category": "消费者好评/推荐-\"喜欢\"",
-          "url": "https://mbd.baidu.com/newspage/data/landingshare?nid=news_10182908249569885971#ocr"
-        },
-        {
-          "platform": "有驾",
-          "title": "听劝！不要轻易去青岛，体验超棒，但戒断反应太折磨人！",
-          "sentiment": "pos",
-          "author": "勇敢的亮光",
-          "category": "消费者好评/推荐-\"喜欢\"",
-          "url": "https://yoojia.baidu.com/app/tuwen/index?nid=10182908249569885971#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "夏日灵魂标配：冰镇鲜榨果汁吃瓜 告别工业糖浆，只喝原汁原味 一口下去，燥热瞬间消散 多款果汁可选，减脂期也能放心喝 #",
-          "sentiment": "pos",
-          "author": "切果·小能手",
-          "category": "品牌自营账号推广",
-          "url": "https://www.iesdouyin.com/share/video/7666328443881757574"
         },
         {
           "platform": "新浪微博",
@@ -726,14 +1322,6 @@
           "author": "切果NOW丨果切",
           "category": "品牌自营账号推广",
           "url": "https://weibo.com/7018578909/Raim01xzL#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "#婴儿车里的小可爱 我宝贝一百天了。",
-          "sentiment": "pos",
-          "author": "汪海英",
-          "category": "消费者好评/推荐-\"爱\"",
-          "url": "https://www.iesdouyin.com/share/video/7666265841886228678#asr"
         },
         {
           "platform": "新浪微博",
@@ -762,25 +1350,32 @@
       ],
       "negative_items": [],
       "platforms": {
-        "快手": 6,
-        "新浪微博": 4,
-        "抖音": 18,
-        "小红书": 2,
-        "百度百家-文章": 1,
-        "有驾": 1
+        "快手": 3,
+        "抖音": 11,
+        "新浪微博": 3,
+        "小红书": 1
       }
     },
     {
       "date": "20260724",
       "label": "7月24日",
-      "total": 45,
-      "pos": 38,
-      "neg": 2,
+      "total": 43,
+      "pos": 35,
+      "neg": 3,
       "neu": 5,
-      "pos_pct": 84.4,
-      "neg_pct": 4.4,
-      "neu_pct": 11.1,
+      "pos_pct": 81.4,
+      "neg_pct": 7.0,
+      "neu_pct": 11.6,
       "negatives": [
+        {
+          "time": "23:13",
+          "platform": "抖音",
+          "title": "买榴莲还是自己去店里挑吧，大周末的真晦气，这就是#黑河#切果now家的",
+          "summary": "消费者自然分享-场景信号",
+          "url": "https://www.iesdouyin.com/share/video/7666112896020007290",
+          "category": "出品品质投诉",
+          "city": ""
+        },
         {
           "time": "21:34",
           "platform": "新浪微博",
@@ -812,7 +1407,7 @@
         {
           "platform": "抖音",
           "title": "买榴莲还是自己去店里挑吧，大周末的真晦气，这就是#黑河#切果now家的",
-          "sentiment": "pos",
+          "sentiment": "neg",
           "author": "冰冷的小小猫",
           "category": "消费者自然分享-场景信号",
           "url": "https://www.iesdouyin.com/share/video/7666112896020007290"
@@ -1099,14 +1694,6 @@
         },
         {
           "platform": "抖音",
-          "title": "多了一个身份 饮品师#咖啡馆打卡日常 #vlog十亿流量扶持计划 #上班日常 #新梦想流行舞馆 #生活碎片分享",
-          "sentiment": "pos",
-          "author": "在舞室养老的帅航.",
-          "category": "消费者好评/推荐-\"爱\"",
-          "url": "https://www.iesdouyin.com/share/video/7665954004433673705#asr"
-        },
-        {
-          "platform": "抖音",
           "title": "切果now万达店缺个晚班啊#",
           "sentiment": "pos",
           "author": "绥化切果now万达店&三立方咖啡",
@@ -1138,14 +1725,6 @@
           "url": "https://finance.sina.cn/2026-07-24/detail-iniiwvke4407927.d.html#ocr"
         },
         {
-          "platform": "抖音",
-          "title": "董立兵鸭头搞活动了#济南美食 #美食没有天花板 #鸭头#开业福利 #鸭头",
-          "sentiment": "pos",
-          "author": "董立兵烤鸭(玉函小吃店)",
-          "category": "消费者好评/推荐-\"爱\"",
-          "url": "https://www.iesdouyin.com/share/video/7665924828764074405#asr"
-        },
-        {
           "platform": "小红书",
           "title": "果切、切果NOW",
           "sentiment": "neu",
@@ -1163,6 +1742,15 @@
         }
       ],
       "negative_items": [
+        {
+          "time": "23:13",
+          "platform": "抖音",
+          "title": "买榴莲还是自己去店里挑吧，大周末的真晦气，这就是#黑河#切果now家的",
+          "summary": "消费者自然分享-场景信号",
+          "url": "https://www.iesdouyin.com/share/video/7666112896020007290",
+          "category": "出品品质投诉",
+          "city": ""
+        },
         {
           "time": "21:34",
           "platform": "新浪微博",
@@ -1184,7 +1772,7 @@
       ],
       "platforms": {
         "快手": 20,
-        "抖音": 11,
+        "抖音": 9,
         "小红书": 4,
         "新浪微博": 3,
         "美篇": 1,
@@ -2024,243 +2612,6 @@
         "小红书": 5,
         "快手": 17,
         "今日头条": 1
-      }
-    },
-    {
-      "date": "20260720",
-      "label": "7月20日",
-      "total": 22,
-      "pos": 14,
-      "neg": 2,
-      "neu": 6,
-      "pos_pct": 63.6,
-      "neg_pct": 9.1,
-      "neu_pct": 27.3,
-      "negatives": [
-        {
-          "time": "10:18",
-          "platform": "抖音",
-          "title": "tb闪购商家666，这样的店还能给继续开 晚上点了份水果，刚拿到还没开就发现是烂果，商家说熟透了，西瓜和图片严重不符，直接放了三个整块，我找商家，神人直接开怼，",
-          "summary": "食品安全-异物(虫)",
-          "url": "https://www.iesdouyin.com/share/video/7664428811681618874#ocr",
-          "category": "食品安全-异物(虫)",
-          "city": "山东-烟台"
-        },
-        {
-          "time": "03:32",
-          "platform": "黑猫投诉",
-          "title": "切果NOW！（金沙滩店）食物中发现虫子，并且严重辱骂消费者",
-          "summary": "食品安全-异物(虫)",
-          "url": "https://tousu.sina.com.cn/complaint/view/17399961736/?sld=cc34b85ecd4da4430639bb50cc5b1c15",
-          "category": "食品安全-异物(虫)",
-          "city": "山东-烟台"
-        }
-      ],
-      "today_items": [
-        {
-          "platform": "小红书",
-          "title": "品牌连锁切果NOW纯外卖店整体出兑 无堂食，轻运营，只做美团、饿了么，京东，不用接待到店客人，省心省力。 店铺优势： 1. 切果NOW成熟品牌自带流量，平台活动",
-          "sentiment": "neu",
-          "author": "李迪",
-          "category": "店铺转让/出兑",
-          "url": "https://www.xiaohongshu.com/discovery/item/6a5e3fb8000000000101c6b4#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "旺铺转让。有诚私信",
-          "sentiment": "neu",
-          "author": "切果NOW（只用鲜果现切）",
-          "category": "店铺转让/出兑",
-          "url": "https://www.iesdouyin.com/share/video/7664630407636777893#ocr"
-        },
-        {
-          "platform": "小红书",
-          "title": "切果now转让",
-          "sentiment": "neu",
-          "author": "一叶子枫",
-          "category": "店铺转让/出兑",
-          "url": "https://www.xiaohongshu.com/discovery/item/6a5e392700000000010010fe#ocr"
-        },
-        {
-          "platform": "小红书",
-          "title": "厦门外卖避雷",
-          "sentiment": "neu",
-          "author": "",
-          "category": "骑手与顾客纠纷-非品牌产品问题",
-          "url": "https://www.xiaohongshu.com/discovery/item/6a5e31a5000000000f02a74e#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "今天偷个懒，发发美美的果切#切果now #现切水果 #新店开业 #本地下午茶#创作者扶持计划",
-          "sentiment": "pos",
-          "author": "切果now（汉中吾悦店）",
-          "category": "品牌自营推广",
-          "url": "https://www.iesdouyin.com/share/video/7664596764146187762#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "超好吃推荐。#青岛#青岛旅游#青岛好吃的特色美食",
-          "sentiment": "pos",
-          "author": "快乐小狗",
-          "category": "消费者推荐-旅游美食",
-          "url": "https://www.iesdouyin.com/share/video/7664590295984827250#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "#切果now #水果 #外卖 #水果人的日常 ，干这么久来个大单一脸懵逼，还以为谁搞恶作剧，刀都切冒烟",
-          "sentiment": "neu",
-          "author": "半江渔火.",
-          "category": "品牌提及-无明确评价",
-          "url": "https://www.iesdouyin.com/share/video/7664569241991486066"
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW！10元代金券，低价尝鲜超划算！#同城好商家 #切果NOW #代金券",
-          "sentiment": "pos",
-          "author": "思源宝藏严选",
-          "category": "团购达人推荐",
-          "url": "https://www.kuaishou.com/short-video/3x5g2fzpqu6jbsa#asr"
-        },
-        {
-          "platform": "抖音",
-          "title": "#新鲜水果现切现做吃瓜 #新鲜看得见的水果 #每日新鲜水果现切现拌",
-          "sentiment": "neu",
-          "author": "杨老保险",
-          "category": "店铺转让/出兑",
-          "url": "https://www.iesdouyin.com/share/video/7664552923820673526#ocr"
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW精品香蕉，低价尝鲜，香甜软糯超值！#团购福利官 #香蕉 #精品水果",
-          "sentiment": "pos",
-          "author": "丽姐",
-          "category": "消费者好评-超值",
-          "url": "https://www.kuaishou.com/short-video/3xzfgi73pb9x6hu#asr"
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW精品香蕉，低价抢鲜，甜软香滑超值！#团购福利官 #精品香蕉 #甜软香滑",
-          "sentiment": "pos",
-          "author": "花荔吃喝玩乐",
-          "category": "消费者好评-超值",
-          "url": "https://www.kuaishou.com/short-video/3xu263jmgx2wuq9#asr"
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW精品香蕉，低价抢鲜，甜软香糯超值！#团购福利官 #精品香蕉 #甜软香糯",
-          "sentiment": "pos",
-          "author": "哈哈哥",
-          "category": "消费者好评-超值",
-          "url": "https://www.kuaishou.com/short-video/3x2b7qk8ewskyvk#asr"
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW精品香蕉，低价抢鲜，香甜软糯超值！#团购福利官 #精品香蕉 #香甜软糯",
-          "sentiment": "pos",
-          "author": "杰子爱生活",
-          "category": "消费者好评-超值",
-          "url": "https://www.kuaishou.com/short-video/3xcabtde23fajby#asr"
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW精品香蕉，低价抢鲜，甜软香滑一口沦陷！#团购福利官 #香蕉 #精品水果",
-          "sentiment": "pos",
-          "author": "竹林听雨",
-          "category": "团购达人推荐",
-          "url": "https://www.kuaishou.com/short-video/3xuq5cmq6t8d5iq#asr"
-        },
-        {
-          "platform": "快手",
-          "title": "切果NOW精品香蕉，超值低价，香甜软糯一口上瘾！#团购福利官 #香蕉 #精品水果",
-          "sentiment": "pos",
-          "author": "大众点评精选商家",
-          "category": "消费者好评-超值",
-          "url": "https://www.kuaishou.com/short-video/3xqyh922qve2uac#asr"
-        },
-        {
-          "platform": "微信视频号",
-          "title": "#西瓜",
-          "sentiment": "pos",
-          "author": "切果now金堂店",
-          "category": "品牌自营推广",
-          "url": "https://channels.weixin.qq.com/web/pages/feed?eid=export/UzFfBgAAxMuCbHFhQA-6jMzT4DCLr6ASGyrVrTHdOahfpqoUlA#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "这个是零售标准店和小店型线下数据排名前十，以及上周陈列区优秀门店的奖励排名#切果NOW #切果乐 #水果 #复购率才是选品硬指标",
-          "sentiment": "pos",
-          "author": "切果NOW总部中心",
-          "category": "品牌自营推广",
-          "url": "https://www.iesdouyin.com/share/video/7664515556455966884#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "快 | 现点鲜切，快速送达 乐 | 独乐开心，众乐开怀 好 | 上好水果，美好滋味吃瓜  简单 想吃水果？ 我们采，我们挑，我们选，我们洗， 我们切，我们拼，我",
-          "sentiment": "pos",
-          "author": "切果N0W（九华店）",
-          "category": "品牌自营推广",
-          "url": "https://www.iesdouyin.com/share/video/7664464802089906361#ocr"
-        },
-        {
-          "platform": "新浪微博",
-          "title": "凤梨乌梅真是夯爆了的存在 ​",
-          "sentiment": "pos",
-          "author": "怃然",
-          "category": "消费者主动关注/分享",
-          "url": "https://weibo.com/5615075958/R9xoWlUwm#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "tb闪购商家666，这样的店还能给继续开 晚上点了份水果，刚拿到还没开就发现是烂果，商家说熟透了，西瓜和图片严重不符，直接放了三个整块，我找商家，神人直接开怼，",
-          "sentiment": "neg",
-          "author": "诗⏮️⏸️⏭️",
-          "category": "食品安全-异物(虫)",
-          "url": "https://www.iesdouyin.com/share/video/7664428811681618874#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "切果NOW·建水店  正式营业！ 线下可到店选购， 美团/饿了么/京东/微信小程序 各大线上平台均可下单 每日鲜果现切、无添加、不卖隔夜果 单人果盒、下午茶拼盘",
-          "sentiment": "pos",
-          "author": "",
-          "category": "消费者主动关注/分享",
-          "url": "https://www.iesdouyin.com/share/video/7664409063359798459#ocr"
-        },
-        {
-          "platform": "黑猫投诉",
-          "title": "切果NOW！（金沙滩店）食物中发现虫子，并且严重辱骂消费者",
-          "sentiment": "neg",
-          "author": "正义喵",
-          "category": "食品安全-异物(虫)",
-          "url": "https://tousu.sina.com.cn/complaint/view/17399961736/?sld=cc34b85ecd4da4430639bb50cc5b1c15"
-        }
-      ],
-      "negative_items": [
-        {
-          "time": "10:18",
-          "platform": "抖音",
-          "title": "tb闪购商家666，这样的店还能给继续开 晚上点了份水果，刚拿到还没开就发现是烂果，商家说熟透了，西瓜和图片严重不符，直接放了三个整块，我找商家，神人直接开怼，",
-          "summary": "食品安全-异物(虫)",
-          "url": "https://www.iesdouyin.com/share/video/7664428811681618874#ocr",
-          "category": "食品安全-异物(虫)",
-          "city": "山东-烟台"
-        },
-        {
-          "time": "03:32",
-          "platform": "黑猫投诉",
-          "title": "切果NOW！（金沙滩店）食物中发现虫子，并且严重辱骂消费者",
-          "summary": "食品安全-异物(虫)",
-          "url": "https://tousu.sina.com.cn/complaint/view/17399961736/?sld=cc34b85ecd4da4430639bb50cc5b1c15",
-          "category": "食品安全-异物(虫)",
-          "city": "山东-烟台"
-        }
-      ],
-      "platforms": {
-        "小红书": 3,
-        "抖音": 9,
-        "快手": 7,
-        "微信视频号": 1,
-        "新浪微博": 1,
-        "黑猫投诉": 1
       }
     }
   ]

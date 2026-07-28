@@ -505,6 +505,33 @@ function saveStars(s){localStorage.setItem('qg_stars',JSON.stringify(s));}
 function isStarred(date,title){return getStars().some(function(s){return s.date===date&&s.title===title;});}
 function quickStar(el){var date=el.dataset.date;var title=el.dataset.title;var platform=el.dataset.platform;var author=el.dataset.author;var url=el.dataset.url;var stars=getStars();var idx=stars.findIndex(function(s){return s.date===date&&s.title===title;});if(idx>=0){stars.splice(idx,1);el.classList.remove('active');}else{stars.push({date:date,title:title,platform:platform,author:author,url:url,savedAt:new Date().toISOString()});el.classList.add('active');}saveStars(stars);renderStarPage();toast(idx>=0?'已取消收藏':'⭐ 已收藏');}
 function clearStars(){if(confirm('确定清空所有精选正面素材?')){localStorage.removeItem('qg_stars');renderStarPage();toast('已清空');}}
+function importStarsJSON(){
+  var input=document.createElement('input');
+  input.type='file';input.accept='.json';
+  input.onchange=function(){
+    var file=input.files[0];
+    if(!file)return;
+    var reader=new FileReader();
+    reader.onload=function(e){
+      try{
+        var data=JSON.parse(e.target.result);
+        if(!Array.isArray(data)){toast('格式错误：需为JSON数组');return;}
+        var existing=getStars();
+        var added=0;
+        data.forEach(function(s){
+          if(!existing.some(function(x){return x.date===s.date&&x.title===s.title})){
+            existing.push(s);added++;
+          }
+        });
+        saveStars(existing);
+        renderStarPage();
+        toast('📥 导入完成：新增 '+added+' 条，共 '+existing.length+' 条');
+      }catch(err){toast('解析失败：'+err.message);}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
 function exportStarsJSON(){
   var stars=getStars();
   if(stars.length===0){toast('暂无收藏可导出');return;}
