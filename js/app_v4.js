@@ -538,7 +538,52 @@ function renderProducts(){if(!productData)return;var search=(document.getElement
 
 // ═══════ HOTSPOT ═══════
 function refreshHotspot(){var el=document.getElementById('hotspotContent');el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">🔄 刷新中...</div>';var btn=document.getElementById('hotspotRefreshBtn');if(btn){btn.textContent='⏳';btn.disabled=true;}setTimeout(function(){renderHotspot();if(btn){btn.textContent='🔄 刷新';btn.disabled=false;}},500);}
-function renderHotspot(){var el=document.getElementById('hotspotContent');fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){document.getElementById('hotspotDate').textContent=d.date;var items=d.items||[];if(items.length===0){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无热点数据<br><span style="font-size:12px">每天12:00自动更新</span></div>';return;}var emoji={'🍉果切相关':'🍉',娱乐:'🎬',美食:'🍜',生活:'🏠',品牌:'🏷️',节日:'🎉',综合:'📌'};var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px">';items.forEach(function(item){html+='<div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)"><span style="font-size:11px;color:var(--text-dim)">'+(emoji[item.category]||'📌')+' '+item.source+' · '+item.category+'</span><div style="font-weight:600;color:var(--text);font-size:13px;margin-top:2px;margin-bottom:4px">'+item.word+'</div><div style="display:flex;gap:8px;font-size:11px">'+(item.url?'<a href="'+item.url+'" target="_blank" style="color:var(--brand);text-decoration:none">查看原帖 ↗</a>':'')+'<span onclick="copyHotspot(this)" data-word="'+item.word+'" style="color:var(--text-dim);cursor:pointer">📋 复制</span></div></div>';});html+='</div>';el.innerHTML=html;}).catch(function(){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">热点数据加载中...</div>';});}
+var hotspotCache=null;
+var hotspotFilter='all';
+
+function filterHotspot(f){
+  hotspotFilter=f;
+  ['all','百度','微博','抖音'].forEach(function(s){
+    var id='hs'+(s==='all'?'All':s==='百度'?'Baidu':s==='微博'?'Weibo':'Douyin');
+    var btn=document.getElementById(id);
+    if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(f===s?'btn-primary':'btn-ghost');}
+  });
+  if(hotspotCache)renderHotspotItems(hotspotCache);
+}
+
+function renderHotspot(){
+  var el=document.getElementById('hotspotContent');
+  fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    hotspotCache=d;
+    document.getElementById('hotspotDate').textContent=d.date;
+    renderHotspotItems(d);
+  }).catch(function(){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">热点数据加载中...</div>';});
+}
+
+function renderHotspotItems(d){
+  var el=document.getElementById('hotspotContent');
+  var items=d.items||[];
+  if(hotspotFilter!=='all'){
+    items=items.filter(function(i){return (i.source||'').indexOf(hotspotFilter)>=0;});
+  }
+  items.sort(function(a,b){return ((a.category||'').indexOf('果切')>=0?0:1)-((b.category||'').indexOf('果切')>=0?0:1);});
+  if(items.length===0){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无匹配热点</div>';return;}
+  var sem={百度:'🔍',微博:'💬',抖音:'🎵'};
+  var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px">';
+  items.forEach(function(item){
+    var si='📌';for(var k in sem){if((item.source||'').indexOf(k)>=0){si=sem[k];break;}}
+    html+='<div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)">'+
+      '<span style="font-size:11px;color:var(--text-dim)">'+si+' '+item.source+(item.category?' · '+item.category:'')+'</span>'+
+      '<div style="font-weight:600;color:var(--text);font-size:13px;margin-top:2px;margin-bottom:4px">'+item.word+'</div>'+
+      '<div style="display:flex;gap:8px;font-size:11px">'+
+      (item.url?'<a href="'+item.url+'" target="_blank" style="color:var(--brand);text-decoration:none">查看原帖 ↗</a>':'')+
+      '<span onclick="copyHotspot(this)" data-word="'+item.word+'" style="color:var(--text-dim);cursor:pointer">📋 复制</span>'+
+    '</div></div>';
+  });
+  html+='</div>';el.innerHTML=html;
+}
+
+function refreshHotspot(){filterHotspot('all');renderHotspot();}
 function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════

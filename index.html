@@ -265,6 +265,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
     <div class="page" id="page-hotspot">
       <div class="card">
         <div class="card-header"><div class="card-title">📡 今日热点捕捉</div><div style="display:flex;gap:6px;align-items:center"><span style="font-size:11px;color:var(--text-dim)" id="hotspotDate"></span><button class="btn btn-ghost" id="hotspotRefreshBtn" onclick="refreshHotspot()" style="font-size:11px;padding:3px 10px">🔄 刷新</button></div></div>
+        <div style="display:flex;gap:6px;margin-bottom:12px">
+          <button class="btn btn-primary" onclick="filterHotspot('all')" id="hsAll">全部</button>
+          <button class="btn btn-ghost" onclick="filterHotspot('百度')" id="hsBaidu">🔍 百度</button>
+          <button class="btn btn-ghost" onclick="filterHotspot('微博')" id="hsWeibo">💬 微博</button>
+          <button class="btn btn-ghost" onclick="filterHotspot('抖音')" id="hsDouyin">🎵 抖音</button>
+        </div>
         <div id="hotspotContent" style="font-size:13px;color:var(--text-dim)">抓取中...</div>
       </div>
     </div>
