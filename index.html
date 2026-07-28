@@ -179,7 +179,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
     </div>
     <div class="page" id="page-community">
       <div class="card">
-        <div class="card-header"><div><div class="card-title">📅 社群运营排期</div><div class="card-sub">点击日期格子编辑 · 自动本地保存</div></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><select id="scheduleYearSelect" onchange="renderSchedule()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:#fff"></select><div id="scheduleMonthNav" style="display:flex;gap:6px"></div><button class="btn btn-ghost" onclick="clearScheduleEdits()" style="font-size:11px;color:var(--red)" title="清除全年手动编辑">🔄 重置全部</button><button class="btn btn-ghost" onclick="exportScheduleToExcel()" style="font-size:11px;margin-left:8px" title="导出CSV">📥 导出</button></div></div>
+        <div class="card-header"><div><div class="card-title">📅 社群运营排期</div><div class="card-sub" style="white-space:nowrap">点击日期格子编辑 · 自动本地保存</div></div><div style="display:flex;gap:6px;align-items:center"><select id="scheduleYearSelect" onchange="renderSchedule()" style="padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:11px;background:#fff"></select><div id="scheduleMonthNav" style="display:flex;gap:4px;font-size:11px"></div><button class="btn btn-ghost" onclick="clearScheduleEdits()" style="font-size:10px;color:var(--red);white-space:nowrap" title="清除全年手动编辑">🔄 重置</button><button class="btn btn-ghost" onclick="exportScheduleToExcel()" style="font-size:10px;white-space:nowrap" title="导出CSV">📥 导出</button></div></div>
         <div id="scheduleContent"></div>
       </div>
     </div>
@@ -391,6 +391,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
-<script src="js/app_v5.js?v=15"></script>
+<script src="js/app_v5.js?v=16"></script>
 </body>
 </html>
