@@ -26,6 +26,8 @@ function renderSchedule(){
   if(!sel||!nav||!content)return;
   
   var now=new Date();
+  // Populate year select
+  if(!sel.options.length){sel.innerHTML='<option>2026</option><option>2027</option>';sel.value='2026';}
   var year=parseInt(sel.value)||now.getFullYear();
   
   // Build month buttons
