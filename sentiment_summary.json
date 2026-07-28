@@ -5,20 +5,29 @@
   "stats": {
     "date": "20260727",
     "label": "7月27日",
-    "total": 58,
-    "pos": 56,
-    "neg": 2,
+    "total": 49,
+    "pos": 46,
+    "neg": 3,
     "neu": 0,
-    "pos_pct": 96.6,
-    "neg_pct": 3.4,
+    "pos_pct": 93.9,
+    "neg_pct": 6.1,
     "neu_pct": 0.0,
     "negatives": [
       {
-        "time": "02:05",
-        "platform": "抖音",
-        "title": "切果now我恨你一辈子",
-        "summary": "P4:极端负面情绪-恨你一辈子",
-        "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+        "time": "13:02",
+        "platform": "今日头条-微头条",
+        "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+        "summary": "食品安全信任危机-路过店面后对果切失去信心",
+        "url": "https://www.toutiao.com/w/1871842982414403/#ocr",
+        "category": "",
+        "city": ""
+      },
+      {
+        "time": "11:22",
+        "platform": "新浪微博",
+        "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+        "summary": "食品安全信任危机-路过店面后对果切失去信心",
+        "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr",
         "category": "",
         "city": ""
       },
@@ -40,14 +49,6 @@
         "author": "Oceanfornow_",
         "category": "消费者主动分享",
         "url": "https://weibo.com/7792111422/RaFtKlGzr#ocr"
-      },
-      {
-        "platform": "快手",
-        "title": "身边朋友都在夸某东外卖，陆续上线超多热门店铺，不管聚餐简餐都合适，坐等我爱吃的小店也早日入驻。 #外卖上新宝藏店铺 #外卖新店推荐 #好吃外卖推荐 #深夜外卖宝",
-        "sentiment": "pos",
-        "author": "丹纸127",
-        "category": "好评-好吃",
-        "url": "https://www.kuaishou.com/short-video/3xev4rps8tthddy#ocr"
       },
       {
         "platform": "快手",
@@ -163,14 +164,6 @@
       },
       {
         "platform": "抖音",
-        "title": "毛货街|EQNX60S|毛货街清|毛货街清真|毛货街清真古|毛货街清真古丰|毛货街清真古寺|华街清真古寺|真古丰|公|FCFP72|T|91H09V|91H09",
-        "sentiment": "pos",
-        "author": "远飞",
-        "category": "好评-爱",
-        "url": "https://www.iesdouyin.com/share/video/7667145604959563185#ocr"
-      },
-      {
-        "platform": "抖音",
         "title": "报恩榴莲来的！ #报恩榴莲 #切果NOW #榴莲",
         "sentiment": "pos",
         "author": "小羊妮妮",
@@ -242,14 +235,6 @@
         "url": "https://www.iesdouyin.com/share/video/7667053395677158376#ocr"
       },
       {
-        "platform": "抖音",
-        "title": "超级好吃的东北老饭盒荤素搭配均衡，口味地道，快速解决单人就餐需求",
-        "sentiment": "pos",
-        "author": "兔子",
-        "category": "好评-好吃",
-        "url": "https://www.iesdouyin.com/share/video/7667105395264998690#ocr"
-      },
-      {
         "platform": "小红书",
         "title": "夏天水果怎么选？脆桃vs软桃",
         "sentiment": "pos",
@@ -316,9 +301,9 @@
       {
         "platform": "今日头条-微头条",
         "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
-        "sentiment": "pos",
+        "sentiment": "neg",
         "author": "果林花木集",
-        "category": "消费者主动分享",
+        "category": "食品安全信任危机-路过店面后对果切失去信心",
         "url": "https://www.toutiao.com/w/1871842982414403/#ocr"
       },
       {
@@ -402,36 +387,12 @@
         "url": "https://www.xiaohongshu.com/discovery/item/6a66d94f00000000010022f3#ocr"
       },
       {
-        "platform": "快手",
-        "title": "拿命换钱的硬汉",
-        "sentiment": "pos",
-        "author": "二轩建材……轩",
-        "category": "好评-爱",
-        "url": "https://www.kuaishou.com/short-video/3x4idn4e2q9xujc#ocr"
-      },
-      {
         "platform": "新浪微博",
         "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
-        "sentiment": "pos",
+        "sentiment": "neg",
         "author": "科技科普传播者李典",
-        "category": "消费者主动分享",
+        "category": "食品安全信任危机-路过店面后对果切失去信心",
         "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr"
-      },
-      {
-        "platform": "抖音",
-        "title": "超级好吃的东北老饭盒地道东北家常菜封装，出餐快捷，上班族午餐好选择",
-        "sentiment": "pos",
-        "author": "兔子",
-        "category": "消费者主动分享",
-        "url": "https://www.iesdouyin.com/share/video/7667038166385282319#ocr"
-      },
-      {
-        "platform": "微信",
-        "title": "别直接点外卖！每天记得领美团&淘宝闪购无门槛券，天天都能省几块！",
-        "sentiment": "pos",
-        "author": "阿券",
-        "category": "消费者主动分享",
-        "url": "http://mp.weixin.qq.com/s?__biz=Mzg3MDE0Mzk2Mg==&mid=2247484030&idx=1&sn=4dc923507ab3aa5c3a0b28ec7b5c4308#ocr"
       },
       {
         "platform": "抖音",
@@ -440,14 +401,6 @@
         "author": "切果now永康宝龙店",
         "category": "品牌自营",
         "url": "https://www.iesdouyin.com/share/video/7667014772022146790#asr"
-      },
-      {
-        "platform": "抖音",
-        "title": "路要自己走 苦要自己吃 钱要自己挣 靠自己永远是最大的底气 奔跑起来",
-        "sentiment": "pos",
-        "author": "努力奋斗",
-        "category": "消费者主动分享",
-        "url": "https://www.iesdouyin.com/share/video/7667011051548514511#ocr"
       },
       {
         "platform": "小红书",
@@ -467,14 +420,6 @@
       },
       {
         "platform": "抖音",
-        "title": "#众包日常 身体在透支，灵魂在漂泊，这大概就是内耗的常态。",
-        "sentiment": "pos",
-        "author": "A8",
-        "category": "消费者自然分享",
-        "url": "https://www.iesdouyin.com/share/video/7666904786368804442#ocr"
-      },
-      {
-        "platform": "抖音",
         "title": "切果now我恨你一辈子",
         "sentiment": "neg",
         "author": "我只是来地球散步的",
@@ -488,23 +433,24 @@
         "author": ".",
         "category": "消费者自然分享",
         "url": "https://www.kuaishou.com/short-video/3xw7drsp7j934uc#ocr"
-      },
-      {
-        "platform": "抖音",
-        "title": "切果now我恨你一辈子",
-        "sentiment": "neg",
-        "author": "我只是来地球散步的",
-        "category": "P4:极端负面情绪-恨你一辈子",
-        "url": "https://www.iesdouyin.com/share/video/7666899320012756150"
       }
     ],
     "negative_items": [
       {
-        "time": "02:05",
-        "platform": "抖音",
-        "title": "切果now我恨你一辈子",
-        "summary": "P4:极端负面情绪-恨你一辈子",
-        "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+        "time": "13:02",
+        "platform": "今日头条-微头条",
+        "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+        "summary": "食品安全信任危机-路过店面后对果切失去信心",
+        "url": "https://www.toutiao.com/w/1871842982414403/#ocr",
+        "category": "",
+        "city": ""
+      },
+      {
+        "time": "11:22",
+        "platform": "新浪微博",
+        "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+        "summary": "食品安全信任危机-路过店面后对果切失去信心",
+        "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr",
         "category": "",
         "city": ""
       },
@@ -520,31 +466,39 @@
     ],
     "platforms": {
       "新浪微博": 4,
-      "快手": 14,
+      "快手": 12,
       "小红书": 18,
-      "抖音": 20,
-      "今日头条-微头条": 1,
-      "微信": 1
+      "抖音": 14,
+      "今日头条-微头条": 1
     }
   },
   "daily_trend": [
     {
       "date": "20260727",
       "label": "7月27日",
-      "total": 58,
-      "pos": 56,
-      "neg": 2,
+      "total": 49,
+      "pos": 46,
+      "neg": 3,
       "neu": 0,
-      "pos_pct": 96.6,
-      "neg_pct": 3.4,
+      "pos_pct": 93.9,
+      "neg_pct": 6.1,
       "neu_pct": 0.0,
       "negatives": [
         {
-          "time": "02:05",
-          "platform": "抖音",
-          "title": "切果now我恨你一辈子",
-          "summary": "P4:极端负面情绪-恨你一辈子",
-          "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+          "time": "13:02",
+          "platform": "今日头条-微头条",
+          "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+          "summary": "食品安全信任危机-路过店面后对果切失去信心",
+          "url": "https://www.toutiao.com/w/1871842982414403/#ocr",
+          "category": "",
+          "city": ""
+        },
+        {
+          "time": "11:22",
+          "platform": "新浪微博",
+          "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+          "summary": "食品安全信任危机-路过店面后对果切失去信心",
+          "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr",
           "category": "",
           "city": ""
         },
@@ -566,14 +520,6 @@
           "author": "Oceanfornow_",
           "category": "消费者主动分享",
           "url": "https://weibo.com/7792111422/RaFtKlGzr#ocr"
-        },
-        {
-          "platform": "快手",
-          "title": "身边朋友都在夸某东外卖，陆续上线超多热门店铺，不管聚餐简餐都合适，坐等我爱吃的小店也早日入驻。 #外卖上新宝藏店铺 #外卖新店推荐 #好吃外卖推荐 #深夜外卖宝",
-          "sentiment": "pos",
-          "author": "丹纸127",
-          "category": "好评-好吃",
-          "url": "https://www.kuaishou.com/short-video/3xev4rps8tthddy#ocr"
         },
         {
           "platform": "快手",
@@ -689,14 +635,6 @@
         },
         {
           "platform": "抖音",
-          "title": "毛货街|EQNX60S|毛货街清|毛货街清真|毛货街清真古|毛货街清真古丰|毛货街清真古寺|华街清真古寺|真古丰|公|FCFP72|T|91H09V|91H09",
-          "sentiment": "pos",
-          "author": "远飞",
-          "category": "好评-爱",
-          "url": "https://www.iesdouyin.com/share/video/7667145604959563185#ocr"
-        },
-        {
-          "platform": "抖音",
           "title": "报恩榴莲来的！ #报恩榴莲 #切果NOW #榴莲",
           "sentiment": "pos",
           "author": "小羊妮妮",
@@ -768,14 +706,6 @@
           "url": "https://www.iesdouyin.com/share/video/7667053395677158376#ocr"
         },
         {
-          "platform": "抖音",
-          "title": "超级好吃的东北老饭盒荤素搭配均衡，口味地道，快速解决单人就餐需求",
-          "sentiment": "pos",
-          "author": "兔子",
-          "category": "好评-好吃",
-          "url": "https://www.iesdouyin.com/share/video/7667105395264998690#ocr"
-        },
-        {
           "platform": "小红书",
           "title": "夏天水果怎么选？脆桃vs软桃",
           "sentiment": "pos",
@@ -842,9 +772,9 @@
         {
           "platform": "今日头条-微头条",
           "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
-          "sentiment": "pos",
+          "sentiment": "neg",
           "author": "果林花木集",
-          "category": "消费者主动分享",
+          "category": "食品安全信任危机-路过店面后对果切失去信心",
           "url": "https://www.toutiao.com/w/1871842982414403/#ocr"
         },
         {
@@ -928,36 +858,12 @@
           "url": "https://www.xiaohongshu.com/discovery/item/6a66d94f00000000010022f3#ocr"
         },
         {
-          "platform": "快手",
-          "title": "拿命换钱的硬汉",
-          "sentiment": "pos",
-          "author": "二轩建材……轩",
-          "category": "好评-爱",
-          "url": "https://www.kuaishou.com/short-video/3x4idn4e2q9xujc#ocr"
-        },
-        {
           "platform": "新浪微博",
           "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
-          "sentiment": "pos",
+          "sentiment": "neg",
           "author": "科技科普传播者李典",
-          "category": "消费者主动分享",
+          "category": "食品安全信任危机-路过店面后对果切失去信心",
           "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "超级好吃的东北老饭盒地道东北家常菜封装，出餐快捷，上班族午餐好选择",
-          "sentiment": "pos",
-          "author": "兔子",
-          "category": "消费者主动分享",
-          "url": "https://www.iesdouyin.com/share/video/7667038166385282319#ocr"
-        },
-        {
-          "platform": "微信",
-          "title": "别直接点外卖！每天记得领美团&淘宝闪购无门槛券，天天都能省几块！",
-          "sentiment": "pos",
-          "author": "阿券",
-          "category": "消费者主动分享",
-          "url": "http://mp.weixin.qq.com/s?__biz=Mzg3MDE0Mzk2Mg==&mid=2247484030&idx=1&sn=4dc923507ab3aa5c3a0b28ec7b5c4308#ocr"
         },
         {
           "platform": "抖音",
@@ -966,14 +872,6 @@
           "author": "切果now永康宝龙店",
           "category": "品牌自营",
           "url": "https://www.iesdouyin.com/share/video/7667014772022146790#asr"
-        },
-        {
-          "platform": "抖音",
-          "title": "路要自己走 苦要自己吃 钱要自己挣 靠自己永远是最大的底气 奔跑起来",
-          "sentiment": "pos",
-          "author": "努力奋斗",
-          "category": "消费者主动分享",
-          "url": "https://www.iesdouyin.com/share/video/7667011051548514511#ocr"
         },
         {
           "platform": "小红书",
@@ -993,14 +891,6 @@
         },
         {
           "platform": "抖音",
-          "title": "#众包日常 身体在透支，灵魂在漂泊，这大概就是内耗的常态。",
-          "sentiment": "pos",
-          "author": "A8",
-          "category": "消费者自然分享",
-          "url": "https://www.iesdouyin.com/share/video/7666904786368804442#ocr"
-        },
-        {
-          "platform": "抖音",
           "title": "切果now我恨你一辈子",
           "sentiment": "neg",
           "author": "我只是来地球散步的",
@@ -1014,23 +904,24 @@
           "author": ".",
           "category": "消费者自然分享",
           "url": "https://www.kuaishou.com/short-video/3xw7drsp7j934uc#ocr"
-        },
-        {
-          "platform": "抖音",
-          "title": "切果now我恨你一辈子",
-          "sentiment": "neg",
-          "author": "我只是来地球散步的",
-          "category": "P4:极端负面情绪-恨你一辈子",
-          "url": "https://www.iesdouyin.com/share/video/7666899320012756150"
         }
       ],
       "negative_items": [
         {
-          "time": "02:05",
-          "platform": "抖音",
-          "title": "切果now我恨你一辈子",
-          "summary": "P4:极端负面情绪-恨你一辈子",
-          "url": "https://www.iesdouyin.com/share/video/7666899320012756150",
+          "time": "13:02",
+          "platform": "今日头条-微头条",
+          "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+          "summary": "食品安全信任危机-路过店面后对果切失去信心",
+          "url": "https://www.toutiao.com/w/1871842982414403/#ocr",
+          "category": "",
+          "city": ""
+        },
+        {
+          "time": "11:22",
+          "platform": "新浪微博",
+          "title": "#再也不敢吃削过皮的水果了#一个喜欢吃果切的小男孩悄悄碎掉了！ 之前很爱吃果切，直到路过店面……现在觉得还不如助农，广汽昊铂埃安助力广西果农，那么多新鲜的水果卖",
+          "summary": "食品安全信任危机-路过店面后对果切失去信心",
+          "url": "https://weibo.com/7972565912/RaAVvlxFG#ocr",
           "category": "",
           "city": ""
         },
@@ -1046,11 +937,10 @@
       ],
       "platforms": {
         "新浪微博": 4,
-        "快手": 14,
+        "快手": 12,
         "小红书": 18,
-        "抖音": 20,
-        "今日头条-微头条": 1,
-        "微信": 1
+        "抖音": 14,
+        "今日头条-微头条": 1
       }
     },
     {
