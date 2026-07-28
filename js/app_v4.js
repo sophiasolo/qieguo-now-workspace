@@ -560,20 +560,34 @@ function renderHotspot(){
   }).catch(function(){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">热点数据加载中...</div>';});
 }
 
+function isFruitRelated(item){
+  var kw=['果切','水果','西瓜','榴莲','芒果','凤梨','哈密瓜','葡萄','草莓','荔枝','蜜桃','车厘子',
+    '奶茶','咖啡','美食','吃货','好吃','外卖','零食','甜品','饮料','解暑','冰镇','夏日','夏天',
+    '种草','划算','低价','团购','特价','尝鲜','上新'];
+  var text=(item.word||'')+(item.category||'')+(item.source||'');
+  for(var i=0;i<kw.length;i++){if(text.indexOf(kw[i])>=0)return true;}
+  return false;
+}
+
 function renderHotspotItems(d){
   var el=document.getElementById('hotspotContent');
   var items=d.items||[];
   if(hotspotFilter!=='all'){
     items=items.filter(function(i){return (i.source||'').indexOf(hotspotFilter)>=0;});
   }
-  items.sort(function(a,b){return ((a.category||'').indexOf('果切')>=0?0:1)-((b.category||'').indexOf('果切')>=0?0:1);});
+  items.sort(function(a,b){
+    var aFruit=isFruitRelated(a)?0:1;
+    var bFruit=isFruitRelated(b)?0:1;
+    return aFruit-bFruit;
+  });
   if(items.length===0){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无匹配热点</div>';return;}
   var sem={百度:'🔍',微博:'💬',抖音:'🎵'};
   var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px">';
   items.forEach(function(item){
     var si='📌';for(var k in sem){if((item.source||'').indexOf(k)>=0){si=sem[k];break;}}
-    html+='<div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)">'+
-      '<span style="font-size:11px;color:var(--text-dim)">'+si+' '+item.source+(item.category?' · '+item.category:'')+'</span>'+
+    var fruit=isFruitRelated(item)?'🍉':'';
+    html+='<div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)'+(fruit?'border-left:3px solid var(--brand)':'')+'">'+
+      '<span style="font-size:11px;color:var(--text-dim)">'+si+' '+item.source+(item.category?' · '+item.category:'')+fruit+'</span>'+
       '<div style="font-weight:600;color:var(--text);font-size:13px;margin-top:2px;margin-bottom:4px">'+item.word+'</div>'+
       '<div style="display:flex;gap:8px;font-size:11px">'+
       (item.url?'<a href="'+item.url+'" target="_blank" style="color:var(--brand);text-decoration:none">查看原帖 ↗</a>':'')+
