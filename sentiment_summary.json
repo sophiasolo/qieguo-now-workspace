@@ -5,12 +5,12 @@
   "stats": {
     "date": "20260727",
     "label": "7月27日",
-    "total": 49,
-    "pos": 46,
+    "total": 48,
+    "pos": 45,
     "neg": 3,
     "neu": 0,
-    "pos_pct": 93.9,
-    "neg_pct": 6.1,
+    "pos_pct": 93.8,
+    "neg_pct": 6.2,
     "neu_pct": 0.0,
     "negatives": [
       {
@@ -403,14 +403,6 @@
         "url": "https://www.iesdouyin.com/share/video/7667014772022146790#asr"
       },
       {
-        "platform": "小红书",
-        "title": "冰箱收纳强迫症福音",
-        "sentiment": "pos",
-        "author": "好物分享杂货铺2wv",
-        "category": "好评-新鲜",
-        "url": "https://www.xiaohongshu.com/discovery/item/6a669f4b0000000001030cf3#ocr"
-      },
-      {
         "platform": "抖音",
         "title": "是谁呀！是谁呀！哈哈！",
         "sentiment": "pos",
@@ -467,7 +459,7 @@
     "platforms": {
       "新浪微博": 4,
       "快手": 12,
-      "小红书": 18,
+      "小红书": 17,
       "抖音": 14,
       "今日头条-微头条": 1
     }
@@ -476,12 +468,12 @@
     {
       "date": "20260727",
       "label": "7月27日",
-      "total": 49,
-      "pos": 46,
+      "total": 48,
+      "pos": 45,
       "neg": 3,
       "neu": 0,
-      "pos_pct": 93.9,
-      "neg_pct": 6.1,
+      "pos_pct": 93.8,
+      "neg_pct": 6.2,
       "neu_pct": 0.0,
       "negatives": [
         {
@@ -874,14 +866,6 @@
           "url": "https://www.iesdouyin.com/share/video/7667014772022146790#asr"
         },
         {
-          "platform": "小红书",
-          "title": "冰箱收纳强迫症福音",
-          "sentiment": "pos",
-          "author": "好物分享杂货铺2wv",
-          "category": "好评-新鲜",
-          "url": "https://www.xiaohongshu.com/discovery/item/6a669f4b0000000001030cf3#ocr"
-        },
-        {
           "platform": "抖音",
           "title": "是谁呀！是谁呀！哈哈！",
           "sentiment": "pos",
@@ -938,7 +922,7 @@
       "platforms": {
         "新浪微博": 4,
         "快手": 12,
-        "小红书": 18,
+        "小红书": 17,
         "抖音": 14,
         "今日头条-微头条": 1
       }
