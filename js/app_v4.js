@@ -475,8 +475,7 @@ function renderHistorical(dateKey){
       '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
       (item.url?'<a href="'+item.url+'" target="_blank" style="font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none">原帖 ↗</a>':'')+
       '<span onclick="quickStar(this)" data-date="'+item.date+'" data-title="'+item.title.replace(/"/g,'&quot;')+'" data-platform="'+item.platform+'" data-author="'+(item.author||'')+'" data-url="'+(item.url||'')+'" class="star-btn'+(isStarred(item.date,item.title)?' active':'')+'" title="收藏/取消">⭐</span>'+
-      '<span onclick="hideItem(\''+key.replace(/'/g,"\\'")+'\');renderHistorical(\''+dateKey+'\')" style="cursor:pointer;flex-shrink:0;font-size:12px;opacity:0.3" title="隐藏此条">🚫</span>'+
-    '</div>';
+      '<span onclick="hideItem(\''+key.replace(/'/g,"\\'")+'\');renderHistorical(\''+dateKey+'\')" style="cursor:pointer;flex-shrink:0;font-size:12px;opacity:0.3" title="隐藏此条">🚫</span>'+    '</div>';
   });list.innerHTML=html;}
 
 function getHidden(){try{return JSON.parse(localStorage.getItem('qg_hidden')||'{}');}catch(e){return{};}}
