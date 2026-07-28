@@ -266,204 +266,32 @@ function updateOverviewSentimentData(){
 }
 
 
-// ═══════ HISTORICAL SENTIMENT DATE SWITCHING ═══════
-var historyCache={};
+
+// ═══════ SENTIMENT MODULE (clean rebuild) ═══════
+var sentimentCache=null;
+var sentimentFilter='all';
 var historicalItems=[];
 var historicalFilter='all';
+var historyCache={};
 
-function populateSentimentDates(){
-  var sel=document.getElementById('sentimentDateSelect');
-  var currentVal=sel?sel.value:'today';
-  fetch('master_data_7d.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    var dates=Object.keys(d).sort().reverse();
-    if(!sel)return;
-    sel.innerHTML='<option value="today">📅 最新数据</option>';
-    dates.forEach(function(dk){
-      var y=dk.substring(0,4), m=dk.substring(4,6), dd=dk.substring(6,8);
-      sel.innerHTML+='<option value="'+dk+'">'+y+'/'+m+'/'+dd+'</option>';
-    });
-    // Restore previously selected value (don't trigger onchange)
-    if(currentVal!=='today' && sel.querySelector('option[value="'+currentVal+'"]')){
-      sel.value=currentVal;
-    }
-  }).catch(function(){});
-}
-
-function switchSentimentDate(dateKey){
-  if(dateKey==='today'){
-    // Reset to today mode
-    historicalItems=[];
-    historicalFilter='all';
-    // Show today data from sentiment_summary
-    historicalItems=[];
-    historicalFilter='all';
-    sentimentFilter='all';
-    if(sentimentCache)renderSentimentItems(sentimentCache);
-    // Reset filter buttons
-    ['all','pos','neg'].forEach(function(f){
-      var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));
-      if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(f==='all'?'btn-primary':'btn-ghost');}
-    });
-    var label=document.getElementById('sentimentItemDateLabel');if(label)label.textContent='舆情明细';
-  }else{
-    // Load historical data - reset filter buttons
-    historicalFilter='all';
-    ['all','pos','neg'].forEach(function(f){
-      var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));
-      if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(f==='all'?'btn-primary':'btn-ghost');}
-    });
-    loadHistoricalItems(dateKey);
-  }
-}
-
-function loadHistoricalItems(dateKey){
-  var list=document.getElementById('sentimentItemsList');
-  list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">加载中...</div>';
-  
-  // Check cache
-  if(historyCache[dateKey]){
-    historicalItems=historyCache[dateKey];
-    renderHistorical(dateKey);
-    return;
-  }
-  
-  fetch('master_data_7d.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    var dayData=d[dateKey];
-    if(!dayData||!dayData.data){
-      list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">该日期无数据</div>';
-      return;
-    }
-    // Map master_data fields to display format
-    var items=dayData.data.map(function(item){
-      return {
-        date: dateKey.substring(0,4)+'-'+dateKey.substring(4,6)+'-'+dateKey.substring(6,8),
-        title: item.t||'(无标题)',
-        platform: item.p||'未知',
-        author: item.n||item.u||'',
-        url: item.url||'',
-        category: item.c||'',
-        summary: (item._ocr||'').substring(0,100),
-        sentiment: item.c||'neu',
-      };
-    });
-    historicalItems=items;
-    historyCache[dateKey]=items;
-    renderHistorical(dateKey);
-  }).catch(function(){
-    list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">加载失败</div>';
-  });
-}
-
-function renderHistorical(dateKey){
-  var y=dateKey.substring(0,4), m=dateKey.substring(4,6), dd=dateKey.substring(6,8);
-  // Sync filter button state
-  ['all','pos','neg'].forEach(function(f){
-    var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));
-    if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(historicalFilter===f?'btn-primary':'btn-ghost');}
-  });
-  document.querySelector('#page-sentiment .card-header .card-title').innerHTML='📋 '+y+'/'+m+'/'+dd+' 舆情明细（<span id="sentimentItemCount">'+historicalItems.length+'</span>条）';var label=document.getElementById('sentimentItemDateLabel');if(label)label.textContent=y+'/'+m+'/'+dd+' 舆情明细';
-  document.getElementById('sentimentItemTime').textContent='历史数据 · '+y+'-'+m+'-'+dd;
-  
-  var items=historicalItems;
-  if(historicalFilter==='pos')items=items.filter(function(i){return i.sentiment==='pos'});
-  else if(historicalFilter==='neg')items=items.filter(function(i){return i.sentiment==='neg'});
-  
-  document.getElementById('sentimentItemCount').textContent=items.length;
-  var list=document.getElementById('sentimentItemsList');
-  if(items.length===0){
-    list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">暂无明细数据</div>';
-    return;
-  }
-  
-  // Override filter for historical: show all, allow starring
-  var html='';
-  items.forEach(function(item){
-    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start">'+
-      '<span style="font-size:16px;flex-shrink:0">📌</span>'+
-      '<div style="flex:1;min-width:0">'+
-        '<div style="font-weight:600;color:var(--text)">'+item.title+'</div>'+
-        '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div>'+
-      '</div>'+
-      (item.url?'<a href="'+item.url+'" target="_blank" style="font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none">原帖 ↗</a>':'')+
-      '<span onclick="quickStar(this)" data-date="'+item.date+'" data-title="'+item.title.replace(/"/g,'&quot;')+'" data-platform="'+item.platform+'" data-author="'+(item.author||'')+'" data-url="'+(item.url||'')+'" class="star-btn'+(isStarred(item.date,item.title)?' active':'')+'" title="收藏/取消">⭐</span>'+
-    '</div>';
-  });
-  list.innerHTML=html;
-}
-
-function filterSentimentItems(filter){
-  if(historicalItems.length>0){
-    // Historical mode
-    historicalFilter=filter;
-    ['all','pos','neg'].forEach(function(f){
-      var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));
-      if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(filter===f?'btn-primary':'btn-ghost');}
-    });
-    renderHistorical(document.getElementById('sentimentDateSelect').value);
-  }else{
-    // Today mode
-    sentimentFilter=filter;
-    ['all','pos','neg'].forEach(function(f){
-      var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));
-      if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(filter===f?'btn-primary':'btn-ghost');}
-    });
-    if(sentimentCache)renderSentimentItems(sentimentCache);
-  }
-}
-
-// ═══════ PAGE INIT ═══════
-// Run on load
-(function init(){
-  var now=new Date();
-  document.getElementById('currentDate').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+['日','一','二','三','四','五','六'][now.getDay()]+'曜日';
-  
-  // Populate year select
-  var sel=document.getElementById('scheduleYearSelect');
-  if(sel){sel.innerHTML='';for(var y=2026;y<=now.getFullYear();y++)sel.innerHTML+='<option value="'+y+'"'+(y===now.getFullYear()?' selected':'')+'>'+y+'年</option>';}
-  
-  loadSentimentData();
-  renderWeeklyReports();
-  renderStarPage();
-  renderAcquisition();
-  renderMemberDay();
-  initOverview();
-  setInterval(function(){loadSentimentData();},30*60*1000);
-})();
-
-const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',inspiration:'📚 素材灵感库',ailearn:'💡 AI前沿案例',portfolio:'🖼️ 作品集'};
-document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='acquisition')renderAcquisition();});});
-var now=new Date();document.getElementById('currentDate').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+['日','一','二','三','四','五','六'][now.getDay()]+'曜日';
-function toast(msg){var el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(function(){el.remove()},2000);}
-
-
-// ═══════ SENTIMENT ═══════
-var sentimentCache=null;
 function loadSentimentData(){
   fetch('sentiment_summary.json?v='+Date.now()).then(function(r){return r.json()}).then(function(data){
-    // Normalize: new format (stats) → old format (today)
+    // Normalize new format
     if(data.stats&&!data.today){
       data.today={
-        total:data.stats.total||0,
-        pos:data.stats.pos||0,
-        neg:data.stats.neg||0,
-        neu:data.stats.neu||0,
-        pos_pct:data.stats.pos_pct||0,
-        neg_pct:data.stats.neg_pct||0
+        total:data.stats.total||0, pos:data.stats.pos||0, neg:data.stats.neg||0,
+        neu:data.stats.neu||0, pos_pct:data.stats.pos_pct||0, neg_pct:data.stats.neg_pct||0
       };
       data.today_items=data.stats.today_items||[];
-      // 汇总7天负面（不只是今天）
-      var allNeg=[];
-      if(data.daily_trend){
-        data.daily_trend.forEach(function(d){
-          (d.negatives||d.negative_items||[]).forEach(function(n){
-            if(!n.date)n.date=d.date||'';
-            allNeg.push(n);
-          });
-        });
-      }
-      data.negative_items=allNeg;
       data.generated=data.updated||'';
-      // Compute last_7d from daily_trend
+      // Aggregate 7-day negatives
+      var allNeg=[];
+      if(data.daily_trend){data.daily_trend.forEach(function(d){
+        (d.negatives||d.negative_items||[]).forEach(function(n){
+          if(!n.date)n.date=d.date||''; allNeg.push(n);
+        });
+      });}
+      data.negative_items=allNeg;
       if(data.daily_trend&&data.daily_trend.length>0){
         var t7={total:0,pos:0,neg:0};
         data.daily_trend.forEach(function(d){t7.total+=d.total||0;t7.pos+=d.pos||0;t7.neg+=d.neg||0;});
@@ -475,29 +303,172 @@ function loadSentimentData(){
     data.negative_items=data.negative_items||[];
     data.last_7d=data.last_7d||{total:0,pos:0,neg:0};
     data.date_range=data.date_range||'';
-    data.generated=data.generated||data.updated||'';
+    data.generated=data.generated||'';
     sentimentCache=data;
-    try{renderSentimentKPIs(data);}catch(e){console.log('KPI error:',e.message);}
-    try{renderSentimentTrend(data);}catch(e){console.log('Trend error:',e.message);}
-    try{renderSentimentNegList(data);}catch(e){console.log('NegList error:',e.message);}
-    try{renderSentimentItems(data);}catch(e){console.log('Items error:',e.message);}
-    try{updateOverviewSentiment(data);updateSentimentBadge(data);}catch(e){console.log('Overview error:',e.message);}
+    updateOverviewSentiment(data);
+    updateSentimentBadge(data);
+    renderSentimentKPIs(data);
+    renderSentimentTrend(data);
+    renderSentimentItems(data);
+    renderSentimentNegList(data);
     populateSentimentDates();
-  }).catch(function(e){console.log('Fetch error:',e.message);});
+  }).catch(function(e){console.log('sentiment load error:',e);});
 }
-function refreshSentimentLive(){
-  toast('🔄 正在刷新数据...');
-  loadSentimentData();
-  setTimeout(function(){if(sentimentCache)toast('✅ 已更新 ('+sentimentCache.today.total+'条)');},1000);
-}
-function renderSentimentKPIs(data){if(!data||!data.today)return;var t=data.today;var h='<div class="kpi accent-green"><div class="kpi-label">📊 今日舆情总量</div><div class="kpi-value">'+t.total+'<span class="kpi-change flat">条</span></div><div class="kpi-sub">'+data.latest_date+'</div></div>'+'<div class="kpi accent-teal"><div class="kpi-label">😊 正面</div><div class="kpi-value">'+t.pos+'<span class="kpi-change up">'+(t.pos_pct||0).toFixed(0)+'%</span></div><div class="kpi-sub">口碑健康</div></div>'+'<div class="kpi '+(t.neg>0?'accent-red':'accent-green')+'"><div class="kpi-label">⚠️ 负面</div><div class="kpi-value">'+t.neg+'<span class="kpi-change '+(t.neg>0?'down':'flat')+'">'+(t.neg>0?'需关注':'✅')+'</span></div><div class="kpi-sub">近7天累计 '+data.last_7d.neg+' 条</div></div>'+'<div class="kpi accent-blue"><div class="kpi-label">📊 7天总量</div><div class="kpi-value">'+data.last_7d.total+'<span class="kpi-change flat">条</span></div><div class="kpi-sub">'+data.daily_trend[0].date+' ~ '+data.daily_trend[data.daily_trend.length-1].date+'</div></div>';document.getElementById('sentimentKPI').innerHTML=h;document.getElementById('sentimentMeta').textContent='数据源: master_data.json ('+data.date_range+')';}
-function renderSentimentTrend(data){var trend=data.daily_trend;var ctx=document.getElementById('sentimentTrendChart');if(!ctx)return;new Chart(ctx,{type:'line',data:{labels:trend.map(function(d){return d.date.slice(5)}),datasets:[{label:'总量',data:trend.map(function(d){return d.total}),borderColor:'#2d8a4e',backgroundColor:'rgba(45,138,78,.1)',borderWidth:2,pointRadius:3,fill:true,tension:.3},{label:'正面',data:trend.map(function(d){return d.pos}),borderColor:'#4caf50',borderWidth:1.5,pointRadius:2,tension:.3,borderDash:[3,2]},{label:'负面',data:trend.map(function(d){return d.neg}),borderColor:'#e53935',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'#e53935',tension:.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{usePointStyle:true,boxWidth:6,font:{size:10}}}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{beginAtZero:true,ticks:{font:{size:10}},grid:{color:'#e8ece8'}}}}});}
-var sentimentFilter='all';
-function renderSentimentItems(data){if(historicalItems.length>0)return;var allItems=data.today_items||[];var items;if(sentimentFilter==='pos')items=allItems.filter(function(i){return i.sentiment==='pos'});else if(sentimentFilter==='neg')items=allItems.filter(function(i){return i.sentiment==='neg'});else items=allItems;document.getElementById('sentimentItemCount').textContent=items.length;document.getElementById('sentimentItemTime').textContent=data.latest_date||data.generated||'';var label=document.getElementById('sentimentItemDateLabel');if(label)label.textContent=(data.latest_date||'')+' 舆情明细';var list=document.getElementById('sentimentItemsList');if(items.length===0){list.innerHTML='<div style=\"text-align:center;padding:20px;color:var(--text-dim)\">暂无明细数据</div>';return;}var emoji={pos:'😊',neg:'🔴',neu:'➖'};var html='';items.forEach(function(item){var s=item.sentiment||'';html+='<div style=\"padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start\"><span style=\"font-size:16px;flex-shrink:0\">'+(emoji[s]||'📌')+'</span><div style=\"flex:1;min-width:0\"><div style=\"font-weight:600;color:var(--text)\">'+item.title+'</div><div style=\"font-size:11px;color:var(--text-dim)\">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+(item.url?'<a href=\"'+item.url+'\" target=\"_blank\" style=\"font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none\">原帖 ↗</a>':'')+'<span onclick=\"quickStar(this)\" data-date=\"'+item.date+'\" data-title=\"'+item.title.replace(/\"/g,'&quot;')+'\" data-platform=\"'+item.platform+'\" data-author=\"'+(item.author||'')+'\" data-url=\"'+(item.url||'')+'\" class=\"star-btn'+(isStarred(item.date,item.title)?' active':'')+'\" title=\"收藏/取消\">⭐</span></div>';});list.innerHTML=html;}
-function renderSentimentNegList(data){var items=data.negative_items||[];items.sort(function(a,b){return (b.date||'').localeCompare(a.date||'')});var list=document.getElementById('sentimentNegList');if(items.length===0){list.innerHTML='<div style=\"text-align:center;padding:40px;color:var(--text-dim)\">✅ 近7天无负面舆情</div>';return;}var html='';items.slice(0,15).forEach(function(item){html+='<div style=\"padding:8px 0;border-bottom:1px solid var(--border)\"><div style=\"font-weight:600;color:var(--text);margin-bottom:2px\">['+(item.platform||'')+'] '+(item.title||'')+'</div><div style=\"font-size:11px;color:var(--text-dim)\">'+(item.date||'')+' · '+(item.category||'')+(item.url?' · <a href=\"'+item.url+'\" target=\"_blank\" style=\"color:var(--brand);text-decoration:none\">原帖 ↗</a>':'')+'</div></div>';});list.innerHTML=html;}
-function updateOverviewSentiment(data){if(!data||!data.today)return;var cards=document.querySelectorAll('#page-overview .kpi');if(cards.length>=1){var c1=cards[0];c1.querySelector('.kpi-value').innerHTML=data.today.total+'<span class=\"kpi-change flat\">条</span>';c1.querySelector('.kpi-sub').textContent=data.latest_date+' · 正面'+data.today.pos+' · 负面'+data.today.neg;}}
 
-function updateSentimentBadge(data){var b=document.getElementById('sentimentBadge');if(data.today.neg>0){b.textContent=data.today.neg;b.classList.add('show');}else if(data.last_7d.neg>0){b.textContent='!';b.classList.add('show');}}
+function refreshSentimentLive(){toast('🔄 刷新中...');loadSentimentData();setTimeout(function(){if(sentimentCache)toast('✅ 已更新('+sentimentCache.today.total+'条)');},1000);}
+
+function renderSentimentKPIs(data){
+  if(!data||!data.today)return;
+  var t=data.today;
+  var h='<div class="kpi accent-green"><div class="kpi-label">📊 今日舆情总量</div><div class="kpi-value">'+t.total+'<span class="kpi-change flat">条</span></div><div class="kpi-sub">'+data.latest_date+'</div></div>'+
+    '<div class="kpi accent-teal"><div class="kpi-label">😊 正面</div><div class="kpi-value">'+t.pos+'<span class="kpi-change up">'+(t.pos_pct||0).toFixed(0)+'%</span></div><div class="kpi-sub">口碑健康</div></div>'+
+    '<div class="kpi '+(t.neg>0?'accent-red':'accent-green')+'"><div class="kpi-label">⚠️ 负面</div><div class="kpi-value">'+t.neg+'<span class="kpi-change '+(t.neg>0?'down':'flat')+'">'+(t.neg>0?'需关注':'✅')+'</span></div><div class="kpi-sub">近7天累计 '+data.last_7d.neg+' 条</div></div>'+
+    '<div class="kpi accent-blue"><div class="kpi-label">📊 7天总量</div><div class="kpi-value">'+data.last_7d.total+'<span class="kpi-change flat">条</span></div><div class="kpi-sub">'+data.daily_trend[0].date+' ~ '+data.daily_trend[data.daily_trend.length-1].date+'</div></div>';
+  document.getElementById('sentimentKPI').innerHTML=h;
+  document.getElementById('sentimentMeta').textContent='数据源: sentiment_summary.json ('+data.date_range+')';
+}
+
+function renderSentimentTrend(data){
+  var trend=data.daily_trend;
+  var ctx=document.getElementById('sentimentTrendChart');
+  if(!ctx)return;
+  new Chart(ctx,{type:'line',data:{labels:trend.map(function(d){return d.date.slice(5)}),datasets:[
+    {label:'总量',data:trend.map(function(d){return d.total}),borderColor:'#2d8a4e',backgroundColor:'rgba(45,138,78,.1)',borderWidth:2,pointRadius:3,fill:true,tension:.3},
+    {label:'正面',data:trend.map(function(d){return d.pos}),borderColor:'#4caf50',borderWidth:1.5,pointRadius:2,tension:.3,borderDash:[3,2]},
+    {label:'负面',data:trend.map(function(d){return d.neg}),borderColor:'#e53935',borderWidth:1.5,pointRadius:3,tension:.3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{usePointStyle:true,boxWidth:6,font:{size:10}}}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{beginAtZero:true,ticks:{font:{size:10}},grid:{color:'#e8ece8'}}}}});
+}
+
+function renderSentimentItems(data){
+  if(historicalItems.length>0)return;
+  var allItems=data.today_items||[];
+  var items;
+  if(sentimentFilter==='pos')items=allItems.filter(function(i){return i.sentiment==='pos'});
+  else if(sentimentFilter==='neg')items=allItems.filter(function(i){return i.sentiment==='neg'});
+  else items=allItems;
+  document.getElementById('sentimentItemCount').textContent=items.length;
+  document.getElementById('sentimentItemTime').textContent=data.latest_date||data.generated||'';
+  var label=document.getElementById('sentimentItemDateLabel');
+  if(label)label.textContent=(data.latest_date||'')+' 舆情明细';
+  var list=document.getElementById('sentimentItemsList');
+  if(items.length===0){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">暂无明细数据</div>';return;}
+  var emoji={pos:'😊',neg:'🔴',neu:'➖'};
+  var html='';
+  items.forEach(function(item){
+    var s=item.sentiment||'';
+    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start">'+
+      '<span style="font-size:16px;flex-shrink:0">'+(emoji[s]||'📌')+'</span>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:600;color:var(--text)">'+item.title+'</div>'+
+      '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
+      (item.url?'<a href="'+item.url+'" target="_blank" style="font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none">原帖 ↗</a>':'')+
+      '<span onclick="quickStar(this)" data-date="'+item.date+'" data-title="'+item.title.replace(/"/g,'&quot;')+'" data-platform="'+item.platform+'" data-author="'+(item.author||'')+'" data-url="'+(item.url||'')+'" class="star-btn'+(isStarred(item.date,item.title)?' active':'')+'" title="收藏/取消">⭐</span>'+
+    '</div>';
+  });
+  list.innerHTML=html;
+}
+
+function renderSentimentNegList(data){
+  var items=data.negative_items||[];
+  items.sort(function(a,b){return (b.date||'').localeCompare(a.date||'')});
+  var list=document.getElementById('sentimentNegList');
+  if(items.length===0){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">✅ 近7天无负面舆情</div>';return;}
+  var html='';
+  items.slice(0,15).forEach(function(item){
+    html+='<div style="padding:8px 0;border-bottom:1px solid var(--border)">'+
+      '<div style="font-weight:600;color:var(--text);margin-bottom:2px">['+item.platform+'] '+item.title+'</div>'+
+      '<div style="font-size:11px;color:var(--text-dim)">'+(item.date||'')+' · '+(item.category||'')+(item.url?' · <a href="'+item.url+'" target="_blank" style="color:var(--brand);text-decoration:none">原帖 ↗</a>':'')+'</div>'+
+    '</div>';
+  });
+  list.innerHTML=html;
+}
+
+function updateOverviewSentiment(data){
+  if(!data||!data.today)return;
+  var cards=document.querySelectorAll('#page-overview .kpi');
+  if(cards.length>=1){var c1=cards[0];c1.querySelector('.kpi-value').innerHTML=data.today.total+'<span class="kpi-change flat">条</span>';c1.querySelector('.kpi-sub').textContent=data.latest_date+' · 正面'+data.today.pos+' · 负面'+data.today.neg;}
+}
+
+function updateSentimentBadge(data){
+  if(!data||!data.today)return;
+  var b=document.getElementById('sentimentBadge');
+  if(data.today.neg>0){b.textContent=data.today.neg;b.classList.add('show');}
+  else if(data.last_7d.neg>0){b.textContent='!';b.classList.add('show');}
+}
+
+function filterSentimentItems(filter){
+  if(historicalItems.length>0){
+    historicalFilter=filter;
+    ['all','pos','neg'].forEach(function(f){var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(filter===f?'btn-primary':'btn-ghost');}});
+    renderHistorical(document.getElementById('sentimentDateSelect').value);
+  }else{
+    sentimentFilter=filter;
+    ['all','pos','neg'].forEach(function(f){var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(filter===f?'btn-primary':'btn-ghost');}});
+    if(sentimentCache)renderSentimentItems(sentimentCache);
+  }
+}
+
+function updateOverviewSentimentData(){
+  if(sentimentCache&&sentimentCache.today){updateOverviewSentiment(sentimentCache);updateSentimentBadge(sentimentCache);}
+}
+
+// ─── Historical date switching ───
+function populateSentimentDates(){
+  var sel=document.getElementById('sentimentDateSelect');
+  var currentVal=sel?sel.value:'today';
+  fetch('master_data_7d.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    var dates=Object.keys(d).sort().reverse();
+    if(!sel)return;
+    sel.innerHTML='<option value="today">📅 最新数据</option>';
+    dates.forEach(function(dk){var y=dk.substring(0,4),m=dk.substring(4,6),dd=dk.substring(6,8);sel.innerHTML+='<option value="'+dk+'">'+y+'/'+m+'/'+dd+'</option>';});
+    if(currentVal!=='today'&&sel.querySelector('option[value="'+currentVal+'"]')){sel.value=currentVal;}
+  }).catch(function(){});
+}
+
+function switchSentimentDate(dateKey){
+  if(dateKey==='today'){
+    historicalItems=[];historicalFilter='all';
+    ['all','pos','neg'].forEach(function(f){var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(f==='all'?'btn-primary':'btn-ghost');}});
+    if(sentimentCache)renderSentimentItems(sentimentCache);
+    document.getElementById('sentimentItemTime').textContent=sentimentCache?sentimentCache.latest_date:'';
+  }else{
+    historicalFilter='all';
+    ['all','pos','neg'].forEach(function(f){var btn=document.getElementById('sentFilter'+f.charAt(0).toUpperCase()+f.slice(1));if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(f==='all'?'btn-primary':'btn-ghost');}});
+    loadHistoricalItems(dateKey);
+  }
+}
+
+function loadHistoricalItems(dateKey){
+  var list=document.getElementById('sentimentItemsList');
+  list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">加载中...</div>';
+  if(historyCache[dateKey]){historicalItems=historyCache[dateKey];renderHistorical(dateKey);return;}
+  fetch('master_data_7d.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    var dayData=d[dateKey];
+    if(!dayData||!dayData.data){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">该日期无数据</div>';return;}
+    var items=dayData.data.map(function(item){return {date:dateKey.substring(0,4)+'-'+dateKey.substring(4,6)+'-'+dateKey.substring(6,8),title:item.t||'(无标题)',platform:item.p||'未知',author:item.n||item.u||'',url:item.url||'',category:item.c||'',sentiment:item.c||'neu',summary:(item._ocr||'').substring(0,100)};});
+    historicalItems=items;historyCache[dateKey]=items;renderHistorical(dateKey);
+  }).catch(function(){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">加载失败</div>';});
+}
+
+function renderHistorical(dateKey){
+  var y=dateKey.substring(0,4),m=dateKey.substring(4,6),dd=dateKey.substring(6,8);
+  document.getElementById('sentimentItemTime').textContent='历史数据 · '+y+'-'+m+'-'+dd;
+  var items=historicalItems;
+  if(historicalFilter==='pos')items=items.filter(function(i){return i.sentiment==='pos'});
+  else if(historicalFilter==='neg')items=items.filter(function(i){return i.sentiment==='neg'});
+  document.getElementById('sentimentItemCount').textContent=items.length;
+  var label=document.getElementById('sentimentItemDateLabel');
+  if(label)label.textContent=y+'/'+m+'/'+dd+' 舆情明细';
+  var list=document.getElementById('sentimentItemsList');
+  if(items.length===0){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">暂无明细数据</div>';return;}
+  var html='';items.forEach(function(item){
+    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start">'+
+      '<span style="font-size:16px;flex-shrink:0">📌</span>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:600;color:var(--text)">'+item.title+'</div>'+
+      '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
+      (item.url?'<a href="'+item.url+'" target="_blank" style="font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none">原帖 ↗</a>':'')+
+      '<span onclick="quickStar(this)" data-date="'+item.date+'" data-title="'+item.title.replace(/"/g,'&quot;')+'" data-platform="'+item.platform+'" data-author="'+(item.author||'')+'" data-url="'+(item.url||'')+'" class="star-btn'+(isStarred(item.date,item.title)?' active':'')+'" title="收藏/取消">⭐</span>'+
+    '</div>';
+  });list.innerHTML=html;}
 
 // ═══════ STAR ═══════
 function getStars(){try{return JSON.parse(localStorage.getItem('qg_stars')||'[]');}catch(e){return[];}}
