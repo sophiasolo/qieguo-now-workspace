@@ -26,6 +26,12 @@ function renderSchedule(){
   if(!sel||!nav||!content)return;
   
   var now=new Date();
+  // Populate year select
+  if(!sel.innerHTML||sel.options.length===0){
+    var yh='';
+    for(var yy=2026;yy<=now.getFullYear()+1;yy++)yh+='<option'+(yy===now.getFullYear()?' selected':'')+'>'+yy+'</option>';
+    sel.innerHTML=yh;
+  }
   var year=parseInt(sel.value)||now.getFullYear();
   
   // Build month buttons
