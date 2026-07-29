@@ -1093,6 +1093,7 @@ function generateCopy(){
   v2=injectExtras(v2,dir,hotspotLine,2);
   v3=injectExtras(v3,dir,hotspotLine,3);
   
+  var dirLabel=document.getElementById("copyDirection").selectedOptions[0].text;
   document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);document.getElementById("copyV1").parentElement.style.opacity="1";
   document.getElementById('copyV2').innerHTML=formatCopyDisplay(v2,labels[1],dirLabel);document.getElementById("copyV2").parentElement.style.opacity="1";
   document.getElementById('copyV3').innerHTML=formatCopyDisplay(v3,labels[2],dirLabel);document.getElementById("copyV3").parentElement.style.opacity="1";
