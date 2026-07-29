@@ -772,7 +772,6 @@ function genThuV1(product,short,dir,hotspot){
   var lines=[hz,'','🔥 '+product,price,''];
   if(typeof selling==='string')lines.push(selling);else selling.forEach(function(s){lines.push(s);});
   if(dirHook)lines.push(dirHook);
-  if(hotspot)lines.push(hotspot);
   lines.push('');lines.push(cta);lines.push('');lines.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');lines.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
   return linesToCopy(lines);
 }
@@ -1048,28 +1047,28 @@ function copyVersion(idx){
 function stripLinkFragments(text){
   var lines=text.split('\n');
   var out=[];
-  var inLink=false;
+  var skipping=null; // null, 'mt', 'elm', 'mini'
   lines.forEach(function(l){
     var t=l.trim();
-    // Detect link section start
-    if(t.indexOf('🟡美团')>=0||t.indexOf('🔵饿了么')>=0||/^#小程序/.test(t)){
-      inLink=true;
-      if(!CopyConfig.linkMeituan&&t.indexOf('🟡美团')>=0)return;
-      if(!CopyConfig.linkEleme&&t.indexOf('🔵饿了么')>=0)return;
-      if(!CopyConfig.linkMini&&/^#小程序/.test(t))return;
+    if(!skipping){
+      // Check if entering a link-strip section
+      if(t.indexOf('🟡美团')>=0){if(!CopyConfig.linkMeituan)skipping='mt';else{out.push(l);return;}}
+      if(t.indexOf('🔵饿了么')>=0){if(!CopyConfig.linkEleme)skipping='elm';else{out.push(l);return;}}
+      if(/^#小程序/.test(t)){if(!CopyConfig.linkMini)skipping='mini';else{out.push(l);return;}}
     }
-    if(inLink){
-      // Skip URL fragments: hex strings, path segments, domain fragments
+    if(skipping){
+      // Fragment: hex+emoji, path segment, domain fragment
       if(/^[A-Za-z0-9]+🍉$/.test(t))return;
-      if(/^[a-z]{2,}\.[a-z]{2,}\//.test(t)||/^\/[a-zA-Z0-9]{3,}🍉$/.test(t)||/^[a-z]+\.[a-z]+\/[a-z]+/.test(t))return;
-      // If we reach a non-link line, end link section
-      if(t&&!/^[A-Za-z0-9\/:._-]+🍉?$/.test(t))inLink=false;
+      if(/^[a-z]+\.[a-z]+\//.test(t)||/^\/[a-zA-Z0-9]+🍉$/.test(t))return;
+      // If line doesn't look like a URL fragment, end the skip
+      if(t&&!/^[A-Za-z0-9\/:._-]+🍉?$/.test(t))skipping=null;
       else return;
     }
     out.push(l);
   });
   return out.join('\n');
 }
+
 
 function generateCopy(){
   if(CopyConfig.aiMode==='ai'){generateCopyAI();return;}
