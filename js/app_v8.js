@@ -1152,6 +1152,7 @@ function generateCopyAI(){
   var dayName=dayNames[day]||'今日';
   
   var product=getCopyProduct();
+  var direction=CopyConfig.direction||'auto';
   var priceRule='';
   if(CopyConfig.priceMode==='regional'){
     priceRule='不要写具体价格！必须写「各区域以平台实际价格为准」';
