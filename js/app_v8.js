@@ -678,8 +678,8 @@ function filterCopyProducts(){
 
 
 function toggleCopyProduct(cb,name){
-  if(cb.checked){if(copyProducts.indexOf(name)<0)copyProducts.push(name);}
-  else{copyProducts=copyProducts.filter(function(p){return p!==name});}
+  if(cb.checked){copyProducts=[name];renderCopyProductSelector();}
+  else{copyProducts=[];}
   document.getElementById('copyProductCount').textContent=copyProducts.length;
 }
 
