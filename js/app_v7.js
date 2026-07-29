@@ -1039,7 +1039,7 @@ function formatCopyDisplay(text,label,extraLabel){
   return out;
 }
 
-function getCopyProduct(){var c=document.getElementById('copyProductSearch');if(c&&c.value.trim())return c.value.trim();if(copyProducts.length>0)return copyProducts[0];return '招牌鲜果切';}
+function getCopyProduct(){if(copyProducts.length>0)return copyProducts[0];var c=document.getElementById('copyProductSearch');if(c&&c.value.trim())return c.value.trim();if(allProductsData.length>0)return allProductsData[0].name;return '招牌鲜果切';}
 function useCustomProduct(){var c=document.getElementById('copyProductSearch');if(c){var v=c.value.trim();if(v){CopyConfig.customProduct=v;saveCopyConfig();renderCopyProductSelector();toast('📝 已选：'+v);}}}
 
 function copyVersion(idx){
