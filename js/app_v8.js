@@ -1131,6 +1131,7 @@ function generateCopy(){
   document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);document.getElementById("copyV1").parentElement.style.opacity="1";
   document.getElementById('copyV2').innerHTML=formatCopyDisplay(v2,labels[1],dirLabel);document.getElementById("copyV2").parentElement.style.opacity="1";
   document.getElementById('copyV3').innerHTML=formatCopyDisplay(v3,labels[2],dirLabel);document.getElementById("copyV3").parentElement.style.opacity="1";
+  document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
   currentCopyTexts=[v1,v2,v3];
   saveCopyHistory(product,[v1,v2,v3]);
   toast('🚀 已生成 3 版文案');
