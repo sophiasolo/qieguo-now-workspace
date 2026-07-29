@@ -1152,10 +1152,19 @@ function generateCopyAI(){
   var dayName=dayNames[day]||'今日';
   
   var product=getCopyProduct();
-  var price=CopyConfig.customPrice||'';
-  var direction=CopyConfig.direction||'auto';
-  var delivery='满30免配送费';
-  if(CopyConfig.delivery==='custom')delivery=CopyConfig.deliveryCustomVal||'自定义配送';
+  var priceRule='';
+  if(CopyConfig.priceMode==='regional'){
+    priceRule='不要写具体价格！必须写「各区域以平台实际价格为准」';
+  }else if(CopyConfig.customPrice){
+    priceRule='必须包含价格行：💰 ¥'+CopyConfig.customPrice;
+  }
+  var deliveryRule='';
+  if(CopyConfig.delivery==='custom'){
+    var dv=CopyConfig.deliveryCustomVal||'自定义配送';
+    deliveryRule='必须写配送费提示：💡'+dv;
+  }else{
+    deliveryRule='配送费可提可不提';
+  }
   
   // Festival detection
   var festToday='';
@@ -1203,8 +1212,8 @@ function generateCopyAI(){
     '【emoji铁律】每行配1-2个贴合内容的emoji，拒绝全篇🍉！用🧊表冰爽、🛵表外卖、💰表价格、😋表口感、🔥表热度、✨表惊喜、🎁表福利、💪表健康、🥭🍍🍈根据水果灵活换。花字行的emoji要更有创意。\\n\\n'+
     '【排版】每行≤20字，不允许断词换行。像朋友群发消息，不机械不模板。\\n\\n'+
     '【推送日】'+dayName+'\\n'+
-    '【产品名】'+product+'\\n'+
-    '【价格】'+(price||'各区域以平台实际为准')+'\\n'+
+    '【价格要求】'+priceRule+'\\n'+
+    '【配送费要求】'+deliveryRule+'\\n'+
     '【配送】'+delivery+'\\n'+
     '【方向】'+(direction==='auto'?'根据推送日自由选择':direction)+'\\n\\n'+
     '生成3版差异化社群文案，每版5-8行，花字类型和风格要明显不同。\\n'+
