@@ -1113,6 +1113,13 @@ function renderCopyHistory(){
   el.innerHTML=html;
 }
 
+function clearCopyHistory(){
+  if(!confirm('确定清空所有历史文案记录？'))return;
+  localStorage.removeItem('qg_copy_history');
+  renderCopyHistory();
+  toast('🗑 历史已清空');
+}
+
 function loadCopyHistory(idx){
   var history=[];
   try{history=JSON.parse(localStorage.getItem('qg_copy_history')||'[]');}catch(e){}
