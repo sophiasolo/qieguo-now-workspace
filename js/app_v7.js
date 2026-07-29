@@ -1024,6 +1024,20 @@ function getDirectionHook(dir,product,short,dayKey){
 // 存储当前3版文案纯文本
 var currentCopyTexts=[];
 
+// ─── Format copy output like WeChat message ───
+function formatCopyDisplay(text,label,extraLabel){
+  var clean=text||"";
+  var lines_=clean.split("\n");
+  var out="<div style=\"background:#f0f7f0;border-radius:8px;padding:14px 16px;font-size:13px;line-height:2.2;color:var(--text)\">";
+  out+="<div style=\"font-size:11px;color:var(--brand);margin-bottom:8px;font-weight:600\">"+label+(extraLabel?" · "+extraLabel:"")+"</div>";
+  lines_.forEach(function(l){
+    if(!l.trim()){out+="<div style=\"height:8px\"></div>";}
+    else{out+="<div>"+l+"</div>";}
+  });
+  out+="</div>";
+  return out;
+}
+
 function copyVersion(idx){
   var text=currentCopyTexts[idx-1]||'';
   text=text.replace(/<br>/g,'\n').replace(/<[^>]*>/g,'');
@@ -1079,9 +1093,9 @@ function generateCopy(){
   v2=injectExtras(v2,dir,hotspotLine,2);
   v3=injectExtras(v3,dir,hotspotLine,3);
   
-  var dirLabel=document.getElementById('copyDirection').selectedOptions[0].text;document.getElementById('copyV1').innerHTML='<strong>'+labels[0]+' · '+dirLabel+'</strong><br><br>'+v1.replace(/\n/g,'<br>');
-  document.getElementById('copyV2').innerHTML='<strong>'+labels[1]+' · '+dirLabel+'</strong><br><br>'+v2.replace(/\n/g,'<br>');
-  document.getElementById('copyV3').innerHTML='<strong>'+labels[2]+' · '+dirLabel+'</strong><br><br>'+v3.replace(/\n/g,'<br>');
+  document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);
+  document.getElementById('copyV2').innerHTML=formatCopyDisplay(v2,labels[1],dirLabel);
+  document.getElementById('copyV3').innerHTML=formatCopyDisplay(v3,labels[2],dirLabel);
   
   document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
   
@@ -1118,9 +1132,9 @@ function loadCopyHistory(idx){
   try{history=JSON.parse(localStorage.getItem('qg_copy_history')||'[]');}catch(e){}
   if(idx>=history.length)return;
   var h=history[idx];
-  document.getElementById('copyV1').innerHTML='<strong>版本一 · 历史</strong><br><br>'+h.v1.replace(/\n/g,'<br>');
-  document.getElementById('copyV2').innerHTML='<strong>版本二 · 历史</strong><br><br>'+h.v2.replace(/\n/g,'<br>');
-  document.getElementById('copyV3').innerHTML='<strong>版本三 · 历史</strong><br><br>'+h.v3.replace(/\n/g,'<br>');
+  document.getElementById('copyV1').innerHTML=formatCopyDisplay(h.v1,'版本一','历史');
+  document.getElementById('copyV2').innerHTML=formatCopyDisplay(h.v2,'版本二','历史');
+  document.getElementById('copyV3').innerHTML=formatCopyDisplay(h.v3,'版本三','历史');
   document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
 }
 
@@ -1259,7 +1273,7 @@ function generateCopyAI(){
     for(var v=0;v<3;v++){
       var vid='copyV'+(v+1);
       var el=document.getElementById(vid);
-      if(el)el.innerHTML='<strong>'+labels[v]+' · 🧠 AI</strong><br><br>'+(versions[v]||'生成中...').replace(/\\n/g,'<br>');
+      if(el)el.innerHTML=formatCopyDisplay(versions[v]||'',labels[v],'🧠 AI');
     }
     document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
     currentCopyTexts=versions;
