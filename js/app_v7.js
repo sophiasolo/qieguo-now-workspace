@@ -1286,7 +1286,7 @@ function generateCopyAI(){
     document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
     currentCopyTexts=versions;
     saveCopyHistory(product,versions);
-    toast('🧠 AI 润色完成');
+    toast('🧠 已生成: '+product);
   }).catch(function(e){
     console.error('AI call error:', e.message, e);
     document.getElementById('btnGenerateCopy').disabled=false;
