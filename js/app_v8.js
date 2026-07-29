@@ -1288,10 +1288,11 @@ function generateCopyAI(){
     saveCopyHistory(product,versions);
     toast('🧠 AI 润色完成');
   }).catch(function(e){
+    console.error('AI call error:', e.message, e);
     document.getElementById('btnGenerateCopy').disabled=false;
-    document.getElementById('btnGenerateCopy').textContent='🧠 AI 润色生成';
-    ['copyV1','copyV2','copyV3'].forEach(function(id){document.getElementById(id).innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:13px">⚠️ 生成失败，请检查 API Key 或网络</div>';});
-    toast('⚠️ AI 调用失败');
+    document.getElementById('btnGenerateCopy').textContent='🧠 AI 一键生成';
+    ['copyV1','copyV2','copyV3'].forEach(function(id){document.getElementById(id).innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:13px">⚠️ '+e.message+'</div>';});
+    toast('⚠️ '+e.message);
   });
 }
 
