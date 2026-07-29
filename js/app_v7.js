@@ -1119,18 +1119,18 @@ function generateCopy(){
   v2=injectExtras(v2,dir,hotspotLine,2);
   v3=injectExtras(v3,dir,hotspotLine,3);
   
-  // Filter links: use stripLinkFragments to handle URLs broken by linesToCopy
-  if(!CopyConfig.linkMeituan||!CopyConfig.linkEleme||!CopyConfig.linkMini){
-    v1=stripLinkFragments(v1);v2=stripLinkFragments(v2);v3=stripLinkFragments(v3);
-  }
+  // Build clean links based on config (append AFTER linesToCopy, not through it)
+  var linkFooter="";
+  if(CopyConfig.linkMeituan)linkFooter+="\\n🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK";
+  if(CopyConfig.linkEleme)linkFooter+="\\n🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b";
+  if(CopyConfig.linkMini)linkFooter+="\\n#小程序://切果NOW/LFtIEeLhMcgq0Rx";
+  // Strip old link fragments from gen functions, append clean links
+  v1=stripLinkFragments(v1)+linkFooter;v2=stripLinkFragments(v2)+linkFooter;v3=stripLinkFragments(v3)+linkFooter;
   
   var dirLabel=document.getElementById("copyDirection").selectedOptions[0].text;
   document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);document.getElementById("copyV1").parentElement.style.opacity="1";
   document.getElementById('copyV2').innerHTML=formatCopyDisplay(v2,labels[1],dirLabel);document.getElementById("copyV2").parentElement.style.opacity="1";
   document.getElementById('copyV3').innerHTML=formatCopyDisplay(v3,labels[2],dirLabel);document.getElementById("copyV3").parentElement.style.opacity="1";
-  
-  document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
-  
   currentCopyTexts=[v1,v2,v3];
   saveCopyHistory(product,[v1,v2,v3]);
   toast('🚀 已生成 3 版文案');
