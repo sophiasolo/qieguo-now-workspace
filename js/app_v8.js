@@ -642,36 +642,38 @@ function loadCopyProducts(){
 }
 
 function renderCopyProductSelector(){
-  var el=document.getElementById('copyProducts');
+  var el=document.getElementById("copyProducts");
   if(!el)return;
-  var order=['🔥 引流爆品','🎯 当家爆款','🆕 网红创新','🥗 拼盘套餐','💎 高客单','📦 经典果切'];
-  var grouped={};
-  allProductsData.forEach(function(p){
-    var cat=p.category||'📦 经典果切';
-    if(!grouped[cat])grouped[cat]=[];
-    grouped[cat].push(p);
-  });
-  var html='<input id="copyProductSearch" oninput="filterCopyProducts()" placeholder="🔍 搜索产品..." style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:11px;margin-bottom:8px">';
+  var sorted=allProductsData.slice().sort(function(a,b){return (b.sales||0)-(a.sales||0)});
+  var top=sorted.slice(0,10);
+  var html='<input id="copyProductSearch" oninput="filterCopyProducts()" placeholder="🔍 搜索产品...（销量Top10快捷选，搜索可查全部）" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:11px;margin-bottom:8px">';
   html+='<div id="copyProductList" style="max-height:200px;overflow-y:auto;font-size:11px">';
-  order.forEach(function(cat){
-    var items=grouped[cat]||[];
-    if(items.length===0)return;
-    html+='<div style="font-weight:700;color:var(--text-dim);padding:4px 0 2px;font-size:10px">'+cat+' ('+items.length+')</div>';
-    items.slice(0,5).forEach(function(p){
-      var checked=copyProducts.indexOf(p.name)>=0?'checked':'';
-      html+='<label style="display:flex;align-items:center;gap:4px;padding:2px 4px;cursor:pointer"><input type="checkbox" '+checked+' onchange="toggleCopyProduct(this,\''+p.name.replace(/'/g,"\'")+'\')"><span>'+p.name+'</span><span style="color:var(--text-dim);margin-left:auto">¥'+p.price+'</span></label>';
-    });
+  top.forEach(function(p,i){
+    var checked=copyProducts.indexOf(p.name)>=0?' checked':'';
+    var icon=i<3?["🥇","🥈","🥉"][i]:"#"+(i+1);
+    var safeName=p.name.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+    html+='<label style="display:flex;align-items:center;gap:4px;padding:2px 4px;cursor:pointer"><span style="font-size:10px;width:22px;text-align:center">'+icon+'</span><input type="checkbox"'+checked+' data-prod="'+safeName+'" onchange="toggleCopyProduct(this,this.dataset.prod)"><span>'+p.name+'</span><span style="color:var(--text-dim);margin-left:auto;font-size:10px">¥'+p.price+' · 销'+p.sales+'</span></label>';
   });
-  html+='</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px">已选 <span id="copyProductCount">'+copyProducts.length+'</span> 款</div>';
+  html+='</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px">已选 <span id="copyProductCount">'+copyProducts.length+'</span> 款 · 搜索可查全部'+(sorted.length-top.length)+'款</div>';
   el.innerHTML=html;
 }
 
 function filterCopyProducts(){
-  var q=(document.getElementById('copyProductSearch').value||'').toLowerCase();
-  document.querySelectorAll('#copyProductList label').forEach(function(l){
-    l.style.display=(!q||l.textContent.toLowerCase().indexOf(q)>=0)?'flex':'none';
+  var q=(document.getElementById("copyProductSearch").value||"").toLowerCase();
+  var el=document.getElementById("copyProductList");
+  if(!el)return;
+  if(!q){renderCopyProductSelector();return;}
+  var matches=allProductsData.filter(function(p){return p.name.toLowerCase().indexOf(q)>=0}).slice(0,20);
+  var html='';
+  matches.forEach(function(p){
+    var checked=copyProducts.indexOf(p.name)>=0?' checked':'';
+    var safeName=p.name.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+    html+='<label style="display:flex;align-items:center;gap:4px;padding:2px 4px;cursor:pointer"><input type="checkbox"'+checked+' data-prod="'+safeName+'" onchange="toggleCopyProduct(this,this.dataset.prod)"><span>'+p.name+'</span><span style="color:var(--text-dim);margin-left:auto;font-size:10px">¥'+p.price+' · '+p.category+'</span></label>';
   });
+  if(!matches.length)html='<div style="padding:8px;color:var(--text-dim)">无匹配产品</div>';
+  el.innerHTML=html;
 }
+
 
 function toggleCopyProduct(cb,name){
   if(cb.checked){if(copyProducts.indexOf(name)<0)copyProducts.push(name);}
