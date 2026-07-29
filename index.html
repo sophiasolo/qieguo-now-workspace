@@ -280,8 +280,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
         <!-- LEFT: 配置栏 -->
         <div>
           <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">📅 推送日</div></div>
-            <div style="font-size:13px;font-weight:700;color:var(--brand)" id="copyDayLabel">加载中...</div>
+            <div class="card-header"><div class="card-title">📅 今日推送</div></div>
+            <div style="font-size:13px;font-weight:700;color:var(--brand);margin-bottom:4px" id="copyDayLabel">加载中...</div>
+            <div id="copyWeather" style="font-size:11px;color:var(--text-dim)">加载中...</div>
           </div>
           <div class="card" style="margin-bottom:12px">
             <div class="card-header"><div class="card-title">📦 产品</div></div>
@@ -310,10 +311,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
               <label><input type="checkbox" checked onchange="setCopyConfig('linkEleme',this.checked)"> 饿了么</label>
               <label id="linkMiniapp"><input type="checkbox" checked onchange="setCopyConfig('linkMini',this.checked)"> 小程序</label>
             </div>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">☀️ 今日信息</div></div>
-            <div id="copyWeather" style="font-size:12px;color:var(--text-dim)">加载中...</div>
           </div>
           <div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">
             <button class="btn btn-primary" onclick="setCopyConfig('aiMode','template')" id="modeTemplate" style="font-size:11px;padding:6px 0;flex:1">⚡ 快速模板</button>
