@@ -720,15 +720,15 @@ function getSellingPoint(productName){
   return PRODUCT_SELLING['default'];
 }
 
-// ─── 行处理（铁律：≤20字，emoji行尾）───
+// ─── 行处理（≤22字，emoji行尾）───
 function wrapLine(text){
   if(!text)return '';
-  if(text.length<=20)return text;
+  if(text.length<=22)return text;
   var result=[];
   var current='';
   for(var i=0;i<text.length;i++){
     current+=text[i];
-    if(current.length>=18||'，。！？、｜'.indexOf(text[i])>=0){
+    if(current.length>=22||'，。！？、｜'.indexOf(text[i])>=0){
       if(current.trim())result.push(current.trim());
       current='';
     }
@@ -742,6 +742,17 @@ function eji(line){
   if(!line||!line.trim())return line;
   if(line.charAt(0)==='#'||line.indexOf('http')===0||line.indexOf('//')===0)return line;
   if(/[\u{1F300}-\u{1FAFF}]/u.test(line))return line;
+  // Contextual emoji based on content
+  if(/外卖|配送|到家|下单|直达/.test(line))return line+'🛵';
+  if(/冰|冻|凉|冷|降温/.test(line))return line+'🧊';
+  if(/热|高温|暑|晒|闷/.test(line))return line+'🔥';
+  if(/甜|蜜|好吃|美味/.test(line))return line+'😋';
+  if(/健康|维C|营养|养生/.test(line))return line+'💪';
+  if(/懒|轻松|方便|省/.test(line))return line+'😎';
+  if(/福利|惊喜|会员|特权|彩蛋/.test(line))return line+'🎁';
+  if(/价格|¥|元|钱|省/.test(line))return line+'💰';
+  if(/快|秒|速|限时|倒计时/.test(line))return line+'⚡';
+  if(/周末|宅|追剧|聚会|沙发/.test(line))return line+'🎬';
   return line+'🍉';
 }
 
