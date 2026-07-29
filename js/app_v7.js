@@ -1120,10 +1120,11 @@ function generateCopy(){
   v3=injectExtras(v3,dir,hotspotLine,3);
   
   // Build clean links based on config (append AFTER linesToCopy, not through it)
-  var linkFooter="";
-  if(CopyConfig.linkMeituan)linkFooter+='\n🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK';
-  if(CopyConfig.linkEleme)linkFooter+='\n🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b';
-  if(CopyConfig.linkMini)linkFooter+='\n#小程序://切果NOW/LFtIEeLhMcgq0Rx';
+  var linkParts=[];
+  if(CopyConfig.linkMeituan)linkParts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
+  if(CopyConfig.linkEleme)linkParts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
+  if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/LFtIEeLhMcgq0Rx');
+  var linkFooter=linkParts.length?String.fromCharCode(10,10)+linkParts.join(String.fromCharCode(10)):'';
   // Strip old link fragments from gen functions, append clean links
   v1=stripLinkFragments(v1)+linkFooter;v2=stripLinkFragments(v2)+linkFooter;v3=stripLinkFragments(v3)+linkFooter;
   
@@ -1304,10 +1305,11 @@ function generateCopyAI(){
       else{versions=[p3[0]||raw,p3[1]||'',p3[2]||''];}
     }
     // Build link footer based on config
-    var linkFooter='';
-    if(CopyConfig.linkMeituan)linkFooter+='\n🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK';
-    if(CopyConfig.linkEleme)linkFooter+='\n🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b';
-    if(CopyConfig.linkMini)linkFooter+='\n#小程序://切果NOW/LFtIEeLhMcgq0Rx';
+    var linkParts=[];
+    if(CopyConfig.linkMeituan)linkParts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
+    if(CopyConfig.linkEleme)linkParts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
+    if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/LFtIEeLhMcgq0Rx');
+    var linkFooter=linkParts.length?String.fromCharCode(10,10)+linkParts.join(String.fromCharCode(10)):"";
     var priceLine='';
     if(price)priceLine='💰 ¥'+price;
     // Ensure at least one version has price
@@ -1316,7 +1318,7 @@ function generateCopyAI(){
       versions[0]=versions[0]+'\n\n'+priceLine;
     }
     // Append links to all versions
-    for(var v=0;v<3;v++){if(versions[v]&&linkFooter)versions[v]=versions[v]+'\n\n'+linkFooter.trim();}
+    for(var v=0;v<3;v++){if(versions[v]&&linkFooter)versions[v]=versions[v]+linkFooter;}
     var labels=['生成版一','生成版二','生成版三'];
     for(var v=0;v<3;v++){
       var vid='copyV'+(v+1);
