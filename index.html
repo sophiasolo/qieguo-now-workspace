@@ -280,8 +280,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
         <!-- LEFT: 配置栏 -->
         <div>
           <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">📅 今日推送</div></div>
+            <div class="card-header"><div class="card-title">📅 推送日</div></div>
             <div style="font-size:13px;font-weight:700;color:var(--brand);margin-bottom:4px" id="copyDayLabel">加载中...</div>
+            <select id="copyDaySelect" onchange="setCopyConfig('customDay',this.value)" style="width:100%;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:11px;margin-bottom:4px">
+              <option value="">📅 自动（今天）</option>
+              <option value="2">周二 · 热销风向</option>
+              <option value="3">周三 · 会员日88折</option>
+              <option value="4">周四 · 外卖双平台</option>
+              <option value="5">周五 · 周末套餐</option>
+              <option value="6">周六 · 外卖双平台+周末</option>
+            </select>
             <div id="copyWeather" style="font-size:11px;color:var(--text-dim)">加载中...</div>
           </div>
           <div class="card" style="margin-bottom:12px">

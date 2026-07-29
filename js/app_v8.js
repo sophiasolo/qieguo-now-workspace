@@ -3,7 +3,7 @@ var productData=null;
 var sentimentFilter='all';
 var currentNoteDate=null;
 
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:''};
 
 var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-12":"春节","04-05":"清明","05-01":"劳动节","06-25":"端午","09-15":"中秋","10-01":"国庆","12-25":"圣诞"}};
 
@@ -606,7 +606,7 @@ function refreshHotspot(){filterHotspot('all');renderHotspot();}
 function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:''};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
 function saveCopyConfig(){localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}
 function setCopyConfig(key,val){
@@ -1154,7 +1154,8 @@ function generateCopyAI(){
   document.getElementById('btnGenerateCopy').disabled=true;
   document.getElementById('btnGenerateCopy').textContent='⏳ 生成中...';
   
-  var now=new Date();var day=now.getDay();
+  var now=new Date();
+  var day=CopyConfig.customDay?parseInt(CopyConfig.customDay):now.getDay();
   var dayNames={2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·外卖双平台·轮换种草'};
   var dayName=dayNames[day]||'今日';
   
