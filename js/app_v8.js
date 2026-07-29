@@ -867,8 +867,8 @@ function injectExtras(text,dir,hotspot,n){
     var dh=getDirectionHookPlain(dir,n);
     if(dh)extra.push(dh);
   }
-  // 热点：从关键词中提取可融入的自然句，不硬插
-  if(hotspot){
+  // 热点：仅在auto或hotspot方向时注入
+  if(hotspot&&(dir==='auto'||dir==='hotspot')){
     var hl=makeHotspotLine(hotspot);
     if(hl)extra.push(hl);
   }
@@ -1092,6 +1092,11 @@ function generateCopy(){
   v1=injectExtras(v1,dir,hotspotLine,1);
   v2=injectExtras(v2,dir,hotspotLine,2);
   v3=injectExtras(v3,dir,hotspotLine,3);
+  
+  // Filter links: respect CopyConfig
+  if(!CopyConfig.linkMeituan){v1=v1.replace(/\n🟡美团[^\n]*/g,"");v2=v2.replace(/\n🟡美团[^\n]*/g,"");v3=v3.replace(/\n🟡美团[^\n]*/g,"");}
+  if(!CopyConfig.linkEleme){v1=v1.replace(/\n🔵饿了么[^\n]*/g,"");v2=v2.replace(/\n🔵饿了么[^\n]*/g,"");v3=v3.replace(/\n🔵饿了么[^\n]*/g,"");}
+  if(!CopyConfig.linkMini){v1=v1.replace(/\n#小程序[^\n]*/g,"");v2=v2.replace(/\n#小程序[^\n]*/g,"");v3=v3.replace(/\n#小程序[^\n]*/g,"");}
   
   var dirLabel=document.getElementById("copyDirection").selectedOptions[0].text;
   document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);document.getElementById("copyV1").parentElement.style.opacity="1";
