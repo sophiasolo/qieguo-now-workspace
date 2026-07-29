@@ -606,12 +606,16 @@ function refreshHotspot(){filterHotspot('all');renderHotspot();}
 function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto'};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template'};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
 function saveCopyConfig(){localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}
-function setCopyConfig(key,val){CopyConfig[key]=val;saveCopyConfig();applyCopyConfig();}
-function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;}
-function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2){label='周二 · 生活关怀';document.getElementById('linkMiniapp').style.display='';}else if(day===3){label='周三 · 会员日88折';document.getElementById('linkMiniapp').style.display='';}else if(day===4){label='周四 · 特价';document.getElementById('linkMiniapp').style.display='none';CopyConfig.linkMini=false;}else if(day===5){label='周五 · 周末场景';document.getElementById('linkMiniapp').style.display='';}else if(day===6){label='周六 · 轮换种草';document.getElementById('linkMiniapp').style.display='';}else{label='今天无推送';}document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML='📅 '+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日'+festToday;}
+function setCopyConfig(key,val){
+  CopyConfig[key]=val;saveCopyConfig();applyCopyConfig();
+  if(key==='aiMode'){updateGenBtnLabel();}
+}
+function updateGenBtnLabel(){var b=document.getElementById('btnGenerateCopy');if(!b)return;b.textContent=CopyConfig.aiMode==='ai'?'🧠 AI 润色生成':'🚀 一键生成';}
+function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;updateGenBtnLabel();var mt=document.getElementById('modeTemplate'),ma=document.getElementById('modeAI');if(mt){mt.className='btn '+(CopyConfig.aiMode==='template'?'btn-primary':'btn-ghost');mt.style.fontSize='11px';mt.style.padding='6px 0';mt.style.flex='1';}if(ma){ma.className='btn '+(CopyConfig.aiMode==='ai'?'btn-primary':'btn-ghost');ma.style.fontSize='11px';ma.style.padding='6px 0';ma.style.flex='1';}}
+function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2){label='周二 · 热销风向';document.getElementById('linkMiniapp').style.display='';}else if(day===3){label='周三 · 会员日88折';document.getElementById('linkMiniapp').style.display='';}else if(day===4){label='周四 · 外卖双平台';document.getElementById('linkMiniapp').style.display='none';CopyConfig.linkMini=false;}else if(day===5){label='周五 · 周末套餐';document.getElementById('linkMiniapp').style.display='';}else if(day===6){label='周六 · 外卖双平台 · 轮换种草';document.getElementById('linkMiniapp').style.display='';}else{label='今天无推送';}document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML='📅 '+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日'+festToday;}
 function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
 
 // ═══════ COPY GENERATOR ═══════
@@ -1025,6 +1029,7 @@ function copyVersion(idx){
 }
 
 function generateCopy(){
+  if(CopyConfig.aiMode==='ai'){generateCopyAI();return;}
   var now=new Date();
   var dir=CopyConfig.direction||'auto';
   
@@ -1055,13 +1060,13 @@ function generateCopy(){
     labels=['版本一 · 外卖特价','版本二 · 限时紧迫','版本三 · 冰鲜直达'];
   }else if(day===5){ // Friday
     v1=genFriV1(product,short,dir,hotspotLine);v2=genFriV2(product,short,dir,hotspotLine);v3=genFriV3(product,short,dir,hotspotLine);
-    labels=['版本一 · 追剧场景','版本二 · 宅家公式','版本三 · 聚会分享'];
+    labels=['版本一 · 周末套餐','版本二 · 宅家公式','版本三 · 聚会分享'];
   }else if(day===2){ // Tuesday
     v1=genTueV1(product,short,dir,hotspotLine);v2=genTueV2(product,short,dir,hotspotLine);v3=genTueV3(product,short,dir,hotspotLine);
-    labels=['版本一 · 生活共鸣','版本二 · 诊断处方','版本三 · 犒赏自己'];
+    labels=['版本一 · 热销风向','版本二 · 诊断处方','版本三 · 犒赏自己'];
   }else if(day===6){ // Saturday
     v1=genSatV1(product,short,dir,hotspotLine);v2=genSatV2(product,short,dir,hotspotLine);v3=genSatV3(product,short,dir,hotspotLine);
-    labels=['版本一 · 宝藏安利','版本二 · 周末限定','版本三 · 快乐自由'];
+    labels=['版本一 · 外卖双平台','版本二 · 周末限定','版本三 · 种草自由'];
   }else{
     v1=genThuV1(product,short,dir,hotspotLine);v2=genFriV1(product,short,dir,hotspotLine);v3=genTueV1(product,short,dir,hotspotLine);
     labels=['版本一 · 外卖','版本二 · 场景','版本三 · 关怀'];
@@ -1117,18 +1122,114 @@ function loadCopyHistory(idx){
   document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
 }
 
-// ─── Init ───
-function initCopyPage(){initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyHotspots();loadCopyProducts();renderCopyHistory();}
+// ─── AI 润色 ───
+function getApiKey(){return localStorage.getItem('qg_apikey')||'';}
+function openApiKeyModal(){if(getApiKey())document.getElementById('apiKeyInput').value=getApiKey();document.getElementById('apiKeyModal').classList.add('show');}
+function closeApiKeyModal(){document.getElementById('apiKeyModal').classList.remove('show');}
+function saveApiKey(){var key=document.getElementById('apiKeyInput').value.trim();if(!key){toast('请输入 API Key');return;}localStorage.setItem('qg_apikey',key);closeApiKeyModal();toast('✅ API Key 已保存');}
 
-function initCopyPage(){
-  initCopyDay();
-  loadCopyConfig();
-  applyCopyConfig();
-  loadCopyHotspots();
-  loadCopyProducts();
-  renderCopyHistory();
+function showCopyLoading(){
+  ['copyV1','copyV2','copyV3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(el)el.innerHTML='<div style="text-align:center;padding:40px"><div style="display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:8px"></div><div style="font-size:12px;color:var(--text-dim)">正在为你创作文案...</div></div>';
+  });
+  var cards=document.querySelectorAll('#copyVersions .card');
+  cards.forEach(function(c){c.style.opacity='1';});
+  document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='none';});
 }
 
+function generateCopyAI(){
+  var key=getApiKey();
+  if(!key){toast('⚠️ 请先设置 API Key');openApiKeyModal();return;}
+  showCopyLoading();
+  document.getElementById('btnGenerateCopy').disabled=true;
+  document.getElementById('btnGenerateCopy').textContent='⏳ 生成中...';
+  
+  var now=new Date();var day=now.getDay();
+  var dayNames={2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·外卖双平台·轮换种草'};
+  var dayName=dayNames[day]||'今日';
+  
+  if(copyProducts.length===0){
+    if(allProductsData.length>0)copyProducts=[allProductsData[0].name];
+    else copyProducts=['招牌鲜果切'];
+  }
+  var product=copyProducts[0];
+  var price=CopyConfig.customPrice||'';
+  var direction=CopyConfig.direction||'auto';
+  var delivery='满30免配送费';
+  if(CopyConfig.delivery==='custom')delivery=CopyConfig.deliveryCustomVal||'自定义配送';
+  
+  var prompt='你是切果NOW的品牌文案。切果NOW是鲜切水果外卖品牌，调性：健康活力、不浮夸营销、口语化亲切。\\n\\n'+
+    '【推送日】'+dayName+'\\n'+
+    '【产品】'+product+'\\n'+
+    '【价格】'+(price||'以平台实际价格为准')+'\\n'+
+    '【配送】'+delivery+'\\n'+
+    '【方向】'+(direction==='auto'?'自由发挥':direction)+'\\n\\n'+
+    '生成3版差异化的社群文案。每版5-7行，每行≤20字，行尾加emoji。3版风格要不同。\\n'+
+    '输出格式：\\n'+
+    '【版本一 · 风格名】\\n文案内容...\\n\\n'+
+    '【版本二 · 风格名】\\n文案内容...\\n\\n'+
+    '【版本三 · 风格名】\\n文案内容...';
+  
+  fetch('https://api.deepseek.com/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:prompt}],max_tokens:1200,temperature:0.8})
+  }).then(function(r){return r.json()}).then(function(d){
+    document.getElementById('btnGenerateCopy').disabled=false;
+    document.getElementById('btnGenerateCopy').textContent='🧠 AI 润色生成';
+    var raw=d.choices[0].message.content;
+    // Parse 3 versions from AI output (【版本一/二/三】...)
+    var versions=['','',''];
+    var cnMap={'一':1,'二':2,'三':3};
+    // Split at 【版本 markers
+    var parts=raw.split(/【版本[一二三]/);
+    // parts[0]=prefix, parts[1]=v1 content, parts[2]=v2 content, parts[3]=v3 content
+    for(var v=1;v<=3;v++){
+      if(parts[v]&&parts[v].trim()){
+        // Strip leading style label "· 风格名】" and whitespace
+        var content=parts[v].replace(/^[^\\n]*】\\s*/,'').trim();
+        if(content)versions[v-1]=content;
+      }
+    }
+    // Fallback: if parsing fails, try splitting on 【
+    if(!versions[0]&&!versions[1]&&!versions[2]){
+      var parts2=raw.split('【');
+      for(var j=0;j<parts2.length;j++){
+        for(var c in cnMap){
+          if(parts2[j].indexOf(c+' ·')>=0||parts2[j].indexOf(c+'·')>=0){
+            var content2=parts2[j].replace(/^[^\\n]*】\\s*/,'').trim();
+            versions[cnMap[c]-1]=content2;
+          }
+        }
+      }
+    }
+    // Last resort: split by blank lines
+    if(!versions[0]&&!versions[1]&&!versions[2]){
+      var p3=raw.split(/\\n{2,}/).filter(function(p){return p.trim()&&p.length>10;});
+      if(p3.length>=3){versions[0]=p3[0];versions[1]=p3[1];versions[2]=p3[2];}
+      else{versions=[p3[0]||raw,p3[1]||'',p3[2]||''];}
+    }
+    var labels=['生成版一','生成版二','生成版三'];
+    for(var v=0;v<3;v++){
+      var vid='copyV'+(v+1);
+      var el=document.getElementById(vid);
+      if(el)el.innerHTML='<strong>'+labels[v]+' · 🧠 AI</strong><br><br>'+(versions[v]||'生成中...').replace(/\\n/g,'<br>');
+    }
+    document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
+    currentCopyTexts=versions;
+    saveCopyHistory(product,versions);
+    toast('🧠 AI 润色完成');
+  }).catch(function(e){
+    document.getElementById('btnGenerateCopy').disabled=false;
+    document.getElementById('btnGenerateCopy').textContent='🧠 AI 润色生成';
+    ['copyV1','copyV2','copyV3'].forEach(function(id){document.getElementById(id).innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:13px">⚠️ 生成失败，请检查 API Key 或网络</div>';});
+    toast('⚠️ AI 调用失败');
+  });
+}
+
+// ─── Init ───
+function initCopyPage(){initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyHotspots();loadCopyProducts();renderCopyHistory();}
 
 // ═══════ COMMUNITY ═══════
 function renderWeeklyReports(){var kpi='<div class="kpi accent-green"><div class="kpi-label">👥 群客户数</div><div class="kpi-value">33,321<span class="kpi-change flat">人</span></div><div class="kpi-sub">712群 · 682门店 · 渗透92.5%</div></div>';kpi+='<div class="kpi accent-teal"><div class="kpi-label">📈 本周入群</div><div class="kpi-value">391<span class="kpi-change up">+47.0%</span></div><div class="kpi-sub">07/13-07/19</div></div>';kpi+='<div class="kpi accent-red"><div class="kpi-label">📉 本周退群</div><div class="kpi-value">502<span class="kpi-change down">-11.9%</span></div><div class="kpi-sub">环比改善+193</div></div>';kpi+='<div class="kpi accent-amber"><div class="kpi-label">📊 本周净增</div><div class="kpi-value">-111<span class="kpi-change flat">改善中</span></div><div class="kpi-sub">退群率>10%: 3家</div></div>';document.getElementById('communityDataKPI').innerHTML=kpi;var weeks=[{label:'07/13-07/19',file:'社群周报看板_20260713-0719.html'},{label:'07/06-07/12',file:'社群周报看板_20260706-0712.html'},{label:'06/29-07/05',file:'社群周报看板_20260629-0705.html'},{label:'06/22-06/28',file:'社群周报看板_20260622-0628.html'},{label:'06/15-06/21',file:'社群周报看板_20260615-0621.html'}];var h='';weeks.forEach(function(w){h+='<div><a href="#" data-type="weekly" data-file="'+w.file+'" onclick="openReport(this.dataset.type,this.dataset.file);return false" style="color:var(--brand);font-size:13px">📄 '+w.label+' 社群周报</a></div>';});document.getElementById('weeklyReportsList').innerHTML=h;var months=[{label:'2026年6月',file:'社群月报看板_202606.html'},{label:'2026年5月',file:'社群月报看板_202605.html'}];var m='';months.forEach(function(mo){m+='<div><a href="#" data-type="monthly" data-file="'+mo.file+'" onclick="openReport(this.dataset.type,this.dataset.file);return false" style="color:var(--brand);font-size:13px">📄 '+mo.label+' 社群月报</a></div>';});document.getElementById('monthlyReportsList').innerHTML=m;}
@@ -1142,4 +1243,4 @@ function renderAcquisition(){var kpi='<div class="kpi accent-blue"><div class="k
 renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderMemberDay();renderAcquisition();loadCopyConfig();applyCopyConfig();
 setInterval(function(){loadSentimentData();},30*60*1000);
 document.getElementById('noteModal').addEventListener('click',function(e){if(e.target===this)closeNoteModal();});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNoteModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeNoteModal();closeApiKeyModal();}});

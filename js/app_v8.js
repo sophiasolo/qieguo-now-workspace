@@ -1179,21 +1179,36 @@ function generateCopyAI(){
     document.getElementById('btnGenerateCopy').disabled=false;
     document.getElementById('btnGenerateCopy').textContent='🧠 AI 润色生成';
     var raw=d.choices[0].message.content;
-    // Parse 3 versions from AI output
-    var blocks=raw.split(/【版本/);
+    // Parse 3 versions from AI output (【版本一/二/三】...)
     var versions=['','',''];
-    for(var i=0;i<blocks.length;i++){
-      var idx=parseInt(blocks[i].charAt(0));
-      if(idx>=1&&idx<=3&&blocks[i].length>10){
-        versions[idx-1]=blocks[i].replace(/^[一二三]\\s*[·⋅·]\\s*[^\\n]*\\n?/,'').trim();
-        if(!versions[idx-1])versions[idx-1]=blocks[i].trim();
+    var cnMap={'一':1,'二':2,'三':3};
+    // Split at 【版本 markers
+    var parts=raw.split(/【版本[一二三]/);
+    // parts[0]=prefix, parts[1]=v1 content, parts[2]=v2 content, parts[3]=v3 content
+    for(var v=1;v<=3;v++){
+      if(parts[v]&&parts[v].trim()){
+        // Strip leading style label "· 风格名】" and whitespace
+        var content=parts[v].replace(/^[^\\n]*】\\s*/,'').trim();
+        if(content)versions[v-1]=content;
       }
     }
-    // Fallback: if parsing fails, use raw split
+    // Fallback: if parsing fails, try splitting on 【
     if(!versions[0]&&!versions[1]&&!versions[2]){
-      var parts=raw.split(/\\n{2,}/).filter(function(p){return p.trim();});
-      if(parts.length>=3){versions[0]=parts[0];versions[1]=parts[1];versions[2]=parts[2];}
-      else{versions=[parts[0]||raw,parts[1]||'',parts[2]||''];}
+      var parts2=raw.split('【');
+      for(var j=0;j<parts2.length;j++){
+        for(var c in cnMap){
+          if(parts2[j].indexOf(c+' ·')>=0||parts2[j].indexOf(c+'·')>=0){
+            var content2=parts2[j].replace(/^[^\\n]*】\\s*/,'').trim();
+            versions[cnMap[c]-1]=content2;
+          }
+        }
+      }
+    }
+    // Last resort: split by blank lines
+    if(!versions[0]&&!versions[1]&&!versions[2]){
+      var p3=raw.split(/\\n{2,}/).filter(function(p){return p.trim()&&p.length>10;});
+      if(p3.length>=3){versions[0]=p3[0];versions[1]=p3[1];versions[2]=p3[2];}
+      else{versions=[p3[0]||raw,p3[1]||'',p3[2]||''];}
     }
     var labels=['生成版一','生成版二','生成版三'];
     for(var v=0;v<3;v++){
