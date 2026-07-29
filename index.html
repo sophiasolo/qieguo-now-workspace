@@ -99,6 +99,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 .btn-ghost:hover{background:var(--bg)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:10px 24px;border-radius:20px;font-size:13px;z-index:300;animation:toastIn .3s ease;pointer-events:none}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-dim)}
 .empty-state .icon{font-size:48px;margin-bottom:12px}
 .empty-state h3{font-size:16px;margin-bottom:6px;color:var(--text)}
@@ -314,7 +315,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
             <div class="card-header"><div class="card-title">☀️ 今日信息</div></div>
             <div id="copyWeather" style="font-size:12px;color:var(--text-dim)">加载中...</div>
           </div>
-          <button class="btn btn-primary" onclick="generateCopy()" style="width:100%;padding:12px;font-size:14px">🚀 一键生成 3 版</button>
+          <div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">
+            <button class="btn btn-primary" onclick="setCopyConfig('aiMode','template')" id="modeTemplate" style="font-size:11px;padding:6px 0;flex:1">⚡ 快速模板</button>
+            <button class="btn btn-ghost" onclick="setCopyConfig('aiMode','ai')" id="modeAI" style="font-size:11px;padding:6px 0;flex:1">🧠 AI润色</button>
+            <span onclick="openApiKeyModal()" style="cursor:pointer;font-size:14px;opacity:0.4;padding:0 4px" title="API Key 设置">⚙️</span>
+          </div>
+          <button class="btn btn-primary" onclick="generateCopy()" id="btnGenerateCopy" style="width:100%;padding:12px;font-size:14px">🚀 一键生成</button>
         </div>
         
         <!-- CENTER: 创作区 -->
@@ -380,6 +386,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
     <div class="page" id="page-ailearn"><div class="empty-state"><div class="icon">💡</div><h3>AI前沿案例 · 知识卡片盒</h3><p>AI资讯收藏 → 标签分类 → 翻卡浏览 — 建设中</p></div></div>
   </div>
 </div>
+<div class="modal-overlay" id="apiKeyModal"><div class="modal" style="max-width:420px"><h3>🔑 DeepSeek API Key</h3><div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">仅保存在你浏览器本地，不上传任何服务器。<br>Key 获取：<a href="https://platform.deepseek.com/api_keys" target="_blank" style="color:var(--brand)">platform.deepseek.com/api_keys</a></div><input id="apiKeyInput" placeholder="sk-..." style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:monospace"><div class="btn-row" style="margin-top:12px"><button class="btn btn-ghost" onclick="closeApiKeyModal()">取消</button><button class="btn btn-primary" onclick="saveApiKey()">保存</button></div></div></div>
 <div class="modal-overlay" id="noteModal"><div class="modal" style="max-width:520px"><h3 id="noteModalTitle">📝 编辑排期内容</h3>
 <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">直接修改各分类内容，保存后实时更新</div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#e65100">🟠 小程序</label><input id="editProgram" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：会员日、9块9特价单品"></div>
@@ -389,6 +396,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
-<script src="js/app_v7.js?v=19"></script>
+<script src="js/app_v8.js?v=20"></script>
 </body>
 </html>
