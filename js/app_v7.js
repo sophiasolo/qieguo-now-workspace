@@ -3,7 +3,7 @@ var productData=null;
 var sentimentFilter='all';
 var currentNoteDate=null;
 
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto'};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:''};
 
 var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-12":"春节","04-05":"清明","05-01":"劳动节","06-25":"端午","09-15":"中秋","10-01":"国庆","12-25":"圣诞"}};
 
@@ -606,7 +606,7 @@ function refreshHotspot(){filterHotspot('all');renderHotspot();}
 function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template'};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:''};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
 function saveCopyConfig(){localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}
 function setCopyConfig(key,val){
@@ -670,7 +670,9 @@ function filterCopyProducts(){
     var safeName=p.name.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
     html+='<label style="display:flex;align-items:center;gap:4px;padding:2px 4px;cursor:pointer"><input type="checkbox"'+checked+' data-prod="'+safeName+'" onchange="toggleCopyProduct(this,this.dataset.prod)"><span>'+p.name+'</span><span style="color:var(--text-dim);margin-left:auto;font-size:10px">¥'+p.price+' · '+p.category+'</span></label>';
   });
-  if(!matches.length)html='<div style="padding:8px;color:var(--text-dim)">无匹配产品</div>';
+  var exactMatch=matches.some(function(p){return p.name.toLowerCase()===q;});
+  if(q&&!exactMatch){html='<div onclick="useCustomProduct()" style="padding:5px 8px;background:var(--brand-light);color:var(--brand);border-radius:4px;cursor:pointer;font-weight:600;font-size:11px;margin-bottom:4px">📝 使用「'+q+'」作为产品名</div>'+html;}
+  if(!matches.length&&!q)html='<div style="padding:8px;color:var(--text-dim)">无匹配产品</div>';
   el.innerHTML=html;
 }
 
@@ -1037,6 +1039,9 @@ function formatCopyDisplay(text,label,extraLabel){
   return out;
 }
 
+function getCopyProduct(){var c=document.getElementById('copyProductSearch');if(c&&c.value.trim())return c.value.trim();if(copyProducts.length>0)return copyProducts[0];return '招牌鲜果切';}
+function useCustomProduct(){var c=document.getElementById('copyProductSearch');if(c){var v=c.value.trim();if(v){CopyConfig.customProduct=v;saveCopyConfig();renderCopyProductSelector();toast('📝 已选：'+v);}}}
+
 function copyVersion(idx){
   var text=currentCopyTexts[idx-1]||'';
   // text is already plain from versions[] array — just copy it
@@ -1087,12 +1092,7 @@ function generateCopy(){
     hotspotLine=hw; // 原样传给makeHotspotLine处理
   }
   var day=now.getDay();
-  if(copyProducts.length===0){
-    if(allProductsData.length>0)copyProducts=[allProductsData[0].name];
-    else copyProducts=['招牌鲜果切'];
-  }
-  var product=copyProducts[0];
-  var short=shortName(product);
+  var product=getCopyProduct();var short=shortName(product);
   
   var v1='',v2='',v3='';
   var labels=['版本一','版本二','版本三'];
@@ -1199,11 +1199,7 @@ function generateCopyAI(){
   var dayNames={2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·外卖双平台·轮换种草'};
   var dayName=dayNames[day]||'今日';
   
-  if(copyProducts.length===0){
-    if(allProductsData.length>0)copyProducts=[allProductsData[0].name];
-    else copyProducts=['招牌鲜果切'];
-  }
-  var product=copyProducts[0];
+  var product=getCopyProduct();
   var price=CopyConfig.customPrice||'';
   var direction=CopyConfig.direction||'auto';
   var delivery='满30免配送费';
