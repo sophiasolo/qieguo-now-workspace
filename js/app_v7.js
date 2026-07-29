@@ -1044,6 +1044,33 @@ function copyVersion(idx){
   navigator.clipboard.writeText(text).then(function(){toast('📋 版本'+idx+'已复制');}).catch(function(){toast('复制失败');});
 }
 
+// ─── Strip link fragments (handles URLs broken by linesToCopy) ───
+function stripLinkFragments(text){
+  var lines=text.split('\n');
+  var out=[];
+  var inLink=false;
+  lines.forEach(function(l){
+    var t=l.trim();
+    // Detect link section start
+    if(t.indexOf('🟡美团')>=0||t.indexOf('🔵饿了么')>=0||/^#小程序/.test(t)){
+      inLink=true;
+      if(!CopyConfig.linkMeituan&&t.indexOf('🟡美团')>=0)return;
+      if(!CopyConfig.linkEleme&&t.indexOf('🔵饿了么')>=0)return;
+      if(!CopyConfig.linkMini&&/^#小程序/.test(t))return;
+    }
+    if(inLink){
+      // Skip URL fragments: hex strings, path segments, domain fragments
+      if(/^[A-Za-z0-9]+🍉$/.test(t))return;
+      if(/^[a-z]{2,}\.[a-z]{2,}\//.test(t)||/^\/[a-zA-Z0-9]{3,}🍉$/.test(t)||/^[a-z]+\.[a-z]+\/[a-z]+/.test(t))return;
+      // If we reach a non-link line, end link section
+      if(t&&!/^[A-Za-z0-9\/:._-]+🍉?$/.test(t))inLink=false;
+      else return;
+    }
+    out.push(l);
+  });
+  return out.join('\n');
+}
+
 function generateCopy(){
   if(CopyConfig.aiMode==='ai'){generateCopyAI();return;}
   var now=new Date();
@@ -1093,10 +1120,10 @@ function generateCopy(){
   v2=injectExtras(v2,dir,hotspotLine,2);
   v3=injectExtras(v3,dir,hotspotLine,3);
   
-  // Filter links: respect CopyConfig
-  if(!CopyConfig.linkMeituan){v1=v1.replace(/\n🟡美团[^\n]*/g,"");v2=v2.replace(/\n🟡美团[^\n]*/g,"");v3=v3.replace(/\n🟡美团[^\n]*/g,"");}
-  if(!CopyConfig.linkEleme){v1=v1.replace(/\n🔵饿了么[^\n]*/g,"");v2=v2.replace(/\n🔵饿了么[^\n]*/g,"");v3=v3.replace(/\n🔵饿了么[^\n]*/g,"");}
-  if(!CopyConfig.linkMini){v1=v1.replace(/\n#小程序[^\n]*/g,"");v2=v2.replace(/\n#小程序[^\n]*/g,"");v3=v3.replace(/\n#小程序[^\n]*/g,"");}
+  // Filter links: use stripLinkFragments to handle URLs broken by linesToCopy
+  if(!CopyConfig.linkMeituan||!CopyConfig.linkEleme||!CopyConfig.linkMini){
+    v1=stripLinkFragments(v1);v2=stripLinkFragments(v2);v3=stripLinkFragments(v3);
+  }
   
   var dirLabel=document.getElementById("copyDirection").selectedOptions[0].text;
   document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);document.getElementById("copyV1").parentElement.style.opacity="1";
