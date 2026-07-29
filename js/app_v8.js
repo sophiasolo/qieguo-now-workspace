@@ -652,7 +652,7 @@ function renderCopyProductSelector(){
     var checked=copyProducts.indexOf(p.name)>=0?' checked':'';
     var icon=i<3?["🥇","🥈","🥉"][i]:"#"+(i+1);
     var safeName=p.name.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
-    html+='<label style="display:flex;align-items:center;gap:4px;padding:2px 4px;cursor:pointer"><span style="font-size:10px;width:22px;text-align:center">'+icon+'</span><input type="checkbox"'+checked+' data-prod="'+safeName+'" onchange="toggleCopyProduct(this,this.dataset.prod)"><span>'+p.name+'</span><span style="color:var(--text-dim);margin-left:auto;font-size:10px">¥'+p.price+' · 销'+p.sales+'</span></label>';
+    html+='<label style="display:flex;align-items:center;gap:4px;padding:2px 4px;cursor:pointer"><span style="font-size:10px;width:22px;text-align:center">'+icon+'</span><input type="checkbox"'+checked+' data-prod="'+safeName+'" onchange="toggleCopyProduct(this,this.dataset.prod)"><span>'+p.name+'</span><span style="color:var(--text-dim);margin-left:auto;font-size:10px">¥'+p.price+'</span></label>';
   });
   html+='</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px">已选 <span id="copyProductCount">'+copyProducts.length+'</span> 款 · 搜索可查全部'+(sorted.length-top.length)+'款</div>';
   el.innerHTML=html;
