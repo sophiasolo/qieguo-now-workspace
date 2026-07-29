@@ -1163,8 +1163,14 @@ function generateCopyAI(){
   var priceRule='';
   if(CopyConfig.priceMode==='regional'){
     priceRule='不要写具体价格！必须写「各区域以平台实际价格为准」';
-  }else if(CopyConfig.customPrice){
-    priceRule='必须包含价格行：💰 ¥'+CopyConfig.customPrice;
+  }else{
+    var p;
+    if(CopyConfig.customPrice){p=CopyConfig.customPrice;}
+    else if(allProductsData.length>0){
+      var found=allProductsData.find(function(x){return x.name===product;});
+      if(found&&found.price)p=found.price;
+    }
+    priceRule=p?'必须包含价格行：💰 ¥'+p:'';
   }
   var deliveryRule='';
   if(CopyConfig.delivery==='custom'){
