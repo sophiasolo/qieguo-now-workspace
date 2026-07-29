@@ -1268,13 +1268,6 @@ function generateCopyAI(){
     if(CopyConfig.linkEleme)linkParts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
     if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/LFtIEeLhMcgq0Rx');
     var linkFooter=linkParts.length?String.fromCharCode(10,10)+linkParts.join(String.fromCharCode(10)):"";
-    var priceLine='';
-    if(price)priceLine='💰 ¥'+price;
-    // Ensure at least one version has price
-    var hasPrice=versions.some(function(v){return v.indexOf('💰')>=0||v.indexOf('¥')>=0;});
-    if(!hasPrice&&priceLine){
-      versions[0]=versions[0]+'\n\n'+priceLine;
-    }
     // Append links to all versions
     for(var v=0;v<3;v++){if(versions[v]&&linkFooter)versions[v]=versions[v]+linkFooter;}
     var labels=['生成版一','生成版二','生成版三'];
