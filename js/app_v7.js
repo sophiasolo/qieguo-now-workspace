@@ -1040,7 +1040,7 @@ function formatCopyDisplay(text,label,extraLabel){
 
 function copyVersion(idx){
   var text=currentCopyTexts[idx-1]||'';
-  text=text.replace(/<br>/g,'\n').replace(/<[^>]*>/g,'');
+  // text is already plain from versions[] array — just copy it
   navigator.clipboard.writeText(text).then(function(){toast('📋 版本'+idx+'已复制');}).catch(function(){toast('复制失败');});
 }
 
@@ -1093,9 +1093,9 @@ function generateCopy(){
   v2=injectExtras(v2,dir,hotspotLine,2);
   v3=injectExtras(v3,dir,hotspotLine,3);
   
-  document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);
-  document.getElementById('copyV2').innerHTML=formatCopyDisplay(v2,labels[1],dirLabel);
-  document.getElementById('copyV3').innerHTML=formatCopyDisplay(v3,labels[2],dirLabel);
+  document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);document.getElementById("copyV1").parentElement.style.opacity="1";
+  document.getElementById('copyV2').innerHTML=formatCopyDisplay(v2,labels[1],dirLabel);document.getElementById("copyV2").parentElement.style.opacity="1";
+  document.getElementById('copyV3').innerHTML=formatCopyDisplay(v3,labels[2],dirLabel);document.getElementById("copyV3").parentElement.style.opacity="1";
   
   document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
   
@@ -1132,9 +1132,9 @@ function loadCopyHistory(idx){
   try{history=JSON.parse(localStorage.getItem('qg_copy_history')||'[]');}catch(e){}
   if(idx>=history.length)return;
   var h=history[idx];
-  document.getElementById('copyV1').innerHTML=formatCopyDisplay(h.v1,'版本一','历史');
-  document.getElementById('copyV2').innerHTML=formatCopyDisplay(h.v2,'版本二','历史');
-  document.getElementById('copyV3').innerHTML=formatCopyDisplay(h.v3,'版本三','历史');
+  document.getElementById('copyV1').innerHTML=formatCopyDisplay(h.v1,'版本一','历史');document.getElementById("copyV1").parentElement.style.opacity="1";
+  document.getElementById('copyV2').innerHTML=formatCopyDisplay(h.v2,'版本二','历史');document.getElementById("copyV2").parentElement.style.opacity="1";
+  document.getElementById('copyV3').innerHTML=formatCopyDisplay(h.v3,'版本三','历史');document.getElementById("copyV3").parentElement.style.opacity="1";
   document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
 }
 
@@ -1225,6 +1225,7 @@ function generateCopyAI(){
     '【配送】'+delivery+'\\n'+
     '【方向】'+(direction==='auto'?'根据推送日自由选择':direction)+'\\n\\n'+
     '生成3版差异化社群文案，每版5-8行，花字类型和风格要明显不同。\\n'+
+    '至少1版要带价格（格式：💰¥XX或💰¥XX起）。\\n'+
     '输出格式（严格）：\\n'+
     '【版本一 · 风格名】\\n文案\\n\\n'+
     '【版本二 · 风格名】\\n文案\\n\\n'+
@@ -1269,11 +1270,25 @@ function generateCopyAI(){
       if(p3.length>=3){versions[0]=p3[0];versions[1]=p3[1];versions[2]=p3[2];}
       else{versions=[p3[0]||raw,p3[1]||'',p3[2]||''];}
     }
+    // Build link footer based on config
+    var linkFooter='';
+    if(CopyConfig.linkMeituan)linkFooter+='\n🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK';
+    if(CopyConfig.linkEleme)linkFooter+='\n🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b';
+    if(CopyConfig.linkMini)linkFooter+='\n#小程序://切果NOW/LFtIEeLhMcgq0Rx';
+    var priceLine='';
+    if(price)priceLine='💰 ¥'+price;
+    // Ensure at least one version has price
+    var hasPrice=versions.some(function(v){return v.indexOf('💰')>=0||v.indexOf('¥')>=0;});
+    if(!hasPrice&&priceLine){
+      versions[0]=versions[0]+'\n\n'+priceLine;
+    }
+    // Append links to all versions
+    for(var v=0;v<3;v++){if(versions[v]&&linkFooter)versions[v]=versions[v]+'\n\n'+linkFooter.trim();}
     var labels=['生成版一','生成版二','生成版三'];
     for(var v=0;v<3;v++){
       var vid='copyV'+(v+1);
       var el=document.getElementById(vid);
-      if(el)el.innerHTML=formatCopyDisplay(versions[v]||'',labels[v],'🧠 AI');
+      if(el){el.innerHTML=formatCopyDisplay(versions[v]||"",labels[v],"🧠 AI");el.parentElement.style.opacity="1";}
     }
     document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
     currentCopyTexts=versions;
