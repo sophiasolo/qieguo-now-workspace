@@ -613,8 +613,8 @@ function setCopyConfig(key,val){
   CopyConfig[key]=val;saveCopyConfig();applyCopyConfig();
   if(key==='aiMode'){updateGenBtnLabel();}
 }
-function updateGenBtnLabel(){var b=document.getElementById('btnGenerateCopy');if(!b)return;b.textContent=CopyConfig.aiMode==='ai'?'🧠 AI 润色生成':'🚀 一键生成';}
-function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;updateGenBtnLabel();var mt=document.getElementById('modeTemplate'),ma=document.getElementById('modeAI');if(mt){mt.className='btn '+(CopyConfig.aiMode==='template'?'btn-primary':'btn-ghost');mt.style.fontSize='11px';mt.style.padding='6px 0';mt.style.flex='1';}if(ma){ma.className='btn '+(CopyConfig.aiMode==='ai'?'btn-primary':'btn-ghost');ma.style.fontSize='11px';ma.style.padding='6px 0';ma.style.flex='1';}}
+function updateGenBtnLabel(){}
+function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;updateGenBtnLabel();}
 function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2){label='周二 · 热销风向';document.getElementById('linkMiniapp').style.display='';}else if(day===3){label='周三 · 会员日88折';document.getElementById('linkMiniapp').style.display='';}else if(day===4){label='周四 · 外卖双平台';document.getElementById('linkMiniapp').style.display='none';CopyConfig.linkMini=false;}else if(day===5){label='周五 · 周末套餐';document.getElementById('linkMiniapp').style.display='';}else if(day===6){label='周六 · 外卖双平台 · 轮换种草';document.getElementById('linkMiniapp').style.display='';}else{label='今天无推送';}document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML='📅 '+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日'+festToday;}
 function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
 
@@ -1087,66 +1087,7 @@ function stripLinkFragments(text){
 
 
 function generateCopy(){
-  if(CopyConfig.aiMode==='ai'){generateCopyAI();return;}
-  var now=new Date();
-  var dir=CopyConfig.direction||'auto';
-  
-  // Get hotspot keywords for injection
-  var hotspotWords=[];
-  try{
-    var hotspotEls=document.querySelectorAll('#copyHotspotBar span');
-    hotspotEls.forEach(function(s){var w=s.textContent.trim();if(w)hotspotWords.push(w);});
-  }catch(e){}
-  var hotspotLine='';
-  if(hotspotWords.length>0){
-    var hw=hotspotWords[Math.floor(Math.random()*Math.min(3,hotspotWords.length))];
-    hotspotLine=hw; // 原样传给makeHotspotLine处理
-  }
-  var day=now.getDay();
-  var product=getCopyProduct();var short=shortName(product);
-  
-  var v1='',v2='',v3='';
-  var labels=['版本一','版本二','版本三'];
-  
-  if(day===4){ // Thursday
-    v1=genThuV1(product,short,dir,hotspotLine);v2=genThuV2(product,short,dir,hotspotLine);v3=genThuV3(product,short,dir,hotspotLine);
-    labels=['版本一 · 外卖特价','版本二 · 限时紧迫','版本三 · 冰鲜直达'];
-  }else if(day===5){ // Friday
-    v1=genFriV1(product,short,dir,hotspotLine);v2=genFriV2(product,short,dir,hotspotLine);v3=genFriV3(product,short,dir,hotspotLine);
-    labels=['版本一 · 周末套餐','版本二 · 宅家公式','版本三 · 聚会分享'];
-  }else if(day===2){ // Tuesday
-    v1=genTueV1(product,short,dir,hotspotLine);v2=genTueV2(product,short,dir,hotspotLine);v3=genTueV3(product,short,dir,hotspotLine);
-    labels=['版本一 · 热销风向','版本二 · 诊断处方','版本三 · 犒赏自己'];
-  }else if(day===6){ // Saturday
-    v1=genSatV1(product,short,dir,hotspotLine);v2=genSatV2(product,short,dir,hotspotLine);v3=genSatV3(product,short,dir,hotspotLine);
-    labels=['版本一 · 外卖双平台','版本二 · 周末限定','版本三 · 种草自由'];
-  }else{
-    v1=genThuV1(product,short,dir,hotspotLine);v2=genFriV1(product,short,dir,hotspotLine);v3=genTueV1(product,short,dir,hotspotLine);
-    labels=['版本一 · 外卖','版本二 · 场景','版本三 · 关怀'];
-  }
-  
-  // Inject direction hook + hotspot into each variant
-  v1=injectExtras(v1,dir,hotspotLine,1);
-  v2=injectExtras(v2,dir,hotspotLine,2);
-  v3=injectExtras(v3,dir,hotspotLine,3);
-  
-  // Build clean links based on config (append AFTER linesToCopy, not through it)
-  var linkParts=[];
-  if(CopyConfig.linkMeituan)linkParts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
-  if(CopyConfig.linkEleme)linkParts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
-  if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/LFtIEeLhMcgq0Rx');
-  var linkFooter=linkParts.length?String.fromCharCode(10,10)+linkParts.join(String.fromCharCode(10)):'';
-  // Strip old link fragments from gen functions, append clean links
-  v1=stripLinkFragments(v1)+linkFooter;v2=stripLinkFragments(v2)+linkFooter;v3=stripLinkFragments(v3)+linkFooter;
-  
-  var dirLabel=document.getElementById("copyDirection").selectedOptions[0].text;
-  document.getElementById('copyV1').innerHTML=formatCopyDisplay(v1,labels[0],dirLabel);document.getElementById("copyV1").parentElement.style.opacity="1";
-  document.getElementById('copyV2').innerHTML=formatCopyDisplay(v2,labels[1],dirLabel);document.getElementById("copyV2").parentElement.style.opacity="1";
-  document.getElementById('copyV3').innerHTML=formatCopyDisplay(v3,labels[2],dirLabel);document.getElementById("copyV3").parentElement.style.opacity="1";
-  document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
-  currentCopyTexts=[v1,v2,v3];
-  saveCopyHistory(product,[v1,v2,v3]);
-  toast('🚀 已生成 3 版文案');
+  generateCopyAI();
 }
 
 // ─── History ───

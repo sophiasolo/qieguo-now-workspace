@@ -313,11 +313,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
             </div>
           </div>
           <div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">
-            <button class="btn btn-primary" onclick="setCopyConfig('aiMode','template')" id="modeTemplate" style="font-size:11px;padding:6px 0;flex:1">⚡ 快速模板</button>
-            <button class="btn btn-ghost" onclick="setCopyConfig('aiMode','ai')" id="modeAI" style="font-size:11px;padding:6px 0;flex:1">🧠 AI润色</button>
+            <button class="btn btn-primary" onclick="generateCopy()" id="btnGenerateCopy" style="flex:1;padding:12px;font-size:14px">🧠 AI 一键生成</button>
             <span onclick="openApiKeyModal()" style="cursor:pointer;font-size:14px;opacity:0.4;padding:0 4px" title="API Key 设置">⚙️</span>
           </div>
-          <button class="btn btn-primary" onclick="generateCopy()" id="btnGenerateCopy" style="width:100%;padding:12px;font-size:14px">🚀 一键生成</button>
         </div>
         
         <!-- CENTER: 创作区 -->
