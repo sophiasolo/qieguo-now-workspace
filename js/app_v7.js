@@ -779,14 +779,14 @@ function genThuV1(product,short,dir,hotspot){
 function genThuV2(product,short,dir,hotspot){
   var hz='⚡限时特价｜'+short;
   var cta='💨 30分钟冰鲜到家🍉';
-  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,'','🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK','🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b'];
+  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
   return linesToCopy(lines);
 }
 
 function genThuV3(product,short,dir,hotspot){
   var hz=pickHuaZi('thu','thuHuaUsed2',2)+short;
   var cta='🧊 冰镇鲜切🍉外卖直达';
-  var lines=[hz,'','📦 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,'','🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK','🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b'];
+  var lines=[hz,'','📦 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
   return linesToCopy(lines);
 }
 
@@ -794,21 +794,21 @@ function genThuV3(product,short,dir,hotspot){
 function genFriV1(product,short,dir,hotspot){
   var hz='😆周五福来day🍉'+short+'已就位';
   var cta=pickCTA('fri','ctaUsed_fri');
-  var lines=[hz,'','追剧·宅家·聚会🥳',short+'清爽不脏手🍴','边看边叉着吃',cta,'','👆小程序下单直送到手👇','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','追剧·宅家·聚会🥳',short+'清爽不脏手🍴','边看边叉着吃',cta,'','👆小程序下单直送到手👇'];
   return linesToCopy(lines);
 }
 
 function genFriV2(product,short,dir,hotspot){
   var hz='周末宅家公式🏠：沙发🛋️+'+short;
   var cta='🛋️ 周末快乐入口🍉';
-  var lines=[hz,'','空调房里一口冰果切🍃','谁还要出门呀',cta,'','👆小程序下单直送到手👇','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','空调房里一口冰果切🍃','谁还要出门呀',cta,'','👆小程序下单直送到手👇'];
   return linesToCopy(lines);
 }
 
 function genFriV3(product,short,dir,hotspot){
   var hz='🎉周五解放日🍉'+short;
   var cta=pickCTA('fri','ctaUsed_fri2');
-  var lines=[hz,'','朋友局上少了它就离谱😤','分享装一人一口刚好🍴',cta,'','👆小程序下单直送到手👇','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','朋友局上少了它就离谱😤','分享装一人一口刚好🍴',cta,'','👆小程序下单直送到手👇'];
   return linesToCopy(lines);
 }
 
@@ -816,21 +816,21 @@ function genFriV3(product,short,dir,hotspot){
 function genTueV1(product,short,dir,hotspot){
   var hz=pickHuaZi('tue','tueHuaUsed',6)+short;
   var cta=pickCTA('tue','ctaUsed_tue');
-  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,'','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
   return linesToCopy(lines);
 }
 
 function genTueV2(product,short,dir,hotspot){
   var hz='🤔今日诊断🍉你缺一份'+short;
   var cta='💆 犒赏周二的自己🍉';
-  var lines=[hz,'','📋处方：冰镇'+short+'×1','即刻服用⚡',getSellingPoint(product),'',cta,'','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','📋处方：冰镇'+short+'×1','即刻服用⚡',getSellingPoint(product),'',cta,''];
   return linesToCopy(lines);
 }
 
 function genTueV3(product,short,dir,hotspot){
   var hz='一周过半⏳该奖励自己了🥝';
   var cta=pickCTA('tue','ctaUsed_tue2');
-  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,'','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
   return linesToCopy(lines);
 }
 
@@ -838,21 +838,21 @@ function genTueV3(product,short,dir,hotspot){
 function genSatV1(product,short,dir,hotspot){
   var hz=pickHuaZi('sat','satHuaUsed',3)+short;
   var cta=pickCTA('sat','ctaUsed_sat');
-  var lines=[hz,'','这款宝藏果切我不允许你不知道😤',getSellingPoint(product),cta,'','👉小程序下单👇','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','这款宝藏果切我不允许你不知道😤',getSellingPoint(product),cta,'','👉小程序下单👇'];
   return linesToCopy(lines);
 }
 
 function genSatV2(product,short,dir,hotspot){
   var hz='⋆⁺₊☾ 周六限定🍉'+short;
   var cta='💫 周末小惊喜在这里✨';
-  var lines=[hz,'','吃过一次就回不去了🤤',getSellingPoint(product),cta,'','👉小程序下单👇','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','吃过一次就回不去了🤤',getSellingPoint(product),cta,'','👉小程序下单👇'];
   return linesToCopy(lines);
 }
 
 function genSatV3(product,short,dir,hotspot){
   var hz='周末就是要🍉'+short+'自由';
   var cta=pickCTA('sat','ctaUsed_sat2');
-  var lines=[hz,'','周末的快乐就是它给的🥰',getSellingPoint(product),cta,'','👉小程序下单👇','#小程序://切果NOW/LFtIEeLhMcgq0Rx'];
+  var lines=[hz,'','周末的快乐就是它给的🥰',getSellingPoint(product),cta,'','👉小程序下单👇'];
   return linesToCopy(lines);
 }
 
@@ -1043,31 +1043,31 @@ function copyVersion(idx){
   navigator.clipboard.writeText(text).then(function(){toast('📋 版本'+idx+'已复制');}).catch(function(){toast('复制失败');});
 }
 
-// ─── Strip link fragments (handles URLs broken by linesToCopy) ───
+// ─── Strip ALL link fragments (gen functions have no more links, but cleanup debris) ───
 function stripLinkFragments(text){
   var lines=text.split('\n');
   var out=[];
-  var skipping=null; // null, 'mt', 'elm', 'mini'
   lines.forEach(function(l){
     var t=l.trim();
-    if(!skipping){
-      // Check if entering a link-strip section
-      if(t.indexOf('🟡美团')>=0){if(!CopyConfig.linkMeituan)skipping='mt';else{out.push(l);return;}}
-      if(t.indexOf('🔵饿了么')>=0){if(!CopyConfig.linkEleme)skipping='elm';else{out.push(l);return;}}
-      if(/^#小程序/.test(t)){if(!CopyConfig.linkMini)skipping='mini';else{out.push(l);return;}}
-    }
-    if(skipping){
-      // Fragment: hex+emoji, path segment, domain fragment
-      if(/^[A-Za-z0-9]+🍉$/.test(t))return;
-      if(/^[a-z]+\.[a-z]+\//.test(t)||/^\/[a-zA-Z0-9]+🍉$/.test(t))return;
-      // If line doesn't look like a URL fragment, end the skip
-      if(t&&!/^[A-Za-z0-9\/:._-]+🍉?$/.test(t))skipping=null;
-      else return;
-    }
+    if(!t){out.push(l);return;}
+    // Skip lines that are link-related
+    if(/^美团[:：]/.test(t))return;
+    if(/^饿了么/.test(t))return;
+    if(/^(🟡美团|🔵饿了么)/.test(t))return;
+    if(/^(#小程序|👆小程序)/.test(t))return;
+    // Skip URL fragments
+    if(/^[a-zA-Z0-9]{4,}🍉$/.test(t))return;
+    if(/^[a-z]{2,}\.[a-z]{2,}\//.test(t))return;
+    if(/^\/[a-zA-Z0-9]{3,}🍉$/.test(t))return;
+    if(/^https?:\/\//.test(t))return;
+    // Skip URL path fragments (like le.me/wow/alsc/mod)
+    if(/^[a-z]+\.[a-z]+\/[a-z]+/.test(t)&&t.indexOf(' ')=== -1)return;
     out.push(l);
   });
   return out.join('\n');
 }
+
+
 
 
 function generateCopy(){
