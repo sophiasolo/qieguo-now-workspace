@@ -1121,9 +1121,9 @@ function generateCopy(){
   
   // Build clean links based on config (append AFTER linesToCopy, not through it)
   var linkFooter="";
-  if(CopyConfig.linkMeituan)linkFooter+="\\n🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK";
-  if(CopyConfig.linkEleme)linkFooter+="\\n🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b";
-  if(CopyConfig.linkMini)linkFooter+="\\n#小程序://切果NOW/LFtIEeLhMcgq0Rx";
+  if(CopyConfig.linkMeituan)linkFooter+='\n🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK';
+  if(CopyConfig.linkEleme)linkFooter+='\n🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b';
+  if(CopyConfig.linkMini)linkFooter+='\n#小程序://切果NOW/LFtIEeLhMcgq0Rx';
   // Strip old link fragments from gen functions, append clean links
   v1=stripLinkFragments(v1)+linkFooter;v2=stripLinkFragments(v2)+linkFooter;v3=stripLinkFragments(v3)+linkFooter;
   
