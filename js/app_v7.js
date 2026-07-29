@@ -1214,9 +1214,8 @@ function generateCopyAI(){
     '【排版】每行≤20字，不允许断词换行。像朋友群发消息，不机械不模板。\\n\\n'+
     '【推送日】'+dayName+'\\n'+
     '【价格要求】'+priceRule+'\\n'+
-    '【配送费要求】'+deliveryRule+'\\n'+
-    '【配送】'+delivery+'\\n'+
-    '【方向】'+(direction==='auto'?'根据推送日自由选择':direction)+'\\n\\n'+
+    '【配送费要求】'+deliveryRule+'\n'+
+    '【方向】'+(direction==='auto'?'根据推送日自由选择':direction)+'\n\n'+
     '生成3版差异化社群文案，每版5-8行，花字类型和风格要明显不同。\\n'+
     '至少1版要带价格（格式：💰¥XX或💰¥XX起）。\\n'+
     '输出格式（严格）：\\n'+
