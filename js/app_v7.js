@@ -615,8 +615,7 @@ toast('📄 '+rows.length+'行, 解析中...');
       if(colName<0){toast('⚠️ 未找到「商品名称」列');return;}
       var hasPrice=colPrice>=0;
       // Debug: show detected columns
-      var colInfo='表头: '+header.slice(0,8).map(function(h){return String(h||'').substring(0,8)}).join(' | ');
-      colInfo+=' | 价格列: '+(hasPrice?'第'+(colPrice+1)+'列':'未识别');
+      var colInfo='列'+header.length+' | 商品名:'+(colName>=0?'第'+(colName+1)+'列':'未找到')+' | 价格:'+(hasPrice?'第'+(colPrice+1)+'列':'未识别')+' | 份数:'+(colQty>=0?'第'+(colQty+1)+'列':'未识别');
       console.log(colInfo);
       toast('📊 '+colInfo);
       var agg={};
