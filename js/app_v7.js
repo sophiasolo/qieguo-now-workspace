@@ -606,10 +606,12 @@ toast('📄 '+rows.length+'行, 解析中...');
       for(var i=0;i<header.length;i++){
         var h=String(header[i]||'');
         if(h.indexOf('商品名称')>=0)colName=i;
-        if(h.indexOf('规格')>=0)colSpec=i;
+        if(h.indexOf('规格')>=0&&h.indexOf('编号')<0)colSpec=i;
         if(h.indexOf('份数')>=0||h.indexOf('数量')>=0)colQty=i;
-        if(h.indexOf('实收')>=0||h.indexOf('金额')>=0||h.indexOf('价格')>=0||h.indexOf('价')>=0||h.indexOf('单价')>=0)colPrice=i;
+        if(h.indexOf('售价')>=0||h.indexOf('单价')>=0)colPrice=i;
+        else if(h.indexOf('实收')>=0)colPrice=i;
       }
+      if(colPrice<0){for(var j=0;j<header.length;j++){var hj=String(header[j]||'');if(hj.indexOf('价')>=0&&hj.indexOf('退款')<0&&hj.indexOf('优惠')<0){colPrice=j;break;}}}
       if(colName<0){toast('⚠️ 未找到「商品名称」列');return;}
       var hasPrice=colPrice>=0;
       // Debug: show detected columns
