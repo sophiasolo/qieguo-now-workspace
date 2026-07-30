@@ -610,6 +610,12 @@ function handleProductFile(e){
         if(h.indexOf('实收')>=0||h.indexOf('金额')>=0||h.indexOf('价格')>=0||h.indexOf('价')>=0||h.indexOf('单价')>=0)colPrice=i;
       }
       if(colName<0){toast('⚠️ 未找到「商品名称」列');return;}
+      var hasPrice=colPrice>=0;
+      // Debug: show detected columns
+      var colInfo='表头: '+header.slice(0,8).map(function(h){return String(h||'').substring(0,8)}).join(' | ');
+      colInfo+=' | 价格列: '+(hasPrice?'第'+(colPrice+1)+'列':'未识别');
+      console.log(colInfo);
+      if(!hasPrice)toast('⚠️ '+colInfo);
       var agg={};
       for(var r=1;r<rows.length;r++){
         var name=String(rows[r][colName]||'').trim();
