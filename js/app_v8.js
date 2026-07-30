@@ -600,6 +600,7 @@ function handleProductFile(e){
       var sheet=wb.Sheets[wb.SheetNames[0]];
       var rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});
       if(rows.length<2){toast('⚠️ 表格为空');return;}
+toast('📄 '+rows.length+'行, 解析中...');
       var header=rows[0];
       var colName=-1,colSpec=-1,colQty=-1,colPrice=-1;
       for(var i=0;i<header.length;i++){
@@ -615,7 +616,7 @@ function handleProductFile(e){
       var colInfo='表头: '+header.slice(0,8).map(function(h){return String(h||'').substring(0,8)}).join(' | ');
       colInfo+=' | 价格列: '+(hasPrice?'第'+(colPrice+1)+'列':'未识别');
       console.log(colInfo);
-      if(!hasPrice)toast('⚠️ '+colInfo);
+      toast('📊 '+colInfo);
       var agg={};
       for(var r=1;r<rows.length;r++){
         var name=String(rows[r][colName]||'').trim();
@@ -654,7 +655,8 @@ function handleProductFile(e){
       updateProductUI(data);
       renderProducts();
       allProductsData=items;
-      toast('✅ 已提取 '+items.length+' 个产品');
+      var priceSamples=items.slice(0,3).map(function(p){return '¥'+p.price}).join(',');
+toast('✅ '+items.length+'个产品 | '+priceSamples);
     }catch(err){
       toast('⚠️ 解析失败: '+err.message);
     }
