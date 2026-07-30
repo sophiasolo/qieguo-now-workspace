@@ -538,13 +538,48 @@ function unstarItem(date,title){var stars=getStars();var idx=stars.findIndex(fun
 
 // ═══════ PRODUCTS ═══════
 var productData=null;
+function renderProducts(){if(!productData)return;var search=(document.getElementById("productSearch").value||"").toLowerCase();var cat=document.getElementById("productCat").value;var items=productData.items.filter(function(p){if(search&&!p.name.toLowerCase().includes(search))return false;if(cat!=="all"&&p.category!==cat)return false;return true;});var maxSales=items.length>0?items[0].sales:1;var html="";items.slice(0,80).forEach(function(p,i){var w=Math.round(p.sales/maxSales*100);var rank=i+1;var medal=rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":rank;var tag="";if(p.sales>1000)tag="🔥";else if(p.price<15&&p.sales>200)tag="💰";html+='<div style="display:grid;grid-template-columns:35px 1fr 90px 70px 80px;gap:0;padding:6px 8px;border-bottom:1px solid var(--border);align-items:center;'+(rank<=3?'background:var(--brand-light)':'')+'"><div style="text-align:center;font-weight:700;color:'+(rank<=3?'var(--brand)':'var(--text-dim)')+'">'+medal+'</div><div><span style="font-weight:600;color:var(--text);font-size:12px">'+tag+' '+p.name+'</span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">'+p.spec+'</span><div style="height:2px;background:var(--border);border-radius:1px;margin-top:2px"><div style="height:2px;width:'+w+'%;background:'+(rank<=3?'var(--brand)':'#c8e6c9')+';border-radius:1px;min-width:2px"></div></div></div><div style="text-align:right;font-weight:700;font-size:12px;color:var(--text)">¥'+p.price+'</div><div style="text-align:right;font-weight:700;font-size:12px;color:var(--text)">'+p.sales+'</div><div style="text-align:center"><button class="btn btn-ghost" onclick="useProductForCopy(\''+p.name.replace(/'/g,"\\'")+'\','+p.price+')" style="font-size:10px;padding:2px 8px;white-space:nowrap">📝 写文案</button></div></div>'});document.getElementById("productsGrid").innerHTML+=html||'<div style="text-align:center;padding:40px;color:var(--text-dim)">无匹配产品</div>';}
+
+function renderProductRecs(){
+  var el=document.getElementById("productRecs");
+  if(!productData||!productData.items){el.innerHTML='<div style="padding:4px 0">暂无数据</div>';return;}
+  var items=productData.items.filter(function(p){return p.price<30&&p.sales>100;}).slice(0,4);
+  if(!items.length){el.innerHTML='<div style="padding:4px 0">暂无推荐</div>';return;}
+  var html="";
+  items.forEach(function(p,i){
+    var score=Math.round(p.sales/(p.price||1));
+    var bg=i===0?"var(--brand-light)":"#fff";
+    html+='<div style="background:'+bg+';border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid var(--border)">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">'+
+      '<span style="font-weight:700;font-size:12px;color:var(--text)">'+p.name+'</span>'+
+      '<span style="font-size:10px;color:var(--brand);font-weight:600">'+(i===0?"⭐最佳":i===1?"🔥热门":"📈推荐")+'</span>'+
+      '</div>'+
+      '<div style="font-size:10px;color:var(--text-dim);margin-bottom:6px">'+p.spec+' · ¥'+p.price+' · 销'+p.sales+'份 · 性价比'+score+'</div>'+
+      '<button class="btn btn-primary" onclick="useProductForCopy(\''+p.name.replace(/'/g,"\\'")+'\','+p.price+')" style="width:100%;font-size:11px;padding:4px 0">📝 用这个写文案</button>'+
+      '</div>';
+  });
+  el.innerHTML=html;
+}
+
+function useProductForCopy(name,price){
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelector('[data-page="copy"]').classList.add('active');
+  document.getElementById('page-copy').classList.add('active');
+  document.getElementById('pageTitle').textContent='✍️ 文案创作';
+  copyProducts=[name];
+  setCopyConfig('customPrice',price);
+  initCopyPage();
+  toast('📝 已选中: '+name);
+}
+
 function loadProducts(){var el=document.getElementById('productsGrid');
   try{var local=JSON.parse(localStorage.getItem('qg_products')||'null');}catch(e){local=null;}
   if(local&&local.items&&local.items.length>0){
-    productData=local;updateProductUI(local);renderProducts();return;
+    productData=local;updateProductUI(local);renderProducts();renderProductRecs();return;
   }
   fetch('product_library.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    productData=d;updateProductUI(d);renderProducts();
+    productData=d;updateProductUI(d);renderProducts();renderProductRecs();
   }).catch(function(){el.innerHTML='<div style="text-align:center;padding:60px;color:var(--text-dim)"><div style="font-size:40px;margin-bottom:12px">📦</div>产品库建设中<br><span style="font-size:12px">拖拽订单表上传或等cron自动生成</span></div>';document.getElementById('productUpdateTime').textContent='';});}
 function updateProductUI(d){
   document.getElementById('productMeta').textContent=d.total_products+'个SKU · 来源: '+(d.source||'上传文件');
@@ -622,7 +657,6 @@ function handleProductFile(e){
   reader.readAsArrayBuffer(file);
 }
 
-function renderProducts(){if(!productData)return;var search=(document.getElementById('productSearch').value||'').toLowerCase();var cat=document.getElementById('productCat').value;var items=productData.items.filter(function(p){if(search&&!p.name.toLowerCase().includes(search))return false;if(cat!=='all'&&p.category!==cat)return false;return true;});var maxSales=items.length>0?items[0].sales:1;var html='';items.slice(0,80).forEach(function(p,i){var w=Math.round(p.sales/maxSales*100);var rank=i+1;var medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;html+='<div style="display:grid;grid-template-columns:40px 1fr 100px 80px 100px;gap:0;padding:8px;border-bottom:1px solid var(--border);align-items:center;'+(rank<=3?'background:var(--brand-light)':'')+'" title="'+p.name+' · '+p.spec+'"><div style="text-align:center;font-weight:700;color:'+(rank<=3?'var(--brand)':'var(--text-dim)')+'">'+medal+'</div><div><div style="font-weight:600;color:var(--text)">'+p.name+'</div><div style="font-size:11px;color:var(--text-dim)">'+p.spec+'</div><div style="height:3px;background:var(--border);border-radius:2px;margin-top:3px"><div style="height:3px;width:'+w+'%;background:'+(rank<=3?'var(--brand)':'#c8e6c9')+';border-radius:2px;min-width:2px"></div></div></div><div style="font-size:11px;color:var(--text-dim)">'+p.category+'</div><div style="text-align:right;font-weight:700;color:var(--text)">¥'+p.price+'</div><div style="text-align:right"><span style="font-weight:700;color:var(--text)">'+p.sales+'</span><span style="font-size:10px;color:var(--text-dim)">份</span></div></div>';});document.getElementById('productsGrid').innerHTML+=html||'<div style="text-align:center;padding:40px;color:var(--text-dim)">无匹配产品</div>';}
 
 // ═══════ HOTSPOT ═══════
 function refreshHotspot(){var el=document.getElementById('hotspotContent');el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">🔄 刷新中...</div>';var btn=document.getElementById('hotspotRefreshBtn');if(btn){btn.textContent='⏳';btn.disabled=true;}setTimeout(function(){renderHotspot();if(btn){btn.textContent='🔄 刷新';btn.disabled=false;}},500);}

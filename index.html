@@ -252,17 +252,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
         <div style="font-size:10px;color:var(--text-muted);margin-top:6px" id="productUpdateTime"></div>
       </div>
       </div>
-      <div class="card">
-        <div class="card-header">
-          <div><div class="card-title">📦 产品库</div><div class="card-sub" id="productMeta">加载中...</div></div>
-          <div style="display:flex;gap:6px">
-            <input id="productSearch" oninput="renderProducts()" placeholder="🔍 搜索产品..." style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;width:180px">
-            <select id="productCat" onchange="renderProducts()" style="padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px"></select>
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;min-height:calc(100vh - 200px)">
+        <!-- LEFT: 推广推荐 -->
+        <div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">🔥 推广推荐</div><div class="card-sub">高销量+亲民价</div></div>
+            <div id="productRecs" style="font-size:12px;color:var(--text-dim)">加载中...</div>
           </div>
         </div>
-        <div id="productsGrid" style="font-size:13px;max-height:calc(100vh - 200px);overflow-y:auto">
-          <div style="display:grid;grid-template-columns:40px 1fr 100px 80px 100px;gap:0;font-size:11px;color:var(--text-muted);padding:6px 8px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:1;font-weight:600">
-            <div style="text-align:center">#</div><div>产品</div><div>分类</div><div style="text-align:right">单价</div><div style="text-align:right">销量</div>
+        <!-- RIGHT: 产品总表 -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">📦 产品总表</div><div class="card-sub" id="productMeta">加载中...</div></div>
+            <div style="display:flex;gap:6px">
+              <input id="productSearch" oninput="renderProducts()" placeholder="🔍 搜索产品..." style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;width:150px">
+              <select id="productCat" onchange="renderProducts()" style="padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px"></select>
+            </div>
+          </div>
+          <div id="productsGrid" style="font-size:12px;max-height:calc(100vh - 280px);overflow-y:auto">
+            <div style="display:grid;grid-template-columns:35px 1fr 90px 70px 80px;gap:0;font-size:11px;color:var(--text-muted);padding:6px 8px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:1;font-weight:600">
+              <div style="text-align:center">#</div><div>产品</div><div style="text-align:right">单价</div><div style="text-align:right">销量</div><div></div>
+            </div>
           </div>
         </div>
       </div>
