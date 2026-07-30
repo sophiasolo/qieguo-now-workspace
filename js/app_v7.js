@@ -550,12 +550,11 @@ function renderProductRecs(){
     var score=Math.round(p.sales/(p.price||1));
     var bg=i===0?"var(--brand-light)":"#fff";
     html+='<div style="background:'+bg+';border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid var(--border)">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">'+
       '<span style="font-weight:700;font-size:12px;color:var(--text)">'+p.name+'</span>'+
-      '<span style="font-size:10px;color:var(--brand);font-weight:600">'+(i===0?"⭐最佳":i===1?"🔥热门":"📈推荐")+'</span>'+
+      '<span style="font-size:10px;color:var(--brand);font-weight:600">'+(i===0?"⭐最佳":i===1?"🔥热门":i===2?"📈推荐":"💡可选")+'</span>'+
       '</div>'+
-      '<div style="font-size:10px;color:var(--text-dim);margin-bottom:6px">'+p.spec+' · ¥'+p.price+' · 销'+p.sales+'份 · 性价比'+score+'</div>'+
-      '<button class="btn btn-primary" onclick="useProductForCopy(\''+p.name.replace(/'/g,"\\'")+'\','+p.price+')" style="width:100%;font-size:11px;padding:4px 0">📝 用这个写文案</button>'+
+      '<div style="font-size:10px;color:var(--text-dim)">'+p.spec+' · ¥'+p.price+' · 销'+p.sales+'份 · 性价比'+score+'</div>'+
       '</div>';
   });
   el.innerHTML=html;
