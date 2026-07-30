@@ -8,6 +8,7 @@
 <meta http-equiv="Expires" content="0">
 <title>切果NOW · 运营工作台</title>
 <script src="https://cdn.bootcdn.net/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
   --brand: #2d8a4e; --brand-light: #e8f5e9; --brand-dark: #1b5e2f;
@@ -240,13 +241,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
       </div>
     </div>
 <div class="page" id="page-products">
-      <div style="background:var(--brand-light);border:1px dashed var(--brand);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:12px">
-        <span style="font-size:20px">📂</span>
-        <div>
-          <div style="font-weight:600;color:var(--brand-dark)">丢表格到这里 → 自动提取产品</div>
-          <div style="color:var(--text-dim)">桌面「切果NOW工作台/产品表」文件夹 · 每天12:30自动刷新</div>
-        </div>
-        <span style="margin-left:auto;font-size:11px;color:var(--text-dim)" id="productUpdateTime"></span>
+      <div id="productDropZone" style="background:var(--brand-light);border:2px dashed var(--brand);border-radius:var(--radius-sm);padding:16px;margin-bottom:16px;text-align:center;cursor:pointer;transition:all .2s" 
+           ondragover="this.style.background='#d4edda';this.style.borderColor='var(--brand-dark)';event.preventDefault()" 
+           ondragleave="this.style.background='var(--brand-light)';this.style.borderColor='var(--brand)'" 
+           ondrop="handleProductFile(event)" onclick="document.getElementById('productFileInput').click()">
+        <span style="font-size:24px">📂</span>
+        <div style="font-weight:600;color:var(--brand-dark);margin-top:4px">拖拽订单表到这里</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">支持 .xlsx / .xls · 也可点击选择文件</div>
+        <input type="file" id="productFileInput" accept=".xlsx,.xls" onchange="handleProductFile(event)" style="display:none">
+        <div style="font-size:10px;color:var(--text-muted);margin-top:6px" id="productUpdateTime"></div>
+      </div>
       </div>
       <div class="card">
         <div class="card-header">

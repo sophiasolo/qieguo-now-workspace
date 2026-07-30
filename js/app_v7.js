@@ -538,7 +538,90 @@ function unstarItem(date,title){var stars=getStars();var idx=stars.findIndex(fun
 
 // ═══════ PRODUCTS ═══════
 var productData=null;
-function loadProducts(){var el=document.getElementById('productsGrid');fetch('product_library.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){productData=d;document.getElementById('productMeta').textContent=d.total_products+'个SKU · 来源: '+d.source;document.getElementById('productUpdateTime').textContent='最近更新: '+d.updated.substring(0,16);var sel=document.getElementById('productCat');sel.innerHTML='<option value="all">全部分类</option>';(d.categories||[]).forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>';});renderProducts();}).catch(function(){el.innerHTML='<div style="text-align:center;padding:60px;color:var(--text-dim)"><div style="font-size:40px;margin-bottom:12px">📦</div>产品库建设中<br><span style="font-size:12px">将订单表放入「产品表」文件夹后自动生成</span></div>';document.getElementById('productUpdateTime').textContent='';});}
+function loadProducts(){var el=document.getElementById('productsGrid');
+  try{var local=JSON.parse(localStorage.getItem('qg_products')||'null');}catch(e){local=null;}
+  if(local&&local.items&&local.items.length>0){
+    productData=local;updateProductUI(local);renderProducts();return;
+  }
+  fetch('product_library.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    productData=d;updateProductUI(d);renderProducts();
+  }).catch(function(){el.innerHTML='<div style="text-align:center;padding:60px;color:var(--text-dim)"><div style="font-size:40px;margin-bottom:12px">📦</div>产品库建设中<br><span style="font-size:12px">拖拽订单表上传或等cron自动生成</span></div>';document.getElementById('productUpdateTime').textContent='';});}
+function updateProductUI(d){
+  document.getElementById('productMeta').textContent=d.total_products+'个SKU · 来源: '+(d.source||'上传文件');
+  document.getElementById('productUpdateTime').textContent='最近更新: '+(d.updated||'').substring(0,16);
+  var sel=document.getElementById('productCat');sel.innerHTML='<option value="all">全部分类</option>';
+  (d.categories||[]).forEach(function(c){sel.innerHTML+='<option value="'+c+'">'+c+'</option>';});
+}
+function handleProductFile(e){
+  e.preventDefault();e.stopPropagation();
+  var file=(e.dataTransfer?e.dataTransfer.files[0]:null)||(e.target?e.target.files[0]:null);
+  if(!file)return;
+  var zone=document.getElementById('productDropZone');
+  zone.style.background='var(--brand-light)';
+  toast('📂 正在解析 '+file.name+'...');
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var wb=XLSX.read(ev.target.result,{type:'array'});
+      var sheet=wb.Sheets[wb.SheetNames[0]];
+      var rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});
+      if(rows.length<2){toast('⚠️ 表格为空');return;}
+      var header=rows[0];
+      var colName=-1,colSpec=-1,colQty=-1,colPrice=-1;
+      for(var i=0;i<header.length;i++){
+        var h=String(header[i]||'');
+        if(h.indexOf('商品名称')>=0)colName=i;
+        if(h.indexOf('规格')>=0)colSpec=i;
+        if(h.indexOf('份数')>=0||h.indexOf('数量')>=0)colQty=i;
+        if(h.indexOf('实收')>=0||h.indexOf('金额')>=0||h.indexOf('价格')>=0)colPrice=i;
+      }
+      if(colName<0){toast('⚠️ 未找到「商品名称」列');return;}
+      var agg={};
+      for(var r=1;r<rows.length;r++){
+        var name=String(rows[r][colName]||'').trim();
+        var spec=colSpec>=0?String(rows[r][colSpec]||'').trim():'';
+        if(!name)continue;
+        var qty=parseFloat(rows[r][colQty])||0;
+        var price=parseFloat(rows[r][colPrice])||0;
+        var key=name+'||'+spec;
+        if(!agg[key])agg[key]={name:name,spec:spec,sales:0,price:0};
+        agg[key].sales+=qty;
+        if(price>0)agg[key].price=price;
+      }
+      var cats=[
+        ['🔥 引流爆品',['一斤西瓜','引流','9.9','8.8']],
+        ['🎯 当家爆款',['乐享桶','霸气西瓜桶','当家']],
+        ['🆕 网红创新',['乌梅','干噎酸奶','酸奶捞','酸嘢','海盐青柠','网红','阳光玫瑰夹乌梅']],
+        ['💎 高客单',['榴莲','商务五拼','豪华','蓝莓','整果']],
+        ['🥗 拼盘套餐',['三拼','四拼','双拼','mini拼','组合','自选','套餐','大四拼','大三拼']],
+        ['📦 经典果切',['果切','半个西瓜','西瓜汁','冰镇']]
+      ];
+      function autoCat(name,price){
+        for(var i=0;i<cats.length;i++){for(var j=0;j<cats[i][1].length;j++){if(name.indexOf(cats[i][1][j])>=0)return cats[i][0];}}
+        return price>=20?'💎 高客单':'📦 经典果切';
+      }
+      var items=[],catSet={};
+      for(var k in agg){
+        var a=agg[k];
+        var cat=autoCat(a.name,a.price);
+        catSet[cat]=true;
+        items.push({name:a.name,spec:a.spec,price:Math.round(a.price*10)/10,sales:Math.round(a.sales),orders:Math.round(a.sales),category:cat});
+      }
+      items.sort(function(a,b){return b.sales-a.sales;});
+      var data={updated:new Date().toISOString(),source:file.name,total_products:items.length,categories:Object.keys(catSet),items:items};
+      localStorage.setItem('qg_products',JSON.stringify(data));
+      productData=data;
+      updateProductUI(data);
+      renderProducts();
+      allProductsData=items;
+      toast('✅ 已提取 '+items.length+' 个产品');
+    }catch(err){
+      toast('⚠️ 解析失败: '+err.message);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
 function renderProducts(){if(!productData)return;var search=(document.getElementById('productSearch').value||'').toLowerCase();var cat=document.getElementById('productCat').value;var items=productData.items.filter(function(p){if(search&&!p.name.toLowerCase().includes(search))return false;if(cat!=='all'&&p.category!==cat)return false;return true;});var maxSales=items.length>0?items[0].sales:1;var html='';items.slice(0,80).forEach(function(p,i){var w=Math.round(p.sales/maxSales*100);var rank=i+1;var medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;html+='<div style="display:grid;grid-template-columns:40px 1fr 100px 80px 100px;gap:0;padding:8px;border-bottom:1px solid var(--border);align-items:center;'+(rank<=3?'background:var(--brand-light)':'')+'" title="'+p.name+' · '+p.spec+'"><div style="text-align:center;font-weight:700;color:'+(rank<=3?'var(--brand)':'var(--text-dim)')+'">'+medal+'</div><div><div style="font-weight:600;color:var(--text)">'+p.name+'</div><div style="font-size:11px;color:var(--text-dim)">'+p.spec+'</div><div style="height:3px;background:var(--border);border-radius:2px;margin-top:3px"><div style="height:3px;width:'+w+'%;background:'+(rank<=3?'var(--brand)':'#c8e6c9')+';border-radius:2px;min-width:2px"></div></div></div><div style="font-size:11px;color:var(--text-dim)">'+p.category+'</div><div style="text-align:right;font-weight:700;color:var(--text)">¥'+p.price+'</div><div style="text-align:right"><span style="font-weight:700;color:var(--text)">'+p.sales+'</span><span style="font-size:10px;color:var(--text-dim)">份</span></div></div>';});document.getElementById('productsGrid').innerHTML+=html||'<div style="text-align:center;padding:40px;color:var(--text-dim)">无匹配产品</div>';}
 
 // ═══════ HOTSPOT ═══════
