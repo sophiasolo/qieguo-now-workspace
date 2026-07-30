@@ -621,14 +621,17 @@ toast('📄 '+rows.length+'行, 解析中...');
       var agg={};
       for(var r=1;r<rows.length;r++){
         var name=String(rows[r][colName]||'').trim();
-        var spec=colSpec>=0?String(rows[r][colSpec]||'').trim():'';
         if(!name)continue;
+        var spec=colSpec>=0?String(rows[r][colSpec]||'').trim():'';
+        if(spec==='.'||spec==='')spec=''; // Treat "." as empty
         var qty=parseFloat(rows[r][colQty])||0;
         var price=parseFloat(rows[r][colPrice])||0;
-        var key=name+'||'+spec;
-        if(!agg[key])agg[key]={name:name,spec:spec,sales:0,price:0};
+        var key=name; // Only group by name, not spec
+        if(!agg[key])agg[key]={name:name,spec:spec||'',sales:0,price:999};
         agg[key].sales+=qty;
-        if(price>0)agg[key].price=price;
+        // Keep the most common price (lowest non-zero)
+        if(price>0&&price<agg[key].price)agg[key].price=price;
+        if(agg[key].spec===''&&spec!=='')agg[key].spec=spec;
       }
       var cats=[
         ['🔥 引流爆品',['一斤西瓜','引流','9.9','8.8']],
