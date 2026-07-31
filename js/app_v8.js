@@ -682,11 +682,19 @@ function filterHotspot(f){
 
 function renderHotspot(){
   var el=document.getElementById('hotspotContent');
-  fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+  console.log('renderHotspot: fetching hotspot.json...');
+  fetch('hotspot.json?v='+Date.now()).then(function(r){
+    console.log('hotspot fetch status:', r.status);
+    return r.json();
+  }).then(function(d){
+    console.log('hotspot loaded:', d.items?d.items.length:'no items');
     hotspotCache=d;
     document.getElementById('hotspotDate').textContent=d.date||'';
     renderHotspotItems(d);
-  }).catch(function(){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">热点数据加载中...</div>';});
+  }).catch(function(e){
+    console.error('hotspot error:', e.message);
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">热点数据加载失败: '+e.message+'</div>';
+  });
 }
 
 function isFruitRelated(item){
