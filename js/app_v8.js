@@ -1504,17 +1504,20 @@ function genPrompt(){
   var apiKey=getApiKey();
   if(!apiKey){el.innerHTML="<div style=\"text-align:center;padding:40px;color:var(--red)\">⚠️ 请先设置 API Key</div>";btn.disabled=false;btn.textContent="🧠 生成 Prompt";return;}
   
-  var promptText="你是食物摄影专家，为产品「"+product+"」写一段AI生图Prompt。\n\n"+
-    "场景要求：「"+sceneName+"」\n\n"+
-    "Prompt必须包含：\n"+
-    "1. 构图方式（居中对称/三角构图/窗边纵深/极简留白任选一种）\n"+
-    "2. 桌面材质与光影（橡木/微水泥/大理石，柔光/侧光/自然光）\n"+
-    "3. 色彩调性（清新明亮/暖调柔光/冷白冰镇感）\n"+
-    "4. 氛围描述（精致/松弛/高级/食欲感）\n"+
-    "5. 景深层次（前中后3层纵深，前景虚化道具→中景产品→后景氛围）\n"+
-    "6. 画幅3:4竖版\n\n"+
-    "禁止项：不要任何文字、LOGO、水印。\n"+
-    "输出一段完整Prompt，不需要解释，直接返回Prompt内容。";
+  var promptText="你是食物摄影布景专家。用户将上传一张产品白底图+一张博主参考图到AI生图工具。\\n"+
+    "产品名称「"+product+"」仅作场景搭配参考——产品外观以白底图为准，你不需描述产品形态。\\n\\n"+
+    "请根据场景「"+sceneName+"」写一段生图Prompt：\\n\\n"+
+    "必须包含：\\n"+
+    "1. 画幅：3:4竖版\\n"+
+    "2. 产品：使用上传白底图中的产品，保持果盒/容器/果肉形态原样，不改变产品外观\\n"+
+    "3. 构图（居中对称/三角构图/窗边纵深/极简留白选一种）\\n"+
+    "4. 桌面+光影（橡木/微水泥/大理石，柔光/侧光）\\n"+
+    "5. 色调调性（清新明亮/暖调柔光/冷白冰镇感）\\n"+
+    "6. 氛围（精致/松弛/高级/食欲感）\\n"+
+    "7. 前景→中景产品→后景虚化的3层景深，4-6件道具分散层次\\n"+
+    "8. 博主参考图仅借鉴拍摄风格与布景逻辑\\n\\n"+
+    "禁止：文字/LOGO/水印，3D建模感，高饱和，复刻博主原图道具。\\n"+
+    "直接输出Prompt，不解释。";
   
   fetch("https://api.deepseek.com/chat/completions",{
     method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+apiKey},
