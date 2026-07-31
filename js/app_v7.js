@@ -701,14 +701,20 @@ function renderHotspot(){
   fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     hotspotCache=d;
         var cats={};var items=d.items||[];
-    items.forEach(function(i){var c=i.category||'其他';cats[c]=(cats[c]||0)+1;});
+    items.forEach(function(i){
+      var c=i.category||'';
+      if(c==='热榜')c='📱 抖音'; // Douyin items
+      c=c.replace(/[🎬🍉🍜🏠🏷️📌🎉]/g,'').trim(); // Strip emoji prefix
+      if(!c)c='综合';
+      cats[c]=(cats[c]||0)+1;
+    });
     var sortedCats=Object.keys(cats).sort(function(a,b){
       if(a.indexOf('果切')>=0)return -1;if(b.indexOf('果切')>=0)return 1;
       return cats[b]-cats[a];
     });
     var catHtml='<button class="btn btn-primary" onclick="filterHotspotCat(&apos;all&apos;)" data-cat="all" style="font-size:11px;padding:5px 10px;text-align:left">🏷️ 全部 ('+items.length+')</button>';
     sortedCats.forEach(function(c){
-      var icon=c.indexOf('果切')>=0?'🍉':c.indexOf('娱乐')>=0?'🎬':c.indexOf('美食')>=0?'🍜':c.indexOf('生活')>=0?'🏠':'📌';
+      var icon=c.indexOf('果切')>=0?'🍉':c.indexOf('娱乐')>=0?'🎬':c.indexOf('美食')>=0?'🍜':c.indexOf('生活')>=0?'🏠':c.indexOf('抖音')>=0?'🎵':'📌';
       catHtml+='<button class="btn btn-ghost" onclick="filterHotspotCat(&apos;'+c+'&apos;)" data-cat="'+c+'" style="font-size:11px;padding:5px 10px;text-align:left">'+icon+' '+c+' ('+cats[c]+')</button>';
     });
     document.getElementById('hotspotCatBtns').innerHTML=catHtml;
@@ -738,7 +744,7 @@ function renderHotspotItems(d){
   var el=document.getElementById('hotspotContent');
   var items=d.items||[];
   if(hotspotFilter!=='all'){items=items.filter(function(i){return (i.source||'').indexOf(hotspotFilter)>=0;});}
-  if(hotspotCat!=='all'){items=items.filter(function(i){return (i.category||'')===hotspotCat;});}
+  if(hotspotCat!=='all'){items=items.filter(function(i){var c=i.category||'';c=c.replace(/[🎬🍉🍜🏠🏷️📌🎉]/g,'').trim();return c===hotspotCat;});}
   items.sort(function(a,b){
     var aFruit=isFruitRelated(a)?0:1;
     var bFruit=isFruitRelated(b)?0:1;
@@ -750,10 +756,11 @@ function renderHotspotItems(d){
   items.forEach(function(item){
     var si='📌';for(var k in sem){if((item.source||'').indexOf(k)>=0){si=sem[k];break;}}
     var fruit=isFruitRelated(item);
+    var catClean=(item.category||'').replace(/[🎬🍉🍜🏠🏷️📌🎉]/g,'').trim()||'';
     html+='<div style="background:#fff;border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)'+(fruit?'border-left:3px solid var(--brand);background:var(--brand-light)':'')+'">'+
       '<div style="display:flex;gap:4px;align-items:center;margin-bottom:4px;flex-wrap:wrap">'+
       '<span style="font-size:10px;background:var(--bg);padding:1px 6px;border-radius:10px;color:var(--text-dim)">'+si+' '+item.source+'</span>'+
-      (item.category?'<span style="font-size:10px;background:'+(fruit?'var(--brand);color:#fff':'var(--bg);color:var(--text-dim)')+';padding:1px 6px;border-radius:10px">'+item.category+'</span>':'')+
+      (catClean?'<span style="font-size:10px;background:'+(fruit?'var(--brand);color:#fff':'var(--bg);color:var(--text-dim)')+';padding:1px 6px;border-radius:10px">'+catClean+'</span>':'')+
       (fruit?'<span style="font-size:10px;color:var(--brand);font-weight:600">🍉 相关</span>':'')+
       '</div>'+
       '<div style="font-weight:600;color:var(--text);font-size:13px;line-height:1.5">'+item.word+'</div>'+
