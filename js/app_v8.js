@@ -1475,6 +1475,73 @@ function generateCopyAI(){
 // ─── Init ───
 function initCopyPage(){initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyHotspots();loadCopyProducts();renderCopyHistory();}
 
+// ═══════ PROMPT ═══════
+function genPrompt(){
+  var product=document.getElementById("promptProduct").value.trim()||"招牌鲜果切";
+  var scene=document.getElementById("promptScene").value;
+  var btn=document.getElementById("btnGenPrompt");
+  var el=document.getElementById("promptOutput");
+  
+  if(scene==="brand"||scene==="social"){
+    var logoRule=scene==="brand"
+      ? "图1（产品白底图）强制规则：果盒、容器、果肉种类与摆放完整原样复刻，不得修改、增减水果；完整保留原图LOGO图案，LOGO统一放置画面左上角，随3:4画幅等比例适配缩放，禁止消除、扭曲、移位至其他区域。"
+      : "图1（产品白底图）强制规则：果盒、容器、果肉种类与摆放完整原样复刻，不得修改、增减水果；LOGO可直接去除弱化。";
+    var txt="根据上传两张图片生成果切实拍图。\n\n"+logoRule+"\n\n"+
+      "2.图2（博主氛围参考图）通用参考范围：保留画面整体光影色调、构图留白、桌面布景、餐具搭配、人物手持/摆放姿势、生活化氛围感、背景虚化层次；仅忽略图内博主手中盛放的水果、餐食、原装容器，禁止照搬这份食物形态。\n\n"+
+      "3.版权约束：仅借鉴拍摄风格与布局逻辑，生成全新原创场景，不完整复刻博主原图道具、背景细节。\n\n"+
+      "4.画质底线：原生实拍质感，禁用3D塑料建模感、高饱和刺眼色彩、厚重黑影、廉价塑料装饰；画面留白充足，产品始终清晰突出。\n\n"+
+      "5.规格：3:4竖版4K高清，无多余文字、无水印。";
+    el.innerHTML=renderPromptCard(txt,"社群图·博主参考","📸");
+    return;
+  }
+  
+  btn.disabled=true;btn.textContent="⏳ 生成中...";
+  el.innerHTML="<div style=\"text-align:center;padding:40px;color:var(--text-dim)\">⏳ AI 正在为你创作配图 Prompt...</div>";
+  
+  var sceneNames={hot:"热销爆品·精致质感",member:"会员日·清新仪式感",weekend:"周末·窗边松弛感",grass:"种草·高级食欲感",ice:"特价·极简冰镇感"};
+  var sceneName=sceneNames[scene]||"精致质感";
+  
+  var apiKey=getApiKey();
+  if(!apiKey){el.innerHTML="<div style=\"text-align:center;padding:40px;color:var(--red)\">⚠️ 请先设置 API Key</div>";btn.disabled=false;btn.textContent="🧠 生成 Prompt";return;}
+  
+  var promptText="你是食物摄影专家，为产品「"+product+"」写一段AI生图Prompt。\n\n"+
+    "场景要求：「"+sceneName+"」\n\n"+
+    "Prompt必须包含：\n"+
+    "1. 构图方式（居中对称/三角构图/窗边纵深/极简留白任选一种）\n"+
+    "2. 桌面材质与光影（橡木/微水泥/大理石，柔光/侧光/自然光）\n"+
+    "3. 色彩调性（清新明亮/暖调柔光/冷白冰镇感）\n"+
+    "4. 氛围描述（精致/松弛/高级/食欲感）\n"+
+    "5. 景深层次（前中后3层纵深，前景虚化道具→中景产品→后景氛围）\n"+
+    "6. 画幅3:4竖版\n\n"+
+    "禁止项：不要任何文字、LOGO、水印。\n"+
+    "输出一段完整Prompt，不需要解释，直接返回Prompt内容。";
+  
+  fetch("https://api.deepseek.com/chat/completions",{
+    method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+apiKey},
+    body:JSON.stringify({model:"deepseek-chat",messages:[{role:"user",content:promptText}],max_tokens:800})
+  }).then(function(r){return r.json()}).then(function(d){
+    var txt=d.choices?d.choices[0].message.content:"生成失败";
+    el.innerHTML=renderPromptCard(txt,sceneName,"🧠");
+    btn.disabled=false;btn.textContent="🧠 生成 Prompt";
+  }).catch(function(e){
+    el.innerHTML="<div style=\"text-align:center;padding:40px;color:var(--red)\">⚠️ "+e.message+"</div>";
+    btn.disabled=false;btn.textContent="🧠 生成 Prompt";
+  });
+}
+
+function renderPromptCard(text,label,badge){
+  return '<div style="background:#fff;border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'+
+    '<span style="font-size:12px;font-weight:600;color:var(--brand)">'+badge+' '+label+'</span>'+
+    '<div style="display:flex;gap:8px">'+
+    '<button class="btn btn-ghost" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.parentElement.querySelector(\'.prompt-body\').textContent);toast(\'📋 已复制\')" style="font-size:11px;padding:4px 10px">📋 复制</button>'+
+    '<button class="btn btn-ghost" onclick="window.open(\'https://www.doubao.com/chat\',\'_blank\')" style="font-size:11px;padding:4px 10px">📱 豆包生图</button>'+
+    '</div></div>'+
+    '<div class="prompt-body" style="font-size:12px;line-height:1.8;color:var(--text);white-space:pre-wrap;background:var(--bg);padding:12px;border-radius:var(--radius-sm)">'+text+'</div>'+
+    '</div>';
+}
+
+
 // ═══════ COMMUNITY ═══════
 function renderWeeklyReports(){var kpi='<div class="kpi accent-green"><div class="kpi-label">👥 群客户数</div><div class="kpi-value">33,321<span class="kpi-change flat">人</span></div><div class="kpi-sub">712群 · 682门店 · 渗透92.5%</div></div>';kpi+='<div class="kpi accent-teal"><div class="kpi-label">📈 本周入群</div><div class="kpi-value">391<span class="kpi-change up">+47.0%</span></div><div class="kpi-sub">07/13-07/19</div></div>';kpi+='<div class="kpi accent-red"><div class="kpi-label">📉 本周退群</div><div class="kpi-value">502<span class="kpi-change down">-11.9%</span></div><div class="kpi-sub">环比改善+193</div></div>';kpi+='<div class="kpi accent-amber"><div class="kpi-label">📊 本周净增</div><div class="kpi-value">-111<span class="kpi-change flat">改善中</span></div><div class="kpi-sub">退群率>10%: 3家</div></div>';document.getElementById('communityDataKPI').innerHTML=kpi;var weeks=[{label:'07/13-07/19',file:'社群周报看板_20260713-0719.html'},{label:'07/06-07/12',file:'社群周报看板_20260706-0712.html'},{label:'06/29-07/05',file:'社群周报看板_20260629-0705.html'},{label:'06/22-06/28',file:'社群周报看板_20260622-0628.html'},{label:'06/15-06/21',file:'社群周报看板_20260615-0621.html'}];var h='';weeks.forEach(function(w){h+='<div><a href="#" data-type="weekly" data-file="'+w.file+'" onclick="openReport(this.dataset.type,this.dataset.file);return false" style="color:var(--brand);font-size:13px">📄 '+w.label+' 社群周报</a></div>';});document.getElementById('weeklyReportsList').innerHTML=h;var months=[{label:'2026年6月',file:'社群月报看板_202606.html'},{label:'2026年5月',file:'社群月报看板_202605.html'}];var m='';months.forEach(function(mo){m+='<div><a href="#" data-type="monthly" data-file="'+mo.file+'" onclick="openReport(this.dataset.type,this.dataset.file);return false" style="color:var(--brand);font-size:13px">📄 '+mo.label+' 社群月报</a></div>';});document.getElementById('monthlyReportsList').innerHTML=m;}
 function openReport(type,id){var url;if(type==='weekly')url='社群周报/'+id;else if(type==='monthly')url=id;else url='社群半年报_2026H1.html';window.open(url,'_blank');}

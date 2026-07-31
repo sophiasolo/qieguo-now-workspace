@@ -407,7 +407,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
         </div>
       </div>
     </div>
-    <div class="page" id="page-prompt"><iframe src="toolbox.html?tab=prompt" style="width:100%;height:calc(100vh - 80px);border:none;border-radius:var(--radius);background:#f5f7f5" title="配图Prompt"></iframe></div>
+    <div class="page" id="page-prompt">
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:16px">
+        <div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">🎨 产品名</div></div>
+            <input id="promptProduct" placeholder="如：麒麟瓜鲜切 / 酸奶捞 / 招牌四拼" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px" onkeydown="if(event.key==='Enter')genPrompt()">
+          </div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">🎬 场景风格</div></div>
+            <select id="promptScene" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px">
+              <option value="social">💬 社群图（博主参考+弱化LOGO）</option>
+              <option value="brand">🏷️ 品牌图（博主参考+保留LOGO）</option>
+              <option value="hot">🔥 热销爆品·精致质感</option>
+              <option value="member">💎 会员日·清新仪式感</option>
+              <option value="weekend">🏠 周末·窗边松弛感</option>
+              <option value="grass">🌟 种草·高级食欲感</option>
+              <option value="ice">⚡ 特价·极简冰镇感</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="genPrompt()" id="btnGenPrompt" style="width:100%;padding:12px;font-size:14px">🧠 生成 Prompt</button>
+        </div>
+        <div id="promptOutput" style="font-size:13px;color:var(--text-dim)">点击生成，AI 将为你创作配图 Prompt</div>
+      </div>
+    </div>
     <div class="page" id="page-inspiration"><div class="empty-state"><div class="icon">📚</div><h3>素材灵感库 · 灵感墙 Mood Board</h3><p>花字卡片 · 博主灵感图 · 水果知识文章 — 建设中</p></div></div>
     <div class="page" id="page-ailearn"><div class="empty-state"><div class="icon">💡</div><h3>AI前沿案例 · 知识卡片盒</h3><p>AI资讯收藏 → 标签分类 → 翻卡浏览 — 建设中</p></div></div>
   </div>
