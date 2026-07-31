@@ -700,8 +700,7 @@ function renderHotspot(){
   var el=document.getElementById('hotspotContent');
   fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     hotspotCache=d;
-    document.getElementById('hotspotDate').textContent=d.date||'';
-    var cats={};var items=d.items||[];
+        var cats={};var items=d.items||[];
     items.forEach(function(i){var c=i.category||'其他';cats[c]=(cats[c]||0)+1;});
     var sortedCats=Object.keys(cats).sort(function(a,b){
       if(a.indexOf('果切')>=0)return -1;if(b.indexOf('果切')>=0)return 1;
