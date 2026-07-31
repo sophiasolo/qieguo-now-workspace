@@ -412,19 +412,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
       <div style="display:grid;grid-template-columns:300px 1fr;gap:16px">
         <div>
           <div class="card" style="margin-bottom:12px">
+            <div class="card-header"><div class="card-title">📐 用途</div></div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-primary" id="ptCover" onclick="setPromptType('cover')" style="flex:1;font-size:12px;padding:8px 0">🛒 小程序封面</button>
+              <button class="btn btn-ghost" id="ptCommunity" onclick="setPromptType('community')" style="flex:1;font-size:12px;padding:8px 0">📱 社群群发</button>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:12px">
             <div class="card-header"><div class="card-title">🎨 产品名</div></div>
             <input id="promptProduct" placeholder="如：麒麟瓜鲜切 / 酸奶捞 / 招牌四拼" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px" onkeydown="if(event.key==='Enter')genPrompt()">
           </div>
           <div class="card" style="margin-bottom:12px">
             <div class="card-header"><div class="card-title">🎬 场景风格</div></div>
             <select id="promptScene" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px">
-              <option value="social">💬 社群图（博主参考+弱化LOGO）</option>
-              <option value="brand">🏷️ 品牌图（博主参考+保留LOGO）</option>
+              <option value="social">💬 博主参考+弱化LOGO（仅社群可用）</option>
+              <option value="brand">🏷️ 博主参考+保留LOGO（仅社群可用）</option>
               <option value="hot">🔥 热销爆品·精致质感</option>
               <option value="member">💎 会员日·清新仪式感</option>
               <option value="weekend">🏠 周末·窗边松弛感</option>
               <option value="grass">🌟 种草·高级食欲感</option>
               <option value="ice">⚡ 特价·极简冰镇感</option>
+              <option value="clean">📦 干净白底产品图（封面常用）</option>
             </select>
           </div>
           <div style="display:flex;gap:6px;align-items:center">

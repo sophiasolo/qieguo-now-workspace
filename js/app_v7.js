@@ -1476,22 +1476,31 @@ function generateCopyAI(){
 function initCopyPage(){initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyHotspots();loadCopyProducts();renderCopyHistory();}
 
 // ═══════ PROMPT ═══════
+var promptType='cover';
+function setPromptType(t){
+  promptType=t;
+  document.getElementById('ptCover').className='btn '+(t==='cover'?'btn-primary':'btn-ghost');
+  document.getElementById('ptCommunity').className='btn '+(t==='community'?'btn-primary':'btn-ghost');
+}
+
 function genPrompt(){
   var product=document.getElementById("promptProduct").value.trim()||"招牌鲜果切";
   var scene=document.getElementById("promptScene").value;
   var btn=document.getElementById("btnGenPrompt");
   var el=document.getElementById("promptOutput");
+  var typeName=promptType==='cover'?'小程序封面':'社群群发';
+  var ratio=promptType==='cover'?'1:1正方形':'3:4竖版';
   
   if(scene==="brand"||scene==="social"){
     var logoRule=scene==="brand"
-      ? "图1（产品白底图）强制规则：果盒、容器、果肉种类与摆放完整原样复刻，不得修改、增减水果；完整保留原图LOGO图案，LOGO统一放置画面左上角，随3:4画幅等比例适配缩放，禁止消除、扭曲、移位至其他区域。"
+      ? "图1（产品白底图）强制规则：果盒、容器、果肉种类与摆放完整原样复刻，不得修改、增减水果；完整保留原图LOGO图案，LOGO统一放置画面左上角，随"+ratio+"画幅等比例适配缩放，禁止消除、扭曲、移位至其他区域。"
       : "图1（产品白底图）强制规则：果盒、容器、果肉种类与摆放完整原样复刻，不得修改、增减水果；LOGO可直接去除弱化。";
-    var txt="根据上传两张图片生成果切实拍图。\n\n"+logoRule+"\n\n"+
-      "2.图2（博主氛围参考图）通用参考范围：保留画面整体光影色调、构图留白、桌面布景、餐具搭配、人物手持/摆放姿势、生活化氛围感、背景虚化层次；仅忽略图内博主手中盛放的水果、餐食、原装容器，禁止照搬这份食物形态。\n\n"+
-      "3.版权约束：仅借鉴拍摄风格与布局逻辑，生成全新原创场景，不完整复刻博主原图道具、背景细节。\n\n"+
-      "4.画质底线：原生实拍质感，禁用3D塑料建模感、高饱和刺眼色彩、厚重黑影、廉价塑料装饰；画面留白充足，产品始终清晰突出。\n\n"+
-      "5.规格：3:4竖版4K高清，无多余文字、无水印。";
-    el.innerHTML=renderPromptCard(txt,"社群图·博主参考","📸");
+    var txt="根据上传两张图片生成果切实拍图。\\n\\n"+logoRule+"\\n\\n"+
+      "2.图2（博主氛围参考图）通用参考范围：保留画面整体光影色调、构图留白、桌面布景、餐具搭配、人物手持/摆放姿势、生活化氛围感、背景虚化层次；仅忽略图内博主手中盛放的水果、餐食、原装容器，禁止照搬这份食物形态。\\n\\n"+
+      "3.版权约束：仅借鉴拍摄风格与布局逻辑，生成全新原创场景，不完整复刻博主原图道具、背景细节。\\n\\n"+
+      "4.画质底线：原生实拍质感，禁用3D塑料建模感、高饱和刺眼色彩、厚重黑影、廉价塑料装饰；画面留白充足，产品始终清晰突出。\\n\\n"+
+      "5.规格："+ratio+"4K高清，无多余文字、无水印。";
+    el.innerHTML=renderPromptCard(txt,typeName+'·博主参考',"📸");
     return;
   }
   
@@ -1508,7 +1517,7 @@ function genPrompt(){
     "产品名称「"+product+"」仅作场景搭配参考——产品外观以白底图为准，你不需描述产品形态。\\n\\n"+
     "请根据场景「"+sceneName+"」写一段生图Prompt：\\n\\n"+
     "必须包含：\\n"+
-    "1. 画幅：3:4竖版\\n"+
+    "1. 画幅："+ratio+"\\n"+
     "2. 产品：使用上传白底图中的产品，保持果盒/容器/果肉形态原样，不改变产品外观\\n"+
     "3. 构图（居中对称/三角构图/窗边纵深/极简留白选一种）\\n"+
     "4. 桌面+光影（橡木/微水泥/大理石，柔光/侧光）\\n"+
@@ -1559,7 +1568,7 @@ function favPrompt(cardId){
   var favs=getFavs();
   // Check duplicate
   if(favs.some(function(f){return f.text===d.text;})){toast('⚠️ 已收藏过');return;}
-  favs.unshift({text:d.text,label:d.label,time:new Date().toISOString()});
+  favs.unshift({text:d.text,label:d.label,time:new Date().toISOString(),type:promptType});
   saveFavs(favs);
   toast('⭐ 已收藏');
 }
@@ -1574,10 +1583,11 @@ function renderPromptLib(){
   var favs=getFavs();
   if(!favs.length){meta.textContent='暂无收藏';el.innerHTML='<div style="padding:8px;color:var(--text-dim);font-size:12px">在配图Prompt页面生成并⭐收藏后出现在这里</div>';return;}
   // Group by scene
-  var groups={community:[],cover:[]};
+  var groups={cover:[],community:[]};
   favs.forEach(function(f,i){
-    var scene=(f.label||'').indexOf('社群')>=0?'community':'cover';
-    groups[scene].push({idx:i,item:f});
+    var t=f.type||'cover';
+    if(!groups[t])groups[t]=[];
+    groups[t].push({idx:i,item:f});
   });
   meta.textContent=favs.length+'条 · 社群'+groups.community.length+' · 封面'+groups.cover.length;
   var html='';
