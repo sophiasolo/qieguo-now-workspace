@@ -710,7 +710,6 @@ function renderHotspotItems(d){
   var el=document.getElementById('hotspotContent');
   var items=d.items||[];
   if(hotspotFilter!=='all'){items=items.filter(function(i){return (i.source||'').indexOf(hotspotFilter)>=0;});}
-  if(hotspotCat!=='all'){items=items.filter(function(i){return (i.category||'')===hotspotCat;});}
   items.sort(function(a,b){
     var aFruit=isFruitRelated(a)?0:1;
     var bFruit=isFruitRelated(b)?0:1;
