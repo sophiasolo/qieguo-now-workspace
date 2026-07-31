@@ -431,7 +431,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
             <span onclick="openApiKeyModal()" style="cursor:pointer;font-size:14px;opacity:0.4;padding:0 4px" title="API Key 设置">⚙️</span>
           </div>
         </div>
-        <div id="promptOutput" style="font-size:13px;color:var(--text-dim)">点击生成，AI 将为你创作配图 Prompt</div>
+        <div id="promptOutput" style="font-size:13px;color:var(--text-dim);margin-bottom:16px">点击生成，AI 将为你创作配图 Prompt</div>
+        <div class="card" id="promptLibrary" style="display:none">
+          <div class="card-header"><div class="card-title">📚 精品 Prompt 库</div><div class="card-sub" id="promptLibMeta"></div></div>
+          <div id="promptLibContent" style="font-size:12px"></div>
+        </div>
       </div>
     </div>
     <div class="page" id="page-inspiration"><div class="empty-state"><div class="icon">📚</div><h3>素材灵感库 · 灵感墙 Mood Board</h3><p>花字卡片 · 博主灵感图 · 水果知识文章 — 建设中</p></div></div>

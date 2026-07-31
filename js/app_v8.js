@@ -1534,16 +1534,108 @@ function genPrompt(){
 }
 
 function renderPromptCard(text,label,badge){
-  return '<div style="background:#fff;border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)">'+
+  var id='pr_'+Date.now();
+  // Store current prompt data for favoriting
+  window._lastPrompt={text:text,label:label,id:id};
+  return '<div style="background:#fff;border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)" id="'+id+'">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'+
     '<span style="font-size:12px;font-weight:600;color:var(--brand)">'+badge+' '+label+'</span>'+
-    '<div style="display:flex;gap:8px">'+
-    '<button class="btn btn-ghost" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.parentElement.querySelector(\'.prompt-body\').textContent);toast(\'📋 已复制\')" style="font-size:11px;padding:4px 10px">📋 复制</button>'+
-    '<button class="btn btn-ghost" onclick="window.open(\'https://www.doubao.com/chat\',\'_blank\')" style="font-size:11px;padding:4px 10px">📱 豆包生图</button>'+
+    '<div style="display:flex;gap:6px">'+
+    '<button class="btn btn-ghost" onclick="favPrompt(\''+id+'\')" style="font-size:11px;padding:4px 8px" title="收藏">⭐</button>'+
+    '<button class="btn btn-ghost" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.parentElement.querySelector(\'.prompt-body\').textContent);toast(\'📋 已复制\')" style="font-size:11px;padding:4px 8px">📋 复制</button>'+
+    '<button class="btn btn-ghost" onclick="window.open(\'https://www.doubao.com/chat\',\'_blank\')" style="font-size:11px;padding:4px 8px">📱 豆包</button>'+
     '</div></div>'+
     '<div class="prompt-body" style="font-size:12px;line-height:1.8;color:var(--text);white-space:pre-wrap;background:var(--bg);padding:12px;border-radius:var(--radius-sm)">'+text+'</div>'+
     '</div>';
 }
+
+// ─── Prompt Favorites ───
+function getFavs(){try{return JSON.parse(localStorage.getItem('qg_prompt_favs')||'[]');}catch(e){return[];}}
+function saveFavs(arr){localStorage.setItem('qg_prompt_favs',JSON.stringify(arr));renderPromptLib();}
+
+function favPrompt(cardId){
+  var d=window._lastPrompt;
+  if(!d||d.id!==cardId)return;
+  var favs=getFavs();
+  // Check duplicate
+  if(favs.some(function(f){return f.text===d.text;})){toast('⚠️ 已收藏过');return;}
+  favs.unshift({text:d.text,label:d.label,time:new Date().toISOString()});
+  saveFavs(favs);
+  toast('⭐ 已收藏');
+}
+
+function removeFav(idx){
+  var favs=getFavs();favs.splice(idx,1);saveFavs(favs);
+}
+
+function renderPromptLib(){
+  var el=document.getElementById('promptLibContent');
+  var meta=document.getElementById('promptLibMeta');
+  var lib=document.getElementById('promptLibrary');
+  var favs=getFavs();
+  if(!favs.length){lib.style.display='none';return;}
+  lib.style.display='';
+  // Group by scene
+  var groups={community:[],cover:[]};
+  favs.forEach(function(f,i){
+    var scene=(f.label||'').indexOf('社群')>=0?'community':'cover';
+    groups[scene].push({idx:i,item:f});
+  });
+  meta.textContent=favs.length+'条 · 社群'+groups.community.length+' · 封面'+groups.cover.length;
+  var html='';
+  ['community','cover'].forEach(function(s){
+    if(!groups[s].length)return;
+    html+='<div style="font-weight:600;color:var(--text);font-size:12px;margin:8px 0 4px">'+(s==='community'?'📱 社群群发':'🛒 小程序封面')+' ('+groups[s].length+')</div>';
+    groups[s].forEach(function(g){
+      html+='<div style="display:flex;align-items:flex-start;gap:6px;padding:6px 8px;border-bottom:1px solid var(--border);font-size:11px;cursor:pointer" onclick="reuseFav('+g.idx+')">'+
+        '<div style="flex:1;color:var(--text);line-height:1.6;max-height:40px;overflow:hidden">'+g.item.text.replace(/\n/g,' ').substring(0,80)+'…</div>'+
+        '<button class="btn btn-ghost" onclick="event.stopPropagation();removeFav('+g.idx+')" style="font-size:10px;color:var(--red);padding:2px 6px">🗑</button>'+
+      '</div>';
+    });
+  });
+  if(favs.length>=3){
+    html+='<div style="text-align:center;margin-top:8px"><button class="btn btn-primary" onclick="extractRecipe()" style="font-size:11px;padding:6px 16px">🧠 提炼配方</button></div>';
+  }
+  el.innerHTML=html;
+}
+
+function reuseFav(idx){
+  var favs=getFavs();
+  var f=favs[idx];
+  if(!f)return;
+  document.getElementById('promptOutput').innerHTML=renderPromptCard(f.text,f.label,'📌');
+  window.scrollTo({top:document.getElementById('promptOutput').offsetTop-20,behavior:'smooth'});
+}
+
+function extractRecipe(){
+  var favs=getFavs();
+  var apiKey=getApiKey();
+  if(!apiKey){toast('⚠️ 请先设置 API Key');return;}
+  var scene=document.getElementById('promptScene').value;
+  var sceneIsCommunity=scene==='social'||scene==='brand';
+  var sceneName=sceneIsCommunity?'社群群发配图':'小程序产品封面图';
+  var samples=favs.map(function(f){return f.text;}).join('\n\n---\n\n');
+  
+  var promptText='你是切果NOW配图Prompt分析师。以下是用户收藏的「'+sceneName+'」优秀Prompt，共'+favs.length+'条。\\n\\n'+
+    samples+'\\n\\n'+
+    '请分析这些Prompt的共性，提炼出：\\n'+
+    '1. 该场景的核心关键词（构图/布景/道具/光影/色调）\\n'+
+    '2. 一条优化合成的标准Prompt模板\\n\\n'+
+    '输出格式：先总结关键词，再输出模板Prompt。全中文。';
+  
+  toast('🧠 分析中...');
+  fetch('https://api.deepseek.com/chat/completions',{
+    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:promptText}],max_tokens:1200})
+  }).then(function(r){return r.json()}).then(function(d){
+    var txt=d.choices?d.choices[0].message.content:'分析失败';
+    var el=document.getElementById('promptOutput');
+    el.innerHTML=renderPromptCard(txt,'配方提炼 · '+sceneName,'🧪');
+    window.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
+  }).catch(function(e){toast('⚠️ '+e.message);});
+}
+
+
 
 
 // ═══════ COMMUNITY ═══════
