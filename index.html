@@ -288,7 +288,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
           <button class="btn btn-ghost" id="hotspotRefreshBtn" onclick="refreshHotspot()" style="font-size:11px;padding:3px 10px">🔄 刷新</button>
         </div>
       </div>
-      <div id="hotspotContent" style="font-size:13px;color:var(--text-dim)">抓取中...</div>
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:16px">
+        <div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-title" style="font-size:13px;margin-bottom:8px">📡 来源</div>
+            <div style="display:flex;flex-direction:column;gap:4px" id="hotspotSourceBtns">
+              <button class="btn btn-primary" onclick="filterHotspot('all')" style="font-size:11px;padding:5px 10px;text-align:left">🌐 全部</button>
+              <button class="btn btn-ghost" onclick="filterHotspot('百度')" style="font-size:11px;padding:5px 10px;text-align:left">🔍 百度</button>
+              <button class="btn btn-ghost" onclick="filterHotspot('微博')" style="font-size:11px;padding:5px 10px;text-align:left">💬 微博</button>
+              <button class="btn btn-ghost" onclick="filterHotspot('抖音')" style="font-size:11px;padding:5px 10px;text-align:left">🎵 抖音</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="font-size:13px;margin-bottom:8px">🏷️ 分类</div>
+            <div id="hotspotCatBtns" style="display:flex;flex-direction:column;gap:4px;font-size:11px"></div>
+          </div>
+        </div>
+        <div id="hotspotContent" style="font-size:13px;color:var(--text-dim)">抓取中...</div>
+      </div>
     </div>
     <div class="page" id="page-copy">
       <div style="display:grid;grid-template-columns:300px 1fr 200px;gap:16px;min-height:calc(100vh - 120px)">
@@ -409,6 +426,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
-<script src="js/app_v8.js?v=23"></script>
+<script src="js/app_v8.js?v=24"></script>
 </body>
 </html>
