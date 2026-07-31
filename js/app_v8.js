@@ -673,21 +673,10 @@ toast('✅ '+items.length+'个产品 | '+priceSamples);
 function refreshHotspot(){var el=document.getElementById('hotspotContent');el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">🔄 刷新中...</div>';var btn=document.getElementById('hotspotRefreshBtn');if(btn){btn.textContent='⏳';btn.disabled=true;}setTimeout(function(){renderHotspot();if(btn){btn.textContent='🔄 刷新';btn.disabled=false;}},500);}
 var hotspotCache=null;
 var hotspotFilter='all';
-var hotspotCat='all';
+
 
 function filterHotspot(f){
   hotspotFilter=f;
-  ['all','百度','微博','抖音'].forEach(function(s){
-    var id='hs'+(s==='all'?'All':s==='百度'?'Baidu':s==='微博'?'Weibo':'Douyin');
-    var btn=document.getElementById(id);
-    if(btn){btn.classList.remove('btn-primary','btn-ghost');btn.classList.add(f===s?'btn-primary':'btn-ghost');}
-  });
-  if(hotspotCache)renderHotspotItems(hotspotCache);
-}
-function filterHotspotCat(c){
-  hotspotCat=c;
-  var btns=document.querySelectorAll('#hotspotCatBtns button');
-  btns.forEach(function(b){b.classList.remove('btn-primary','btn-ghost');b.classList.add(b.dataset.cat===c?'btn-primary':'btn-ghost');});
   if(hotspotCache)renderHotspotItems(hotspotCache);
 }
 
@@ -696,18 +685,6 @@ function renderHotspot(){
   fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     hotspotCache=d;
     document.getElementById('hotspotDate').textContent=d.date||'';
-    var cats={};var items=d.items||[];
-    items.forEach(function(i){var c=i.category||'其他';cats[c]=(cats[c]||0)+1;});
-    var sortedCats=Object.keys(cats).sort(function(a,b){
-      if(a.indexOf('果切')>=0)return -1;if(b.indexOf('果切')>=0)return 1;
-      return cats[b]-cats[a];
-    });
-    var catHtml='<button class="btn btn-primary" onclick="filterHotspotCat(\'all\')" data-cat="all" style="font-size:11px;padding:5px 10px;text-align:left">🏷️ 全部 ('+items.length+')</button>';
-    sortedCats.forEach(function(c){
-      var icon=c.indexOf('果切')>=0?'🍉':c.indexOf('娱乐')>=0?'🎬':c.indexOf('美食')>=0?'🍜':c.indexOf('生活')>=0?'🏠':c.indexOf('品牌')>=0?'🏷️':'📌';
-      catHtml+='<button class="btn btn-ghost" onclick="filterHotspotCat(\''+c+'\')" data-cat="'+c+'" style="font-size:11px;padding:5px 10px;text-align:left">'+icon+' '+c+' ('+cats[c]+')</button>';
-    });
-    document.getElementById('hotspotCatBtns').innerHTML=catHtml;
     renderHotspotItems(d);
   }).catch(function(){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">热点数据加载中...</div>';});
 }
@@ -752,7 +729,7 @@ function renderHotspotItems(d){
   html+='</div>';el.innerHTML=html;
 }
 
-function refreshHotspot(){filterHotspot('all');renderHotspot();}
+
 function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════
