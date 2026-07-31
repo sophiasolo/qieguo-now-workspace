@@ -1517,6 +1517,7 @@ function genPrompt(){
     "7. 前景→中景产品→后景虚化的3层景深，4-6件道具分散层次\\n"+
     "8. 博主参考图仅借鉴拍摄风格与布景逻辑\\n\\n"+
     "禁止：文字/LOGO/水印，3D建模感，高饱和，复刻博主原图道具。\\n"+
+    "所有输出必须使用中文，不要任何英文。\\n"+
     "直接输出Prompt，不解释。";
   
   fetch("https://api.deepseek.com/chat/completions",{
