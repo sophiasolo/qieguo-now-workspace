@@ -130,6 +130,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
   </div>
   <div class="nav-item" data-page="copy"><span class="icon">✍️</span><span>文案创作</span></div>
   <div class="nav-item" data-page="prompt"><span class="icon">🎨</span><span>配图Prompt</span></div>
+  <div class="nav-item" data-page="recipe"><span class="icon">🧪</span><span>Prompt配方</span></div>
   <div class="nav-item" data-page="inspiration"><span class="icon">📚</span><span>素材灵感库</span></div>
   <div class="nav-item" data-page="ailearn"><span class="icon">💡</span><span>AI前沿案例</span></div>
 </aside>
@@ -431,14 +432,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
             <span onclick="openApiKeyModal()" style="cursor:pointer;font-size:14px;opacity:0.4;padding:0 4px" title="API Key 设置">⚙️</span>
           </div>
         </div>
-        <div>
-          <div id="promptOutput" style="font-size:13px;color:var(--text-dim);margin-bottom:16px">点击生成，AI 将为你创作配图 Prompt</div>
-          <div class="card" id="promptLibrary" style="display:none">
-            <div class="card-header"><div class="card-title">📚 精品 Prompt 库</div><div class="card-sub" id="promptLibMeta"></div></div>
-            <div id="promptLibContent" style="font-size:12px"></div>
-          </div>
-        </div>
+        <div id="promptOutput" style="font-size:13px;color:var(--text-dim)">点击生成，AI 将为你创作配图 Prompt</div>
       </div>
+    </div>
+    <div class="page" id="page-recipe">
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><div class="card-title">📚 精品 Prompt 库</div><div class="card-sub" id="promptLibMeta">加载中...</div></div>
+        <div id="promptLibContent" style="font-size:12px"></div>
+      </div>
+      <div id="recipeOutput" style="font-size:13px;color:var(--text-dim)"></div>
     </div>
     <div class="page" id="page-inspiration"><div class="empty-state"><div class="icon">📚</div><h3>素材灵感库 · 灵感墙 Mood Board</h3><p>花字卡片 · 博主灵感图 · 水果知识文章 — 建设中</p></div></div>
     <div class="page" id="page-ailearn"><div class="empty-state"><div class="icon">💡</div><h3>AI前沿案例 · 知识卡片盒</h3><p>AI资讯收藏 → 标签分类 → 翻卡浏览 — 建设中</p></div></div>

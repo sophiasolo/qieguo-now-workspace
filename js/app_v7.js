@@ -9,8 +9,8 @@ var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-12":"春节","04-05":"清明","0
 
 var MEMBER_DATA={"2026-07-15":{prev:"07-08",orders:73,sales:2360,stores:51,prevOrders:81,prevSales:2600,prevStores:53,couponUseRate:42.5,prevCouponUseRate:41.2,members:4,deliveryOrders:42,prevDeliveryOrders:46,customerPrice:32.3,prevCustomerPrice:32.1,conclusion:"7月15日会员日受下雨影响订单↓10%，但客单价和券核销率微增。外卖占比57%与上期持平。动销门店51家较上期53家略降。"},"2026-07-08":{prev:"07-01",orders:81,sales:2600,stores:53,prevOrders:76,prevSales:2420,prevStores:52,couponUseRate:41.2,prevCouponUseRate:40.5,members:6,deliveryOrders:46,prevDeliveryOrders:43,customerPrice:32.1,prevCustomerPrice:31.8,conclusion:"7月8日会员日订单↑6.6%，销售额↑7.4%。券核销率连续上升。新增会员6人，外卖56.8%。"},"2026-07-01":{prev:"06-24",orders:76,sales:2420,stores:52,prevOrders:72,prevSales:2290,prevStores:51,couponUseRate:40.5,prevCouponUseRate:39.8,members:5,deliveryOrders:43,prevDeliveryOrders:40,customerPrice:31.8,prevCustomerPrice:31.8,conclusion:"7月1日会员日订单↑5.6%。客单价持平。券核销率突破40%。动销门店稳定。"}};
 
-const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',inspiration:'📚 素材灵感库',ailearn:'💡 AI前沿案例'};
-document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='acquisition')renderAcquisition();});});
+const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库',ailearn:'💡 AI前沿案例'};
+document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='prompt'){}if(page==='recipe'){renderPromptLib();}if(page==='acquisition')renderAcquisition();});});
 var now=new Date();document.getElementById('currentDate').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+['日','一','二','三','四','五','六'][now.getDay()]+'曜日';
 function toast(msg){var el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(function(){el.remove()},2000);}
 
@@ -1571,10 +1571,8 @@ function removeFav(idx){
 function renderPromptLib(){
   var el=document.getElementById('promptLibContent');
   var meta=document.getElementById('promptLibMeta');
-  var lib=document.getElementById('promptLibrary');
   var favs=getFavs();
-  if(!favs.length){lib.style.display='none';return;}
-  lib.style.display='';
+  if(!favs.length){meta.textContent='暂无收藏';el.innerHTML='<div style="padding:8px;color:var(--text-dim);font-size:12px">在配图Prompt页面生成并⭐收藏后出现在这里</div>';return;}
   // Group by scene
   var groups={community:[],cover:[]};
   favs.forEach(function(f,i){
@@ -1629,7 +1627,7 @@ function extractRecipe(){
     body:JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:promptText}],max_tokens:1200})
   }).then(function(r){return r.json()}).then(function(d){
     var txt=d.choices?d.choices[0].message.content:'分析失败';
-    var el=document.getElementById('promptOutput');
+    var el=document.getElementById('recipeOutput');
     el.innerHTML=renderPromptCard(txt,'配方提炼 · '+sceneName,'🧪');
     window.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
   }).catch(function(e){toast('⚠️ '+e.message);});
