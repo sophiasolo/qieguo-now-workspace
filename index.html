@@ -426,7 +426,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
               <option value="ice">⚡ 特价·极简冰镇感</option>
             </select>
           </div>
-          <button class="btn btn-primary" onclick="genPrompt()" id="btnGenPrompt" style="width:100%;padding:12px;font-size:14px">🧠 生成 Prompt</button>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button class="btn btn-primary" onclick="genPrompt()" id="btnGenPrompt" style="flex:1;padding:12px;font-size:14px">🧠 生成 Prompt</button>
+            <span onclick="openApiKeyModal()" style="cursor:pointer;font-size:14px;opacity:0.4;padding:0 4px" title="API Key 设置">⚙️</span>
+          </div>
         </div>
         <div id="promptOutput" style="font-size:13px;color:var(--text-dim)">点击生成，AI 将为你创作配图 Prompt</div>
       </div>
