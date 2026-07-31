@@ -281,14 +281,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
       </div>
     </div>
     <div class="page" id="page-hotspot">
-      <div class="card">
-        <div class="card-header"><div class="card-title">📡 今日热点捕捉</div><div style="display:flex;gap:6px;align-items:center"><span style="font-size:11px;color:var(--text-dim)" id="hotspotDate"></span><button class="btn btn-ghost" id="hotspotRefreshBtn" onclick="refreshHotspot()" style="font-size:11px;padding:3px 10px">🔄 刷新</button></div></div>
-        <div style="display:flex;gap:6px;margin-bottom:12px">
-          <button class="btn btn-primary" onclick="filterHotspot('all')" id="hsAll">全部</button>
-          <button class="btn btn-ghost" onclick="filterHotspot('百度')" id="hsBaidu">🔍 百度</button>
-          <button class="btn btn-ghost" onclick="filterHotspot('微博')" id="hsWeibo">💬 微博</button>
-          <button class="btn btn-ghost" onclick="filterHotspot('抖音')" id="hsDouyin">🎵 抖音</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <h2 style="font-size:18px;font-weight:700;color:var(--text)">📡 今日热点捕捉</h2>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:11px;color:var(--text-dim)" id="hotspotDate"></span>
+          <button class="btn btn-ghost" id="hotspotRefreshBtn" onclick="refreshHotspot()" style="font-size:11px;padding:3px 10px">🔄 刷新</button>
         </div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:16px">
+        <!-- LEFT: 来源+分类筛选 -->
+        <div>
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-title" style="font-size:13px;margin-bottom:8px">📡 来源</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <button class="btn btn-primary" onclick="filterHotspot('all')" id="hsAll" style="font-size:11px;padding:5px 10px;text-align:left">🌐 全部</button>
+              <button class="btn btn-ghost" onclick="filterHotspot('百度')" id="hsBaidu" style="font-size:11px;padding:5px 10px;text-align:left">🔍 百度</button>
+              <button class="btn btn-ghost" onclick="filterHotspot('微博')" id="hsWeibo" style="font-size:11px;padding:5px 10px;text-align:left">💬 微博</button>
+              <button class="btn btn-ghost" onclick="filterHotspot('抖音')" id="hsDouyin" style="font-size:11px;padding:5px 10px;text-align:left">🎵 抖音</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="font-size:13px;margin-bottom:8px">🏷️ 分类</div>
+            <div id="hotspotCatBtns" style="display:flex;flex-direction:column;gap:4px;font-size:11px"></div>
+          </div>
+        </div>
+        <!-- RIGHT: 热点列表 -->
         <div id="hotspotContent" style="font-size:13px;color:var(--text-dim)">抓取中...</div>
       </div>
     </div>
