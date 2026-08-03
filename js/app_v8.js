@@ -1560,90 +1560,152 @@ function renderPromptCard(text,label,badge){
 }
 
 // ─── Prompt Favorites ───
+var recipeType='cover';
+var recipeCache={};
+
+function setRecipeType(t){
+  recipeType=t;
+  document.getElementById('rtCover').className='btn '+(t==='cover'?'btn-primary':'btn-ghost');
+  document.getElementById('rtCommunity').className='btn '+(t==='community'?'btn-primary':'btn-ghost');
+  renderPromptLib();
+  renderRecipeHistory();
+}
+
+function getRecipes(){try{return JSON.parse(localStorage.getItem('qg_prompt_recipes')||'{}');}catch(e){return{};}}
+function saveRecipes(r){localStorage.setItem('qg_prompt_recipes',JSON.stringify(r));}
 function getFavs(){try{return JSON.parse(localStorage.getItem('qg_prompt_favs')||'[]');}catch(e){return[];}}
-function saveFavs(arr){localStorage.setItem('qg_prompt_favs',JSON.stringify(arr));renderPromptLib();}
-
-function favPrompt(cardId){
-  var d=window._lastPrompt;
-  if(!d||d.id!==cardId)return;
-  var favs=getFavs();
-  // Check duplicate
-  if(favs.some(function(f){return f.text===d.text;})){toast('⚠️ 已收藏过');return;}
-  favs.unshift({text:d.text,label:d.label,time:new Date().toISOString(),type:promptType});
-  saveFavs(favs);
-  toast('⭐ 已收藏');
-}
-
-function removeFav(idx){
-  var favs=getFavs();favs.splice(idx,1);saveFavs(favs);
-}
 
 function renderPromptLib(){
   var el=document.getElementById('promptLibContent');
   var meta=document.getElementById('promptLibMeta');
+  var btn=document.getElementById('btnExtract');
   var favs=getFavs();
-  if(!favs.length){meta.textContent='暂无收藏';el.innerHTML='<div style="padding:8px;color:var(--text-dim);font-size:12px">在配图Prompt页面生成并⭐收藏后出现在这里</div>';return;}
-  // Group by scene
-  var groups={cover:[],community:[]};
-  favs.forEach(function(f,i){
-    var t=f.type||'cover';
-    if(!groups[t])groups[t]=[];
-    groups[t].push({idx:i,item:f});
+  
+  // Filter by type
+  var typeFavs=favs.filter(function(f){return (f.type||'cover')===recipeType;});
+  var q=(document.getElementById('recipeSearch').value||'').toLowerCase();
+  if(q)typeFavs=typeFavs.filter(function(f){
+    return (f.label||'').toLowerCase().indexOf(q)>=0||f.text.toLowerCase().indexOf(q)>=0;
   });
-  meta.textContent=favs.length+'条 · 社群'+groups.community.length+' · 封面'+groups.cover.length;
-  var html='';
-  ['community','cover'].forEach(function(s){
-    if(!groups[s].length)return;
-    html+='<div style="font-weight:600;color:var(--text);font-size:12px;margin:8px 0 4px">'+(s==='community'?'📱 社群群发':'🛒 小程序封面')+' ('+groups[s].length+')</div>';
-    groups[s].forEach(function(g){
-      html+='<div style="display:flex;align-items:flex-start;gap:6px;padding:6px 8px;border-bottom:1px solid var(--border);font-size:11px;cursor:pointer" onclick="reuseFav('+g.idx+')">'+
-        '<div style="flex:1;color:var(--text);line-height:1.6;max-height:40px;overflow:hidden">'+g.item.text.replace(/\n/g,' ').substring(0,80)+'…</div>'+
-        '<button class="btn btn-ghost" onclick="event.stopPropagation();removeFav('+g.idx+')" style="font-size:10px;color:var(--red);padding:2px 6px">🗑</button>'+
-      '</div>';
-    });
-  });
-  if(favs.length>=3){
-    html+='<div style="text-align:center;margin-top:8px"><button class="btn btn-primary" onclick="extractRecipe()" style="font-size:11px;padding:6px 16px">🧠 提炼配方</button></div>';
+  
+  meta.textContent=typeFavs.length+'/'+favs.length+'条';
+  btn.disabled=typeFavs.length<3;
+  btn.textContent=typeFavs.length>=3?'🧠 提炼配方（'+typeFavs.length+'条）':'🧠 提炼配方（需≥3条）';
+  
+  if(!typeFavs.length){
+    el.innerHTML='<div style="padding:16px;color:var(--text-dim);font-size:12px;text-align:center">'+
+      (q?'无匹配':'暂无 '+recipeTypeMap[recipeType]+' 收藏。在配图Prompt页面生成并⭐收藏')+'</div>';
+    return;
   }
+  
+  var typeName=recipeTypeMap[recipeType];
+  var html='<div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;padding:0 8px">'+typeName+' · '+typeFavs.length+'条</div>';
+  typeFavs.forEach(function(f,i){
+    html+='<div style="padding:6px 8px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px;cursor:pointer;font-size:11px" onclick="reuseFav('+i+')">'+
+      '<div style="flex:1;min-width:0">'+
+      '<div style="color:var(--text);line-height:1.5;max-height:32px;overflow:hidden">'+(f.label||'无标签')+'</div>'+
+      '<div style="color:var(--text-dim);max-height:16px;overflow:hidden">'+f.text.replace(/\n/g,' ').substring(0,50)+'…</div>'+
+      '</div>'+
+      '<span onclick="event.stopPropagation();removeFav('+i+')" style="color:var(--red);cursor:pointer;flex-shrink:0;font-size:10px">🗑</span>'+
+    '</div>';
+  });
   el.innerHTML=html;
+  
+  // Also render recipe history
+  renderRecipeHistory();
 }
 
 function reuseFav(idx){
-  var favs=getFavs();
+  var favs=getFavs().filter(function(f){return (f.type||'cover')===recipeType;});
   var f=favs[idx];
   if(!f)return;
-  document.getElementById('promptOutput').innerHTML=renderPromptCard(f.text,f.label,'📌');
-  window.scrollTo({top:document.getElementById('promptOutput').offsetTop-20,behavior:'smooth'});
+  var el=document.getElementById('recipeOutput');
+  el.innerHTML='<div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">📌 选中</div>'+
+    renderPromptCard(f.text,f.label,'📌');
+  window.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
+}
+
+function removeFav(idx){
+  var favs=getFavs();
+  var typeFavs=favs.filter(function(f){return (f.type||'cover')===recipeType;});
+  var target=typeFavs[idx];
+  if(!target)return;
+  favs=favs.filter(function(f){return f.text!==target.text||f.time!==target.time;});
+  localStorage.setItem('qg_prompt_favs',JSON.stringify(favs));
+  renderPromptLib();
+}
+
+function renderRecipeHistory(){
+  var el=document.getElementById('recipeOutput');
+  var recipes=getRecipes();
+  var key=recipeType;
+  if(!recipes[key]||!recipes[key].length){
+    el.innerHTML='<div style="padding:40px;text-align:center;color:var(--text-dim)">暂无'+recipeTypeMap[recipeType]+'配方</div>';
+    return;
+  }
+  var list=recipes[key];
+  var html='';
+  list.forEach(function(r,i){
+    html+='<div style="background:#fff;border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;border:1px solid var(--border)">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'+
+      '<div style="font-size:11px;font-weight:600;color:var(--brand)">🧪 '+recipeTypeMap[recipeType]+' · '+(r.time||'').substring(0,10)+'</div>'+
+      '<div style="display:flex;gap:4px">'+
+      '<button class="btn btn-ghost" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.parentElement.querySelector(\'.recipe-body\').textContent);toast(\'📋 已复制\')" style="font-size:10px;padding:2px 6px">📋</button>'+
+      '<button class="btn btn-ghost" onclick="delRecipe(\''+key+'\','+i+')" style="font-size:10px;color:var(--red);padding:2px 6px">🗑</button>'+
+      '</div></div>'+
+      '<div class="recipe-body" style="font-size:11px;line-height:1.7;color:var(--text);white-space:pre-wrap;max-height:200px;overflow-y:auto;background:var(--bg);padding:8px;border-radius:4px">'+r.text+'</div>'+
+      '</div>';
+  });
+  el.innerHTML=html;
+}
+
+function delRecipe(key,idx){
+  var recipes=getRecipes();
+  recipes[key].splice(idx,1);
+  saveRecipes(recipes);
+  renderRecipeHistory();
 }
 
 function extractRecipe(){
-  var favs=getFavs();
+  var favs=getFavs().filter(function(f){return (f.type||'cover')===recipeType;});
+  if(favs.length<3){toast('⚠️ 至少需要3条收藏');return;}
   var apiKey=getApiKey();
   if(!apiKey){toast('⚠️ 请先设置 API Key');return;}
-  var scene=document.getElementById('promptScene').value;
-  var sceneIsCommunity=scene==='social'||scene==='brand';
-  var sceneName=sceneIsCommunity?'社群群发配图':'小程序产品封面图';
-  var samples=favs.map(function(f){return f.text;}).join('\n\n---\n\n');
   
-  var promptText='你是切果NOW配图Prompt分析师。以下是用户收藏的「'+sceneName+'」优秀Prompt，共'+favs.length+'条。\\n\\n'+
-    samples+'\\n\\n'+
-    '请分析这些Prompt的共性，提炼出：\\n'+
-    '1. 该场景的核心关键词（构图/布景/道具/光影/色调）\\n'+
-    '2. 一条优化合成的标准Prompt模板\\n\\n'+
-    '输出格式：先总结关键词，再输出模板Prompt。全中文。';
+  var typeName=recipeTypeMap[recipeType];
+  var samples=favs.map(function(f,i){return '【'+f.label+'】\n'+f.text;}).join('\n\n---\n\n');
   
-  toast('🧠 分析中...');
+  var promptText='你是切果NOW配图Prompt配方分析师。以下是「'+typeName+'」场景的'+favs.length+'条收藏Prompt：\n\n'+
+    samples+'\n\n'+
+    '请提炼出：\n'+
+    '1. 核心关键词（构图/布景/道具/光影/色调）\n'+
+    '2. 优化合成的标准Prompt模板\n\n'+
+    '输出格式：先总结关键词，再输出模板。全中文。';
+  
+  var btn=document.getElementById('btnExtract');
+  btn.disabled=true;btn.textContent='⏳ 分析中...';
+  toast('🧠 正在分析 '+favs.length+' 条配方...');
+  
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
     body:JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:promptText}],max_tokens:1200})
   }).then(function(r){return r.json()}).then(function(d){
     var txt=d.choices?d.choices[0].message.content:'分析失败';
-    var el=document.getElementById('recipeOutput');
-    el.innerHTML=renderPromptCard(txt,'配方提炼 · '+sceneName,'🧪');
-    window.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
-  }).catch(function(e){toast('⚠️ '+e.message);});
+    // Save to recipe history
+    var recipes=getRecipes();
+    if(!recipes[recipeType])recipes[recipeType]=[];
+    recipes[recipeType].unshift({text:txt,time:new Date().toISOString(),count:favs.length});
+    saveRecipes(recipes);
+    renderRecipeHistory();
+    btn.disabled=false;btn.textContent='🧠 提炼配方（'+favs.length+'条）';
+    toast('🧪 配方已保存');
+  }).catch(function(e){
+    btn.disabled=false;btn.textContent='🧠 提炼配方（'+favs.length+'条）';
+    toast('⚠️ '+e.message);
+  });
 }
 
+var recipeTypeMap={cover:'小程序封面',community:'社群群发'};
 
 
 

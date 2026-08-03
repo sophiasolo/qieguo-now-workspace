@@ -444,13 +444,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
       </div>
     </div>
     <div class="page" id="page-recipe">
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-header"><div class="card-title">📚 精品 Prompt 库</div><div class="card-sub" id="promptLibMeta">加载中...</div></div>
-        <div id="promptLibContent" style="font-size:12px"></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="display:flex;gap:4px;background:var(--bg);border-radius:8px;padding:3px">
+          <button class="btn btn-primary" id="rtCover" onclick="setRecipeType('cover')" style="font-size:12px;padding:6px 16px">🛒 小程序封面</button>
+          <button class="btn btn-ghost" id="rtCommunity" onclick="setRecipeType('community')" style="font-size:12px;padding:6px 16px">📱 社群群发</button>
+        </div>
+        <span id="promptLibMeta" style="font-size:12px;color:var(--text-dim)">加载中...</span>
+        <div style="flex:1"></div>
+        <input id="recipeSearch" oninput="renderPromptLib()" placeholder="🔍 搜索收藏..." style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;width:180px">
+        <button class="btn btn-ghost" id="btnExtract" onclick="extractRecipe()" style="font-size:12px;padding:6px 16px" disabled>🧠 提炼配方</button>
       </div>
-      <div id="recipeOutput" style="font-size:13px;color:var(--text-dim)"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📚 收藏库</div></div>
+          <div id="promptLibContent" style="font-size:12px;max-height:calc(100vh - 200px);overflow-y:auto"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🧪 配方记录</div></div>
+          <div id="recipeOutput" style="font-size:12px;max-height:calc(100vh - 200px);overflow-y:auto;color:var(--text-dim)">选择
+          </div>
+        </div>
+      </div>
     </div>
     <div class="page" id="page-inspiration"><div class="empty-state"><div class="icon">📚</div><h3>素材灵感库 · 灵感墙 Mood Board</h3><p>花字卡片 · 博主灵感图 · 水果知识文章 — 建设中</p></div></div>
+    
     <div class="page" id="page-ailearn"><div class="empty-state"><div class="icon">💡</div><h3>AI前沿案例 · 知识卡片盒</h3><p>AI资讯收藏 → 标签分类 → 翻卡浏览 — 建设中</p></div></div>
   </div>
 </div>
@@ -464,6 +481,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
-<script src="js/app_v8.js?v=30"></script>
+<script src="js/app_v8.js?v=31"></script>
 </body>
 </html>
