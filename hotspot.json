@@ -1,100 +1,418 @@
 {
-  "update_time": "2026-08-01",
-  "source": {
-    "baidu": "https://top.baidu.com/board?tab=realtime",
-    "weibo": "https://weibo.com/hot/search"
+  "meta": {
+    "updated": "2026-08-03 12:06:59",
+    "total": 50,
+    "sources": {
+      "baidu": {
+        "url": "https://top.baidu.com/board?tab=realtime",
+        "count": 30
+      },
+      "weibo": {
+        "url": "https://weibo.com/ajax/side/hotSearch",
+        "count": 20
+      }
+    }
   },
-  "categories": {
-    "军事国防": [
-      {"title": "人民军队制胜向强", "platform": "百度", "rank": 1, "heat": 7903936, "link": "https://www.baidu.com/s?wd=人民军队制胜向强"},
-      {"title": "四川舰：弹就完了！", "platform": "百度", "rank": 5, "heat": 7523936, "link": "https://www.baidu.com/s?wd=四川舰：弹就完了！"},
-      {"title": "这就是中国最帅天团", "platform": "百度", "rank": 10, "heat": 7048486, "link": "https://www.baidu.com/s?wd=这就是中国最帅天团"},
-      {"title": "舰载机飞行员喊话外军：我只想战斗", "platform": "百度", "rank": 16, "heat": 6469550, "link": "https://www.baidu.com/s?wd=舰载机飞行员喊话外军：我只想战斗"},
-      {"title": "中方为何在此时位黄岩岛开展演训", "platform": "百度", "rank": 21, "heat": 5895967, "link": "https://www.baidu.com/s?wd=中方为何在此时位黄岩岛开展演训"},
-      {"title": "美军一架F-35隐形战机坠毁", "platform": "百度", "rank": 32, "heat": 4845220, "link": "https://www.baidu.com/s?wd=美军一架F-35隐形战机坠毁"},
-      {"title": "强军制胜向未来", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=强军制胜向未来"},
-      {"title": "有种安心叫人民子弟兵", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=有种安心叫人民子弟兵"}
-    ],
-    "社会民生": [
-      {"title": "警方对捐日本侵华罪证少年启动保护", "platform": "百度", "rank": 2, "heat": 7809484, "link": "https://www.baidu.com/s?wd=警方对捐日本侵华罪证少年启动保护"},
-      {"title": "五台山多人遭雷击：眼前一白就倒了", "platform": "百度", "rank": 9, "heat": 7142705, "link": "https://www.baidu.com/s?wd=五台山多人遭雷击：眼前一白就倒了"},
-      {"title": "安徽淮北室外温度83°C？不实", "platform": "百度", "rank": 12, "heat": 6856577, "link": "https://www.baidu.com/s?wd=安徽淮北室外温度83°C？不实"},
-      {"title": "快递员在箱上写要不要送你床上", "platform": "百度", "rank": 15, "heat": 6469550, "link": "https://www.baidu.com/s?wd=快递员在箱上写要不要送你床上"},
-      {"title": "女子路上突遇眼镜蛇 科普博主发声", "platform": "百度", "rank": 30, "heat": 5127861, "link": "https://www.baidu.com/s?wd=女子路上突遇眼镜蛇 科普博主发声"},
-      {"title": "轿车雨夜撞上牛群致6牛死亡", "platform": "百度", "rank": 33, "heat": 4845220, "link": "https://www.baidu.com/s?wd=轿车雨夜撞上牛群致6牛死亡"},
-      {"title": "连云港消防回应为何没接住坠楼女孩", "platform": "微博", "rank": 8, "heat": 68900, "link": "https://s.weibo.com/weibo?q=连云港消防回应为何没接住坠楼女孩"},
-      {"title": "公公强奸儿媳案丈夫认定妻子是自愿", "platform": "微博", "rank": 8, "heat": 68816, "link": "https://s.weibo.com/weibo?q=公公强奸儿媳案丈夫认定妻子是自愿"},
-      {"title": "韩国两女子吸毒后在马路现骇人行为", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=韩国两女子吸毒后在马路现骇人行为"},
-      {"title": "送到你床上涉事邮政快递点被查", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=送到你床上涉事邮政快递点被查"},
-      {"title": "奶爸帮娃做手工因太用心被评委退回", "platform": "百度", "rank": 24, "heat": 5602532, "link": "https://www.baidu.com/s?wd=奶爸帮娃做手工因太用心被评委退回"}
-    ],
-    "娱乐八卦": [
-      {"title": "喜羊羊新作陷擦边争议", "platform": "百度", "rank": 8, "heat": 7142705, "link": "https://www.baidu.com/s?wd=喜羊羊新作陷擦边争议"},
-      {"title": "房主任本人回应被停演3个月", "platform": "百度", "rank": 13, "heat": 6751723, "link": "https://www.baidu.com/s?wd=房主任本人回应被停演3个月"},
-      {"title": "67岁杨丽萍谈演出身材控制", "platform": "百度", "rank": 25, "heat": 5502757, "link": "https://www.baidu.com/s?wd=67岁杨丽萍谈演出身材控制"},
-      {"title": "司晓迪暗指鹿晗相关言论均为事实", "platform": "微博", "rank": 1, "heat": null, "link": "https://s.weibo.com/weibo?q=司晓迪暗指鹿晗相关言论均为事实"},
-      {"title": "吴尊女儿想回上海读书", "platform": "微博", "rank": 2, "heat": 58539, "link": "https://s.weibo.com/weibo?q=吴尊女儿想回上海读书"},
-      {"title": "林子烨也在看TF四代突围", "platform": "微博", "rank": 3, "heat": 269249, "link": "https://s.weibo.com/weibo?q=林子烨也在看TF四代突围"},
-      {"title": "李明启拍完就跑只有这次跑不了", "platform": "微博", "rank": 5, "heat": 62011, "link": "https://s.weibo.com/weibo?q=李明启拍完就跑只有这次跑不了"},
-      {"title": "唐艺昕没有妊娠纹", "platform": "微博", "rank": 6, "heat": 58327, "link": "https://s.weibo.com/weibo?q=唐艺昕没有妊娠纹"},
-      {"title": "王楚然耳夹掉了耳朵都红了", "platform": "微博", "rank": 9, "heat": 65828, "link": "https://s.weibo.com/weibo?q=王楚然耳夹掉了耳朵都红了"},
-      {"title": "金靖直言丑的基因很强大", "platform": "微博", "rank": 10, "heat": 455976, "link": "https://s.weibo.com/weibo?q=金靖直言丑的基因很强大"},
-      {"title": "金高银金泰梨韩国90花断层第一", "platform": "微博", "rank": 3, "heat": 506641, "link": "https://s.weibo.com/weibo?q=金高银金泰梨韩国90花断层第一"},
-      {"title": "张颖颖回应骂马筱梅夫妇", "platform": "微博", "rank": 2, "heat": null, "link": "https://s.weibo.com/weibo?q=张颖颖回应骂马筱梅夫妇"},
-      {"title": "Neinei回应吴尊被叫文莱人", "platform": "微博", "rank": 6, "heat": 62381, "link": "https://s.weibo.com/weibo?q=Neinei回应吴尊被叫文莱人"},
-      {"title": "孙珍妮胳膊瘦到只剩骨头了", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=孙珍妮胳膊瘦到只剩骨头了"},
-      {"title": "若曦的爹居然比沈眉庄的爹还高一级", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=若曦的爹居然比沈眉庄的爹还高一级"},
-      {"title": "莫得闲今日开播", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=莫得闲今日开播"}
-    ],
-    "体育竞技": [
-      {"title": "63岁乔丹与26岁哈兰德合影", "platform": "百度", "rank": 20, "heat": 5993120, "link": "https://www.baidu.com/s?wd=63岁乔丹与26岁哈兰德合影"},
-      {"title": "乒超女团山东两队争常规赛第1", "platform": "百度", "rank": 18, "heat": 6175280, "link": "https://www.baidu.com/s?wd=乒超女团山东两队争常规赛第1"},
-      {"title": "乒超女团深大vs黄石争前4", "platform": "百度", "rank": 23, "heat": 5712612, "link": "https://www.baidu.com/s?wd=乒超女团深大vs黄石争前4"},
-      {"title": "王楚钦坦言退役之后能多说点", "platform": "百度", "rank": 19, "heat": 6089512, "link": "https://www.baidu.com/s?wd=王楚钦坦言退役之后能多说点"}
-    ],
-    "财经科技": [
-      {"title": "航空公司不满携程返还天价退票费", "platform": "百度", "rank": 3, "heat": 7713596, "link": "https://www.baidu.com/s?wd=航空公司不满携程返还天价退票费"},
-      {"title": "31省份经济半年报出炉", "platform": "百度", "rank": 4, "heat": 7618747, "link": "https://www.baidu.com/s?wd=31省份经济半年报出炉"},
-      {"title": "硅谷与华尔街争抢20多岁数学天才", "platform": "百度", "rank": 6, "heat": 7428192, "link": "https://www.baidu.com/s?wd=硅谷与华尔街争抢20多岁数学天才"},
-      {"title": "苹果市值一日蒸发超2.4万亿元", "platform": "百度", "rank": 39, "heat": 4270823, "link": "https://www.baidu.com/s?wd=苹果市值一日蒸发超2.4万亿元"},
-      {"title": "美股集体收涨 亚马逊涨超15%", "platform": "百度", "rank": 40, "heat": 4077561, "link": "https://www.baidu.com/s?wd=美股集体收涨 亚马逊涨超15%"},
-      {"title": "事关个人贷款利率上限 六大行公示", "platform": "百度", "rank": 27, "heat": 5323230, "link": "https://www.baidu.com/s?wd=事关个人贷款利率上限 六大行公示"},
-      {"title": "理想汽车", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=理想汽车"}
-    ],
-    "生活健康": [
-      {"title": "含鸡鸭粪便的烟流向全国各地", "platform": "百度", "rank": 7, "heat": 7331067, "link": "https://www.baidu.com/s?wd=含鸡鸭粪便的烟流向全国各地"},
-      {"title": "这2个习惯正在偷走你的视力", "platform": "百度", "rank": 22, "heat": 5796817, "link": "https://www.baidu.com/s?wd=这2个习惯正在偷走你的视力"},
-      {"title": "精神科医生10级美颜证件照火了", "platform": "百度", "rank": 14, "heat": 6565641, "link": "https://www.baidu.com/s?wd=精神科医生10级美颜证件照火了"},
-      {"title": "这几个姿势正在养血栓", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=这几个姿势正在养血栓"},
-      {"title": "我的菌子之交", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=我的菌子之交"},
-      {"title": "你不用去赛里木湖了你没白活", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=你不用去赛里木湖了你没白活"},
-      {"title": "奶奶给我做的减脂餐", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=奶奶给我做的减脂餐"}
-    ],
-    "国际时政": [
-      {"title": "6万非法移民登陆西班牙8万人口飞地", "platform": "百度", "rank": 28, "heat": 5238944, "link": "https://www.baidu.com/s?wd=6万非法移民登陆西班牙8万人口飞地"},
-      {"title": "中国留学生在澳遭种族歧视者掐脖辱骂", "platform": "百度", "rank": 29, "heat": 5238944, "link": "https://www.baidu.com/s?wd=中国留学生在澳遭种族歧视者掐脖辱骂"}
-    ],
-    "其他热点": [
-      {"title": "张玉台同志逝世", "platform": "百度", "rank": 11, "heat": 6950747, "link": "https://www.baidu.com/s?wd=张玉台同志逝世"},
-      {"title": "董宇辉称看了500遍大话西游 星爷震惊", "platform": "百度", "rank": 17, "heat": 6285620, "link": "https://www.baidu.com/s?wd=董宇辉称看了500遍大话西游 星爷震惊"},
-      {"title": "游客彻夜等待八一限定升旗仪式", "platform": "百度", "rank": 26, "heat": 5424380, "link": "https://www.baidu.com/s?wd=游客彻夜等待八一限定升旗仪式"},
-      {"title": "i人收到生日祝福就诺兰这样", "platform": "微博", "rank": 7, "heat": 61680, "link": "https://s.weibo.com/weibo?q=i人收到生日祝福就诺兰这样"},
-      {"title": "公司裁员从胖的开始", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=公司裁员从胖的开始"},
-      {"title": "2026ChinaJoy", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=2026ChinaJoy"},
-      {"title": "高校辟谣开设福鼎肉片专业", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=高校辟谣开设福鼎肉片专业"},
-      {"title": "美羊羊捂裙镜头是否属于过度解读", "platform": "微博", "rank": null, "heat": null, "link": "https://s.weibo.com/weibo?q=美羊羊捂裙镜头是否属于过度解读"}
-    ]
-  },
-  "platform_stats": {
-    "baidu_count": 30,
-    "weibo_count": 25,
-    "cross_platform_topics": [
-      "喜羊羊擦边争议",
-      "警方/少年捐日本侵华罪证",
-      "连云港坠楼/消防回应",
-      "房主任被停演",
-      "金靖/基因",
-      "快递/邮政"
-    ]
-  }
+  "items": [
+    {
+      "rank": 1,
+      "platform": "百度",
+      "word": "坚定不移推动高质量发展",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=坚定不移推动高质量发展",
+      "heat": null
+    },
+    {
+      "rank": 2,
+      "platform": "百度",
+      "word": "别再把冰箱当保险箱了",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=别再把冰箱当保险箱了",
+      "heat": null
+    },
+    {
+      "rank": 3,
+      "platform": "百度",
+      "word": "微信一项能力升级 关键时刻能救命",
+      "category": "科技",
+      "search_url": "https://www.baidu.com/s?wd=微信一项能力升级 关键时刻能救命",
+      "heat": null
+    },
+    {
+      "rank": 4,
+      "platform": "百度",
+      "word": "中国值得一次又一次探索",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=中国值得一次又一次探索",
+      "heat": null
+    },
+    {
+      "rank": 5,
+      "platform": "百度",
+      "word": "交个停车费 顺带被办了个套餐",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=交个停车费 顺带被办了个套餐",
+      "heat": null
+    },
+    {
+      "rank": 6,
+      "platform": "百度",
+      "word": "福建漳州通报抗生素牛蛙：全面核查",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=福建漳州通报抗生素牛蛙：全面核查",
+      "heat": null
+    },
+    {
+      "rank": 7,
+      "platform": "百度",
+      "word": "32岁胡一天演高中生被指违和",
+      "category": "娱乐",
+      "search_url": "https://www.baidu.com/s?wd=32岁胡一天演高中生被指违和",
+      "heat": null
+    },
+    {
+      "rank": 8,
+      "platform": "百度",
+      "word": "奥迪史上最大SUV官宣",
+      "category": "科技",
+      "search_url": "https://www.baidu.com/s?wd=奥迪史上最大SUV官宣",
+      "heat": null
+    },
+    {
+      "rank": 9,
+      "platform": "百度",
+      "word": "哥哥去世 弟媳成7个孩子的妈",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=哥哥去世 弟媳成7个孩子的妈",
+      "heat": null
+    },
+    {
+      "rank": 10,
+      "platform": "百度",
+      "word": "近120万辆特斯拉汽车遭调查",
+      "category": "科技",
+      "search_url": "https://www.baidu.com/s?wd=近120万辆特斯拉汽车遭调查",
+      "heat": null
+    },
+    {
+      "rank": 11,
+      "platform": "百度",
+      "word": "赛里木湖自驾按人收费改按车收费",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=赛里木湖自驾按人收费改按车收费",
+      "heat": null
+    },
+    {
+      "rank": 12,
+      "platform": "百度",
+      "word": "汛期来袭 这5类谣言千万别相信",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=汛期来袭 这5类谣言千万别相信",
+      "heat": null
+    },
+    {
+      "rank": 13,
+      "platform": "百度",
+      "word": "曝理想CEO李想将迎来第六娃",
+      "category": "其他",
+      "search_url": "https://www.baidu.com/s?wd=曝理想CEO李想将迎来第六娃",
+      "heat": null
+    },
+    {
+      "rank": 14,
+      "platform": "百度",
+      "word": "刚出生宝宝不哭反而开心大笑",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=刚出生宝宝不哭反而开心大笑",
+      "heat": null
+    },
+    {
+      "rank": 15,
+      "platform": "百度",
+      "word": "游客被威胁命在我手上 官方回应",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=游客被威胁命在我手上 官方回应",
+      "heat": null
+    },
+    {
+      "rank": 16,
+      "platform": "百度",
+      "word": "刑案嫌犯在逃警方悬赏5万 危险性较高",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=刑案嫌犯在逃警方悬赏5万 危险性较高",
+      "heat": null
+    },
+    {
+      "rank": 17,
+      "platform": "百度",
+      "word": "李鬼们别再硬蹭国字头了",
+      "category": "其他",
+      "search_url": "https://www.baidu.com/s?wd=李鬼们别再硬蹭国字头了",
+      "heat": null
+    },
+    {
+      "rank": 18,
+      "platform": "百度",
+      "word": "胖东来直饮水若大量占用将被管控",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=胖东来直饮水若大量占用将被管控",
+      "heat": null
+    },
+    {
+      "rank": 19,
+      "platform": "百度",
+      "word": "银鹭给维权消费者转账却附言敲诈",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=银鹭给维权消费者转账却附言敲诈",
+      "heat": null
+    },
+    {
+      "rank": 20,
+      "platform": "百度",
+      "word": "抗生素牛蛙存放两三年仍在售卖",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=抗生素牛蛙存放两三年仍在售卖",
+      "heat": null
+    },
+    {
+      "rank": 21,
+      "platform": "百度",
+      "word": "吴清：积极支持内地企业在香港上市",
+      "category": "财经",
+      "search_url": "https://www.baidu.com/s?wd=吴清：积极支持内地企业在香港上市",
+      "heat": null
+    },
+    {
+      "rank": 22,
+      "platform": "百度",
+      "word": "15岁男生称在华山遭遇强制消费",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=15岁男生称在华山遭遇强制消费",
+      "heat": null
+    },
+    {
+      "rank": 23,
+      "platform": "百度",
+      "word": "山东车主贴4个救命车贴",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=山东车主贴4个救命车贴",
+      "heat": null
+    },
+    {
+      "rank": 24,
+      "platform": "百度",
+      "word": "鹤岗70后大哥自信舞姿走红网络",
+      "category": "娱乐",
+      "search_url": "https://www.baidu.com/s?wd=鹤岗70后大哥自信舞姿走红网络",
+      "heat": null
+    },
+    {
+      "rank": 25,
+      "platform": "百度",
+      "word": "网友曝光高铁上家长当众给孩子把尿",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=网友曝光高铁上家长当众给孩子把尿",
+      "heat": null
+    },
+    {
+      "rank": 26,
+      "platform": "百度",
+      "word": "人在职场 忠于公司还是忠于老板",
+      "category": "其他",
+      "search_url": "https://www.baidu.com/s?wd=人在职场 忠于公司还是忠于老板",
+      "heat": null
+    },
+    {
+      "rank": 27,
+      "platform": "百度",
+      "word": "东风快递震撼长镜头来了",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=东风快递震撼长镜头来了",
+      "heat": null
+    },
+    {
+      "rank": 28,
+      "platform": "百度",
+      "word": "厦门象屿回应青岛仓库起火",
+      "category": "社会",
+      "search_url": "https://www.baidu.com/s?wd=厦门象屿回应青岛仓库起火",
+      "heat": null
+    },
+    {
+      "rank": 29,
+      "platform": "百度",
+      "word": "短剧带火招聘市场 有人月薪6万元",
+      "category": "娱乐",
+      "search_url": "https://www.baidu.com/s?wd=短剧带火招聘市场 有人月薪6万元",
+      "heat": null
+    },
+    {
+      "rank": 30,
+      "platform": "百度",
+      "word": "美伊或将举行谈判 国际油价显著下跌",
+      "category": "财经",
+      "search_url": "https://www.baidu.com/s?wd=美伊或将举行谈判 国际油价显著下跌",
+      "heat": null
+    },
+    {
+      "rank": 1,
+      "platform": "微博",
+      "word": "牛蛙 抗生素",
+      "category": "社会",
+      "search_url": "https://s.weibo.com/weibo?q=牛蛙 抗生素",
+      "heat": null
+    },
+    {
+      "rank": 2,
+      "platform": "微博",
+      "word": "婚外胚胎案 重婚",
+      "category": "社会",
+      "search_url": "https://s.weibo.com/weibo?q=婚外胚胎案 重婚",
+      "heat": null
+    },
+    {
+      "rank": 3,
+      "platform": "微博",
+      "word": "活力中国调研行",
+      "category": "社会",
+      "search_url": "https://s.weibo.com/weibo?q=活力中国调研行",
+      "heat": null
+    },
+    {
+      "rank": 4,
+      "platform": "微博",
+      "word": "女儿考上北大 请大家喝水",
+      "category": "其他",
+      "search_url": "https://s.weibo.com/weibo?q=女儿考上北大 请大家喝水",
+      "heat": null
+    },
+    {
+      "rank": 5,
+      "platform": "微博",
+      "word": "不喜欢被叫泡菜妹的韩女",
+      "category": "其他",
+      "search_url": "https://s.weibo.com/weibo?q=不喜欢被叫泡菜妹的韩女",
+      "heat": null
+    },
+    {
+      "rank": 6,
+      "platform": "微博",
+      "word": "王者荣耀",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=王者荣耀",
+      "heat": null
+    },
+    {
+      "rank": 7,
+      "platform": "微博",
+      "word": "网民带娃无聊造谣自己被抢劫",
+      "category": "社会",
+      "search_url": "https://s.weibo.com/weibo?q=网民带娃无聊造谣自己被抢劫",
+      "heat": null
+    },
+    {
+      "rank": 8,
+      "platform": "微博",
+      "word": "存储芯片又崩了",
+      "category": "科技",
+      "search_url": "https://s.weibo.com/weibo?q=存储芯片又崩了",
+      "heat": null
+    },
+    {
+      "rank": 9,
+      "platform": "微博",
+      "word": "天才女友下沉口碑",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=天才女友下沉口碑",
+      "heat": null
+    },
+    {
+      "rank": 10,
+      "platform": "微博",
+      "word": "宋亚轩刘耀文提词器",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=宋亚轩刘耀文提词器",
+      "heat": null
+    },
+    {
+      "rank": 11,
+      "platform": "微博",
+      "word": "显卡跳涨",
+      "category": "科技",
+      "search_url": "https://s.weibo.com/weibo?q=显卡跳涨",
+      "heat": null
+    },
+    {
+      "rank": 12,
+      "platform": "微博",
+      "word": "宋威龙换头像引CP粉解读",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=宋威龙换头像引CP粉解读",
+      "heat": null
+    },
+    {
+      "rank": 13,
+      "platform": "微博",
+      "word": "魏晨让关晓彤实现高跟鞋自由",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=魏晨让关晓彤实现高跟鞋自由",
+      "heat": null
+    },
+    {
+      "rank": 14,
+      "platform": "微博",
+      "word": "赛里木湖按人收费改为按车收费",
+      "category": "社会",
+      "search_url": "https://s.weibo.com/weibo?q=赛里木湖按人收费改为按车收费",
+      "heat": null
+    },
+    {
+      "rank": 15,
+      "platform": "微博",
+      "word": "内娱居然还有这么多积压的剧",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=内娱居然还有这么多积压的剧",
+      "heat": null
+    },
+    {
+      "rank": 16,
+      "platform": "微博",
+      "word": "花开锦绣",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=花开锦绣",
+      "heat": null
+    },
+    {
+      "rank": 17,
+      "platform": "微博",
+      "word": "余承东竹知了玩梗遭投诉",
+      "category": "社会",
+      "search_url": "https://s.weibo.com/weibo?q=余承东竹知了玩梗遭投诉",
+      "heat": null
+    },
+    {
+      "rank": 18,
+      "platform": "微博",
+      "word": "A股",
+      "category": "财经",
+      "search_url": "https://s.weibo.com/weibo?q=A股",
+      "heat": null
+    },
+    {
+      "rank": 19,
+      "platform": "微博",
+      "word": "小黄豆 就这么被蔡徐坤踩到脚下",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=小黄豆 就这么被蔡徐坤踩到脚下",
+      "heat": null
+    },
+    {
+      "rank": 20,
+      "platform": "微博",
+      "word": "恋与深空夏以昼PV",
+      "category": "娱乐",
+      "search_url": "https://s.weibo.com/weibo?q=恋与深空夏以昼PV",
+      "heat": null
+    }
+  ]
 }
