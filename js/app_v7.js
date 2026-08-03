@@ -1573,6 +1573,16 @@ function setRecipeType(t){
 
 function getRecipes(){try{return JSON.parse(localStorage.getItem('qg_prompt_recipes')||'{}');}catch(e){return{};}}
 function saveRecipes(r){localStorage.setItem('qg_prompt_recipes',JSON.stringify(r));}
+function favPrompt(cardId){
+  var d=window._lastPrompt;
+  if(!d||d.id!==cardId)return;
+  var favs=getFavs();
+  if(favs.some(function(f){return f.text===d.text;})){toast('⚠️ 已收藏过');return;}
+  favs.unshift({text:d.text,label:d.label,time:new Date().toISOString(),type:promptType});
+  localStorage.setItem('qg_prompt_favs',JSON.stringify(favs));
+  toast('⭐ 已收藏到'+(promptType==='cover'?'封面':'社群'));
+}
+
 function getFavs(){try{return JSON.parse(localStorage.getItem('qg_prompt_favs')||'[]');}catch(e){return[];}}
 
 function renderPromptLib(){
