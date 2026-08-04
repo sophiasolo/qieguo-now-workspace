@@ -1793,6 +1793,103 @@ function renderMemberDay(){var date=document.getElementById('memberDateSelect').
 function switchActTab(tab){['Member','Weekend','Monthly'].forEach(function(t){var c=document.getElementById('actContent'+t);if(c)c.style.display=(t.toLowerCase()===tab)?'':'none';var b=document.getElementById('actBtn'+t);if(b){b.classList.remove('btn-primary','btn-ghost');b.classList.add(t.toLowerCase()===tab?'btn-primary':'btn-ghost');}});}
 function renderAcquisition(){var kpi='<div class="kpi accent-blue"><div class="kpi-label">📣 随单卡 · 本周扫码</div><div class="kpi-value">140<span class="kpi-change up">+4.6%</span></div><div class="kpi-sub">累计3,216 · 活码171家</div></div>';kpi+='<div class="kpi accent-teal"><div class="kpi-label">📥 本周进群</div><div class="kpi-value">107<span class="kpi-change flat">人</span></div><div class="kpi-sub">进群率76.4% · 历史77.9%</div></div>';kpi+='<div class="kpi accent-red"><div class="kpi-label">📤 本周流失</div><div class="kpi-value">35<span class="kpi-change down">+118.8%</span></div><div class="kpi-sub">需关注</div></div>';kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 累计进群</div><div class="kpi-value">2,506<span class="kpi-change flat">人</span></div><div class="kpi-sub">扫码→进群转化78%</div></div>';document.getElementById('acquisitionKPI').innerHTML=kpi;var funnel='<div style="background:var(--bg);border-radius:8px;padding:16px"><div style="display:flex;align-items:center;gap:0;font-size:13px;margin-bottom:8px"><div style="background:var(--brand);color:#fff;padding:8px 0;text-align:center;border-radius:6px 0 0 6px;flex:1">扫码 140</div><div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div><div style="background:#00897b;color:#fff;padding:8px 0;text-align:center;flex:1">加好友 140<span style="font-size:10px;opacity:.7"> 100%</span></div><div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div><div style="background:var(--blue);color:#fff;padding:8px 0;text-align:center;border-radius:0 6px 6px 0;flex:1">进群 107<span style="font-size:10px;opacity:.7"> 76.4%</span></div></div><div style="font-size:11px;color:var(--text-dim)">本周进群率 76.4% · 历史累计进群率 77.9% · 171家门店 · 31家有扫码</div></div>';document.getElementById('communityFunnel').innerHTML=funnel;var ret='<div style="display:flex;gap:16px"><div style="flex:1;text-align:center;background:var(--brand-light);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--brand)">90.7%</div><div style="font-size:11px;color:var(--text-dim)">24h留存</div><div style="font-size:10px;color:var(--red)">-0.3pp</div></div><div style="flex:1;text-align:center;background:#e0f2f1;border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#00897b">89.4%</div><div style="font-size:11px;color:var(--text-dim)">7天留存</div><div style="font-size:10px;color:var(--red)">-0.4pp</div></div><div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--text)">77.9%</div><div style="font-size:11px;color:var(--text-dim)">历史进群率</div><div style="font-size:10px;color:var(--text-dim)">累计2,506人</div></div></div>';document.getElementById('communityRetention').innerHTML=ret;}
 
+
+var inspTab='card';
+function switchInspTab(tab){
+  inspTab=tab;
+  document.getElementById('inspTabCard').className='btn '+(tab==='card'?'btn-primary':'btn-ghost');
+  document.getElementById('inspTabFruit').className='btn '+(tab==='fruit'?'btn-primary':'btn-ghost');
+  if(tab==='card') renderCardLib(); else renderFruitLib();
+}
+
+function renderCardLib(){
+  var el=document.getElementById('inspContent');
+  var cats=getCardCats();
+  var allCats=Object.keys(cats);
+  var html='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">'+
+    '<button class="btn btn-primary" onclick="filterCards(\'all\')" id="cardFilterAll" style="font-size:11px;padding:4px 12px">全部</button>';
+  allCats.forEach(function(c){
+    html+='<button class="btn btn-ghost" onclick="filterCards(\''+c+'\')" style="font-size:11px;padding:4px 12px">'+c+' ('+cats[c]+')</button>';
+  });
+  html+='</div><div id="cardGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px"></div>';
+  el.innerHTML=html;
+  filterCards('all');
+}
+
+function filterCards(cat){
+  var grid=document.getElementById('cardGrid');
+  var cats=getCardCats();
+  var all=[];
+  Object.keys(cats).forEach(function(c){
+    if(cat==='all'||c===cat) all=all.concat(cats[c]);
+  });
+  var html='';
+  all.forEach(function(phrase){
+    html+='<div style="background:#fff;border-radius:8px;padding:12px;border:1px solid var(--border);font-size:13px;line-height:1.6;color:var(--text);min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center">'+phrase+'</div>';
+  });
+  grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
+}
+
+function getCardCats(){
+  // Use the huaZiDaily data from copy module
+  return {
+    '谐音梗': ['🍉 吃瓜群众已就位','💚 从此对瓜改观','🥭 忙碌打工人标配','🍍 旺旺旺旺来','🍑 逃不开的真香定律','🫐 每天和"莓"好不期而遇','🍈 低调的甜','🍊 "橙"意满满的周二','💛 周二就要"芒"起来'],
+    'Unicode': ['🍉 ⋆｡°✩ 西瓜 × 夏天 = 快乐','🍍⋆⭒˚｡ 菠萝的海浪花打在舌尖','🍈*̩̩̥͙ 果香是夏天的入场券','🥭.ೃ࿔*:･ 忙忙碌碌也要有芒果味','🍓 ₀₁₂₃ ♥ 草莓味的日常'],
+    '公式体': ['🍉 夏天 = 空调 + 西瓜 + 追剧','🍍 快乐 = 菠萝 × 冰镇 × 无限','🥭 好心情 = 芒果 + 酸奶 + 你','🍈 幸福感 = (甜度² + 汁水²) ÷ 热量'],
+    'emoji串': ['🍉☀️💦✨ 夏天的正确打开方式','🍍🌊🏖️🥥 海岛风情来一套','🥭🧊🍯💛 黄金搭配绝绝子','🍑🌸💕🫧 春天在舌尖融化'],
+    '诊断体': ['🩺 诊断：缺少维生素 C\n💊 处方：一斤西瓜，即刻见效','🩺 确诊：下午3点犯困症\n💊 处方：冰镇凤梨一份'],
+    '限时信号': ['⏰ 限时预警：你的下午茶时间到了','🔔 友情提示：再不下单等明年','📢 广播通知：本周特惠今晚截止'],
+    '菜单体': ['📋 今日菜单\n▪ 招牌四拼\n▪ 冰镇西瓜\n▪ 酸奶芒果捞','📋 外卖必点清单\n▪ TOP1 一斤西瓜\n▪ TOP2 凤梨乌梅'],
+    '搜索体': ['🔍 搜索"切果NOW" → 发现新大陆','🔍 你离快乐只差一个搜索 → 切果NOW','🔍 全城热搜 No.1 → 冰镇西瓜']
+  };
+}
+
+function renderFruitLib(){
+  var el=document.getElementById('inspContent');
+  var all=getFruitBase();
+  var html='<input id="fruitSearch" oninput="filterFruit()" placeholder="🔍 搜索水果、品类..." style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;margin-bottom:12px">';
+  html+='<div id="fruitGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px"></div>';
+  el.innerHTML=html;
+  filterFruit();
+}
+
+function filterFruit(){
+  var grid=document.getElementById('fruitGrid');
+  var q=(document.getElementById('fruitSearch')?.value||'').toLowerCase();
+  var all=getFruitBase();
+  var filtered=all;
+  if(q) filtered=all.filter(function(f){
+    return f.name.toLowerCase().indexOf(q)>=0||f.tags.join('').toLowerCase().indexOf(q)>=0||f.tips.toLowerCase().indexOf(q)>=0;
+  });
+  var html='';
+  filtered.forEach(function(f){
+    html+='<div style="background:#fff;border-radius:8px;padding:14px;border:1px solid var(--border);font-size:12px">'+
+      '<div style="font-size:28px;margin-bottom:4px">'+f.icon+'</div>'+
+      '<div style="font-weight:600;color:var(--text);margin-bottom:4px">'+f.name+'</div>'+
+      '<div style="color:var(--text-dim);line-height:1.6;margin-bottom:6px">'+f.tips.substring(0,80)+'…</div>'+
+      '<div style="display:flex;gap:4px;flex-wrap:wrap">'+f.tags.map(function(t){return '<span style="background:var(--brand-light);color:var(--brand);padding:1px 6px;border-radius:8px;font-size:10px">'+t+'</span>';}).join('')+'</div>'+
+    '</div>';
+  });
+  grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配结果</div>';
+}
+
+function getFruitBase(){
+  return [
+    {icon:'🍉',name:'麒麟西瓜',tags:['夏季','冰镇','引流爆品'],tips:'挑选：瓜蒂鲜绿、纹路清晰、拍打声清脆为佳。储存：未切开可常温3-5天，切开后覆保鲜膜冷藏≤2天。甜度：中心糖度可达12%。产地：江苏盐城/山东潍坊。'},
+    {icon:'🍍',name:'凤梨',tags:['四季','冰镇','解腻'],tips:'挑选：果眼均匀、底部有淡淡甜香、轻按有弹性。储存：常温可放3-4天，切开后冷藏≤2天。避雷：黑心说明冻伤。切块后盐水浸泡10分钟减少麻舌感。'},
+    {icon:'🥭',name:'芒果',tags:['夏季','易氧化','拼盘常客'],tips:'挑选：捏起来微软、有明显果香。储存：未熟放常温至表皮起皱=甜度巅峰。已熟冷藏可延长2-3天。避雷：黑线是冻伤、黑斑是腐坏前兆。'},
+    {icon:'🍈',name:'哈密瓜',tags:['夏季','冰镇','高甜'],tips:'挑选：网纹密集清晰、底部微软有弹性、闻起来有清香。储存：未切常温7天，切开后冷藏≤3天。甜度极高：慎混合高糖饮品。'},
+    {icon:'🍑',name:'蜜桃',tags:['夏季','易氧化','限时限量'],tips:'挑选：桃毛完整、缝线对称、有弹性不软烂。储存：常温1-2天变软尽快食用。避雷：软烂处削掉+变色肉不吃。切后5分钟内氧化变色正常。'},
+    {icon:'🍇',name:'巨峰葡萄',tags:['夏季','洗净即食','高复购'],tips:'挑选：果粒饱满有白霜、梗绿不枯。储存：不洗放入保鲜袋冷藏5-7天。避雷：白霜是果粉不是农药。洗后必须当天吃完！'},
+    {icon:'🍓',name:'草莓',tags:['冬季','娇贵','限时'],tips:'挑选：颜色均匀红透、蒂部翠绿、无软烂处。储存：不洗垫厨房纸冷藏≤2天。避雷：冷藏后甜度下降是正常现象。轻微磕碰不影响食用。'},
+    {icon:'🫐',name:'蓝莓',tags:['四季','抗氧化','高客单'],tips:'挑选：果粒紧实有白霜、摇晃无声。储存：不洗原盒冷藏5-7天。亮点：冷冻后口感像冰淇淋。白霜=新鲜标志，越多越好。'},
+    {icon:'🥝',name:'奇异果',tags:['四季','维C','果切常用'],tips:'挑选：轻按微弹、无明显伤痕。储存：硬果常温催熟（和苹果放一起更快），软后冷藏3-5天。催熟只需24-48h，不要买太多囤着。'},
+    {icon:'🍊',name:'脐橙',tags:['秋冬','维C','鲜榨'],tips:'挑选：果脐小、沉甸甸的有分量。储存：常温通风5-7天，冷藏可延长到2周。秋冬=最佳季节，夏季进口橙风味打折。'},
+    {icon:'🍋',name:'柠檬',tags:['四季','酸味','配角'],tips:'挑选：表皮光滑亮泽、无褐斑。储存：冷藏可放2-4周。切半后保鲜膜包好冷藏可再保存5天。温水泡柠檬不要用沸水破坏维C。'},
+    {icon:'🥥',name:'椰子',tags:['夏季','饮品','整只'],tips:'挑选：摇晃有水声、外皮完整无裂。储存：未开可常温5-7天。开口后必须冷藏+当天喝完。椰青水比椰奶更清爽适合夏天。'}
+  ];
+}
+
 // ═══════ INIT ═══════
 renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderMemberDay();renderAcquisition();loadCopyConfig();applyCopyConfig();
 setInterval(function(){loadSentimentData();},30*60*1000);
