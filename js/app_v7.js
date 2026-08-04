@@ -367,13 +367,13 @@ function renderSentimentItems(data){
   var html='';
   items.forEach(function(item){
     var s=item.sentiment||'';
-    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;width:100%;max-width:100%;float:none;clear:both">'+
+    html+='<div style="width:100%;display:block"><div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;width:100%;max-width:100%;float:none;clear:both">'+
       '<span style="font-size:16px;flex-shrink:0">'+(emoji[s]||'📌')+'</span>'+
       '<div style="flex:1;min-width:0"><div style="font-weight:600;color:var(--text);word-break:break-word;line-height:1.4">'+item.title+'</div>'+
       '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
       (item.url?'<a href="'+item.url+'" target="_blank" style="font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none">原帖 ↗</a>':'')+
       '<span onclick="quickStar(this)" data-date="'+item.date+'" data-title="'+item.title.replace(/"/g,'&quot;')+'" data-platform="'+item.platform+'" data-author="'+(item.author||'')+'" data-url="'+(item.url||'')+'" class="star-btn'+(isStarred(item.date,item.title)?' active':'')+'" title="收藏/取消">⭐</span>'+
-    '</div>';
+    '</div></div>';
   });
   list.innerHTML=html;
 }
@@ -475,13 +475,13 @@ function renderHistorical(dateKey){
   if(items.length===0){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">暂无明细数据</div>';return;}
   var html='';items.forEach(function(item){
     var key=item.date+'||'+item.title;
-    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;width:100%;max-width:100%;float:none;clear:both">'+
+    html+='<div style="width:100%;display:block"><div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;width:100%;max-width:100%;float:none;clear:both">'+
       '<span style="font-size:16px;flex-shrink:0">📌</span>'+
       '<div style="flex:1;min-width:0"><div style="font-weight:600;color:var(--text);word-break:break-word;line-height:1.4">'+item.title+'</div>'+
       '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
       (item.url?'<a href="'+item.url+'" target="_blank" style="font-size:11px;color:var(--brand);flex-shrink:0;text-decoration:none">原帖 ↗</a>':'')+
       '<span onclick="quickStar(this)" data-date="'+item.date+'" data-title="'+item.title.replace(/"/g,'&quot;')+'" data-platform="'+item.platform+'" data-author="'+(item.author||'')+'" data-url="'+(item.url||'')+'" class="star-btn'+(isStarred(item.date,item.title)?' active':'')+'" title="收藏/取消">⭐</span>'+
-      '<span onclick="hideItem(\''+key.replace(/'/g,"\\'")+'\');renderHistorical(\''+dateKey+'\')" style="cursor:pointer;flex-shrink:0;font-size:12px;opacity:0.3" title="隐藏此条">🚫</span>'+    '</div>';
+      '<span onclick="hideItem(\''+key.replace(/'/g,"\\'")+'\');renderHistorical(\''+dateKey+'\')" style="cursor:pointer;flex-shrink:0;font-size:12px;opacity:0.3" title="隐藏此条">🚫</span>'+    '</div></div>';
   });list.innerHTML=html;}
 
 function getHidden(){try{return JSON.parse(localStorage.getItem('qg_hidden')||'{}');}catch(e){return{};}}
@@ -785,7 +785,7 @@ function setCopyConfig(key,val){
 function updateGenBtnLabel(){}
 function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;updateGenBtnLabel();}
 function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2){label='周二 · 热销风向';document.getElementById('linkMiniapp').style.display='';}else if(day===3){label='周三 · 会员日88折';document.getElementById('linkMiniapp').style.display='';}else if(day===4){label='周四 · 外卖双平台';document.getElementById('linkMiniapp').style.display='none';CopyConfig.linkMini=false;}else if(day===5){label='周五 · 周末套餐';document.getElementById('linkMiniapp').style.display='';}else if(day===6){label='周六 · 外卖双平台 · 轮换种草';document.getElementById('linkMiniapp').style.display='';}else{label='今天无推送';}document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML='📅 '+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日'+festToday;}
-function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');if(!el)return;if(!el)return;fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
+function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');if(!el)return;if(!el)return;if(!el)return;fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
 
 // ═══════ COPY GENERATOR ═══════
 
