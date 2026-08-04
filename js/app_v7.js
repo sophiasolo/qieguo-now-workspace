@@ -342,6 +342,7 @@ function renderSentimentTrend(data){
   var trend=data.daily_trend;
   var ctx=document.getElementById('sentimentTrendChart');
   if(!ctx)return;
+  var old=Chart.getChart('sentimentTrendChart');if(old)old.destroy();
   new Chart(ctx,{type:'line',data:{labels:trend.map(function(d){return d.date.slice(5)}),datasets:[
     {label:'总量',data:trend.map(function(d){return d.total}),borderColor:'#2d8a4e',backgroundColor:'rgba(45,138,78,.1)',borderWidth:2,pointRadius:3,fill:true,tension:.3},
     {label:'正面',data:trend.map(function(d){return d.pos}),borderColor:'#4caf50',borderWidth:1.5,pointRadius:2,tension:.3,borderDash:[3,2]},
