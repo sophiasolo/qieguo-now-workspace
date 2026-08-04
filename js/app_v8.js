@@ -367,7 +367,7 @@ function renderSentimentItems(data){
   var html='';
   items.forEach(function(item){
     var s=item.sentiment||'';
-    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start">'+
+    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;width:100%;max-width:100%;float:none;clear:both">'+
       '<span style="font-size:16px;flex-shrink:0">'+(emoji[s]||'📌')+'</span>'+
       '<div style="flex:1;min-width:0"><div style="font-weight:600;color:var(--text);word-break:break-word;line-height:1.4">'+item.title+'</div>'+
       '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
@@ -475,7 +475,7 @@ function renderHistorical(dateKey){
   if(items.length===0){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">暂无明细数据</div>';return;}
   var html='';items.forEach(function(item){
     var key=item.date+'||'+item.title;
-    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start">'+
+    html+='<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start;width:100%;max-width:100%;float:none;clear:both">'+
       '<span style="font-size:16px;flex-shrink:0">📌</span>'+
       '<div style="flex:1;min-width:0"><div style="font-weight:600;color:var(--text);word-break:break-word;line-height:1.4">'+item.title+'</div>'+
       '<div style="font-size:11px;color:var(--text-dim)">'+item.platform+' · '+item.author+' · '+(item.category||'')+'</div></div>'+
