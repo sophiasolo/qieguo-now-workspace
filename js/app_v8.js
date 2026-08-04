@@ -1595,7 +1595,6 @@ function renderPromptLib(){
   if(q)typeFavs=typeFavs.filter(function(f){
     return (f.label||'').toLowerCase().indexOf(q)>=0||f.text.toLowerCase().indexOf(q)>=0;
   });
-  // Find indices in global favs array
   var typeIdxs=typeFavs.map(function(f){
     return favs.findIndex(function(x){return x.text===f.text&&x.time===f.time;});
   });
@@ -1618,17 +1617,50 @@ function renderPromptLib(){
   typeFavs.forEach(function(f,i){
     var idx=typeIdxs[i];
     var checked=selectedFavs.includes(idx);
-    html+='<div style="padding:6px 8px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px;cursor:pointer;font-size:11px'+(checked?'background:var(--brand-light)':'')+'" onclick="toggleSel('+idx+')">'+
+    var bodyId='favBody_'+idx;
+    var nameId='favName_'+idx;
+    html+='<div style="padding:6px 8px;border-bottom:1px solid var(--border);font-size:11px'+(checked?'background:var(--brand-light)':'')+'">'+
+      '<div style="display:flex;align-items:center;gap:6px;cursor:pointer" onclick="toggleSel('+idx+')">'+
       '<span style="font-size:14px;flex-shrink:0;width:18px;text-align:center;color:'+(checked?'var(--brand)':'var(--text-dim)')+'">'+(checked?'☑':'☐')+'</span>'+
-      '<div style="flex:1;min-width:0">'+
-      '<div style="color:var(--text);line-height:1.5;max-height:32px;overflow:hidden">'+(f.label||'无标签')+'</div>'+
-      '<div style="color:var(--text-dim);max-height:16px;overflow:hidden">'+f.text.replace(/\n/g,' ').substring(0,50)+'…</div>'+
+      '<span id="'+nameId+'" style="color:var(--text);font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(f.label||'未命名')+'</span>'+
+      '<span onclick="event.stopPropagation();renameFav('+idx+')" style="color:var(--brand);font-size:10px;cursor:pointer" title="改名">✏️</span>'+
+      '<span onclick="event.stopPropagation();toggleFavBody(\''+bodyId+'\',this)" style="color:var(--text-dim);font-size:10px;cursor:pointer" title="展开">▼</span>'+
+      '<span onclick="event.stopPropagation();removeFavByIdx('+idx+')" style="color:var(--red);cursor:pointer;font-size:10px">🗑</span>'+
       '</div>'+
-      '<span onclick="event.stopPropagation();removeFavByIdx('+idx+')" style="color:var(--red);cursor:pointer;flex-shrink:0;font-size:10px">🗑</span>'+
+      '<div id="'+bodyId+'" style="display:none;margin-top:6px;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:11px;line-height:1.6;color:var(--text-dim);white-space:pre-wrap;max-height:120px;overflow-y:auto">'+(f.text||'')+'</div>'+
     '</div>';
   });
   el.innerHTML=html;
   renderRecipeHistory();
+}
+
+function toggleFavBody(id,el){
+  var div=document.getElementById(id);
+  if(div.style.display==='none'||!div.style.display){
+    div.style.display='block';el.textContent='▲';
+  }else{
+    div.style.display='none';el.textContent='▼';
+  }
+}
+
+function renameFav(idx){
+  var nameId='favName_'+idx;
+  var span=document.getElementById(nameId);
+  if(!span)return;
+  var old=span.textContent;
+  var input=document.createElement('input');
+  input.value=old;input.style.cssText='flex:1;min-width:0;padding:2px 4px;border:1px solid var(--brand);border-radius:4px;font-size:11px;font-weight:600;color:var(--text);background:#fff';
+  input.onblur=function(){finishRename(idx,input.value);};
+  input.onkeydown=function(e){if(e.key==='Enter'){input.blur();e.preventDefault();}};
+  span.parentNode.replaceChild(input,span);
+  input.focus();input.select();
+}
+
+function finishRename(idx,val){
+  var favs=getFavs();
+  if(favs[idx]){favs[idx].label=val||favs[idx].label||'未命名';}
+  localStorage.setItem('qg_prompt_favs',JSON.stringify(favs));
+  renderPromptLib();
 }
 
 var selectedFavs=[];
