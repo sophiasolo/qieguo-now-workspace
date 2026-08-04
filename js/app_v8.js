@@ -1806,32 +1806,38 @@ function renderCardLib(){
   var el=document.getElementById('inspContent');
   var cats=getCardCats();
   var allCats=Object.keys(cats);
-  var html='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">'+
-    '<button class="btn btn-primary" onclick="filterCards(\'all\')" id="cardFilterAll" style="font-size:11px;padding:4px 12px">全部</button>';
+  var html='<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px">'+
+    '<span class="insp-pill active" onclick="filterCards(\'all\',this)" style="font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;background:var(--brand);color:#fff">全部</span>';
   allCats.forEach(function(c){
-    html+='<button class="btn btn-ghost" onclick="filterCards(\''+c+'\')" style="font-size:11px;padding:4px 12px">'+c+' ('+cats[c]+')</button>';
+    html+='<span class="insp-pill" onclick="filterCards(\''+c+'\',this)" style="font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;background:var(--bg);color:var(--text-dim);border:1px solid var(--border)">'+c+'</span>';
   });
-  html+='</div><div id="cardGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px"></div>';
+  html+='</div><div id="cardGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px"></div>';
   el.innerHTML=html;
   filterCards('all');
 }
 
-function filterCards(cat){
+var currentCardFilter='all';
+function filterCards(cat,el){
+  currentCardFilter=cat;
+  if(el){
+    document.querySelectorAll('.insp-pill').forEach(function(p){p.classList.remove('active');p.style.background='var(--bg)';p.style.color='var(--text-dim)';p.style.border='1px solid var(--border)';});
+    el.classList.add('active');el.style.background='var(--brand)';el.style.color='#fff';el.style.border='none';
+  }
   var grid=document.getElementById('cardGrid');
   var cats=getCardCats();
   var all=[];
   Object.keys(cats).forEach(function(c){
-    if(cat==='all'||c===cat) all=all.concat(cats[c]);
+    if(cat==='all'||c===cat) all=all.concat(cats[c].map(function(p){return {phrase:p,cat:c};}));
   });
   var html='';
-  all.forEach(function(phrase){
-    html+='<div style="background:#fff;border-radius:8px;padding:12px;border:1px solid var(--border);font-size:13px;line-height:1.6;color:var(--text);min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center">'+phrase+'</div>';
+  all.forEach(function(item){
+    var p=item.phrase;
+    html+='<div style="background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'</div>';
   });
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
 }
 
 function getCardCats(){
-  // Use the huaZiDaily data from copy module
   return {
     '谐音梗': ['🍉 吃瓜群众已就位','💚 从此对瓜改观','🥭 忙碌打工人标配','🍍 旺旺旺旺来','🍑 逃不开的真香定律','🫐 每天和"莓"好不期而遇','🍈 低调的甜','🍊 "橙"意满满的周二','💛 周二就要"芒"起来'],
     'Unicode': ['🍉 ⋆｡°✩ 西瓜 × 夏天 = 快乐','🍍⋆⭒˚｡ 菠萝的海浪花打在舌尖','🍈*̩̩̥͙ 果香是夏天的入场券','🥭.ೃ࿔*:･ 忙忙碌碌也要有芒果味','🍓 ₀₁₂₃ ♥ 草莓味的日常'],
@@ -1843,7 +1849,6 @@ function getCardCats(){
     '搜索体': ['🔍 搜索"切果NOW" → 发现新大陆','🔍 你离快乐只差一个搜索 → 切果NOW','🔍 全城热搜 No.1 → 冰镇西瓜']
   };
 }
-
 function renderFruitLib(){
   var el=document.getElementById('inspContent');
   var all=getFruitBase();
