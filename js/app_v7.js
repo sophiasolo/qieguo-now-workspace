@@ -1683,17 +1683,30 @@ function renderRecipeHistory(){
   var list=recipes[key];
   var html='';
   list.forEach(function(r,i){
+    var collapsed=r.text.length>200;
+    var bodyId='recipeBody_'+i;
+    var display=collapsed?'max-height:60px;overflow:hidden':'';
     html+='<div style="background:#fff;border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;border:1px solid var(--border)">'+
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'+
-      '<div style="font-size:11px;font-weight:600;color:var(--brand)">🧪 '+recipeTypeMap[recipeType]+' · '+(r.time||'').substring(0,10)+'</div>'+
+      '<div style="font-size:11px;font-weight:600;color:var(--brand)">🧪 '+recipeTypeMap[recipeType]+' · '+(r.time||'').substring(0,10)+' · '+r.count+'条</div>'+
       '<div style="display:flex;gap:4px">'+
-      '<button class="btn btn-ghost" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.parentElement.querySelector(\'.recipe-body\').textContent);toast(\'📋 已复制\')" style="font-size:10px;padding:2px 6px">📋</button>'+
+      '<button class="btn btn-ghost" onclick="navigator.clipboard.writeText(document.getElementById(\''+bodyId+'\').textContent);toast(\'📋 已复制\')" style="font-size:10px;padding:2px 6px">📋</button>'+
       '<button class="btn btn-ghost" onclick="delRecipe(\''+key+'\','+i+')" style="font-size:10px;color:var(--red);padding:2px 6px">🗑</button>'+
       '</div></div>'+
-      '<div class="recipe-body" style="font-size:11px;line-height:1.7;color:var(--text);white-space:pre-wrap;max-height:200px;overflow-y:auto;background:var(--bg);padding:8px;border-radius:4px">'+r.text+'</div>'+
+      '<div id="'+bodyId+'" class="recipe-body" style="font-size:11px;line-height:1.7;color:var(--text);white-space:pre-wrap;'+display+';background:var(--bg);padding:8px;border-radius:4px">'+r.text+'</div>'+
+      (collapsed?'<div style="text-align:center;margin-top:4px"><span onclick="toggleRecipeBody(\''+bodyId+'\',this)" style="font-size:10px;color:var(--brand);cursor:pointer">展开全部 ▼</span></div>':'')+
       '</div>';
   });
   el.innerHTML=html;
+}
+
+function toggleRecipeBody(id,el){
+  var div=document.getElementById(id);
+  if(div.style.maxHeight==='60px'||!div.style.maxHeight){
+    div.style.maxHeight='none';div.style.overflow='visible';el.textContent='收起 ▲';
+  }else{
+    div.style.maxHeight='60px';div.style.overflow='hidden';el.textContent='展开全部 ▼';
+  }
 }
 
 function delRecipe(key,idx){
