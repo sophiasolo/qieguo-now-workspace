@@ -466,7 +466,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
         </div>
       </div>
     </div>
-    <div class="page" id="page-inspiration"><div class="empty-state"><div class="icon">📚</div><h3>素材灵感库 · 灵感墙 Mood Board</h3><p>花字卡片 · 博主灵感图 · 水果知识文章 — 建设中</p></div></div>
+    <div class="page" id="page-inspiration">
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="btn btn-primary" id="inspTabCard" onclick="switchInspTab('card')" style="font-size:13px;padding:8px 20px">🀄 花字卡片</button>
+        <button class="btn btn-ghost" id="inspTabFruit" onclick="switchInspTab('fruit')" style="font-size:13px;padding:8px 20px">🍎 水果知识</button>
+      </div>
+      <div id="inspContent" style="font-size:13px;color:var(--text-dim)"></div>
+    </div>
     
     <div class="page" id="page-ailearn"><div class="empty-state"><div class="icon">💡</div><h3>AI前沿案例 · 知识卡片盒</h3><p>AI资讯收藏 → 标签分类 → 翻卡浏览 — 建设中</p></div></div>
   </div>
