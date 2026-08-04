@@ -719,13 +719,6 @@ function renderHotspot(){
       catHtml+='<button class="btn btn-ghost" onclick="filterHotspotCat(&apos;'+c+'&apos;)" data-cat="'+c+'" style="font-size:11px;padding:5px 10px;text-align:left">'+icon+' '+c+' ('+cats[c]+')</button>';
     });
     document.getElementById('hotspotCatBtns').innerHTML=catHtml;
-    // Update source counts
-    var srcCounts={all:items.length};
-    items.forEach(function(i){var s=i.source||'其他';if(s.indexOf('抖音')>=0)s='抖音';srcCounts[s]=(srcCounts[s]||0)+1;});
-    ['百度','微博','抖音'].forEach(function(s){
-      var btn=document.querySelector('#hotspotSourceBtns button:nth-child('+(s==='百度'?2:s==='微博'?3:4)+')');
-      if(btn)btn.textContent=btn.textContent.replace(/\\(.*\\)/,'')+' ('+(srcCounts[s]||0)+')';
-    });
     renderHotspotItems(d);
   }).catch(function(e){
     el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">加载失败: '+e.message+'</div>';
