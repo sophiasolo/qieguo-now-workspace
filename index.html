@@ -166,7 +166,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
           <button class="btn btn-ghost" onclick="filterSentimentItems('pos')" id="sentFilterPos" style="font-size:11px;padding:4px 10px">😊 正面</button>
           <button class="btn btn-ghost" onclick="filterSentimentItems('neg')" id="sentFilterNeg" style="font-size:11px;padding:4px 10px">🔴 负面</button>
         </div>
-        <div id="sentimentItemsList" style="font-size:12px;max-height:500px;overflow-y:auto;padding-right:12px;margin-right:-4px"></div>
+        <div id="sentimentItemsList" style="font-size:12px;max-height:500px;overflow-y:auto;padding-right:12px;margin-right:-4px;display:block!important;column-count:auto!important;columns:auto!important"></div>
       </div>
       <div class="card"><div class="card-header"><div class="card-title">🔗 快捷入口</div></div><div style="display:flex;gap:12px"><a href="#" onclick="window.open('切果NOW综合舆情看板.html','_blank')" class="btn btn-primary" style="text-decoration:none">📊 综合舆情看板</a> <a href="#" onclick="refreshSentimentLive()" class="btn btn-ghost" style="font-size:12px">🔄 刷新</a><span style="font-size:12px;color:var(--text-dim);align-self:center" id="sentimentMeta"></span></div></div>
     </div>
