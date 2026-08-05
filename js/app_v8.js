@@ -1831,8 +1831,11 @@ function filterCards(cat,el){
   });
   var html='';
   all.forEach(function(item){
-    var p=item.phrase;
-    html+='<div style="background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'</div>';
+    var parts=item.phrase.split('\n');
+    parts.forEach(function(p){
+      if(!p.trim())return;
+      html+='<div style="background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'</div>';
+    });
   });
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
 }
