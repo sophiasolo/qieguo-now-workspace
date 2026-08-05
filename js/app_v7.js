@@ -1833,7 +1833,7 @@ function filterCards(cat,el){
   all.forEach(function(item){
     var parts=item.phrase.split('\n');
     parts.forEach(function(p){
-      if(!p.trim())return;
+      if(!p.trim())return; if(p.trim().length<2)return;
       html+='<div style="background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'</div>';
     });
   });
