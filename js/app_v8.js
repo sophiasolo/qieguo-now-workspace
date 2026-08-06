@@ -292,7 +292,9 @@ function loadSentimentData(){
         total:data.stats.total||0, pos:data.stats.pos||0, neg:data.stats.neg||0,
         neu:data.stats.neu||0, pos_pct:data.stats.pos_pct||0, neg_pct:data.stats.neg_pct||0
       };
-      data.today_items=data.stats.today_items||[];
+      data.today_items=(data.stats.today_items||[]).map(function(item){
+        return {title:item.t||item.title,platform:item.p||item.platform,sentiment:item.c||item.sentiment,author:item.u||item.author,category:item.n||item.category,url:item.url,time:item.time,date:item.date,summary:item._ocr||item._summary||''};
+      });
       data.generated=data.updated||'';
       // Aggregate 7-day negatives
       var allNeg=[];
