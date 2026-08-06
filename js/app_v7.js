@@ -300,7 +300,8 @@ function loadSentimentData(){
       var allNeg=[];
       if(data.daily_trend){data.daily_trend.forEach(function(d){
         (d.negatives||d.negative_items||[]).forEach(function(n){
-          if(!n.date)n.date=d.date||''; allNeg.push(n);
+          if(!n.date)n.date=d.date||'';
+          allNeg.push({title:n.t||n.title,platform:n.p||n.platform,author:n.u||n.author,category:n.n||n.category,url:n.url,date:n.date,_city:n._city,_cat:n._cat});
         });
       });}
       data.negative_items=allNeg;
