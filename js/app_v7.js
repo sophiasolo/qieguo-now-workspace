@@ -3,7 +3,7 @@ var productData=null;
 var sentimentFilter='all';
 var currentNoteDate=null;
 
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:''};
 
 var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-12":"春节","04-05":"清明","05-01":"劳动节","06-25":"端午","09-15":"中秋","10-01":"国庆","12-25":"圣诞"}};
 
@@ -768,7 +768,7 @@ function renderHotspotItems(d){
 function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:''};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
 function saveCopyConfig(){localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}
 function setCopyConfig(key,val){
@@ -1389,7 +1389,8 @@ function generateCopyAI(){
     '【emoji铁律】每行配1-2个贴合内容的emoji，拒绝全篇🍉！用🧊表冰爽、🛵表外卖、💰表价格、😋表口感、🔥表热度、✨表惊喜、🎁表福利、💪表健康、🥭🍍🍈根据水果灵活换。花字行的emoji要更有创意。\\n\\n'+
     '【排版】每行≤20字，不允许断词换行。像朋友群发消息，不机械不模板。\\n\\n'+
     '【推送日】'+dayName+'\n'+
-    '【产品名（必须原样使用，不可改！）】'+product+'\n'+
+    '【产品名（必须原样使用，不可改！）】'+product+'\\n'+
+    (CopyConfig.comboNote?'【套餐详情】'+CopyConfig.comboNote+'\\n':'')+
     '【价格要求】'+priceRule+'\n'+
     '【配送费要求】'+deliveryRule+'\n'+
     '【方向】'+(direction==='auto'?'根据推送日自由选择':direction)+'\n\n'+

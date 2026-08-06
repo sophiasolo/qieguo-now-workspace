@@ -326,6 +326,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
             <div id="copyProducts" style="font-size:13px;color:var(--text-dim)">产品库建设中...</div>
           </div>
           <div class="card" style="margin-bottom:12px">
+            <div class="card-header" onclick="var e2=document.getElementById('comboBox');e2.style.display=e2.style.display==='none'?'block':'none'" style="cursor:pointer"><div class="card-title">📋 套餐说明 <span id="comboToggle" style="font-size:10px;color:var(--text-dim);font-weight:400">展开 ▼</span></div></div>
+            <textarea id="comboBox" style="display:none;width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;font-size:11px;resize:vertical;min-height:60px;font-family:inherit" placeholder="填套餐细节，AI会附加到文案中&#10;如：追剧搭子800g，含芒果250g+三拼300g+桃子250g" onchange="CopyConfig.comboNote=this.value;CopyConfig._modified=true"></textarea>
+          </div>
+          <div class="card" style="margin-bottom:12px">
             <div class="card-header"><div class="card-title">💰 价格模式</div></div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               <button class="btn btn-primary" onclick="setCopyConfig('priceMode','unified')" id="priceUnified" style="font-size:11px;padding:5px 12px">统一价格</button>
