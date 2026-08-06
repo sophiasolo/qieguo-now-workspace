@@ -389,7 +389,7 @@ function renderSentimentNegList(data){
   var html='';
   items.slice(0,15).forEach(function(item){
     html+='<div style="padding:8px 0;border-bottom:1px solid var(--border)">'+
-      '<div style="font-weight:600;color:var(--text);margin-bottom:2px">['+item.platform+'] '+item.title+'</div>'+
+      '<div style="font-weight:600;color:var(--text);margin-bottom:2px">['+(item.platform||item.p||'')+'] '+(item.title||item.t||'')+'</div>'+
       '<div style="font-size:11px;color:var(--text-dim)">'+(item.date||'')+' · '+(item.category||'')+(item.url?' · <a href="'+item.url+'" target="_blank" style="color:var(--brand);text-decoration:none">原帖 ↗</a>':'')+'</div>'+
     '</div>';
   });
