@@ -1261,7 +1261,7 @@ function generateCopy(){
 function saveCopyHistory(product,versions){
   var history=[];
   try{history=JSON.parse(localStorage.getItem('qg_copy_history')||'[]');}catch(e){}
-  history.unshift({time:new Date().toISOString(),product:product,v1:versions[0],v2:versions[1],v3:versions[2]});
+  history.unshift({time:new Date().toISOString(),product:product||(CopyConfig.customDay==='festival'?(CopyConfig.festivalName||'节气'):''),v1:versions[0],v2:versions[1],v3:versions[2]});
   if(history.length>20)history=history.slice(0,20);
   localStorage.setItem('qg_copy_history',JSON.stringify(history));
   renderCopyHistory();
