@@ -381,7 +381,7 @@ function renderSentimentItems(data){
   list.innerHTML=html;
 }
 
-function renderSentimentNegList(data){console.log("NEG DATA:",JSON.stringify(data.negative_items?data.negative_items.slice(0,2):"no neg_items"),"stats:",JSON.stringify((data.stats||{}).negative_items?data.stats.negative_items.slice(0,2):"none"));
+function renderSentimentNegList(data){
   var items=data.negative_items||(data.stats||{}).negative_items||[];
   items.sort(function(a,b){return (b.date||'').localeCompare(a.date||'')});
   var list=document.getElementById('sentimentNegList');
