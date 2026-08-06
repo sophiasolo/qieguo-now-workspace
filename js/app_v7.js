@@ -382,7 +382,7 @@ function renderSentimentItems(data){
 }
 
 function renderSentimentNegList(data){
-  var items=data.negative_items||[];
+  var items=data.negative_items||(data.stats||{}).negative_items||[];
   items.sort(function(a,b){return (b.date||'').localeCompare(a.date||'')});
   var list=document.getElementById('sentimentNegList');
   if(items.length===0){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">✅ 近7天无负面舆情</div>';return;}
