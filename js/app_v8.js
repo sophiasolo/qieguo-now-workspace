@@ -3,7 +3,7 @@ var productData=null;
 var sentimentFilter='all';
 var currentNoteDate=null;
 
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:''};
 
 var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-12":"春节","04-05":"清明","05-01":"劳动节","06-25":"端午","09-15":"中秋","10-01":"国庆","12-25":"圣诞"}};
 
@@ -768,11 +768,16 @@ function renderHotspotItems(d){
 function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:''};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
 function saveCopyConfig(){localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}
 function setCopyConfig(key,val){
   CopyConfig[key]=val;saveCopyConfig();applyCopyConfig();
+  if(key==='customDay'){
+    var fi=document.getElementById('festivalNameInput');
+    if(val==='festival'){fi.style.display='';fi.focus();}
+    else fi.style.display='none';
+  }
   if(key==='aiMode'){updateGenBtnLabel();}
 }
 function updateGenBtnLabel(){}
@@ -1382,7 +1387,7 @@ function generateCopyAI(){
   
   var prompt;
   if(isFestival){
-    var festName=festToday||'节气';
+    var festName=CopyConfig.festivalName||festToday||'节气';
     prompt='你是切果NOW品牌社群文案专家。今天是「'+festName+'」节气品宣——纯品牌氛围，不谈产品、不报价、不推链接。'+'\n\n'+huaZiPrompt+'\n\n'+
       '【核心要求】花字当头！前1-2行必须醒目节气花字，2-3句温暖感悟。'+'\n'+
       '每行<=20字，花字行<=25字。禁止产品名、价格、链接、团购、福利。'+'\n\n'+
