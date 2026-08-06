@@ -778,7 +778,7 @@ function setCopyConfig(key,val){
 function updateGenBtnLabel(){}
 function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;updateGenBtnLabel();}
 function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2)label='周二 · 热销风向';else if(day===3)label='周三 · 会员日88折';else if(day===4)label='周四 · 外卖双平台';else if(day===5)label='周五 · 周末套餐';else if(day===6)label='周六 · 外卖双平台 · 轮换种草';else label='今天无推送';document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML='📅 '+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日'+festToday;}
-function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');if(!el)return;if(!el)return;if(!el)return;fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
+function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');if(!el)return;if(!el)return;if(!el)return;if(!el)return;fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
 
 // ═══════ COPY GENERATOR ═══════
 
@@ -1346,6 +1346,7 @@ function generateCopyAI(){
   // Festival detection
   var festToday='';
   try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=yearFests[mmdd];}catch(e){}
+  var isFestival=(CopyConfig.customDay==='festival'||(!CopyConfig.customDay&&festToday));
   
   // Build rich 花字 prompt with festival context
   var huaZiPrompt=''+
@@ -1379,7 +1380,15 @@ function generateCopyAI(){
       '・必须在文案中呼应节日氛围，但锚点仍是果切产品\\n\\n';
   }
   
-  var prompt='你是切果NOW品牌社群文案专家，务必模仿以下风格。\\n\\n'+
+  var prompt;
+  if(isFestival){
+    var festName=festToday||'节气';
+    prompt='你是切果NOW品牌社群文案专家。今天是「'+festName+'」节气品宣——纯品牌氛围，不谈产品、不报价、不推链接。'+'\n\n'+huaZiPrompt+'\n\n'+
+      '【核心要求】花字当头！前1-2行必须醒目节气花字，2-3句温暖感悟。'+'\n'+
+      '每行<=20字，花字行<=25字。禁止产品名、价格、链接、团购、福利。'+'\n\n'+
+      '收尾可用：立秋安好🍂｜秋日安康🧡'+'\n\n';
+  }else{
+    prompt='你是切果NOW品牌社群文案专家，务必模仿以下风格。\\n\\n'+
     '【品牌】鲜切水果外卖，健康活力、口语化亲切、朋友聊天语气。\\n\\n'+
     huaZiPrompt+
     huaZiDaily+
@@ -1401,6 +1410,7 @@ function generateCopyAI(){
     '【版本二 · 风格名】\\n文案\\n\\n'+
     '【版本三 · 风格名】\\n文案';
   
+  }
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
