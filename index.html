@@ -320,6 +320,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
               <option value="6">周六 · 外卖双平台+周末</option>
               <option value="festival">🎋 节气品宣（纯氛围，无产品）</option>
             </select>
+            <input id="festivalNameInput" placeholder="输入节气/节日名称，如：立秋、冬至、中秋" onchange="CopyConfig.festivalName=this.value" style="display:none;width:100%;margin-top:6px;padding:6px 8px;border:1px solid var(--brand);border-radius:4px;font-size:12px">
             <div id="copyWeather" style="font-size:11px;color:var(--text-dim)">加载中...</div>
           </div>
           <div class="card" style="margin-bottom:12px">
@@ -492,6 +493,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
-<script src="js/app_v8.js?v=39"></script>
+<script src="js/app_v8.js?v=40"></script>
 </body>
 </html>
