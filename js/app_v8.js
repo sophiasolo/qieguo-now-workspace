@@ -1856,11 +1856,9 @@ function filterCards(cat,el){
   });
   var html='';
   all.forEach(function(item){
-    var parts=item.phrase.split('\n');
-    parts.forEach(function(p){
-      if(!p.trim())return; if(p.trim().length<2)return;
+    var p=item.phrase;
+    if(!p.trim())return; if(p.trim().length<2)return;
       html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'<span onclick="event.stopPropagation();if(customCards[item.cat]){var cidx=customCards[item.cat].indexOf(p);if(cidx>=0)deleteCustomCard(\''+item.cat+'\',cidx);}" style="position:absolute;top:2px;right:4px;font-size:10px;opacity:0;cursor:pointer" onmouseenter="this.style.opacity=0.4" onmouseleave="this.style.opacity=0" title="删除自定义花字">🗑</span></div>';
-    });
   });
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
 }
