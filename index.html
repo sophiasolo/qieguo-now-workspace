@@ -494,5 +494,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
 <script src="js/app_v8.js?v=42"></script>
+  <div id="cardModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)">
+      <div style="font-weight:700;margin-bottom:16px;font-size:15px">➕ 添加花字卡片</div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">分类</div>
+        <select id="cardCat" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:13px">
+          <option value="">选择分类</option>
+          <option value="__custom__">✏️ 自定义…</option>
+        </select>
+        <input id="cardCustomCat" placeholder="输入新分类名" style="display:none;width:100%;padding:6px 8px;border:1px solid var(--brand);border-radius:4px;font-size:12px;margin-top:6px">
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">花字内容（一行一条）</div>
+        <textarea id="cardText" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:12px;min-height:120px;resize:vertical;font-family:inherit" placeholder="直接粘贴花字，一行一条"></textarea>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="document.getElementById('cardModal').style.display='none'" style="font-size:12px">取消</button>
+        <button class="btn btn-primary" onclick="saveCustomCard()" style="font-size:12px">保存</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

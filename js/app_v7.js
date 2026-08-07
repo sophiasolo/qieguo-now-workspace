@@ -1836,7 +1836,7 @@ function renderCardLib(){
   allCats.forEach(function(c){
     html+='<span class="insp-pill" onclick="filterCards(\''+c+'\',this)" style="font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;background:var(--bg);color:var(--text-dim);border:1px solid var(--border)">'+c+'</span>';
   });
-  html+='</div><div id="cardGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px"></div>';
+  html+='<span class="insp-pill" onclick="showCardModal()" style="font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;background:var(--brand-light);color:var(--brand);border:1px dashed var(--brand);white-space:nowrap">➕ 添加</span></div><div id="cardGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px"></div>';
   el.innerHTML=html;
   filterCards('all');
 }
@@ -1859,7 +1859,7 @@ function filterCards(cat,el){
     var parts=item.phrase.split('\n');
     parts.forEach(function(p){
       if(!p.trim())return; if(p.trim().length<2)return;
-      html+='<div style="background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'</div>';
+      html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'</div>';
     });
   });
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
@@ -1922,6 +1922,89 @@ function getFruitBase(){
     {icon:'🥥',name:'椰子',tags:['夏季','饮品','整只'],tips:'挑选：摇晃有水声、外皮完整无裂。储存：未开可常温5-7天。开口后必须冷藏+当天喝完。椰青水比椰奶更清爽适合夏天。'}
   ];
 }
+
+// ═══════ CUSTOM CARD LIB ═══════
+var customCards = {}; // {category: [phrase, phrase, ...]}
+
+function loadCustomCards(){
+  try {
+    customCards = JSON.parse(localStorage.getItem('qg_custom_cards')||'{}');
+  } catch(e) { customCards = {}; }
+}
+
+function saveCustomCards(){
+  localStorage.setItem('qg_custom_cards', JSON.stringify(customCards));
+}
+
+function showCardModal(){
+  var sel = document.getElementById('cardCat');
+  // Populate with existing categories (built-in + custom)
+  var allCats = new Set(Object.keys(getCardCats()));
+  Object.keys(customCards).forEach(function(c){ allCats.add(c); });
+  sel.innerHTML = '<option value="">选择分类</option>';
+  allCats.forEach(function(c){
+    sel.innerHTML += '<option value="'+c+'">'+c+'</option>';
+  });
+  sel.innerHTML += '<option value="__custom__">✏️ 自定义…</option>';
+  sel.onchange = function(){
+    document.getElementById('cardCustomCat').style.display = (this.value==='__custom__') ? '' : 'none';
+  };
+  document.getElementById('cardCustomCat').style.display = 'none';
+  document.getElementById('cardText').value = '';
+  document.getElementById('cardModal').style.display = 'flex';
+}
+
+function saveCustomCard(){
+  var sel = document.getElementById('cardCat');
+  var cat = sel.value;
+  if (cat === '__custom__') {
+    cat = document.getElementById('cardCustomCat').value.trim();
+  }
+  if (!cat) { toast('请选择或输入分类'); return; }
+  
+  var text = document.getElementById('cardText').value.trim();
+  if (!text) { toast('请输入花字内容'); return; }
+  
+  var phrases = text.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+  if (!phrases.length) { toast('请输入花字内容'); return; }
+  
+  if (!customCards[cat]) customCards[cat] = [];
+  customCards[cat] = customCards[cat].concat(phrases);
+  saveCustomCards();
+  
+  document.getElementById('cardModal').style.display = 'none';
+  toast('✅ 已添加 '+phrases.length+' 条');
+  
+  // Re-render
+  if (inspTab === 'card') renderCardLib();
+}
+
+function deleteCustomCard(cat, idx){
+  if (!customCards[cat]) return;
+  if (!confirm('删除这条花字：'+customCards[cat][idx].substring(0,30)+'…？')) return;
+  customCards[cat].splice(idx, 1);
+  if (!customCards[cat].length) delete customCards[cat];
+  saveCustomCards();
+  renderCardLib();
+}
+
+// Override getCardCats to merge custom
+var _origGetCardCats = getCardCats;
+getCardCats = function(){
+  var builtin = _origGetCardCats();
+  // Merge custom cards
+  Object.keys(customCards).forEach(function(cat){
+    if (builtin[cat]) {
+      builtin[cat] = builtin[cat].concat(customCards[cat]);
+    } else {
+      builtin[cat] = customCards[cat].slice();
+    }
+  });
+  return builtin;
+};
+
+// Initialize
+loadCustomCards();
 
 // ═══════ INIT ═══════
 renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderMemberDay();renderAcquisition();loadCopyConfig();applyCopyConfig();
