@@ -1942,7 +1942,7 @@ var customCards = {}; // {category: [phrase, phrase, ...]}
 
 function delCardClick(el){
   var cat=el.dataset.cat;
-  var phrase=el.dataset.idx; // Now stores the actual phrase
+  var phrase=decodeURIComponent(el.dataset.idx); // Now stores the actual phrase
   if(!cat||!phrase){toast('无法删除');return;}
   var found=false;
   if(!confirm('删除这条花字：'+phrase.substring(0,30)+'…？'))return;
