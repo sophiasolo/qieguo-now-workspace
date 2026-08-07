@@ -2004,7 +2004,7 @@ var _origGetCardCats = getCardCats;
 getCardCats = function(){
   var builtin = _origGetCardCats();
   // Merge custom cards
-  Object.keys(customCards).forEach(function(cat){
+  Object.keys(customCards||{}).forEach(function(cat){
     if (builtin[cat]) {
       builtin[cat] = builtin[cat].concat(customCards[cat]);
     } else {
