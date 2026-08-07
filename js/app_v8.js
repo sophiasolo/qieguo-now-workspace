@@ -1858,7 +1858,7 @@ function filterCards(cat,el){
   all.forEach(function(item){
     var p=item.phrase;
     if(!p.trim())return; if(p.trim().length<2)return;
-      html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'<span onclick="event.stopPropagation();delCardClick(this)" data-cat="'+item.cat+'" data-idx="'+(customCards[item.cat]||[]).indexOf(p)+'" style="position:absolute;top:2px;right:4px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25" title="删除自定义花字">🗑</span></div>';
+      html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'<span onclick="event.stopPropagation();delCardClick(this)" data-cat="'+item.cat+'" data-idx="'+0+'" style="position:absolute;top:2px;right:4px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25" title="删除自定义花字">🗑</span></div>';
  });
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
 }
@@ -1874,6 +1874,12 @@ function getCardCats(){
     "中秋节": ["🥰\\\\\\\"𝑴𝒐𝒐𝒏 𝒄𝒂𝒌𝒆\\\\\\\"🥮\n\\\\\\\"月圆家圆钱包圆，人顺心顺事事顺\\\\\\\"", "🌜𝗛𝗶:月亮🐇\n\\\\\\\"熬夜会长胖，不信你看月亮\\\\\\\"🌝", "🌕 𝕄𝕚𝕕-𝔸𝕦𝕥𝕦𝕞𝕟 𝔽𝕖𝕤𝕥𝕚𝕧𝕒𝕝\n\\\\\\\"月亮慢ᴹᵃⁿ变圆 事事慢 ᴹᵃⁿ如愿\\\\\\\"", "🏮²⁰²⁴/₀₉.₁₇🐇\n\\\\\\\"小小月饼🥮大大团圆\\\\\\\"👨‍👩‍👧‍👦", "²⁰²⁴🌕₀₉💕₁₇𓎤\n\\\\\\\"一轮圆月悬天际，万家灯火映团圆\\\\\\\"", "⁰⁹🥮₁₇▸\n\\\\\\\"一轮明月，一个月饼，一帆风顺\\\\\\\"", "👋🏻𝗛𝗲𝗹𝗹𝗼𝗼𝗼ᯤ😋\n\\\\\\\"举头望明月，低头吃月饼\\\\\\\"🥮", "²º²⁴₀₉🌕₁₇|\n\\\\\\\"中秋月是故乡明，人是故乡亲\\\\\\\"\n\\\\\\\"没能回去的故乡，月亮先替我看看吧\\\\\\\"✨", "中秋🐟快ᐝ\n\\\\\\\"月亮，你也在低头看我吗\\\\\\\"🌕", "ʚ🌗🌘🌕ɞ\n\\\\\\\"走了那么远的地方，最圆的月还是在故乡\\\\\\\"", "🏮中秋快樂◟\n\\\\\\\"幸福就是抬头看月亮时 家在脚下，爱在身旁\\\\\\\"👭", "🐇²⁰²⁴/₀₉.₁₇🌕🌕\n\\\\\\\"两处相思同望月，此刻也算共团圆 \\\\\\\"ˎˊ˗", "🥮•‿•🥮\n\\\\\\\"我中秋节没有月饼吃，谁来给我画个饼\\\\\\\"", "˙º‌˙中秋快乐🎑\n\\\\\\\"赏天上的月，吹人间的风，爱身边的人\\\\\\\"👨‍👩‍👧‍👧", "🐇²⁰²⁴/₀₉.₁₇\n\\\\\\\"每天有每天的快乐，今天中秋是特别快乐\\\\\\\"", "˗ˋˏ 🌕 ˎˊ˗\n\\\\\\\"月亮是我抛出的硬币，两面都是祝福你\\\\\\\"", "👋🏻𝗛𝗲𝗹𝗹𝗼𝗼𝗼🌕\n\\\\\\\"祝你自带光芒，和中秋的月亮不分上下\\\\\\\"✨", "𝑯𝒆𝒚 𝒎𝒐𝒐𝒏!!🌖", "🌕𝐁𝐞𝐬𝐭 𝐖𝐢𝐬𝐡𝐞𝐬︎", "崽崽de中秋日記🥮", "ʚ🥮ɞ Ɱօօղ ↻ąҟҽ", "💐桂花香 明月滿 ☾˚‧º·", "祝你的月饼最好吃🥮", "𝐒𝐚𝐲 𝐇𝐞𝐥𝐥𝐨：中秋假期.ᐟ.ᐟ", "🎑/十五的月亮十六圆☾✦", "𓃹 ⸝⸝ Hi:中秋快樂~🥮🐇", "🐇·🏮「中秋快樂碎片」", "𝓗𝓪𝓹𝓹𝔂 𝓜𝓲𝓭-𝓪𝓾𝓽𝓾𝓶𝓷 𝓓𝓪𝔂", "☾ 𝑀𝑖𝑑-𝐴𝑢𝑡𝑢𝑚𝑛 𝐹𝑒𝑠𝑡𝑖𝑣𝑎𝑙ت", "月饼在身旁 随处是团圆🏠", "𝔀𝓮𝓷/和你一起偷吃月饼🥮", "𝕙𝕒𝕧𝕖 𝕒 𝕘𝕠𝕠𝕕 𝕥𝕚𝕞𝕖！ʚ◡̈⃝ɞ", "想从你的窗子里看月亮🌙", "“祝你快乐 不止中秋”•‿•✿ᵕ̈", "🥮͂ ₍ ๐╹ ꈊ ╹๐ ₎节日快落🌙*̩̩͙", "地球不爆炸，我们不放假🧘‍♀️", "🥂一杯敬故乡，一杯敬远方。", "海上生明月，天涯共此时🍂", "舉頭望明月，低頭吃月餅🥮", "🥮 ´͈ꄃ `͈ 🥮祝你的月饼最好吃", "❾月❷❾日｜中秋佳節愉快🌖", "等一日 終賞月 🌑🌘🌗🌖🌕", "奔月失敗，继续留在了人间🐰", "ε 𝖧𝖺𝗉𝗉𝗒 𝖬𝗂𝖽-𝖺𝗎𝗍𝗎𝗆𝗇 𝖣𝖺𝗒 з🥮", "👧🏻୧ ᴍɪᴅ-ᴀᴜᴛᴜᴍɴ ғᴇsᴛɪᴠᴀʟ୧👧🏻🍼", "《中秋節》開心！/  🅷🅰🅿🅿🆈💫", "出来看月亮吗 不看月亮出来也行🍯"],
     "平安夜·圣诞": ["*..🍎•͈˽•͈🍎 🎄•͈˽•͈🎄", "✿ 𓂂🧣🍎✩₊\n又是一年平安夜", "𝔤𝔬𝔬𝔡 𝔫𝔦𝔤𝔥𝔱 |今夜平安🌔.🍎•͈˽•͈🍎", "𝐴𝑤𝑎𝑖𝑡 平安·喜樂 🍎", "今天的苹果🍎炒鸡甜！", "*。🎄。*..🍎❄︎:平平安安", "🦌𓐃🔔敲响平安夜的钟声", "🎀. 𖤐*̩̩͙⸝⋆ᵕ̈ ᑋᵉᑊᑊᵒ𖠿𖥧𖥣｡\n十二月的風吹來了平安夜🔔", "甜的不是苹果🍎\n而是有你的平安夜✧𝕓𝕚𝕦～ᵕ̈🫶🏻", "聖誕月 希望好‘’🍅‘’正在發生", "⁻🍎🍎🍎 〰︎ 苹果圣诞季 〰", "歲末將至 平安喜樂 ‘’₂₀₂₅.₁₂.₂₄", "✧𝕓𝕚𝕦～ᵕ̈平安夜的苹果超甜的🍎", "🔔 🎄 🍎「平安·圣诞」▸ 𝐿𝑢𝑐𝑘𝑦 🦌", "祝我们：\\\\\\\"平安·喜樂｜萬事·順意\\\\\\\"🎅🏻ᐝ", "🎄。平安夜這一天 ʺ̤ 許你平安快樂。🍎", "天亮了✨昨晚是平安夜 女巫用了解药🧙‍♀", "聖誕月 希望好‘’🍅‘’正在發生", "🎄⸝⸝🍎⸝⸝🎅 “今天是𝗵𝗮𝗮𝗮𝗮𝗮𝗽𝗽𝘆 𝗽𝗹𝗼𝗴 ”", "甜的不止是平安果⸝⸝👫⸝⸝🍎⸝⸝🎅", "¹²/₂₄🎄祝我们都‘’苹‘’安喜乐..🍎•͈˽•͈🍎", "如果在平安夜 吃一个苹果代表平安\n那我吃两个🍎🥄•ᴗ•🥄🍎就可以平平安安", "✧٩(˃̶͈̀௰˂̶͈́)و✧𝕓𝕚𝕦平安夜的苹果超甜的🍎", "🍎今天平安夜记得吃苹果\n明天圣诞节记得吃圣诞树🎄", "🎄。\n*..🍎🍎      ❄\n⁻🍎🍎🍎      〰  苹果圣诞季  〰\n⌁⌁⌁🪧⌁⌁⌁ 🍎 ²⁰²⁵/₁₂.₂₄ 𝙒𝙚𝙙𝙣𝙚𝙨𝙙𝙖𝙮⸝⸝◟̆◞̆♡❄\n祝我们：\\\\\\\"平安·喜樂｜萬事·順意\\\\\\\"🎅🏻ᐝ\n①\n⸝ ⸝ 🎅🏻🪜 𓍼 𖤐*̩̩͙⸝⋆ᵕ̈ ᑋᵉᑊᑊᵒ𖠿𖥧𖥣｡\n叮🔔请签收圣诞节好运✨♪♪\n\t\n②\n🎄𝐻𝑒𝑦 𝐷𝑒𝑐𝑒𝑚𝑏𝑒𝑟✨\n十二月的街道溢满热咖和圣诞气息𖠚ᐝ\n\t\n③\n⭐🎄⭐\n♫ 正在播放《𝙈𝙚𝙧𝙧𝙮 𝘾𝙝𝙧𝙞𝙨𝙩𝙢𝙖𝙨》━─━━━━●───── 𝟏𝟐:𝟐𝟓\n⇆ㅤㅤㅤ◁ㅤ ㅤ❚❚ㅤㅤ ▷ㅤㅤㅤ↻\n\t\n④\n🎄⸝⸝🦊⸝⸝🎅⸝⸝🐻\n“今天是𝗵𝗮𝗮𝗮𝗮𝗮𝗮𝗮𝗮𝗮𝗽𝗽𝘆  𝗽𝗹𝗼𝗴 ”\n\t\n⑤\n🛷☃️🎅🏻 𝙈𝙚𝙧𝙧𝙮  𝘾𝙝𝙧𝙞𝙨𝙩𝙢𝙖𝙨🎄🎁✨\n世上本无圣诞老人 所有的惊喜都来自爱你的人\n\t\n⑥\n𝘔𝘦𝘳𝘳𝘺 𝘊𝘩𝘳𝘪𝘴𝘵𝘮𝘢𝘴🌲+✨=🎄\n“钟声响 祥瑞添 平安夜 道平安”\n\t\n⑦\n🦌•┈┈🎄┈┈🎅┈┈🎁┈┈•👫\n“希望圣诞树 礼物 雪花 和你一起到来”\n\t\n⑧\nᐅ|ııı|ııı|ı|ıı|ııı|ıı45″\n正在播放𝑗𝑖𝑛𝑔𝑙𝑒 𝑏𝑒𝑙𝑙𝑠 🔔\n\t\n⑨\nMERRy 🦌^o^CHRISTMAS 🍓\n十二月的風吹來了聖誕節🧣\n\t\n⑩\n𝙡̶̶̶𝙤̶̶̶𝙫̶̶̶𝙚̶̶̶ᥫᩣ 𝙢𝙚𝙧𝙧𝙮 𝙘𝙝𝙧𝙞𝙨𝙩𝙢𝙖𝙨 𐂂\n🎄⭐🍎\n“在等雪花、圣诞树、新年烟火 和更好的你”", "☃︎☃︎☃︎", "*.❅·🎄⋆·˚ ༘", "🎄𝗠𝙚𝗿𝗿𝘆 𝗖𝗵𝗿𝗶𝘀𝘁𝗺𝗮𝘀⋆₊🍎", "*.❅·🎄 ◡̈ 𝕄𝕖𝕣𝕣𝕪 ℂ𝕙𝕣𝕚𝕤𝕥𝕞𝕒𝕤", "✿ 𓂂🧣🍎✩₊ 𝕸𝖊𝖗𝖗𝖞 𝕮𝖍𝖗𝖎𝖘𝖙𝖒𝖆𝖘", "❄️²⁰²⁴/₁₁.₂₂ᵕ̈", "𝙷𝚎𝚕𝚕𝚘☃…", "ˊ˗ ‪𓏸⛄️⁺₊˚‬", "ᯅ̈ |  .   𝙒𝙞𝙣𝙩𝙚𝙧 ❄", "☆.🎄.:*🛷°☆.🦌.:*🍎", "𝚊𝚕𝚕 𝚒 𝚠𝚊𝚗𝚝 𝚏𝚘𝚛 𝚌𝚑𝚛𝚒𝚜𝚝𝚖𝚊𝚜 𝚒𝚜 𝚢𝚘𝚞 ˙ᘧ ͜ ˙", "🎄 𝓜𝓮𝓻𝓻𝔂  𝓒𝓱𝓻𝓲𝓼𝓽𝓶𝓪𝓼 🎄", "¹²🎄₂₅｜圣诞快樂  ♡(˃͈ દ ˂͈ ༶ )!!!", "🌲+✨=🎄 𝐻𝑒𝑦 𝐷𝑒𝑐𝑒𝑚𝑏𝑒𝑟 *·°", "☃️𝗖𝗵𝗶𝗹𝗹𝗶𝗻 '𝗖𝗵𝗶𝗹𝗹𝗶𝗻 '♫ ♪🎵♭", "🔔🎄ᎷᎬᎡᎡᎩ ᏟᎻᎡᎨᏚᎢᎷᎪᏚ🎄🔔", "🎄- ̗̀ ꪔ̤̥ꪔ̤̮ꪔ̤̫   ̖́-🎄", "*･🔔 ᴊɪɴɢʟᴇ ʙᴇʟʟs 🎁  ͙･ﾟ❅ *. ♪", "🌟\n🎄\n🎄🎄\n🎄 🎄 🎄\n🎄 🎄 🎄🎄\n𝙈𝙚𝙧𝙧𝙮  𝘾𝙝𝙧𝙞𝙨𝙩𝙢𝙖𝙨\n平安喜乐", "🎄🎁𝑀𝓮𝓇𝓇𝓎 𝒞𝒽𝓇𝒾𝓈𝓉𝓂𝒶𝓈･🪄❆", "🌲+✨=🎄 𝐻𝑒𝑦 𝐷𝑒𝑐𝑒𝑚𝑏𝑒𝑟 *·°", "⁺˚.🍷提前过圣诞咯 ♡✨⋅🎄₊˚.", "🍎♪ 𝐌𝐞𝐫𝐫𝐲 𝐂𝐡𝐫𝐢𝐬𝐭𝐦𝐚𝐬🎄", "¹²🎄₂₅｜圣诞快樂  ♡(˃͈ દ ˂͈ ༶ )!!!", "°☆草莓圣诞季🍓☆.", "꙳˚̩͙ 请你参与我的圣诞 🎁🎄🍷 \\\\\\\"", "◡̈ 𝕄𝕖𝕣𝕣𝕪 ℂ𝕙𝕣𝕚𝕤𝕥𝕞𝕒𝕤\n🎄又是一年“金够败”🎅☃️", "* ❅ ･ﾟ𝕀𝕟 𝕨𝕚𝕟𝕥𝕖𝕣  . 𓈒 ∗ ͙̩̩͙❆ ͙͛\n･₊ 🧣贩卖圣诞气息˚🎅🏻 . ❆🧸", "🎄🎅ꀿªᵖᵖᵞ 𝚝𝚒𝚖𝚎 °🛎️\n⍤ 𓇼请你参与我的圣诞.❅ *. ​♪", "¹²🎄₂₅ ≽^•༚• ྀི≼🎄\n🧣- ̗̀圣诞快樂  ̖́-🐿️", "🛷⊹❅ℳᴇʀʀᎽ🦌 ྀིℂʜʀɪsᴛᴍᴀs🍎\n“歲末將至  平安喜樂”", "²⁰²⁵/₁₂.₂₅ᵕ̈ ꪑ𝚎𝕣𝕣ꪗ ᥴꫝ𝕣ⅈડ𝕥ꪑꪖડ🎅🏻ᐝ\n🎀⊹⍤❅圣诞氛围upʺ̤ ⋆·˚ ༘🪓", "🍎≽^•༚• ྀི≼🎄\n❆𝑀𝓮𝓇𝓇𝓎 𝒞𝒽𝓇𝒾𝓈𝓉𝓂𝒶𝓈 ͈🎅🏻🧣\n˗ˏˋ🎁般的𝟷𝟸月´ˎ˗", "🛷🎵 ᐅ|ııı|ıı|||ı ⁺₊ ⋆˚   𝑗𝑖𝑛𝑔𝑙𝑒 𝑏𝑒𝑙𝑙𝑠 🔔\n“圣诞是冬的来信 而你是我的惊喜”", "🎄•͈˽•͈🎄🎅🏻\n˚ ༘圣诞buff 好运叠满*.❅·", "🌲➕✨〓🎄\n𝐻𝑒𝑦 𝐷𝑒𝑐𝑒𝑚𝑏𝑒𝑟 *·°", "✩ 🎄 ₊˚ 🌨 ·˚ ₊🧣¯❆\n🎅🏻⊹🤶🏻｜十二月會有奇跡嗎ﾟ❅", "🌟𐌔𐌕𐌀☆   .ᐟ .ᐟ\n꙳⋆积攒許多星星 掛滿聖誕樹🎄", "⋆ ੯‧̀͡ᥬ⑅ྀི\\\\\\\\  𖤐*̩̩͙⸝⋆ᵕ̈ 𖠿𖥧𖥣｡🎄\n\\\\\\\"十二月 时而悦\\\\\\\".❅。", "ຼ₀₂₅.₁₂.₂₅˗ˋˏ❤️ˎˊ˗\n🍎「平安·喜樂」▸ 𝐿𝑢𝑐𝑘𝑦🎄", "✨“🔔”叮咚～", "🖍️²⁰²⁵/₁₂.₂₅ 𝑀𝑒𝑟𝑟𝑦 𝐶ℎ𝑟𝑖𝑠𝑡𝑚𝑎𝑠 🎄\n“希望你快乐 不止圣诞这一天🧣🦌”", "🛷“ 𝓜𝓮𝓻𝓻𝔂 𝓒𝓱𝓻𝓲𝓼𝓽𝓶𝓪𝓼 ” ✨\ǹ̗🎄屬於十二月的聖誕特輯🎅", "𝕄𝕖𝕣𝕣𝕪 ℂ𝕙𝕣𝕚𝕤𝕥𝕞𝕒𝕤\n🎄又是一年“金够败”🥺⛄", "🎅🪜⌒ ✧*+🅗🅔🅛🅛🅞°✧∽\n金够拜 金够拜 金够噢了喂🎅🪟🍾", "¹²🎄₂₅｜圣诞快樂 ♡(˃͈ દ ˂͈ ༶ )!", "*❄·°𝓘𝓷 𝓦𝓲𝓷𝓽𝓮𝓻·。❄·+\n🧑‍🎄贩卖圣诞气息🎅·❄🧸", "🎄🥳Ｈａｐｐｙ Ｔｉｍｅ🔔\n°✧请你参与我的圣诞.*·♪", "🎧🎶▶|||||||+·° jingle bells🔔\n“圣诞是冬的来信 而你是我的惊喜”", "🎀+*MERRY🦌°CHRISTMAS🍎\n“歲末將至 平安喜樂”", "🎄+✨=🎄Hey December *·°", "✨🔔叮咚～\n🎄对方与你发起圣诞共享 ／♥", "🧧²⁰²⁵/₁₂.₂₅Merry Christmas 🎄\n“希望你快乐 不止圣诞这一天 🧑‍🎄🦌", "🎧“𝔐𝔢𝔯𝔯𝔶 ℭ𝔥𝔯𝔦𝔰𝔱𝔪𝔞𝔰”✨、\n🎄屬於十二月的聖誕特輯🥺", "🎄🍎𝑴𝒆𝒓𝒓𝒚 𝑪𝒉𝒓𝒊𝒔𝒕𝒎𝒂𝒔·✧*\n✨幸福就像圣诞树顶的星星🎄", "✨🎄.:*🎀°☆.🦌.:*🍎", "嵗末將至，平安喜樂❥ »₂₀₂₅.₁₂.₂₅ ✎☽⋆", "🦌 ྀི ❅°🛷圣诞快乐", "༈·°与你 不止圣诞+♡", "✨向你发出圣诞邀请🔔🎅🎄·°*·🎶", "🦌〉²⁰²⁵·¹²·²⁵-🎄、\n-🍎「平安·喜樂」▶♣Lucky🧋", "🌟\n.★★..\n.★ ..★  ★ .. ★\n✨🎅Merry Christmas🎄\n★.★.★.★.★.★.★.★.✰  98%\n'★. ★''.★ '★. ★''.★ '★. ★''.★. ★''"],
   };
+  // Filter deleted
+  var deleted=[];try{deleted=JSON.parse(localStorage.getItem('qg_deleted_cards')||'[]');}catch(e){}
+  Object.keys(data).forEach(function(cat){
+    data[cat]=data[cat].filter(function(p){return deleted.indexOf(cat+':::'+p)<0;});
+    if(!data[cat].length)delete data[cat];
+  });
   // Merge custom cards
   Object.keys(customCards||{}).forEach(function(cat){
     if (data[cat]) {
@@ -1937,12 +1943,16 @@ var customCards = {}; // {category: [phrase, phrase, ...]}
 function delCardClick(el){
   var cat=el.dataset.cat;
   var cidx=parseInt(el.dataset.idx);
-  if(!customCards[cat]||cidx<0){toast('无法删除内置花字');return;}
-  var phrase=customCards[cat][cidx]||'';
+  if(!cat||cidx<0){toast('无法删除');return;}
+  var phrase='';
+  if(customCards[cat]){phrase=customCards[cat][cidx]||'';}
+  else{var builtin=getCardCats();if(builtin[cat])phrase=builtin[cat][cidx]||'';}
+  if(!phrase){toast('未找到该花字');return;}
   if(!confirm('删除这条花字：'+phrase.substring(0,30)+'…？'))return;
-  customCards[cat].splice(cidx,1);
-  if(!customCards[cat].length)delete customCards[cat];
-  saveCustomCards();
+  // Remove from custom
+  if(customCards[cat]){customCards[cat].splice(cidx,1);if(!customCards[cat].length)delete customCards[cat];saveCustomCards();}
+  // For built-in, add to blacklist
+  if(!customCards[cat]){var del=JSON.parse(localStorage.getItem('qg_deleted_cards')||'[]');del.push(cat+':::'+phrase);localStorage.setItem('qg_deleted_cards',JSON.stringify(del));}
   renderCardLib();
   toast('🗑 已删除');
 }
