@@ -1940,7 +1940,7 @@ function getFruitBase(){
 var customCards = {}; // {category: [phrase, phrase, ...]}
 
 
-function delCardClick(el){
+function delCardClick(el){console.log("DEL",el.dataset.cat,decodeURIComponent(el.dataset.idx||"").substring(0,30));
   var cat=el.dataset.cat;
   var phrase=decodeURIComponent(el.dataset.idx); // Now stores the actual phrase
   if(!cat||!phrase){toast('无法删除');return;}
