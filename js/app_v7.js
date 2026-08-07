@@ -1877,7 +1877,7 @@ function getCardCats(){
   // Filter deleted
   var deleted=[];try{deleted=JSON.parse(localStorage.getItem('qg_deleted_cards')||'[]');}catch(e){}
   Object.keys(data).forEach(function(cat){
-    data[cat]=data[cat].filter(function(p){return deleted.indexOf(cat+':::'+p)<0;});
+    data[cat]=data[cat].filter(function(p){var key=cat+':::'+p;return deleted.indexOf(key)<0;});
     if(!data[cat].length)delete data[cat];
   });
   // Merge custom cards
@@ -1940,7 +1940,7 @@ function getFruitBase(){
 var customCards = {}; // {category: [phrase, phrase, ...]}
 
 
-function delCardClick(el){console.log("DEL",el.dataset.cat,decodeURIComponent(el.dataset.idx||"").substring(0,30));
+function delCardClick(el){
   var cat=el.dataset.cat;
   var phrase=decodeURIComponent(el.dataset.idx); // Now stores the actual phrase
   if(!cat||!phrase){toast('无法删除');return;}
