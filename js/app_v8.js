@@ -1963,7 +1963,7 @@ function saveCustomCard(){
   var text = document.getElementById('cardText').value.trim();
   if (!text) { toast('请输入花字内容'); return; }
   
-  var phrases = text.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+  var phrases = [text.trim()];
   if (!phrases.length) { toast('请输入花字内容'); return; }
   
   if (!customCards[cat]) customCards[cat] = [];
@@ -1971,7 +1971,7 @@ function saveCustomCard(){
   saveCustomCards();
   
   document.getElementById('cardModal').style.display = 'none';
-  toast('✅ 已添加 '+phrases.length+' 条');
+  toast('✅ 已添加');
   
   // Re-render
   if (inspTab === 'card') renderCardLib();
