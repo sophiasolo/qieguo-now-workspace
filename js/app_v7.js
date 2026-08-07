@@ -1942,17 +1942,22 @@ var customCards = {}; // {category: [phrase, phrase, ...]}
 
 function delCardClick(el){
   var cat=el.dataset.cat;
-  var cidx=parseInt(el.dataset.idx);
-  if(!cat||cidx<0){toast('无法删除');return;}
-  var phrase='';
-  if(customCards[cat]){phrase=customCards[cat][cidx]||'';}
-  else{var builtin=getCardCats();if(builtin[cat])phrase=builtin[cat][cidx]||'';}
-  if(!phrase){toast('未找到该花字');return;}
+  var phrase=el.dataset.idx; // Now stores the actual phrase
+  if(!cat||!phrase){toast('无法删除');return;}
+  var found=false;
   if(!confirm('删除这条花字：'+phrase.substring(0,30)+'…？'))return;
-  // Remove from custom
-  if(customCards[cat]){customCards[cat].splice(cidx,1);if(!customCards[cat].length)delete customCards[cat];saveCustomCards();}
-  // For built-in, add to blacklist
-  if(!customCards[cat]){var del=JSON.parse(localStorage.getItem('qg_deleted_cards')||'[]');del.push(cat+':::'+phrase);localStorage.setItem('qg_deleted_cards',JSON.stringify(del));}
+  // Remove from customCards
+  if(customCards[cat]){
+    var ci=customCards[cat].indexOf(phrase);
+    if(ci>=0){customCards[cat].splice(ci,1);if(!customCards[cat].length)delete customCards[cat];found=true;}
+  }
+  // For built-in (or if not in custom), add to blacklist
+  if(!found){
+    var del=JSON.parse(localStorage.getItem('qg_deleted_cards')||'[]');
+    del.push(cat+':::'+phrase);
+    localStorage.setItem('qg_deleted_cards',JSON.stringify(del));
+  }
+  saveCustomCards();
   renderCardLib();
   toast('🗑 已删除');
 }
