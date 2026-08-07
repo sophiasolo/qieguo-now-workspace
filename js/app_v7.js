@@ -1858,7 +1858,7 @@ function filterCards(cat,el){
   all.forEach(function(item){
     var p=item.phrase;
     if(!p.trim())return; if(p.trim().length<2)return;
-      html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'<span onclick="event.stopPropagation();delCardClick(this)" data-cat="'+item.cat+'" data-phrase="'+p.replace(/\"/g,'&quot;')+'" style="position:absolute;top:2px;right:4px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25" title="删除自定义花字">🗑</span></div>';
+      html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'<span onclick="event.stopPropagation();delCardClick(this)" data-cat="'+item.cat+'" data-idx="'+customCards[item.cat].indexOf(p)+'" style="position:absolute;top:2px;right:4px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25" title="删除自定义花字">🗑</span></div>';
  });
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
 }
@@ -1927,10 +1927,9 @@ var customCards = {}; // {category: [phrase, phrase, ...]}
 
 function delCardClick(el){
   var cat=el.dataset.cat;
-  var phrase=el.dataset.phrase;
-  if(!customCards[cat]){toast('无法删除内置花字');return;}
-  var cidx=customCards[cat].indexOf(phrase);
-  if(cidx<0){toast('未找到该花字');return;}
+  var cidx=parseInt(el.dataset.idx);
+  if(!customCards[cat]||cidx<0){toast('无法删除内置花字');return;}
+  var phrase=customCards[cat][cidx]||'';
   if(!confirm('删除这条花字：'+phrase.substring(0,30)+'…？'))return;
   customCards[cat].splice(cidx,1);
   if(!customCards[cat].length)delete customCards[cat];
