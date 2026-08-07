@@ -1,392 +1,84 @@
 {
-  "meta": {
-    "updated": "2026-08-06 12:07:16",
-    "source": "百度热搜 + 微博热搜",
-    "baidu_count": 30,
-    "weibo_count": 20,
-    "total": 50
+  "update_time": "2026-08-07",
+  "total_items": 47,
+  "platforms": {
+    "baidu": {
+      "name": "百度热搜",
+      "count": 30,
+      "items": [
+        {"rank": 1, "title": "把党建设得更加坚强有力", "heat": 7904075, "category": "政策党建", "search_url": "https://www.baidu.com/s?wd=把党建设得更加坚强有力"},
+        {"rank": 2, "title": "今年是\"闭眼秋\"", "heat": 7809607, "category": "生活健康", "search_url": "https://www.baidu.com/s?wd=今年是闭眼秋"},
+        {"rank": 3, "title": "公司\"上四休三\"但要降薪1000元", "heat": 7713591, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=公司上四休三但要降薪1000元"},
+        {"rank": 4, "title": "打破国外垄断！中国重磅科技集中上新", "heat": 7619466, "category": "科技财经", "search_url": "https://www.baidu.com/s?wd=打破国外垄断中国重磅科技集中上新"},
+        {"rank": 5, "title": "越来越多高分考生放弃985选警校", "heat": 7519668, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=越来越多高分考生放弃985选警校"},
+        {"rank": 6, "title": "1岁宝宝碰坏纸巾盒 宝妈被索赔924元", "heat": 7426466, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=1岁宝宝碰坏纸巾盒宝妈被索赔924元"},
+        {"rank": 7, "title": "女子开一天一夜空调后二氧化碳中毒", "heat": 7333028, "category": "生活健康", "search_url": "https://www.baidu.com/s?wd=女子开一天一夜空调后二氧化碳中毒"},
+        {"rank": 8, "title": "台风白海豚体型变大近似13个浙江面积", "heat": 7233732, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=台风白海豚体型变大近似13个浙江面积"},
+        {"rank": 9, "title": "日本网红自杀案在韩国引发很大冲击", "heat": 7136709, "category": "国际时事", "search_url": "https://www.baidu.com/s?wd=日本网红自杀案在韩国引发很大冲击"},
+        {"rank": 10, "title": "父亲劝读师范 女儿偏要考北大", "heat": 7045878, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=父亲劝读师范女儿偏要考北大"},
+        {"rank": 11, "title": "泸溪河：桃酥吃出金属牙冠视频不实", "heat": 6852957, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=泸溪河桃酥吃出金属牙冠视频不实"},
+        {"rank": 12, "title": "\"空调24小时开着更省电\"不实", "heat": 6761661, "category": "生活健康", "search_url": "https://www.baidu.com/s?wd=空调24小时开着更省电不实"},
+        {"rank": 13, "title": "玲花累到不停喝水 曾毅闲到玩猜拳", "heat": 6666943, "category": "娱乐影视", "search_url": "https://www.baidu.com/s?wd=玲花累到不停喝水曾毅闲到玩猜拳"},
+        {"rank": 14, "title": "47岁妈妈突然产女 26岁女儿：很震惊", "heat": 6568257, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=47岁妈妈突然产女26岁女儿很震惊"},
+        {"rank": 15, "title": "27岁女子成组织卖淫集团主犯被通缉", "heat": 6463677, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=27岁女子成组织卖淫集团主犯被通缉"},
+        {"rank": 16, "title": "今日立秋", "heat": 6377534, "category": "生活健康", "search_url": "https://www.baidu.com/s?wd=今日立秋"},
+        {"rank": 17, "title": "夫妻花式晒证展示门当户对", "heat": 6282053, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=夫妻花式晒证展示门当户对"},
+        {"rank": 18, "title": "为何年轻人不愿学医了", "heat": 6181788, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=为何年轻人不愿学医了"},
+        {"rank": 19, "title": "华东要吹\"白海豚牌空调外机\"了", "heat": 6085028, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=华东要吹白海豚牌空调外机了"},
+        {"rank": 20, "title": "男子结婚8年3个女儿均非亲生", "heat": 5996983, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=男子结婚8年3个女儿均非亲生"},
+        {"rank": 21, "title": "你最想去看谁的演唱会", "heat": 5891380, "category": "娱乐影视", "search_url": "https://www.baidu.com/s?wd=你最想去看谁的演唱会"},
+        {"rank": 22, "title": "台风白海豚云系庞大面积堪比东三省", "heat": 5792505, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=台风白海豚云系庞大面积堪比东三省"},
+        {"rank": 23, "title": "翁虹想演《功夫女足2》角色都想好了", "heat": 5711091, "category": "娱乐影视", "search_url": "https://www.baidu.com/s?wd=翁虹想演功夫女足2角色都想好了"},
+        {"rank": 24, "title": "Meta被判支付5.67亿美元", "heat": 5606163, "category": "科技财经", "search_url": "https://www.baidu.com/s?wd=Meta被判支付5.67亿美元"},
+        {"rank": 25, "title": "男子杀人后逃进深山21年活得像野人", "heat": 5519465, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=男子杀人后逃进深山21年活得像野人"},
+        {"rank": 26, "title": "立秋冷知识", "heat": 5420617, "category": "生活健康", "search_url": "https://www.baidu.com/s?wd=立秋冷知识"},
+        {"rank": 27, "title": "金价反弹", "heat": 5319446, "category": "科技财经", "search_url": "https://www.baidu.com/s?wd=金价反弹"},
+        {"rank": 28, "title": "秋天的第一杯奶茶安排上了吗", "heat": 5241330, "category": "生活健康", "search_url": "https://www.baidu.com/s?wd=秋天的第一杯奶茶安排上了吗"},
+        {"rank": 29, "title": "国内首款方盒子大六座SUV卖爆了", "heat": 5137391, "category": "科技财经", "search_url": "https://www.baidu.com/s?wd=国内首款方盒子大六座SUV卖爆了"},
+        {"rank": 30, "title": "母亲骗女儿去漫展后送进如是书院", "heat": 5042256, "category": "社会民生", "search_url": "https://www.baidu.com/s?wd=母亲骗女儿去漫展后送进如是书院"}
+      ]
+    },
+    "weibo": {
+      "name": "微博热搜",
+      "count": 20,
+      "items": [
+        {"rank": 1, "title": "泸溪河牙冠事件消费者已致歉", "heat": 2308004, "category": "社会民生", "search_url": "https://s.weibo.com/weibo?q=泸溪河牙冠事件消费者已致歉"},
+        {"rank": 2, "title": "泸溪河金属牙冠事件调查结果", "heat": 1753686, "category": "社会民生", "search_url": "https://s.weibo.com/weibo?q=泸溪河金属牙冠事件调查结果"},
+        {"rank": 3, "title": "秋天第1个节气", "heat": 1638402, "category": "生活健康", "search_url": "https://s.weibo.com/weibo?q=秋天第1个节气"},
+        {"rank": 4, "title": "于适 平儿都长这么大了", "heat": 1601298, "category": "娱乐影视", "search_url": "https://s.weibo.com/weibo?q=于适平儿都长这么大了"},
+        {"rank": 5, "title": "1岁宝宝碰坏纸巾盒三亚酒店索赔924元", "heat": 1478126, "category": "社会民生", "search_url": "https://s.weibo.com/weibo?q=1岁宝宝碰坏纸巾盒三亚酒店索赔924元"},
+        {"rank": 6, "title": "央视网评银行午休", "heat": 1283375, "category": "社会民生", "search_url": "https://s.weibo.com/weibo?q=央视网评银行午休"},
+        {"rank": 7, "title": "张雅琪中餐厅早上读英语", "heat": 976516, "category": "娱乐影视", "search_url": "https://s.weibo.com/weibo?q=张雅琪中餐厅早上读英语"},
+        {"rank": 8, "title": "今年是闭眼秋", "heat": 780128, "category": "生活健康", "search_url": "https://s.weibo.com/weibo?q=今年是闭眼秋"},
+        {"rank": 9, "title": "空调效果可视化了", "heat": 772444, "category": "生活健康", "search_url": "https://s.weibo.com/weibo?q=空调效果可视化了"},
+        {"rank": 10, "title": "韩国被爆性贿赂世预赛裁判", "heat": 766580, "category": "国际时事", "search_url": "https://s.weibo.com/weibo?q=韩国被爆性贿赂世预赛裁判"},
+        {"rank": 11, "title": "王楚钦还是个起名天才", "heat": 758287, "category": "娱乐影视", "search_url": "https://s.weibo.com/weibo?q=王楚钦还是个起名天才"},
+        {"rank": 12, "title": "Mina同学发声", "heat": 751280, "category": "娱乐影视", "search_url": "https://s.weibo.com/weibo?q=Mina同学发声"},
+        {"rank": 13, "title": "两儿子同患自毁容貌症妈妈说天塌了", "heat": 747953, "category": "社会民生", "search_url": "https://s.weibo.com/weibo?q=两儿子同患自毁容貌症妈妈说天塌了"},
+        {"rank": 14, "title": "iPhone18Pro十二大升级", "heat": 736240, "category": "科技财经", "search_url": "https://s.weibo.com/weibo?q=iPhone18Pro十二大升级"},
+        {"rank": 15, "title": "王垲智向侯卓成致歉", "heat": 733909, "category": "娱乐影视", "search_url": "https://s.weibo.com/weibo?q=王垲智向侯卓成致歉"},
+        {"rank": 16, "title": "粉笔公告自曝决策失误", "heat": 643916, "category": "科技财经", "search_url": "https://s.weibo.com/weibo?q=粉笔公告自曝决策失误"},
+        {"rank": 17, "title": "伊能静自曝不太想录妻旅", "heat": 629812, "category": "娱乐影视", "search_url": "https://s.weibo.com/weibo?q=伊能静自曝不太想录妻旅"},
+        {"rank": 18, "title": "结婚8年3娃非亲生司法鉴定已出", "heat": 530807, "category": "社会民生", "search_url": "https://s.weibo.com/weibo?q=结婚8年3娃非亲生司法鉴定已出"},
+        {"rank": 19, "title": "人活着是为了感受幸福的", "heat": 529393, "category": "生活健康", "search_url": "https://s.weibo.com/weibo?q=人活着是为了感受幸福的"},
+        {"rank": 20, "title": "美国科学家首次用AI设计出病毒", "heat": 480311, "category": "科技财经", "search_url": "https://s.weibo.com/weibo?q=美国科学家首次用AI设计出病毒"}
+      ]
+    }
   },
-  "baidu": [
-    {
-      "rank": 1,
-      "title": "如何把百年大党建设得更加坚强有力",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%A6%82%E4%BD%95%E6%8A%8A%E7%99%BE%E5%B9%B4%E5%A4%A7%E5%85%9A%E5%BB%BA%E8%AE%BE%E5%BE%97%E6%9B%B4%E5%8A%A0%E5%9D%9A%E5%BC%BA%E6%9C%89%E5%8A%9B",
-      "category": "时政"
-    },
-    {
-      "rank": 2,
-      "title": "广东或将迎来“空调外机”",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%B9%BF%E4%B8%9C%E6%88%96%E5%B0%86%E8%BF%8E%E6%9D%A5%E2%80%9C%E7%A9%BA%E8%B0%83%E5%A4%96%E6%9C%BA%E2%80%9D",
-      "category": "其他"
-    },
-    {
-      "rank": 3,
-      "title": "BBA降价也卖不动",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=BBA%E9%99%8D%E4%BB%B7%E4%B9%9F%E5%8D%96%E4%B8%8D%E5%8A%A8",
-      "category": "财经"
-    },
-    {
-      "rank": 4,
-      "title": "西方Z世代为何开始“粉”中国",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E8%A5%BF%E6%96%B9Z%E4%B8%96%E4%BB%A3%E4%B8%BA%E4%BD%95%E5%BC%80%E5%A7%8B%E2%80%9C%E7%B2%89%E2%80%9D%E4%B8%AD%E5%9B%BD",
-      "category": "其他"
-    },
-    {
-      "rank": 5,
-      "title": "汕头市政府被约谈",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E6%B1%95%E5%A4%B4%E5%B8%82%E6%94%BF%E5%BA%9C%E8%A2%AB%E7%BA%A6%E8%B0%88",
-      "category": "时政"
-    },
-    {
-      "rank": 6,
-      "title": "DeepSeek API即将大幅涨价",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=DeepSeek+API%E5%8D%B3%E5%B0%86%E5%A4%A7%E5%B9%85%E6%B6%A8%E4%BB%B7",
-      "category": "科技"
-    },
-    {
-      "rank": 7,
-      "title": "董路致歉：泰国10岁黑人父母是伪造的",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E8%91%A3%E8%B7%AF%E8%87%B4%E6%AD%89%EF%BC%9A%E6%B3%B0%E5%9B%BD10%E5%B2%81%E9%BB%91%E4%BA%BA%E7%88%B6%E6%AF%8D%E6%98%AF%E4%BC%AA%E9%80%A0%E7%9A%84",
-      "category": "其他"
-    },
-    {
-      "rank": 8,
-      "title": "姆巴佩官宣恋情",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%A7%86%E5%B7%B4%E4%BD%A9%E5%AE%98%E5%AE%A3%E6%81%8B%E6%83%85",
-      "category": "娱乐"
-    },
-    {
-      "rank": 9,
-      "title": "山东财大教授刘海明逝世 终年38岁",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%B1%B1%E4%B8%9C%E8%B4%A2%E5%A4%A7%E6%95%99%E6%8E%88%E5%88%98%E6%B5%B7%E6%98%8E%E9%80%9D%E4%B8%96+%E7%BB%88%E5%B9%B438%E5%B2%81",
-      "category": "社会"
-    },
-    {
-      "rank": 10,
-      "title": "多专业取消艺考 文化工作者要有文化",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%A4%9A%E4%B8%93%E4%B8%9A%E5%8F%96%E6%B6%88%E8%89%BA%E8%80%83+%E6%96%87%E5%8C%96%E5%B7%A5%E4%BD%9C%E8%80%85%E8%A6%81%E6%9C%89%E6%96%87%E5%8C%96",
-      "category": "教育"
-    },
-    {
-      "rank": 11,
-      "title": "逃犯看演唱会 刚出地铁就被逮住",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E9%80%83%E7%8A%AF%E7%9C%8B%E6%BC%94%E5%94%B1%E4%BC%9A+%E5%88%9A%E5%87%BA%E5%9C%B0%E9%93%81%E5%B0%B1%E8%A2%AB%E9%80%AE%E4%BD%8F",
-      "category": "娱乐"
-    },
-    {
-      "rank": 12,
-      "title": "事关医保 这些谣言千万别信",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E4%BA%8B%E5%85%B3%E5%8C%BB%E4%BF%9D+%E8%BF%99%E4%BA%9B%E8%B0%A3%E8%A8%80%E5%8D%83%E4%B8%87%E5%88%AB%E4%BF%A1",
-      "category": "时政"
-    },
-    {
-      "rank": 13,
-      "title": "死刑改死缓当事人：已付出沉重代价",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E6%AD%BB%E5%88%91%E6%94%B9%E6%AD%BB%E7%BC%93%E5%BD%93%E4%BA%8B%E4%BA%BA%EF%BC%9A%E5%B7%B2%E4%BB%98%E5%87%BA%E6%B2%89%E9%87%8D%E4%BB%A3%E4%BB%B7",
-      "category": "时政"
-    },
-    {
-      "rank": 14,
-      "title": "小车被劝退23秒后塌方",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%B0%8F%E8%BD%A6%E8%A2%AB%E5%8A%9D%E9%80%8023%E7%A7%92%E5%90%8E%E5%A1%8C%E6%96%B9",
-      "category": "社会"
-    },
-    {
-      "rank": 15,
-      "title": "5人捅马蜂窝意外闹出人命：担责30%",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=5%E4%BA%BA%E6%8D%85%E9%A9%AC%E8%9C%82%E7%AA%9D%E6%84%8F%E5%A4%96%E9%97%B9%E5%87%BA%E4%BA%BA%E5%91%BD%EF%BC%9A%E6%8B%85%E8%B4%A330%25",
-      "category": "社会"
-    },
-    {
-      "rank": 16,
-      "title": "孩子吵闹2小时乘客叹气反被家长怼",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%AD%A9%E5%AD%90%E5%90%B5%E9%97%B92%E5%B0%8F%E6%97%B6%E4%B9%98%E5%AE%A2%E5%8F%B9%E6%B0%94%E5%8F%8D%E8%A2%AB%E5%AE%B6%E9%95%BF%E6%80%BC",
-      "category": "生活"
-    },
-    {
-      "rank": 17,
-      "title": "狗狗突然离世引来同伴围绕哀嚎",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E7%8B%97%E7%8B%97%E7%AA%81%E7%84%B6%E7%A6%BB%E4%B8%96%E5%BC%95%E6%9D%A5%E5%90%8C%E4%BC%B4%E5%9B%B4%E7%BB%95%E5%93%80%E5%9A%8E",
-      "category": "生活"
-    },
-    {
-      "rank": 18,
-      "title": "“婚外胚胎案”原配与第三者当面对质",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E2%80%9C%E5%A9%9A%E5%A4%96%E8%83%9A%E8%83%8E%E6%A1%88%E2%80%9D%E5%8E%9F%E9%85%8D%E4%B8%8E%E7%AC%AC%E4%B8%89%E8%80%85%E5%BD%93%E9%9D%A2%E5%AF%B9%E8%B4%A8",
-      "category": "其他"
-    },
-    {
-      "rank": 19,
-      "title": "美国退回1000亿美元关税",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E7%BE%8E%E5%9B%BD%E9%80%80%E5%9B%9E1000%E4%BA%BF%E7%BE%8E%E5%85%83%E5%85%B3%E7%A8%8E",
-      "category": "时政"
-    },
-    {
-      "rank": 20,
-      "title": "梅姨案受害者：记住“谢家梅”一辈子",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E6%A2%85%E5%A7%A8%E6%A1%88%E5%8F%97%E5%AE%B3%E8%80%85%EF%BC%9A%E8%AE%B0%E4%BD%8F%E2%80%9C%E8%B0%A2%E5%AE%B6%E6%A2%85%E2%80%9D%E4%B8%80%E8%BE%88%E5%AD%90",
-      "category": "其他"
-    },
-    {
-      "rank": 21,
-      "title": "走失老人在父母墓地被找到：想看爸妈",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E8%B5%B0%E5%A4%B1%E8%80%81%E4%BA%BA%E5%9C%A8%E7%88%B6%E6%AF%8D%E5%A2%93%E5%9C%B0%E8%A2%AB%E6%89%BE%E5%88%B0%EF%BC%9A%E6%83%B3%E7%9C%8B%E7%88%B8%E5%A6%88",
-      "category": "生活"
-    },
-    {
-      "rank": 22,
-      "title": "日本女网红在韩国直播时自杀身亡",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E6%97%A5%E6%9C%AC%E5%A5%B3%E7%BD%91%E7%BA%A2%E5%9C%A8%E9%9F%A9%E5%9B%BD%E7%9B%B4%E6%92%AD%E6%97%B6%E8%87%AA%E6%9D%80%E8%BA%AB%E4%BA%A1",
-      "category": "娱乐"
-    },
-    {
-      "rank": 23,
-      "title": "“银行午休1.5小时”留个窗口行不行",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E2%80%9C%E9%93%B6%E8%A1%8C%E5%8D%88%E4%BC%911.5%E5%B0%8F%E6%97%B6%E2%80%9D%E7%95%99%E4%B8%AA%E7%AA%97%E5%8F%A3%E8%A1%8C%E4%B8%8D%E8%A1%8C",
-      "category": "其他"
-    },
-    {
-      "rank": 24,
-      "title": "国际名校扎堆来中国",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%9B%BD%E9%99%85%E5%90%8D%E6%A0%A1%E6%89%8E%E5%A0%86%E6%9D%A5%E4%B8%AD%E5%9B%BD",
-      "category": "教育"
-    },
-    {
-      "rank": 25,
-      "title": "骗走200万元后男子躲进深山13年",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E9%AA%97%E8%B5%B0200%E4%B8%87%E5%85%83%E5%90%8E%E7%94%B7%E5%AD%90%E8%BA%B2%E8%BF%9B%E6%B7%B1%E5%B1%B113%E5%B9%B4",
-      "category": "财经"
-    },
-    {
-      "rank": 26,
-      "title": "周杰伦公司：相关网络传闻均不实",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E5%91%A8%E6%9D%B0%E4%BC%A6%E5%85%AC%E5%8F%B8%EF%BC%9A%E7%9B%B8%E5%85%B3%E7%BD%91%E7%BB%9C%E4%BC%A0%E9%97%BB%E5%9D%87%E4%B8%8D%E5%AE%9E",
-      "category": "娱乐"
-    },
-    {
-      "rank": 27,
-      "title": "高中生做的真人恋爱游戏爆火",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E9%AB%98%E4%B8%AD%E7%94%9F%E5%81%9A%E7%9A%84%E7%9C%9F%E4%BA%BA%E6%81%8B%E7%88%B1%E6%B8%B8%E6%88%8F%E7%88%86%E7%81%AB",
-      "category": "娱乐"
-    },
-    {
-      "rank": 28,
-      "title": "“梅姨”死刑或适用受限",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E2%80%9C%E6%A2%85%E5%A7%A8%E2%80%9D%E6%AD%BB%E5%88%91%E6%88%96%E9%80%82%E7%94%A8%E5%8F%97%E9%99%90",
-      "category": "时政"
-    },
-    {
-      "rank": 29,
-      "title": "顾客结账把钱扔地上 服务员霸气扔回",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E9%A1%BE%E5%AE%A2%E7%BB%93%E8%B4%A6%E6%8A%8A%E9%92%B1%E6%89%94%E5%9C%B0%E4%B8%8A+%E6%9C%8D%E5%8A%A1%E5%91%98%E9%9C%B8%E6%B0%94%E6%89%94%E5%9B%9E",
-      "category": "其他"
-    },
-    {
-      "rank": 30,
-      "title": "杭州一小区17楼玻璃幕墙爆裂",
-      "platform": "baidu",
-      "link": "https://www.baidu.com/s?wd=%E6%9D%AD%E5%B7%9E%E4%B8%80%E5%B0%8F%E5%8C%BA17%E6%A5%BC%E7%8E%BB%E7%92%83%E5%B9%95%E5%A2%99%E7%88%86%E8%A3%82",
-      "category": "社会"
-    }
+  "cross_platform_hits": [
+    {"topic": "泸溪河牙冠事件", "baidu_rank": 11, "weibo_ranks": [1, 2], "note": "双平台均上榜，微博多条相关热搜"},
+    {"topic": "1岁宝宝碰坏纸巾盒被索赔", "baidu_rank": 6, "weibo_rank": 5, "note": "双平台同时上榜"},
+    {"topic": "今年闭眼秋/立秋", "baidu_ranks": [2, 16, 26], "weibo_ranks": [3, 8], "note": "立秋相关话题双平台多条目上榜"},
+    {"topic": "结婚8年3娃非亲生", "baidu_rank": 20, "weibo_rank": 18, "note": "双平台同时上榜"},
+    {"topic": "女子开空调二氧化碳中毒", "baidu_rank": 7, "weibo_rank": 33, "note": "百度高位上榜，微博也有热度"},
+    {"topic": "47岁妈妈产女", "baidu_rank": 14, "weibo_ranks": [37, 44], "note": "双平台均有相关话题"}
   ],
-  "weibo": [
-    {
-      "rank": 1,
-      "title": "周五下午弹性离岗",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=周五下午弹性离岗",
-      "category": "其他",
-      "heat": 1173933
-    },
-    {
-      "rank": 2,
-      "title": "被梅姨拐卖者称已被养父母删除",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=被梅姨拐卖者称已被养父母删除",
-      "category": "其他",
-      "heat": 897028
-    },
-    {
-      "rank": 3,
-      "title": "数据看中国智造硬核实力",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=数据看中国智造硬核实力",
-      "category": "科技",
-      "heat": 683255
-    },
-    {
-      "rank": 4,
-      "title": "田曦薇连续16部铁刘海剧",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=田曦薇连续16部铁刘海剧",
-      "category": "娱乐",
-      "heat": 682050
-    },
-    {
-      "rank": 5,
-      "title": "大白兔奶糖的包装纸火了",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=大白兔奶糖的包装纸火了",
-      "category": "生活",
-      "heat": 673835
-    },
-    {
-      "rank": 6,
-      "title": "姆巴佩新女友是西班牙顶流女星",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=姆巴佩新女友是西班牙顶流女星",
-      "category": "娱乐",
-      "heat": 663088
-    },
-    {
-      "rank": 7,
-      "title": "DeepSeek计划大幅涨价",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=DeepSeek计划大幅涨价",
-      "category": "科技",
-      "heat": 654790
-    },
-    {
-      "rank": 8,
-      "title": "婚外胚胎案父亲已10个月没见过女儿",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=婚外胚胎案父亲已10个月没见过女儿",
-      "category": "其他",
-      "heat": 649061
-    },
-    {
-      "rank": 9,
-      "title": "舒畅演短剧有种降维打击的感觉",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=舒畅演短剧有种降维打击的感觉",
-      "category": "娱乐",
-      "heat": 642617
-    },
-    {
-      "rank": 10,
-      "title": "理想i8发布",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=理想i8发布",
-      "category": "科技",
-      "heat": 632579
-    },
-    {
-      "rank": 11,
-      "title": "张雅琪中餐厅海报被改",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=张雅琪中餐厅海报被改",
-      "category": "其他",
-      "heat": 625646
-    },
-    {
-      "rank": 12,
-      "title": "TFBOYS换置顶",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=TFBOYS换置顶",
-      "category": "其他",
-      "heat": 622850
-    },
-    {
-      "rank": 13,
-      "title": "为什么年轻人更容易疲惫",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=为什么年轻人更容易疲惫",
-      "category": "其他",
-      "heat": 615769
-    },
-    {
-      "rank": 14,
-      "title": "白鹿方持续全网取证",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=白鹿方持续全网取证",
-      "category": "其他",
-      "heat": 508716
-    },
-    {
-      "rank": 15,
-      "title": "曝侯明昊违反交规被约谈",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=曝侯明昊违反交规被约谈",
-      "category": "时政",
-      "heat": 412013
-    },
-    {
-      "rank": 16,
-      "title": "因凡蒂诺道歉",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=因凡蒂诺道歉",
-      "category": "其他",
-      "heat": 410483
-    },
-    {
-      "rank": 17,
-      "title": "周杰伦方回应传闻",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=周杰伦方回应传闻",
-      "category": "娱乐",
-      "heat": 409733
-    },
-    {
-      "rank": 18,
-      "title": "金银狂飙原因",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=金银狂飙原因",
-      "category": "其他",
-      "heat": 406228
-    },
-    {
-      "rank": 19,
-      "title": "Chatgpt你在自己搜什么呢",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=Chatgpt你在自己搜什么呢",
-      "category": "其他",
-      "heat": 404697
-    },
-    {
-      "rank": 20,
-      "title": "要领导带头休假是大家不想休吗",
-      "platform": "weibo",
-      "link": "https://s.weibo.com/weibo?q=要领导带头休假是大家不想休吗",
-      "category": "其他",
-      "heat": 403402
-    }
-  ],
-  "cross_platform_duplicates": [
-    {
-      "baidu_rank": 6,
-      "weibo_rank": 7,
-      "title": "DeepSeek API即将大幅涨价",
-      "baidu_link": "https://www.baidu.com/s?wd=DeepSeek+API%E5%8D%B3%E5%B0%86%E5%A4%A7%E5%B9%85%E6%B6%A8%E4%BB%B7",
-      "weibo_link": "https://s.weibo.com/weibo?q=DeepSeek计划大幅涨价"
-    }
-  ]
+  "category_summary": {
+    "社会民生": 19,
+    "娱乐影视": 11,
+    "生活健康": 8,
+    "科技财经": 7,
+    "国际时事": 2,
+    "政策党建": 1
+  }
 }
