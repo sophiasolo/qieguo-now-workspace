@@ -1,807 +1,351 @@
 {
-  "updated": "2026-07-28T12:31:27.129632",
-  "source": "点单平台订单明细表-2026-07-22.xls",
-  "total_products": 170,
+  "updated": "2026-08-03T13:03:04.616372",
+  "source": "点单平台订单明细表-2026-07-27.xls",
+  "total_products": 141,
   "categories": [
-    "📦 经典果切",
-    "🥗 拼盘套餐",
     "🆕 网红创新",
-    "🔥 引流爆品",
     "🎯 当家爆款",
-    "💎 高客单"
+    "💎 高客单",
+    "📦 经典果切",
+    "🔥 引流爆品",
+    "🥗 拼盘套餐"
   ],
   "items": [
     {
       "name": "【冰镇】一斤西瓜吃到爽",
       "spec": "500g",
-      "price": 9.9,
-      "sales": 4368,
-      "orders": 4001,
+      "price": 8.8,
+      "sales": 1256,
+      "orders": 1135,
       "category": "🔥 引流爆品"
     },
     {
       "name": "【乐享桶】霸气西瓜桶",
       "spec": "含桶约1000g",
-      "price": 19.8,
-      "sales": 1750,
-      "orders": 1623,
+      "price": 15.8,
+      "sales": 386,
+      "orders": 363,
       "category": "🎯 当家爆款"
     },
     {
-      "name": "【冰镇】凤梨果切",
-      "spec": "250g",
-      "price": 12.8,
-      "sales": 1023,
-      "orders": 964,
+      "name": "【半个西瓜】麒麟西瓜3-3.5斤",
+      "spec": ".",
+      "price": 15.8,
+      "sales": 283,
+      "orders": 267,
       "category": "📦 经典果切"
     },
     {
-      "name": "【自选3盒】超值果切套餐",
-      "spec": "1150g",
-      "price": 33.8,
-      "sales": 1021,
-      "orders": 921,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【三拼】西瓜+哈密瓜+甜瓜",
-      "spec": "350g",
-      "price": 13.8,
-      "sales": 897,
-      "orders": 694,
-      "category": "🔥 引流爆品"
-    },
-    {
-      "name": "【自选5种水果】豪华单人果盒",
+      "name": "【酸嘢拼拼】豪华单人果盒",
       "spec": "约500g",
-      "price": 18.8,
-      "sales": 833,
-      "orders": 776,
+      "price": 16.8,
+      "sales": 269,
+      "orders": 247,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【四拼】羊角蜜+橙子+甜瓜+西瓜",
+      "spec": "600g",
+      "price": 17.8,
+      "sales": 252,
+      "orders": 158,
       "category": "🥗 拼盘套餐"
     },
     {
-      "name": "【组合】半斤冰镇西瓜+半斤冰镇凤梨",
-      "spec": "500g",
-      "price": 15.8,
-      "sales": 803,
-      "orders": 738,
-      "category": "🥗 拼盘套餐"
+      "name": "【果切】芒果",
+      "spec": "250g",
+      "price": 10.8,
+      "sales": 230,
+      "orders": 226,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【冰镇】霸气西瓜桶",
+      "spec": "含桶约1000g",
+      "price": 14.8,
+      "sales": 226,
+      "orders": 220,
+      "category": "📦 经典果切"
     },
     {
       "name": "【天作之合】凤梨乌梅+乌梅小番茄",
       "spec": "350g",
       "price": 14.8,
-      "sales": 797,
-      "orders": 756,
+      "sales": 219,
+      "orders": 208,
       "category": "🆕 网红创新"
+    },
+    {
+      "name": "【冰镇】哈密瓜",
+      "spec": "250g",
+      "price": 7.8,
+      "sales": 210,
+      "orders": 198,
+      "category": "🔥 引流爆品"
     },
     {
       "name": "【三拼】桃子（易氧化）+芒果+西瓜",
       "spec": "350g",
       "price": 14.8,
-      "sales": 792,
-      "orders": 676,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【冰镇】哈密瓜",
-      "spec": "250g",
-      "price": 8.8,
-      "sales": 781,
-      "orders": 742,
-      "category": "🔥 引流爆品"
-    },
-    {
-      "name": "【果切】芒果",
-      "spec": "250g",
-      "price": 12.8,
-      "sales": 717,
-      "orders": 697,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【三拼】阳光玫瑰+西瓜+哈密瓜",
-      "spec": "350g",
-      "price": 16.8,
-      "sales": 682,
-      "orders": 461,
+      "sales": 209,
+      "orders": 155,
       "category": "🥗 拼盘套餐"
     },
     {
       "name": "【天作之合】凤梨乌梅+乌梅小番茄",
       "spec": "250g",
       "price": 11.8,
-      "sales": 674,
-      "orders": 651,
+      "sales": 192,
+      "orders": 184,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【网红乌梅】乌梅番茄",
+      "name": "【冰镇】凤梨果切",
       "spec": "250g",
-      "price": 8.8,
-      "sales": 671,
-      "orders": 615,
-      "category": "🆕 网红创新"
+      "price": 14.8,
+      "sales": 185,
+      "orders": 178,
+      "category": "📦 经典果切"
     },
     {
-      "name": "【四拼】羊角蜜+橙子+甜瓜+西瓜",
-      "spec": "600g",
-      "price": 18.8,
-      "sales": 660,
-      "orders": 557,
+      "name": "【三拼】阳光玫瑰+西瓜+哈密瓜",
+      "spec": "350g",
+      "price": 13.8,
+      "sales": 181,
+      "orders": 146,
       "category": "🥗 拼盘套餐"
     },
     {
       "name": "【酸奶捞】自选",
       "spec": "450g",
       "price": 16.8,
-      "sales": 620,
-      "orders": 559,
+      "sales": 172,
+      "orders": 145,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【半个西瓜】麒麟西瓜3-3.5斤",
+      "name": "【鲜果榨汁】自选",
+      "spec": "500ml",
+      "price": 19.8,
+      "sales": 136,
+      "orders": 110,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【网红乌梅】乌梅番茄",
+      "spec": "250g",
+      "price": 8.8,
+      "sales": 134,
+      "orders": 116,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【三拼】西瓜+哈密瓜+甜瓜",
+      "spec": "350g",
+      "price": 12.8,
+      "sales": 131,
+      "orders": 115,
+      "category": "🔥 引流爆品"
+    },
+    {
+      "name": "【自选】",
       "spec": ".",
-      "price": 16.8,
-      "sales": 608,
-      "orders": 571,
-      "category": "📦 经典果切"
+      "price": 17.8,
+      "sales": 128,
+      "orders": 120,
+      "category": "🥗 拼盘套餐"
     },
     {
       "name": "【干噎酸奶】菠萝蜜夹干噎酸奶",
       "spec": "200g",
       "price": 16.8,
-      "sales": 588,
-      "orders": 564,
+      "sales": 127,
+      "orders": 117,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【双拼】芒果+西瓜",
-      "spec": "350g",
-      "price": 13.8,
-      "sales": 542,
-      "orders": 523,
+      "name": "【果切】芒果",
+      "spec": "500g",
+      "price": 17.8,
+      "sales": 116,
+      "orders": 110,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【自选3盒】",
+      "spec": "1150g",
+      "price": 35.8,
+      "sales": 115,
+      "orders": 107,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【大四拼】自选",
+      "spec": "600g",
+      "price": 24.8,
+      "sales": 107,
+      "orders": 102,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【冰镇】西瓜汁",
+      "spec": "350ml",
+      "price": 9.8,
+      "sales": 106,
+      "orders": 82,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【商务五拼】",
+      "spec": "1000g",
+      "price": 39.8,
+      "sales": 102,
+      "orders": 58,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【组合】半斤冰镇西瓜+半斤冰镇凤梨",
+      "spec": "500g",
+      "price": 17.8,
+      "sales": 97,
+      "orders": 97,
       "category": "🥗 拼盘套餐"
     },
     {
       "name": "【豪华小三拼】自选",
       "spec": "350g",
       "price": 15.8,
-      "sales": 537,
-      "orders": 312,
+      "sales": 96,
+      "orders": 56,
       "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【一杯水果】",
-      "spec": "340g",
-      "price": 14.8,
-      "sales": 464,
-      "orders": 142,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【大四拼】自选",
-      "spec": "600g",
-      "price": 24.8,
-      "sales": 418,
-      "orders": 357,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【整装不洗】精品蓝莓（盒装）",
-      "spec": "1盒",
-      "price": 9.8,
-      "sales": 388,
-      "orders": 338,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【半个西瓜】麒麟西瓜",
-      "spec": "3-4斤",
-      "price": 19.8,
-      "sales": 373,
-      "orders": 357,
-      "category": "📦 经典果切"
     },
     {
       "name": "【小双拼】自选",
       "spec": "350g",
-      "price": 13.8,
-      "sales": 365,
-      "orders": 270,
+      "price": 11.8,
+      "sales": 94,
+      "orders": 75,
       "category": "🥗 拼盘套餐"
     },
     {
-      "name": "【三拼】芒果+凤梨+西瓜",
-      "spec": "350g",
-      "price": 15.8,
-      "sales": 359,
-      "orders": 218,
-      "category": "🥗 拼盘套餐"
+      "name": "【乌乌乌】阳光玫瑰夹乌梅+凤梨乌梅+乌梅小番茄",
+      "spec": "300g",
+      "price": 14.8,
+      "sales": 87,
+      "orders": 83,
+      "category": "🆕 网红创新"
     },
     {
-      "name": "【四拼】阳光玫瑰+芒果+西瓜+哈密瓜",
-      "spec": "600g",
-      "price": 26.8,
-      "sales": 354,
-      "orders": 314,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【果切】芒果",
-      "spec": "500g",
-      "price": 19.8,
-      "sales": 335,
-      "orders": 318,
+      "name": "【洗净】阳光玫瑰",
+      "spec": "200g",
+      "price": 9.8,
+      "sales": 87,
+      "orders": 80,
       "category": "📦 经典果切"
+    },
+    {
+      "name": "【双拼】芒果+西瓜",
+      "spec": "350g",
+      "price": 12.8,
+      "sales": 82,
+      "orders": 81,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【果切】桃子（易氧化）",
+      "spec": "250g",
+      "price": 9.8,
+      "sales": 81,
+      "orders": 68,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【自选三拼】水果夹干噎酸奶碗",
+      "spec": "约250g-350g",
+      "price": 19.8,
+      "sales": 80,
+      "orders": 80,
+      "category": "🆕 网红创新"
     },
     {
       "name": "【网红乌梅】凤梨乌梅",
       "spec": "250g",
       "price": 14.8,
-      "sales": 313,
-      "orders": 298,
+      "sales": 76,
+      "orders": 72,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【大三拼】自选",
-      "spec": "600g",
-      "price": 19.8,
-      "sales": 312,
-      "orders": 208,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【干噎酸奶】凤梨夹干噎酸奶",
-      "spec": "200g",
-      "price": 14.9,
-      "sales": 308,
-      "orders": 302,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【果切】麒麟西瓜",
-      "spec": "350g",
-      "price": 10.8,
-      "sales": 305,
-      "orders": 235,
+      "name": "【一杯水果】",
+      "spec": "340g",
+      "price": 14.8,
+      "sales": 75,
+      "orders": 33,
       "category": "📦 经典果切"
     },
     {
-      "name": "【mini拼】凤梨乌梅+西瓜",
+      "name": "【酸奶捞】自选",
       "spec": "250g",
       "price": 11.8,
-      "sales": 302,
-      "orders": 239,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【果切】麒麟西瓜",
-      "spec": "250g",
-      "price": 6.8,
-      "sales": 297,
-      "orders": 281,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【鲜果榨汁】自选",
-      "spec": "500ml",
-      "price": 21.8,
-      "sales": 296,
-      "orders": 242,
+      "sales": 74,
+      "orders": 62,
       "category": "🆕 网红创新"
     },
     {
       "name": "【四拼】凤梨乌梅+芒果+西瓜+甜瓜",
       "spec": "600g",
       "price": 24.8,
-      "sales": 295,
-      "orders": 208,
+      "sales": 71,
+      "orders": 54,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【商务五拼】",
-      "spec": "1000g",
-      "price": 43.8,
-      "sales": 288,
-      "orders": 200,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【酸奶捞】自选",
-      "spec": "250g",
-      "price": 11.8,
-      "sales": 273,
-      "orders": 233,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【冰镇】西瓜汁",
-      "spec": "500ml",
-      "price": 16.8,
-      "sales": 271,
-      "orders": 221,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【乌乌乌】阳光玫瑰夹乌梅+凤梨乌梅+乌梅小番茄",
-      "spec": "300g",
-      "price": 16.8,
-      "sales": 263,
-      "orders": 242,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【冰镇】西瓜汁",
-      "spec": "350ml",
-      "price": 13.8,
-      "sales": 252,
-      "orders": 206,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【网红】秘制脆爽青芒（自选口味包）",
-      "spec": "250g",
-      "price": 13.8,
-      "sales": 250,
-      "orders": 233,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【果切】桃子（易氧化）",
-      "spec": "250g",
-      "price": 11.8,
-      "sales": 244,
-      "orders": 203,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【三拼】蓝莓+橙子+西瓜",
+      "name": "【三拼】芒果+凤梨+西瓜",
       "spec": "350g",
-      "price": 15.8,
-      "sales": 219,
-      "orders": 147,
+      "price": 14.8,
+      "sales": 70,
+      "orders": 64,
       "category": "🥗 拼盘套餐"
     },
     {
-      "name": "【酸嘢杯】百香果味混合果切",
-      "spec": "250g",
-      "price": 9.8,
-      "sales": 196,
-      "orders": 178,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【西瓜汁+任选1份果切】",
-      "spec": ".",
-      "price": 16.8,
-      "sales": 195,
-      "orders": 188,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【海盐青柠杯】阳光玫瑰",
-      "spec": "150g",
-      "price": 9.9,
-      "sales": 183,
-      "orders": 173,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【海盐青柠杯】凤梨",
-      "spec": "150g",
-      "price": 9.8,
-      "sales": 182,
-      "orders": 169,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【整果】香蕉",
-      "spec": "约1斤",
-      "price": 9.9,
-      "sales": 168,
-      "orders": 164,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【酸嘢杯】桃子（易氧化）.约150g（百香果口味）",
-      "spec": ".",
-      "price": 8.8,
-      "sales": 167,
-      "orders": 163,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【四拼】西瓜+哈密瓜+甜瓜+梨",
-      "spec": "600g",
-      "price": 17.8,
-      "sales": 164,
-      "orders": 97,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【mini拼】芒果+西瓜",
-      "spec": "250g",
-      "price": 9.9,
-      "sales": 161,
-      "orders": 147,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【玫瑰干噎】菠萝蜜干噎酸奶抱蓝莓",
-      "spec": "200g",
-      "price": 17.8,
-      "sales": 159,
-      "orders": 157,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【三拼】佳沛绿果+橙子+红火",
-      "spec": "350g",
-      "price": 16.8,
-      "sales": 158,
-      "orders": 151,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【网红乌梅】红心芭乐夹乌梅",
-      "spec": "250g",
-      "price": 13.8,
-      "sales": 151,
-      "orders": 148,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【新鲜剥肉】泰国金枕榴莲",
-      "spec": "约200~220g",
-      "price": 52.8,
-      "sales": 143,
-      "orders": 142,
+      "name": "【整装】精品蓝莓",
+      "spec": "1盒",
+      "price": 12.8,
+      "sales": 70,
+      "orders": 58,
       "category": "💎 高客单"
     },
     {
       "name": "【自选】",
       "spec": "约170g",
       "price": 16.8,
-      "sales": 141,
-      "orders": 103,
+      "sales": 67,
+      "orders": 66,
       "category": "🥗 拼盘套餐"
     },
     {
-      "name": "【海盐青柠杯】桃子",
-      "spec": "150g",
-      "price": 8.8,
-      "sales": 138,
-      "orders": 136,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】红心火龙果",
-      "spec": "250g",
-      "price": 9.8,
-      "sales": 136,
-      "orders": 132,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】芒果",
-      "spec": "350g",
-      "price": 15.8,
-      "sales": 129,
-      "orders": 123,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】哈密瓜",
-      "spec": "250g",
-      "price": 8.8,
-      "sales": 129,
-      "orders": 128,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】橙子",
-      "spec": "250g",
-      "price": 9.8,
-      "sales": 128,
-      "orders": 125,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【新鲜剥肉】泰国金枕榴莲",
-      "spec": "约140-150g",
-      "price": 36.8,
-      "sales": 127,
-      "orders": 126,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【鲜剥】菠萝蜜",
-      "spec": "250g",
-      "price": 18.8,
-      "sales": 125,
-      "orders": 122,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【船系列自选】",
-      "spec": "150g-200g",
-      "price": 11.8,
-      "sales": 123,
-      "orders": 105,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【剥肉】山竹（口味自选）",
-      "spec": "150g",
-      "price": 25.8,
-      "sales": 117,
-      "orders": 104,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【果切】甜瓜",
-      "spec": "250g",
-      "price": 8.8,
-      "sales": 115,
-      "orders": 113,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】凤梨",
-      "spec": "250g",
-      "price": 12.8,
-      "sales": 113,
-      "orders": 111,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】哈密瓜",
-      "spec": "500g",
-      "price": 15.8,
-      "sales": 108,
-      "orders": 100,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【开孔】泰国椰青.1个",
-      "spec": "1个",
-      "price": 15.8,
-      "sales": 107,
-      "orders": 96,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】凤梨",
-      "spec": "500g",
-      "price": 21.8,
-      "sales": 103,
-      "orders": 97,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【四拼】蓝莓+凤梨+西瓜+甜瓜",
-      "spec": "600g",
-      "price": 27.8,
-      "sales": 101,
-      "orders": 88,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【与我联系】餐标定制",
-      "spec": "18.8元",
-      "price": 18.8,
-      "sales": 100,
-      "orders": 1,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【一杯海盐青柠】桃子+凤梨混合杯",
-      "spec": "340g",
-      "price": 17.8,
-      "sales": 100,
-      "orders": 90,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【水果捞】榴莲芒果混合酸奶捞",
-      "spec": "250g",
-      "price": 19.8,
-      "sales": 96,
-      "orders": 91,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【鲜果榨汁】自选",
-      "spec": "350ml",
-      "price": 16.8,
-      "sales": 94,
-      "orders": 63,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【一小杯】蓝莓+佳沛绿果+芒果",
+      "name": "【干噎酸奶】凤梨夹干噎酸奶",
       "spec": "200g",
       "price": 14.8,
-      "sales": 93,
-      "orders": 90,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【水果捞】彩虹混合酸奶捞",
-      "spec": "250g",
-      "price": 9.9,
-      "sales": 91,
-      "orders": 81,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【果切】红心芭乐",
-      "spec": "250g",
-      "price": 11.8,
-      "sales": 90,
-      "orders": 90,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【鲜剥】菠萝蜜",
-      "spec": "500g",
-      "price": 24.8,
-      "sales": 89,
-      "orders": 81,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【mini拼】剥肉榴莲+山竹（易氧化）",
-      "spec": "200g",
-      "price": 39.8,
-      "sales": 87,
-      "orders": 84,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【鲜果榨汁】自选",
-      "spec": "500ml",
-      "price": 21.8,
-      "sales": 84,
-      "orders": 68,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【果切】甜瓜",
-      "spec": "500g",
-      "price": 15.8,
-      "sales": 83,
-      "orders": 75,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】佳沛绿果",
-      "spec": "250g",
-      "price": 16.8,
-      "sales": 83,
-      "orders": 81,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【自选】小台芒果汉堡",
-      "spec": "约300g-350g",
-      "price": 18.8,
-      "sales": 83,
-      "orders": 77,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【玫瑰干噎】阳光玫瑰红心芭乐蓝莓干噎酸奶碗",
-      "spec": "约170g",
-      "price": 17.8,
-      "sales": 82,
-      "orders": 79,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【海盐青柠杯】甜瓜",
-      "spec": "150g",
-      "price": 8.8,
-      "sales": 81,
-      "orders": 78,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【乐享桶】甜蜜瓜瓜桶（西瓜+甜瓜+哈密瓜）",
-      "spec": "含桶约1100g",
-      "price": 28.8,
-      "sales": 80,
-      "orders": 69,
-      "category": "🎯 当家爆款"
-    },
-    {
-      "name": "【洗净】阳光玫瑰",
-      "spec": "250g",
-      "price": 16.8,
-      "sales": 79,
-      "orders": 76,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】桃子（易氧化）",
-      "spec": "500g",
-      "price": 18.8,
-      "sales": 76,
-      "orders": 74,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【辣辣甘草杯】夹爆青红脆李",
-      "spec": "150g",
-      "price": 9.8,
-      "sales": 76,
-      "orders": 72,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】羊角蜜",
-      "spec": "250g",
-      "price": 9.8,
-      "sales": 76,
-      "orders": 76,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】桃子（易氧化）",
-      "spec": "350g",
-      "price": 14.8,
-      "sales": 73,
-      "orders": 69,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【mini】小台芒果汉堡.1个（口味自选）",
-      "spec": "约100g-150g",
-      "price": 11.8,
-      "sales": 73,
-      "orders": 67,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【冷冻】榴莲.100g/盒（包装随机）",
-      "spec": "1盒",
-      "price": 19.8,
-      "sales": 70,
-      "orders": 58,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】哈密瓜",
-      "spec": "350g",
-      "price": 12.8,
-      "sales": 70,
-      "orders": 39,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【mini拼】阳光玫瑰+哈密瓜",
-      "spec": "250g",
-      "price": 12.8,
       "sales": 67,
       "orders": 64,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【干噎酸奶】芒果阳光玫瑰蓝莓干噎酸奶碗（百香茉莉味）",
-      "spec": "约170g",
-      "price": 17.8,
-      "sales": 66,
-      "orders": 66,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【三拼】羊角蜜+西瓜+芒果",
-      "spec": "350g",
-      "price": 20.0,
+      "name": "【果切】麒麟西瓜",
+      "spec": "250g",
+      "price": 6.8,
       "sales": 65,
-      "orders": 1,
-      "category": "🥗 拼盘套餐"
+      "orders": 63,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】麒麟西瓜",
+      "spec": "350g",
+      "price": 7.8,
+      "sales": 65,
+      "orders": 55,
+      "category": "📦 经典果切"
     },
     {
       "name": "【三拼】芒果+红火+阳光玫瑰",
@@ -812,127 +356,103 @@
       "category": "🥗 拼盘套餐"
     },
     {
-      "name": "【自选三拼】水果夹干噎酸奶碗",
-      "spec": "约250g-350g",
-      "price": 19.8,
-      "sales": 63,
-      "orders": 63,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【整装不洗】千禧圣女果",
-      "spec": "约250g",
-      "price": 8.8,
-      "sales": 63,
-      "orders": 60,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【玫瑰干噎】芒果蓝莓干噎酸奶碗",
-      "spec": "约170g",
-      "price": 16.8,
-      "sales": 63,
-      "orders": 56,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【洗净】巨峰葡萄",
+      "name": "【三拼】羊角蜜+西瓜+芒果",
       "spec": "350g",
-      "price": 15.8,
-      "sales": 61,
-      "orders": 61,
+      "price": 20.0,
+      "sales": 65,
+      "orders": 1,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【冰镇】西瓜汁",
+      "spec": "500ml",
+      "price": 14.8,
+      "sales": 64,
+      "orders": 45,
       "category": "📦 经典果切"
     },
     {
-      "name": "【果切】梨（易氧化）",
-      "spec": "250g",
-      "price": 9.8,
-      "sales": 58,
+      "name": "【洗净】阳光玫瑰",
+      "spec": "350g",
+      "price": 13.8,
+      "sales": 61,
       "orders": 58,
       "category": "📦 经典果切"
     },
     {
-      "name": "【固体杨枝甘露】小台芒果汉堡（口味自选）",
-      "spec": "约300g-350g",
-      "price": 19.8,
-      "sales": 58,
-      "orders": 56,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【海盐青柠杯】凤梨+梨",
-      "spec": "150g",
-      "price": 9.8,
-      "sales": 57,
-      "orders": 56,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【酸嘢|甘草杯】自选",
-      "spec": "150g",
-      "price": 9.8,
-      "sales": 56,
-      "orders": 51,
+      "name": "【四拼】西瓜+哈密瓜+甜瓜+梨",
+      "spec": "600g",
+      "price": 17.8,
+      "sales": 61,
+      "orders": 41,
       "category": "🥗 拼盘套餐"
     },
     {
-      "name": "【整装不洗】千禧圣女果",
-      "spec": "约1斤",
-      "price": 12.8,
-      "sales": 55,
-      "orders": 54,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【果切】甜瓜",
-      "spec": "350g",
-      "price": 12.8,
-      "sales": 52,
-      "orders": 22,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【海盐青柠杯】梨",
-      "spec": "150g",
-      "price": 8.8,
-      "sales": 52,
-      "orders": 52,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【三拼】剥肉榴莲+山竹（易氧化）+西瓜",
-      "spec": "300g",
-      "price": 42.8,
-      "sales": 49,
-      "orders": 48,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【果奶】香蕉牛奶",
-      "spec": "350ml",
-      "price": 11.8,
-      "sales": 48,
-      "orders": 42,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【洗净】巨峰葡萄",
-      "spec": "500g",
-      "price": 18.8,
-      "sales": 47,
-      "orders": 44,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【洗净】夏黑葡萄",
+      "name": "【秘制】脆爽青芒(自选口味)",
       "spec": "250g",
       "price": 11.8,
-      "sales": 47,
+      "sales": 59,
+      "orders": 55,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【mini拼】凤梨乌梅+西瓜",
+      "spec": "250g",
+      "price": 11.8,
+      "sales": 56,
+      "orders": 47,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【百香果口味】桃子(易氧化)约150g",
+      "spec": ".",
+      "price": 7.8,
+      "sales": 54,
+      "orders": 54,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【大三拼】自选",
+      "spec": "600g",
+      "price": 19.8,
+      "sales": 52,
+      "orders": 44,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【酸嘢杯】百香果味混合果切",
+      "spec": "250g",
+      "price": 9.8,
+      "sales": 51,
+      "orders": 48,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【自选】小台芒果汉堡",
+      "spec": "约300g-350g",
+      "price": 18.8,
+      "sales": 51,
+      "orders": 49,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【果切】橙子",
+      "spec": "250g",
+      "price": 9.8,
+      "sales": 49,
       "orders": 47,
       "category": "📦 经典果切"
     },
     {
-      "name": "【海盐青柠杯】哈密瓜",
+      "name": "【洗净】阳光玫瑰",
+      "spec": "500g",
+      "price": 17.8,
+      "sales": 46,
+      "orders": 35,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【海盐青柠杯】桃子",
       "spec": "150g",
       "price": 7.8,
       "sales": 46,
@@ -940,436 +460,684 @@
       "category": "📦 经典果切"
     },
     {
-      "name": "【果切】橙子",
-      "spec": "500g",
-      "price": 15.8,
-      "sales": 44,
-      "orders": 42,
+      "name": "【果切】哈密瓜",
+      "spec": "250g",
+      "price": 7.8,
+      "sales": 45,
+      "orders": 43,
       "category": "📦 经典果切"
     },
     {
-      "name": "【洗净】阳光玫瑰",
+      "name": "【三拼】西瓜+芒果+红心火龙果",
       "spec": "350g",
-      "price": 19.8,
-      "sales": 44,
-      "orders": 42,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【乐享桶】缤纷瓜瓜桶（西瓜+哈密瓜+甜瓜+凤梨）",
-      "spec": "1100g",
-      "price": 31.8,
-      "sales": 40,
-      "orders": 35,
-      "category": "🎯 当家爆款"
-    },
-    {
-      "name": "【船系列自选】",
-      "spec": "250g-300g",
-      "price": 16.8,
-      "sales": 40,
-      "orders": 40,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【新鲜剥肉】泰国金枕榴莲",
-      "spec": "450g",
-      "price": 96.8,
-      "sales": 40,
-      "orders": 39,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【果切】凤梨",
-      "spec": "350g",
-      "price": 15.8,
-      "sales": 39,
-      "orders": 37,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【干噎酸奶】纯芒果干噎酸奶碗（香烤椰粒）",
-      "spec": "约170g",
-      "price": 15.8,
-      "sales": 38,
-      "orders": 38,
-      "category": "🆕 网红创新"
-    },
-    {
-      "name": "【果奶】香蕉牛奶",
-      "spec": "500ml",
       "price": 13.8,
-      "sales": 37,
-      "orders": 28,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【mini】小台芒果汉堡（玫瑰干噎）.1个",
-      "spec": "约100g-150g",
-      "price": 11.8,
-      "sales": 36,
-      "orders": 33,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【爱心果切】水果自选",
-      "spec": "500g",
-      "price": 16.8,
-      "sales": 34,
-      "orders": 31,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【果切】红心火龙果",
-      "spec": "500g",
-      "price": 16.8,
-      "sales": 33,
-      "orders": 32,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【固体杨枝甘露】小台芒果汉堡(玫瑰干噎)",
-      "spec": "约300g-350g",
-      "price": 19.8,
-      "sales": 33,
-      "orders": 33,
-      "category": "🆕 网红创新"
+      "sales": 45,
+      "orders": 44,
+      "category": "🥗 拼盘套餐"
     },
     {
       "name": "【干噎酸奶】阳光玫瑰夹干噎酸奶",
       "spec": "170g",
       "price": 13.8,
-      "sales": 32,
-      "orders": 31,
+      "sales": 43,
+      "orders": 37,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【洗净】冬枣",
-      "spec": "150g",
-      "price": 17.8,
-      "sales": 30,
-      "orders": 29,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【洗净】阳光玫瑰",
+      "name": "【果切】哈密瓜",
       "spec": "500g",
-      "price": 29.8,
-      "sales": 30,
-      "orders": 28,
+      "price": 13.8,
+      "sales": 42,
+      "orders": 39,
       "category": "📦 经典果切"
     },
     {
-      "name": "【整装不洗】精品蓝莓（盒装）",
-      "spec": "3盒",
-      "price": 27.8,
-      "sales": 27,
-      "orders": 26,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【果切】佳沛绿果",
-      "spec": "350g",
-      "price": 22.8,
-      "sales": 26,
-      "orders": 25,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【洗净】巨峰葡萄",
+      "name": "【网红乌梅】红心芭乐夹乌梅",
       "spec": "250g",
       "price": 13.8,
-      "sales": 26,
-      "orders": 25,
-      "category": "📦 经典果切"
+      "sales": 41,
+      "orders": 38,
+      "category": "🆕 网红创新"
     },
     {
-      "name": "【洗净】夏黑葡萄",
-      "spec": "500g",
-      "price": 18.8,
-      "sales": 26,
-      "orders": 22,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【大三拼】阳光玫瑰+芒果+红心火龙果",
-      "spec": "600g",
-      "price": 27.8,
-      "sales": 26,
-      "orders": 25,
-      "category": "🥗 拼盘套餐"
-    },
-    {
-      "name": "【果切】羊角蜜",
-      "spec": "500g",
-      "price": 16.8,
-      "sales": 24,
-      "orders": 20,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【果切】羊角蜜",
+      "name": "【果切】芒果",
       "spec": "350g",
-      "price": 12.8,
-      "sales": 24,
-      "orders": 23,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【整果】香蕉",
-      "spec": "约2斤",
-      "price": 15.8,
-      "sales": 24,
-      "orders": 22,
+      "price": 13.8,
+      "sales": 38,
+      "orders": 37,
       "category": "📦 经典果切"
     },
     {
       "name": "【鲜果榨汁】自选",
       "spec": "350ml",
-      "price": 16.8,
-      "sales": 21,
-      "orders": 16,
+      "price": 17.8,
+      "sales": 38,
+      "orders": 27,
       "category": "🆕 网红创新"
     },
     {
-      "name": "【爱心果切】剥肉鲜榴莲.约300-350g",
-      "spec": ".",
-      "price": 88.8,
-      "sales": 21,
-      "orders": 18,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【果切】佳沛金果",
-      "spec": "350g",
-      "price": 36.8,
-      "sales": 21,
-      "orders": 20,
+      "name": "【整果】香蕉",
+      "spec": "约1斤",
+      "price": 9.8,
+      "sales": 37,
+      "orders": 37,
       "category": "📦 经典果切"
     },
     {
       "name": "【果切】红心火龙果",
-      "spec": "350g",
-      "price": 12.8,
-      "sales": 21,
-      "orders": 16,
+      "spec": "250g",
+      "price": 9.8,
+      "sales": 36,
+      "orders": 34,
       "category": "📦 经典果切"
     },
     {
-      "name": "【果切】橙子",
-      "spec": "350g",
-      "price": 12.8,
-      "sales": 20,
-      "orders": 19,
+      "name": "【果切】甜瓜",
+      "spec": "500g",
+      "price": 14.8,
+      "sales": 34,
+      "orders": 29,
       "category": "📦 经典果切"
     },
     {
-      "name": "【与我联系】餐标定制",
-      "spec": "10元",
-      "price": 10.0,
-      "sales": 20,
-      "orders": 2,
+      "name": "【海盐青柠杯】阳光玫瑰",
+      "spec": "150g",
+      "price": 9.8,
+      "sales": 33,
+      "orders": 31,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】凤梨",
+      "spec": "500g",
+      "price": 25.8,
+      "sales": 33,
+      "orders": 31,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【玫瑰干噎】菠萝蜜干噎酸奶抱蓝莓",
+      "spec": "200g",
+      "price": 17.8,
+      "sales": 33,
+      "orders": 32,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【果切】桃子（易氧化）",
+      "spec": "500g",
+      "price": 15.8,
+      "sales": 33,
+      "orders": 32,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【新鲜剥肉】金枕榴莲",
+      "spec": "约140-150g",
+      "price": 39.8,
+      "sales": 31,
+      "orders": 31,
       "category": "💎 高客单"
     },
     {
-      "name": "【冰镇】2瓶 西瓜汁",
-      "spec": "350ml",
-      "price": 19.8,
-      "sales": 20,
-      "orders": 20,
-      "category": "📦 经典果切"
+      "name": "【新鲜剥肉】金枕榴莲",
+      "spec": "约200~220g",
+      "price": 56.8,
+      "sales": 31,
+      "orders": 31,
+      "category": "💎 高客单"
     },
     {
-      "name": "【洗净】夏黑葡萄",
-      "spec": "350g",
+      "name": "【果切】凤梨",
+      "spec": "250g",
       "price": 14.8,
-      "sales": 19,
-      "orders": 19,
+      "sales": 31,
+      "orders": 30,
       "category": "📦 经典果切"
     },
     {
-      "name": "【果切】红心芭乐",
+      "name": "【整装不洗】精品蓝莓（盒装）",
+      "spec": "1盒",
+      "price": 9.8,
+      "sales": 30,
+      "orders": 24,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【果切】甜瓜",
+      "spec": "250g",
+      "price": 8.8,
+      "sales": 29,
+      "orders": 29,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【鲜剥】菠萝蜜",
+      "spec": "250g",
+      "price": 14.8,
+      "sales": 29,
+      "orders": 29,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】羊角蜜",
+      "spec": "250g",
+      "price": 9.8,
+      "sales": 28,
+      "orders": 28,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】桃子（易氧化）",
+      "spec": "350g",
+      "price": 11.8,
+      "sales": 27,
+      "orders": 22,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【海盐青柠杯】凤梨",
+      "spec": "150g",
+      "price": 11.8,
+      "sales": 26,
+      "orders": 25,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【乐享桶】甜蜜瓜瓜桶（西瓜+甜瓜+哈密瓜）",
+      "spec": "含桶约1100g",
+      "price": 25.8,
+      "sales": 25,
+      "orders": 20,
+      "category": "🎯 当家爆款"
+    },
+    {
+      "name": "【四拼】阳光玫瑰+芒果+西瓜+哈密瓜",
+      "spec": "600g",
+      "price": 23.8,
+      "sales": 25,
+      "orders": 20,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【整果组合】阳光玫瑰+葡萄+圣女果",
       "spec": "500g",
-      "price": 17.8,
-      "sales": 19,
+      "price": 16.8,
+      "sales": 24,
+      "orders": 23,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【mini拼】剥肉榴莲+山竹（易氧化）",
+      "spec": "200g",
+      "price": 39.8,
+      "sales": 23,
+      "orders": 22,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【剥肉】山竹（口味自选）",
+      "spec": "150g",
+      "price": 26.8,
+      "sales": 22,
+      "orders": 19,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【水果捞】榴莲芒果混合酸奶捞",
+      "spec": "250g",
+      "price": 19.8,
+      "sales": 21,
+      "orders": 20,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【鲜剥】菠萝蜜",
+      "spec": "500g",
+      "price": 27.8,
+      "sales": 21,
       "orders": 18,
       "category": "📦 经典果切"
     },
     {
-      "name": "【自选】小台芒果汉堡",
-      "spec": "1个(约100g-150g)",
-      "price": 11.8,
-      "sales": 18,
+      "name": "【果切】佳沛绿果",
+      "spec": "250g",
+      "price": 18.8,
+      "sales": 21,
+      "orders": 21,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【海盐青柠】桃子+凤梨混合杯",
+      "spec": "340g",
+      "price": 14.8,
+      "sales": 20,
+      "orders": 19,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【三拼】冬枣+阳光玫瑰+西瓜",
+      "spec": "350g",
+      "price": 15.8,
+      "sales": 20,
       "orders": 18,
       "category": "🥗 拼盘套餐"
     },
     {
-      "name": "【果切】佳沛金果",
-      "spec": "220g",
-      "price": 25.8,
-      "sales": 17,
-      "orders": 17,
+      "name": "【开孔】泰国椰青.1个",
+      "spec": "1个",
+      "price": 14.8,
+      "sales": 19,
+      "orders": 16,
       "category": "📦 经典果切"
-    },
-    {
-      "name": "【至尊一小杯】榴莲山竹（易氧化）荔枝抱抱碗",
-      "spec": "约200-220g",
-      "price": 39.8,
-      "sales": 16,
-      "orders": 16,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【整装】佳沛金果",
-      "spec": "2个",
-      "price": 19.8,
-      "sales": 16,
-      "orders": 16,
-      "category": "💎 高客单"
     },
     {
       "name": "【果切】红心芭乐",
-      "spec": "350g",
-      "price": 14.8,
-      "sales": 16,
-      "orders": 15,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【冰镇】霸气西瓜桶",
-      "spec": "含桶约1000g",
-      "price": 15.8,
-      "sales": 15,
-      "orders": 15,
-      "category": "📦 经典果切"
-    },
-    {
-      "name": "【洗净】冬枣",
       "spec": "250g",
-      "price": 31.8,
-      "sales": 15,
-      "orders": 14,
+      "price": 11.8,
+      "sales": 19,
+      "orders": 19,
       "category": "📦 经典果切"
     },
     {
-      "name": "【至尊一小杯】榴莲荔枝抱抱碗",
-      "spec": "约200-220g",
-      "price": 36.8,
-      "sales": 14,
-      "orders": 14,
-      "category": "💎 高客单"
+      "name": "【洗净】阳光玫瑰",
+      "spec": "250g",
+      "price": 8.8,
+      "sales": 19,
+      "orders": 19,
+      "category": "📦 经典果切"
     },
     {
-      "name": "【与我联系】团餐定制",
-      "spec": "定金",
-      "price": 100.0,
-      "sales": 14,
-      "orders": 4,
+      "name": "【整装不洗】千禧圣女果",
+      "spec": "约250g",
+      "price": 8.8,
+      "sales": 17,
+      "orders": 14,
       "category": "💎 高客单"
     },
     {
       "name": "【海盐青柠杯】混合果切杯",
       "spec": "150g",
       "price": 9.8,
-      "sales": 14,
+      "sales": 17,
+      "orders": 17,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【冷冻】榴莲.100g/盒（包装随机）",
+      "spec": "1盒",
+      "price": 19.8,
+      "sales": 16,
       "orders": 14,
       "category": "📦 经典果切"
     },
     {
-      "name": "【果切】梨（易氧化）",
+      "name": "【果切】橙子",
       "spec": "500g",
       "price": 15.8,
-      "sales": 13,
-      "orders": 10,
+      "sales": 15,
+      "orders": 13,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】红心火龙果",
+      "spec": "500g",
+      "price": 16.8,
+      "sales": 15,
+      "orders": 13,
       "category": "📦 经典果切"
     },
     {
       "name": "【整装】冬枣",
       "spec": "半斤",
+      "price": 12.8,
+      "sales": 15,
+      "orders": 15,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【果切】哈密瓜",
+      "spec": "350g",
+      "price": 9.8,
+      "sales": 15,
+      "orders": 12,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【爱心果切】剥肉鲜榴莲.约300-350g",
+      "spec": ".",
+      "price": 88.8,
+      "sales": 14,
+      "orders": 12,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【果奶】香蕉牛奶",
+      "spec": "350ml",
       "price": 11.8,
+      "sales": 14,
+      "orders": 10,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】梨（易氧化）",
+      "spec": "250g",
+      "price": 9.8,
+      "sales": 13,
+      "orders": 13,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【整装不洗】千禧圣女果",
+      "spec": "约1斤",
+      "price": 12.8,
+      "sales": 12,
+      "orders": 12,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【果切】甜瓜",
+      "spec": "350g",
+      "price": 10.8,
+      "sales": 12,
+      "orders": 11,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【辣辣甘草杯】夹爆青红脆李",
+      "spec": "150g",
+      "price": 9.8,
+      "sales": 12,
+      "orders": 12,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】凤梨",
+      "spec": "350g",
+      "price": 18.8,
+      "sales": 11,
+      "orders": 10,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【海盐青柠杯】凤梨+梨",
+      "spec": "150g",
+      "price": 11.8,
+      "sales": 11,
+      "orders": 10,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【自选】小台芒果汉堡",
+      "spec": "1个(约100g-150g)",
+      "price": 11.8,
+      "sales": 11,
+      "orders": 11,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【洗净三色】阳光玫瑰+葡萄+圣女果",
+      "spec": "340g",
+      "price": 13.8,
+      "sales": 11,
+      "orders": 9,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【新鲜剥肉】金枕榴莲",
+      "spec": "450g",
+      "price": 102.8,
       "sales": 10,
       "orders": 10,
       "category": "💎 高客单"
     },
     {
-      "name": "【果切】梨（易氧化）",
-      "spec": "350g",
-      "price": 12.8,
+      "name": "【洗净】巨峰葡萄",
+      "spec": "500g",
+      "price": 18.8,
       "sales": 10,
       "orders": 10,
       "category": "📦 经典果切"
     },
     {
-      "name": "【整装】佳沛绿果",
-      "spec": "4个",
-      "price": 27.8,
-      "sales": 7,
-      "orders": 7,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【整装】佳沛金果",
-      "spec": "4个",
-      "price": 35.8,
-      "sales": 6,
-      "orders": 6,
+      "name": "【三拼】剥肉榴莲+山竹（易氧化）+西瓜",
+      "spec": "300g",
+      "price": 42.8,
+      "sales": 10,
+      "orders": 10,
       "category": "💎 高客单"
     },
     {
       "name": "【整装】冬枣",
       "spec": "1斤",
+      "price": 18.8,
+      "sales": 9,
+      "orders": 9,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【酸嘢|甘草杯】自选",
+      "spec": "150g",
+      "price": 10.8,
+      "sales": 9,
+      "orders": 9,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【双拼】西瓜+乌梅番茄",
+      "spec": "350g",
+      "price": 6.0,
+      "sales": 9,
+      "orders": 9,
+      "category": "🆕 网红创新"
+    },
+    {
+      "name": "【乐享桶】缤纷瓜瓜桶（西瓜+哈密瓜+甜瓜+凤梨）",
+      "spec": "1100g",
+      "price": 32.8,
+      "sales": 8,
+      "orders": 7,
+      "category": "🎯 当家爆款"
+    },
+    {
+      "name": "【洗净】巨峰葡萄",
+      "spec": "350g",
+      "price": 15.8,
+      "sales": 8,
+      "orders": 8,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】佳沛金果",
+      "spec": "220g",
       "price": 26.8,
+      "sales": 8,
+      "orders": 8,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】羊角蜜",
+      "spec": "500g",
+      "price": 15.8,
+      "sales": 7,
+      "orders": 7,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【三拼】佳沛绿果+橙子+红火",
+      "spec": "350g",
+      "price": 16.8,
+      "sales": 7,
+      "orders": 7,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【洗净】夏黑葡萄",
+      "spec": "500g",
+      "price": 18.8,
+      "sales": 6,
+      "orders": 5,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】梨（易氧化）",
+      "spec": "350g",
+      "price": 12.8,
+      "sales": 6,
+      "orders": 6,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【整果】香蕉",
+      "spec": "约2斤",
+      "price": 15.8,
+      "sales": 6,
+      "orders": 6,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【洗净】巨峰葡萄",
+      "spec": "250g",
+      "price": 13.8,
+      "sales": 6,
+      "orders": 6,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】羊角蜜",
+      "spec": "350g",
+      "price": 12.8,
       "sales": 5,
       "orders": 5,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】红心芭乐",
+      "spec": "500g",
+      "price": 17.8,
+      "sales": 5,
+      "orders": 5,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【洗净】夏黑葡萄",
+      "spec": "350g",
+      "price": 14.8,
+      "sales": 5,
+      "orders": 5,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】红心火龙果",
+      "spec": "350g",
+      "price": 12.8,
+      "sales": 5,
+      "orders": 5,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【爱心果切】水果自选",
+      "spec": "500g",
+      "price": 14.8,
+      "sales": 5,
+      "orders": 4,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【果奶】香蕉牛奶",
+      "spec": "500ml",
+      "price": 13.8,
+      "sales": 5,
+      "orders": 5,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】红心芭乐",
+      "spec": "350g",
+      "price": 14.8,
+      "sales": 5,
+      "orders": 5,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】橙子",
+      "spec": "350g",
+      "price": 12.8,
+      "sales": 4,
+      "orders": 4,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【双拼】芒果+红心火龙果",
+      "spec": "350g",
+      "price": 7.0,
+      "sales": 4,
+      "orders": 4,
+      "category": "🥗 拼盘套餐"
+    },
+    {
+      "name": "【果切】佳沛绿果",
+      "spec": "350g",
+      "price": 26.8,
+      "sales": 3,
+      "orders": 3,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【整装】佳沛绿果",
+      "spec": "4个",
+      "price": 32.8,
+      "sales": 3,
+      "orders": 3,
+      "category": "💎 高客单"
+    },
+    {
+      "name": "【洗净】夏黑葡萄",
+      "spec": "250g",
+      "price": 11.8,
+      "sales": 2,
+      "orders": 2,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【整装】佳沛金果",
+      "spec": "2个",
+      "price": 19.8,
+      "sales": 2,
+      "orders": 2,
       "category": "💎 高客单"
     },
     {
       "name": "【整装】佳沛绿果",
       "spec": "2个",
       "price": 16.8,
-      "sales": 4,
-      "orders": 4,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【爱心果盒】阳光玫瑰（整果不洗）",
-      "spec": "500g",
-      "price": 34.8,
-      "sales": 4,
-      "orders": 4,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【与我联系】餐标定制",
-      "spec": "30元",
-      "price": 30.0,
-      "sales": 3,
-      "orders": 2,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【与我联系】餐标定制",
-      "spec": "20元",
-      "price": 20.0,
-      "sales": 2,
-      "orders": 1,
-      "category": "💎 高客单"
-    },
-    {
-      "name": "【整装】冬枣",
-      "spec": "2斤",
-      "price": 39.8,
       "sales": 1,
       "orders": 1,
       "category": "💎 高客单"
     },
     {
-      "name": "【三拼】冬枣+阳光玫瑰+西瓜",
+      "name": "【果切】佳沛金果",
       "spec": "350g",
-      "price": 16.8,
+      "price": 36.8,
       "sales": 1,
       "orders": 1,
-      "category": "🥗 拼盘套餐"
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【果切】梨（易氧化）",
+      "spec": "500g",
+      "price": 15.8,
+      "sales": 1,
+      "orders": 1,
+      "category": "📦 经典果切"
+    },
+    {
+      "name": "【整装】佳沛金果",
+      "spec": "4个",
+      "price": 38.8,
+      "sales": 1,
+      "orders": 1,
+      "category": "💎 高客单"
     }
   ]
 }

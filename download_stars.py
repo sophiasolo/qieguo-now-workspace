@@ -10,7 +10,7 @@ from datetime import datetime
 
 # ═══ 配置 ═══
 WORKSPACE = Path.home() / "Desktop" / "切果NOW工作台"
-STARS_DIR = WORKSPACE / "精选正面素材"           # 素材子文件夹
+STARS_DIR = Path.home() / "Desktop" / "切果NOW正面素材库"           # 素材子文件夹
 STARS_DIR.mkdir(parents=True, exist_ok=True)
 DOWNLOAD_DIR = STARS_DIR / "_temp_download"       # 临时下载目录
 STARS_FILE = STARS_DIR / "qg_stars_export.json"   # 导出JSON放这里
