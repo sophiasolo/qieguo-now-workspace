@@ -1360,17 +1360,18 @@ function generateCopyAI(){
   var isFestival=(CopyConfig.customDay==='festival'||(!CopyConfig.customDay&&festToday));
   
   // Build rich 花字 prompt with festival context
-  var huaZiPrompt=''+
-    '【花字类型库（8类，类内不重复）】\\n'+
-    '①谐音梗：「接粽而来」「瓜目相看」「甜你一夏」「柚你真好」\\n'+
-    '②Unicode装饰体：𝐒𝐚𝐭𝐮𝐫𝐝𝐚𝐲｜𝗠𝗼𝗻𝗱𝗮𝘆 𝗣𝗶𝗰𝗸｜𝙝𝙚𝙡𝙡𝙤 𝙨𝙪𝙢𝙢𝙚𝙧\\n'+
-    '③公式体：鲜果+冰爽=周一不丧🍉｜高温×果切-热量=快乐²｜周末快乐公式🧊西瓜汁+果切+沙发=躺平\\n'+
-    '④emoji叙事串：😴➡🍉😋 .ᐟ.ᐟ｜🥱😪➡😋🤩✨｜⋆⁺🧊🍃Summer꙳\\n'+
-    '⑤诊断/处方体：🤔今日诊断：你缺一份鲜果切｜📋今日处方：冰镇西瓜×1 即刻服用\\n'+
-    '⑥限时信号：⚡今日限定｜⏰倒计时｜🔥仅此一天\\n'+
-    '⑦菜单/小票体：🧾今日推荐｜━━━━━ 🍉招牌鲜果切 💰特价XX\\n'+
-    '⑧搜索/弹幕体：🔍正在搜索：这个周末吃什么…\\n\\n';
-  
+    var huaZiPrompt='';
+  try{
+    var huaData=getCardCats();
+    var cats=Object.keys(huaData);
+    var samples=[];
+    cats.forEach(function(c){
+      var entries=huaData[c]||[];
+      var pick=entries.slice(0,Math.min(8,entries.length));
+      samples.push(c+': '+pick.join('｜'));
+    });
+    huaZiPrompt='【花字库（来自素材灵感库，以下全为可用的真实花字，禁止编造）】\\n'+samples.join('\\n')+'\\n\\n';
+  }catch(e){huaZiPrompt='';}
   var huaZiDaily=''+
     '【'+dayName+'专属花字（从8类中选，花字开头必用）】\\n'+
     (day===2?'周二·热销风向：🌡️热到不想动｜🧊打败高温的快乐｜💼工作日解暑方案｜一周过半该奖励自己｜🤔今日诊断：缺一份｜📋今日处方｜🍃三伏天续命果切｜💦高温天清爽选择\\n':'')+
