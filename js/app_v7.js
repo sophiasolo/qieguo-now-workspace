@@ -1370,7 +1370,7 @@ function generateCopyAI(){
       var pick=entries.slice(0,Math.min(8,entries.length));
       samples.push(c+': '+pick.join('｜'));
     });
-    huaZiPrompt='【花字库（来自素材灵感库，以下全为可用的真实花字，禁止编造）】\\n'+samples.join('\\n')+'\\n\\n';
+    huaZiPrompt='【花字库（来自素材灵感库，参考风格和句式自由创作变体，不必原样复制）】\\n'+samples.join('\\n')+'\\n\\n';
   }catch(e){huaZiPrompt='';}
   var huaZiDaily=''+
     '【'+dayName+'专属花字（从8类中选，花字开头必用）】\\n'+
