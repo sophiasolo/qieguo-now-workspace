@@ -2125,7 +2125,6 @@ function saveAilItem(){
     };
   }
   ailItems.unshift(item);
-  saveAilItems();
   document.getElementById('ailModal').style.display='none';
   renderAilCards();
   toast('✅ 已添加');
@@ -2134,7 +2133,6 @@ function saveAilItem(){
 function deleteAilItem(idx){
   if(!confirm('删除这条记录？'))return;
   ailItems.splice(idx,1);
-  saveAilItems();
   renderAilCards();
   toast('🗑 已删除');
 }
@@ -2195,7 +2193,7 @@ function renderAilCards(){
 loadAilItems();
 
 (function(){
-  if(ailItems.length>0)return;
+  // Inject seed if empty
   ailItems=[
     {type:'case',title:'百果园：9530万会员体系下的智能库存管理',cat:'📊 数据运营',brand:'百果园',problem:'水果高损耗+门店分布广+会员基数大，如何用数据驱动精准采购和库存管理？',steps:'① 采购端部署大数据预测系统，基于历史销售+天气+节假日建模\n② 仓储端引入冷链及智能分拣系统\n③ 门店端使用智能库存管理+动态补货算法\n④ 向外输出数据模型为其他品牌提供SaaS服务',tools:'自研大数据平台 + 智能分拣系统 + 动态补货算法',result:'9530万会员、全国门店智能调配',link:'https://www.sohu.com/a/983823516_794513',time:'2025-01-01T00:00:00Z'},
     {type:'case',title:'鲜丰水果：新零售智能供应链管理系统',cat:'📊 数据运营',brand:'鲜丰水果',problem:'2400+门店的供应链如何实现数字化管理和降本增效？',steps:'① 签约企企通SRM平台，统一供应商管理\n② 建立智慧冷链物流体系\n③ 整合供应链B2B平台+新零售门店系统\n④ 实现采购-物流-门店全链路数字化',tools:'企企通SRM + 智慧冷链 + B2B平台',result:'供应链效率提升，2400+门店统一管理',link:'https://baike.baidu.com/item/鲜丰水果/53277384',time:'2025-01-01T00:00:00Z'},
@@ -2208,7 +2206,6 @@ loadAilItems();
     {type:'tool',name:'ChatGPT（OpenAI）',cat:'✍️ 文案',desc:'OpenAI通用AI对话助手，支持GPT-4o多模态（文字+图片+语音），有Canvas可视化编辑和DALL-E 3生图',price:'Plus $20/月，Pro $200/月',why:'虽然你还没在用，但GPT-4o的多模态和Canvas功能在内容创作上很强大。如果有英文文案需求或竞品分析需要外网信息，ChatGPT+联网功能很有价值',link:'https://chatgpt.com',time:'2025-01-01T00:00:00Z'},
     {type:'tool',name:'Codex（OpenAI）',cat:'🔧 自动化',desc:'OpenAI代码生成AI，能根据自然语言描述生成完整代码，支持安全漏洞检测',price:'API按token计费',why:'如果你想自己写一些自动化小工具（如自动发群文案、数据抓取），Codex可以帮你快速生成代码。适合运营人员低代码开发',link:'https://openai.com/index/introducing-codex/',time:'2025-01-01T00:00:00Z'}
   ];
-  saveAilItems();
 })();
 
 
