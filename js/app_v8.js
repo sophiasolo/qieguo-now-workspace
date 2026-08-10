@@ -2194,6 +2194,24 @@ function renderAilCards(){
 
 loadAilItems();
 
+(function(){
+  if(ailItems.length>0)return;
+  ailItems=[
+    {type:'case',title:'百果园：9530万会员体系下的智能库存管理',cat:'📊 数据运营',brand:'百果园',problem:'水果高损耗+门店分布广+会员基数大，如何用数据驱动精准采购和库存管理？',steps:'① 采购端部署大数据预测系统，基于历史销售+天气+节假日建模\n② 仓储端引入冷链及智能分拣系统\n③ 门店端使用智能库存管理+动态补货算法\n④ 向外输出数据模型为其他品牌提供SaaS服务',tools:'自研大数据平台 + 智能分拣系统 + 动态补货算法',result:'9530万会员、全国门店智能调配',link:'https://www.sohu.com/a/983823516_794513',time:'2025-01-01T00:00:00Z'},
+    {type:'case',title:'鲜丰水果：新零售智能供应链管理系统',cat:'📊 数据运营',brand:'鲜丰水果',problem:'2400+门店的供应链如何实现数字化管理和降本增效？',steps:'① 签约企企通SRM平台，统一供应商管理\n② 建立智慧冷链物流体系\n③ 整合供应链B2B平台+新零售门店系统\n④ 实现采购-物流-门店全链路数字化',tools:'企企通SRM + 智慧冷链 + B2B平台',result:'供应链效率提升，2400+门店统一管理',link:'https://baike.baidu.com/item/鲜丰水果/53277384',time:'2025-01-01T00:00:00Z'},
+    {type:'case',title:'菠拿拿：数字化全产业链果切连锁',cat:'🍉 果切同行',brand:'菠拿拿',problem:'果切品类SKU多、保质期短、依赖外卖平台，如何用数字化运营提效？',steps:'① 数字化整合全产业链（采购-加工-配送）\n② 平台化运营模式，统一管理400+门店\n③ 采用即食鲜切+外卖新零售组合打法\n④ 标准化的果切拼盘、酸奶捞产品线',tools:'数字化产业链系统 + 外卖平台运营 + 标准化产品体系',result:'全国400+门店，200+城市覆盖',link:'https://baike.baidu.com/item/菠拿拿/62430278',time:'2025-01-01T00:00:00Z'},
+    {type:'tool',name:'即梦（Jimeng）',cat:'🎨 设计',desc:'字节跳动旗下AI创作平台，支持文生图、图生视频、智能画布（扩图/抠图/局部重绘），适合快速产出营销海报和社媒素材',price:'基础功能免费',why:'比Midjourney门槛低，中文Prompt友好，适合快速做社群推图/节气海报/产品图。智能画布的一键扩图+抠图功能省去PS时间',link:'https://jimeng.jianying.com/',time:'2025-01-01T00:00:00Z'},
+    {type:'tool',name:'豆包（Doubao）',cat:'✍️ 文案',desc:'字节跳动AI全能助手：AI写作、图片/视频生成（集成Seedance 2.0）、数据分析（AI Sheet）、AI播客、录音转写、深度研究',price:'免费',why:'一个工具覆盖文案+生图+视频+数据，尤其是AI Sheet可以做数据看板和分析报表，适合运营一人多用的场景。专家模式推理能力更强',link:'https://www.doubao.com',time:'2025-01-01T00:00:00Z'},
+    {type:'tool',name:'DeepSeek',cat:'✍️ 文案',desc:'国产大语言模型，通用对话/代码/数据分析/中文内容创作，API价格极低（输入¥1/百万tokens），兼容OpenAI接口',price:'网页免费，API ¥1-2/百万tokens',why:'目前你在工作台里用的就是它。中文能力顶流，写社群文案、做数据复盘、分析舆情都很稳。API成本极低，适合批量自动化',link:'https://www.deepseek.com',time:'2025-01-01T00:00:00Z'},
+    {type:'tool',name:'LibTV（LiblibAI）',cat:'🎨 设计',desc:'国内AI视频创作平台，无限画布+节点工作流，剧本→分镜→配音→剪辑全链路，集成Seedance等主流模型',price:'基础功能免费',why:'如果你后续想做品牌短视频/节气宣传片/产品展示视频，这个工具可以一站式完成。无限画布适合做多版本对比',link:'https://www.liblib.tv',time:'2025-01-01T00:00:00Z'},
+    {type:'tool',name:'TRAE（字节AI IDE）',cat:'🔧 自动化',desc:'字节推出的AI编程IDE，集成Claude/GPT/DeepSeek/豆包等模型，支持Builder模式让AI主导开发，还有TraeWork能自动生成PPT和数据分析',price:'完全免费',why:'你已经偶尔在用了。SOLO模式可以让AI单独完成小程序/网页开发，适合做内部工具和运营自动化脚本',link:'https://www.trae.cn',time:'2025-01-01T00:00:00Z'},
+    {type:'tool',name:'ChatGPT（OpenAI）',cat:'✍️ 文案',desc:'OpenAI通用AI对话助手，支持GPT-4o多模态（文字+图片+语音），有Canvas可视化编辑和DALL-E 3生图',price:'Plus $20/月，Pro $200/月',why:'虽然你还没在用，但GPT-4o的多模态和Canvas功能在内容创作上很强大。如果有英文文案需求或竞品分析需要外网信息，ChatGPT+联网功能很有价值',link:'https://chatgpt.com',time:'2025-01-01T00:00:00Z'},
+    {type:'tool',name:'Codex（OpenAI）',cat:'🔧 自动化',desc:'OpenAI代码生成AI，能根据自然语言描述生成完整代码，支持安全漏洞检测',price:'API按token计费',why:'如果你想自己写一些自动化小工具（如自动发群文案、数据抓取），Codex可以帮你快速生成代码。适合运营人员低代码开发',link:'https://openai.com/index/introducing-codex/',time:'2025-01-01T00:00:00Z'}
+  ];
+  saveAilItems();
+})();
+
+
 // ═══════ INIT ═══════
 renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderMemberDay();renderAcquisition();loadCopyConfig();applyCopyConfig();
 setInterval(function(){loadSentimentData();},30*60*1000);
