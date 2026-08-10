@@ -660,8 +660,10 @@ toast('📄 '+rows.length+'行, 解析中...');
       var data={updated:new Date().toISOString(),source:file.name,total_products:items.length,categories:Object.keys(catSet),items:items};
       localStorage.setItem('qg_products',JSON.stringify(data));
       productData=data;
+      allProductsData=data.items||[];
       updateProductUI(data);
       renderProducts();
+      renderCopyProductSelector();
       allProductsData=items;
       var priceSamples=items.slice(0,3).map(function(p){return '¥'+p.price}).join(',');
 toast('✅ '+items.length+'个产品 | '+priceSamples);
@@ -798,6 +800,7 @@ var PRODUCT_SELLING = {"西瓜": "麒麟瓜正值甜度巅峰🍉冰甜多汁超
 
 var copyProducts=[];
 var allProductsData=[];
+(function(){try{var p=JSON.parse(localStorage.getItem('qg_products')||'null');if(p&&p.items)allProductsData=p.items;}catch(e){}})();
 
 // ─── Product Selector ───
 function loadCopyProducts(){
@@ -1412,7 +1415,7 @@ function generateCopyAI(){
     '【emoji铁律】每行配1-2个贴合内容的emoji，拒绝全篇🍉！用🧊表冰爽、🛵表外卖、💰表价格、😋表口感、🔥表热度、✨表惊喜、🎁表福利、💪表健康、🥭🍍🍈根据水果灵活换。花字行的emoji要更有创意。\\n\\n'+
     '【排版】每行≤20字，不允许断词换行。像朋友群发消息，不机械不模板。\\n\\n'+
     '【推送日】'+dayName+'\n'+
-    '【产品名（必须原样使用，不可改！）只围绕此产品写，禁止提及其他任何水果或产品。】'+product+'\\n'+
+    '【产品名（必须原样使用，不可改！）】\n【铁律】全文只围绕这一个产品写，严禁出现其他水果名、品类名、或暗示多选的说法。'+product+'\\n'+
     (CopyConfig.comboNote?'【套餐详情（必须融入文案，不可忽略！】'+CopyConfig.comboNote+'\\n':'')+
     '【价格要求】'+priceRule+'\n'+
     '【配送费要求】'+deliveryRule+'\n'+
