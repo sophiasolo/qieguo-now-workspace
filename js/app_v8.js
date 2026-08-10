@@ -807,7 +807,7 @@ function loadCopyProducts(){
   var el=document.getElementById('copyProducts');
   if(!el)return;
   fetch('product_library.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    allProductsData=d.items||[];
+    if(allProductsData.length===0) allProductsData=d.items||[];
     renderCopyProductSelector();
   }).catch(function(){
     el.innerHTML='<span style="color:var(--text-dim)">产品库加载失败</span>';
