@@ -2191,6 +2191,22 @@ function renderAilCards(){
 }
 
 loadAilItems();
+(function(){
+  fetch('ail_seed_new.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    if(!d||!d.length)return;
+    var changed=false;
+    var existing=new Set(ailItems.map(function(i){return (i.type==='case'?i.title:i.name);}));
+    d.forEach(function(item){
+      var key=item.type==='case'?item.title:item.name;
+      if(!existing.has(key)){
+        ailItems.unshift(item);
+        changed=true;
+      }
+    });
+    if(changed){saveAilItems();renderAilCards();}
+  }).catch(function(){});
+})();
+
 
 (function(){
   // Inject seed if empty
