@@ -10,7 +10,7 @@ var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-12":"春节","04-05":"清明","0
 var MEMBER_DATA={"2026-07-15":{prev:"07-08",orders:73,sales:2360,stores:51,prevOrders:81,prevSales:2600,prevStores:53,couponUseRate:42.5,prevCouponUseRate:41.2,members:4,deliveryOrders:42,prevDeliveryOrders:46,customerPrice:32.3,prevCustomerPrice:32.1,conclusion:"7月15日会员日受下雨影响订单↓10%，但客单价和券核销率微增。外卖占比57%与上期持平。动销门店51家较上期53家略降。"},"2026-07-08":{prev:"07-01",orders:81,sales:2600,stores:53,prevOrders:76,prevSales:2420,prevStores:52,couponUseRate:41.2,prevCouponUseRate:40.5,members:6,deliveryOrders:46,prevDeliveryOrders:43,customerPrice:32.1,prevCustomerPrice:31.8,conclusion:"7月8日会员日订单↑6.6%，销售额↑7.4%。券核销率连续上升。新增会员6人，外卖56.8%。"},"2026-07-01":{prev:"06-24",orders:76,sales:2420,stores:52,prevOrders:72,prevSales:2290,prevStores:51,couponUseRate:40.5,prevCouponUseRate:39.8,members:5,deliveryOrders:43,prevDeliveryOrders:40,customerPrice:31.8,prevCustomerPrice:31.8,conclusion:"7月1日会员日订单↑5.6%。客单价持平。券核销率突破40%。动销门店稳定。"}};
 
 const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库',ailearn:'💡 AI前沿案例'};
-document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='prompt'){}if(page==='recipe'){renderPromptLib();}if(page==='inspiration'){switchInspTab('card');}if(page==='acquisition')renderAcquisition();});});
+document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='prompt'){}if(page==='recipe'){renderPromptLib();}if(page==='inspiration'){switchInspTab('card');}if(page==='ailearn'){switchAilTab('case');}if(page==='ailearn'){switchAilTab('case');}if(page==='acquisition')renderAcquisition();});});
 var now=new Date();document.getElementById('currentDate').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+['日','一','二','三','四','五','六'][now.getDay()]+'曜日';
 function toast(msg){var el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(function(){el.remove()},2000);}
 
@@ -2051,6 +2051,148 @@ function deleteCustomCard(cat, idx){
 
 // Initialize
 loadCustomCards();
+
+// ═══════ AI LEARN ═══════
+var ailTab='case';
+var ailItems=[]; // {type:'case'|'tool', ...}
+
+function loadAilItems(){
+  try{ailItems=JSON.parse(localStorage.getItem('qg_ail_items')||'[]');}catch(e){ailItems=[];}
+}
+function saveAilItems(){localStorage.setItem('qg_ail_items',JSON.stringify(ailItems));}
+
+function switchAilTab(t){
+  ailTab=t;
+  document.getElementById('ailTabCase').className='btn '+(t==='case'?'btn-primary':'btn-ghost');
+  document.getElementById('ailTabTool').className='btn '+(t==='tool'?'btn-primary':'btn-ghost');
+  renderAilCards();
+}
+
+function toggleAilFields(){
+  var t=document.getElementById('ailType').value;
+  document.getElementById('ailCaseFields').style.display=(t==='case'?'':'none');
+  document.getElementById('ailToolFields').style.display=(t==='tool'?'':'none');
+  document.getElementById('ailModalTitle').textContent=t==='case'?'➕ 添加案例':'➕ 添加工具';
+}
+
+function showAilModal(){
+  document.getElementById('ailType').value='case';
+  toggleAilFields();
+  document.getElementById('ailTitle').value='';
+  document.getElementById('ailBrand').value='';
+  document.getElementById('ailProblem').value='';
+  document.getElementById('ailSteps').value='';
+  document.getElementById('ailTools').value='';
+  document.getElementById('ailResult').value='';
+  document.getElementById('ailLink').value='';
+  document.getElementById('ailToolName').value='';
+  document.getElementById('ailToolDesc').value='';
+  document.getElementById('ailToolPrice').value='';
+  document.getElementById('ailToolWhy').value='';
+  document.getElementById('ailToolLink').value='';
+  document.getElementById('ailModal').style.display='flex';
+}
+
+function saveAilItem(){
+  var t=document.getElementById('ailType').value;
+  if(t==='case'){
+    var title=document.getElementById('ailTitle').value.trim();
+    if(!title){toast('请输入标题');return;}
+    var item={
+      type:'case',
+      title:title,
+      cat:document.getElementById('ailCat').value,
+      brand:document.getElementById('ailBrand').value.trim(),
+      problem:document.getElementById('ailProblem').value.trim(),
+      steps:document.getElementById('ailSteps').value.trim(),
+      tools:document.getElementById('ailTools').value.trim(),
+      result:document.getElementById('ailResult').value.trim(),
+      link:document.getElementById('ailLink').value.trim(),
+      time:new Date().toISOString()
+    };
+  }else{
+    var name=document.getElementById('ailToolName').value.trim();
+    if(!name){toast('请输入工具名');return;}
+    var item={
+      type:'tool',
+      name:name,
+      cat:document.getElementById('ailToolCat').value,
+      desc:document.getElementById('ailToolDesc').value.trim(),
+      price:document.getElementById('ailToolPrice').value.trim(),
+      why:document.getElementById('ailToolWhy').value.trim(),
+      link:document.getElementById('ailToolLink').value.trim(),
+      time:new Date().toISOString()
+    };
+  }
+  ailItems.unshift(item);
+  saveAilItems();
+  document.getElementById('ailModal').style.display='none';
+  renderAilCards();
+  toast('✅ 已添加');
+}
+
+function deleteAilItem(idx){
+  if(!confirm('删除这条记录？'))return;
+  ailItems.splice(idx,1);
+  saveAilItems();
+  renderAilCards();
+  toast('🗑 已删除');
+}
+
+function renderAilCards(){
+  var el=document.getElementById('ailContent');
+  var items=ailItems.filter(function(i){return i.type===ailTab;});
+  if(!items.length){
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无内容，点击右上角「➕ 添加」</div>';
+    return;
+  }
+  var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">';
+  items.forEach(function(item,i){
+    var idx=ailItems.indexOf(item);
+    if(ailTab==='case'){
+      var stepsHtml='';
+      if(item.steps){
+        var steps=item.steps.split('\n').filter(function(s){return s.trim();});
+        stepsHtml='<div style="margin-top:8px;background:var(--bg);border-radius:6px;padding:10px;font-size:11px;line-height:1.8">';
+        steps.forEach(function(s,j){
+          stepsHtml+='<div style="display:flex;gap:6px"><span style="color:var(--brand);font-weight:700;flex-shrink:0">'+(j+1)+'.</span><span>'+s+'</span></div>';
+        });
+        stepsHtml+='</div>';
+      }
+      html+='<div style="background:#fff;border-radius:10px;padding:16px;border:1px solid var(--border);position:relative">'+
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">'+
+          '<span style="padding:1px 8px;border-radius:8px;font-size:10px;background:var(--brand-light);color:var(--brand)">'+item.cat+'</span>'+
+          (item.brand?'<span style="padding:1px 8px;border-radius:8px;font-size:10px;background:#f0f0f0;color:#666">'+item.brand+'</span>':'')+
+        '</div>'+
+        '<div style="font-weight:700;color:var(--text);margin-bottom:4px">'+item.title+'</div>'+
+        (item.problem?'<div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">🎯 '+item.problem+'</div>':'')+
+        stepsHtml+
+        '<div style="display:flex;gap:12px;margin-top:8px;font-size:11px;flex-wrap:wrap">'+
+          (item.tools?'<span>🧰 '+item.tools+'</span>':'')+
+          (item.result?'<span>📊 '+item.result+'</span>':'')+
+        '</div>'+
+        (item.link?'<div style="margin-top:8px"><a href="'+item.link+'" target="_blank" style="font-size:11px;color:var(--brand)">🔗 原文链接</a></div>':'')+
+        '<span onclick="deleteAilItem('+idx+')" style="position:absolute;top:8px;right:10px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25">🗑</span>'+
+      '</div>';
+    }else{
+      html+='<div style="background:#fff;border-radius:10px;padding:16px;border:1px solid var(--border);position:relative">'+
+        '<span style="padding:1px 8px;border-radius:8px;font-size:10px;background:var(--brand-light);color:var(--brand);margin-bottom:6px;display:inline-block">'+item.cat+'</span>'+
+        '<div style="font-weight:700;color:var(--text);margin-bottom:4px">🛠 '+item.name+'</div>'+
+        (item.desc?'<div style="font-size:12px;color:var(--text-dim);margin-bottom:6px">'+item.desc+'</div>':'')+
+        '<div style="display:flex;gap:8px;font-size:11px;color:var(--text-dim);margin-bottom:4px">'+
+          (item.price?'<span>💰 '+item.price+'</span>':'')+
+        '</div>'+
+        (item.why?'<div style="font-size:11px;color:var(--text-dim);background:var(--bg);border-radius:6px;padding:8px;margin-top:8px;line-height:1.6">💡 '+item.why+'</div>':'')+
+        (item.link?'<div style="margin-top:6px"><a href="'+item.link+'" target="_blank" style="font-size:11px;color:var(--brand)">🔗 链接</a></div>':'')+
+        '<span onclick="deleteAilItem('+idx+')" style="position:absolute;top:8px;right:10px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25">🗑</span>'+
+      '</div>';
+    }
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+loadAilItems();
 
 // ═══════ INIT ═══════
 renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderMemberDay();renderAcquisition();loadCopyConfig();applyCopyConfig();
