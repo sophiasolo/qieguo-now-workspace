@@ -1821,7 +1821,9 @@ function renderWeeklyReports(){
   fetch('community_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     if(!d)return;
     var k=d.kpi||{};
-    var kpi='<div class="kpi accent-green"><div class="kpi-label">👥 群客户数</div><div class="kpi-value">'+(k.members||0).toLocaleString()+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+(k.groups||'?')+'群 · '+(k.stores||'?')+'门店 · 渗透'+(k.penetration||'?')+'%</div></div>';
+    var kpi='<div class="kpi accent-teal"><div class="kpi-label">🏪 覆盖门店</div><div class="kpi-value">'+(k.stores||'?')+'<span class="kpi-change flat">家</span></div><div class="kpi-sub">最新</div></div>';
+    kpi+='<div class="kpi accent-blue"><div class="kpi-label">💬 社群数量</div><div class="kpi-value">'+(k.groups||'?')+'<span class="kpi-change flat">个</span></div><div class="kpi-sub">最新</div></div>';
+    kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 群客户数</div><div class="kpi-value">'+(k.members||0).toLocaleString()+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">渗透'+(k.penetration||'?')+'%</div></div>';
     kpi+='<div class="kpi accent-teal"><div class="kpi-label">📈 本周入群</div><div class="kpi-value">'+(k.join||0)+'<span class="kpi-change up">最新</span></div><div class="kpi-sub">'+d.updated+'</div></div>';
     kpi+='<div class="kpi accent-red"><div class="kpi-label">📉 本周退群</div><div class="kpi-value">'+(k.quit||0)+'<span class="kpi-change down">最新</span></div><div class="kpi-sub">'+d.updated+'</div></div>';
     kpi+='<div class="kpi accent-amber"><div class="kpi-label">📊 本周净增</div><div class="kpi-value">'+(k.net||0)+'<span class="kpi-change flat">最新</span></div><div class="kpi-sub">'+d.updated+'</div></div>';
