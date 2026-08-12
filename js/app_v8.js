@@ -1867,7 +1867,7 @@ function renderWeeklyReports(){
   var weeks=[{label:'08/03 - 08/09',file:'社群周报看板_20260803-0809.html'},{label:'07/27 - 08/02',file:'社群周报看板_20260727-0802.html'},{label:'07/20 - 07/26',file:'社群周报看板_20260720-0726.html'},{label:'07/13 - 07/19',file:'社群周报看板_20260713-0719.html'},{label:'07/06 - 07/12',file:'社群周报看板_20260706-0712.html'}];
   var h='';weeks.forEach(function(w){h+='<div style="display:flex;align-items:center;gap:8px"><a href="#" data-type="weekly" data-file="'+w.file+'" onclick="openReport(this.dataset.type,this.dataset.file);return false" style="color:var(--brand);font-size:13px">📄 社群周报</a><span style="font-size:10px;background:var(--bg);color:var(--text-dim);padding:1px 8px;border-radius:10px">'+w.label+'</span></div>';});
   try{document.getElementById('weeklyReportsList').innerHTML=h;}catch(e){}
-  var months=[{label:'2026年7月',file:'社群月报看板_202607.html'},{label:'2026年6月',file:'社群月报看板_202606.html'},{label:'2026年5月',file:'社群月报看板_202605.html'}];
+  var months=[{label:'2026年6月',file:'社群月报看板_202606.html'},{label:'2026年5月',file:'社群月报看板_202605.html'}];
   var m='';months.forEach(function(mo){m+='<div style="display:flex;align-items:center;gap:8px"><a href="#" data-type="monthly" data-file="'+mo.file+'" onclick="openReport(this.dataset.type,this.dataset.file);return false" style="color:var(--brand);font-size:13px">📄 社群月报</a><span style="font-size:10px;background:var(--bg);color:var(--text-dim);padding:1px 8px;border-radius:10px">'+mo.label+'</span></div>';});
   document.getElementById('monthlyReportsList').innerHTML=m;
 }
