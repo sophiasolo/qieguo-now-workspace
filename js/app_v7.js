@@ -398,7 +398,7 @@ function renderSentimentNegList(data){
 
 function updateOverviewSentiment(data){
   if(!data||!data.today)return;
-  var cards=document.querySelectorAll('#page-overview .kpi');
+  var cards=document.querySelectorAll('#page-sentiment .kpi');
   if(cards.length>=1){var c1=cards[0];c1.querySelector('.kpi-value').innerHTML=data.today.total+'<span class="kpi-change flat">条</span>';c1.querySelector('.kpi-sub').textContent=data.latest_date+' · 正面'+data.today.pos+' · 负面'+data.today.neg;}
 }
 
