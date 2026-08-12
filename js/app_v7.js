@@ -2314,6 +2314,56 @@ function addTodo(){
 function toggleTodo(i){todoItems[i].done=!todoItems[i].done;saveTodos();renderTodos();}
 function deleteTodo(i){todoItems.splice(i,1);saveTodos();renderTodos();}
 
+
+// ═══════ WEATHER ═══════
+var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',45:'🌫 雾',48:'🌫 雾凇',51:'🌧 小毛毛雨',53:'🌧 毛毛雨',55:'🌧 大毛毛雨',61:'🌧 小雨',63:'🌧 中雨',65:'🌧 大雨',71:'❄️ 小雪',73:'❄️ 中雪',75:'❄️ 大雪',77:'❄️ 雪粒',80:'🌧 阵雨',81:'🌧 中阵雨',82:'🌧 大阵雨',85:'❄️ 小阵雪',86:'❄️ 大阵雪',95:'⛈ 雷暴',96:'⛈ 雷暴+小冰雹',99:'⛈ 雷暴+大冰雹'};
+function fetchWeather(){
+  var city=document.getElementById('weatherCity').value.trim();
+  if(!city)return;
+  localStorage.setItem('qg_wx_city',city);
+  document.getElementById('weatherContent').innerHTML='<div style="padding:40px;color:var(--text-dim)">⏳ 查询中…</div>';
+  fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(city)+'&count=1&language=zh')
+  .then(function(r){return r.json()}).then(function(d){
+    if(!d.results||!d.results.length){throw new Error('城市未找到');}
+    var loc=d.results[0];
+    return fetch('https://api.open-meteo.com/v1/forecast?latitude='+loc.latitude+'&longitude='+loc.longitude+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max&timezone=Asia%2FShanghai&forecast_days=4');
+  }).then(function(r){return r.json()}).then(function(d){
+    renderWeather(d);
+  }).catch(function(e){
+    document.getElementById('weatherContent').innerHTML='<div style="padding:40px;color:var(--red)">❌ '+e.message+'</div>';
+  });
+}
+function renderWeather(d){
+  var c=d.current, day=d.daily;
+  var wc=weatherCodes[c.weather_code]||('🌡 '+c.weather_code);
+  var h='<div style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:12px;padding:24px;text-align:center;margin-bottom:16px">';
+  h+='<div style="font-size:48px;margin-bottom:8px">'+wc.split(' ')[0]+'</div>';
+  h+='<div style="font-size:36px;font-weight:800;color:#1565c0">'+c.temperature_2m+'°C</div>';
+  h+='<div style="font-size:14px;color:var(--text-dim);margin-top:4px">'+wc.split(' ').slice(1).join(' ')+' · 湿度'+c.relative_humidity_2m+'% · 风速'+c.wind_speed_10m+'km/h</div>';
+  h+='</div>';
+  h+='<div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">';
+  var dayNames=['今天','明天','后天'];
+  for(var i=0;i<3;i++){
+    var dwc=weatherCodes[day.weather_code[i]]||'';
+    var rain=day.precipitation_probability_max[i]||0;
+    h+='<div class="kpi" style="text-align:center">';
+    h+='<div style="font-size:11px;font-weight:600;color:var(--text-dim);margin-bottom:4px">'+dayNames[i]+'</div>';
+    h+='<div style="font-size:28px">'+dwc.split(' ')[0]+'</div>';
+    h+='<div style="font-size:13px;font-weight:700">'+day.temperature_2m_min[i]+'° ~ '+day.temperature_2m_max[i]+'°</div>';
+    if(rain>0) h+='<div style="font-size:11px;color:#1565c0">💧 降水'+rain+'%</div>';
+    h+='</div>';
+  }
+  h+='</div>';
+  document.getElementById('weatherContent').innerHTML=h;
+}
+(function(){
+  var saved=localStorage.getItem('qg_wx_city');
+  if(saved){
+    document.getElementById('weatherCity').value=saved;
+    fetchWeather();
+  }
+})();
+
 // ═══════ INIT ═══════
 loadTodos();renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();
 setInterval(function(){loadSentimentData();},30*60*1000);
