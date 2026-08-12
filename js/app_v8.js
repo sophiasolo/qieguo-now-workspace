@@ -350,7 +350,7 @@ function renderSentimentTrend(data){
     {label:'总量',data:trend.map(function(d){return d.total}),borderColor:'#2d8a4e',backgroundColor:'rgba(45,138,78,.1)',borderWidth:2,pointRadius:3,fill:true,tension:.3},
     {label:'正面',data:trend.map(function(d){return d.pos}),borderColor:'#4caf50',borderWidth:1.5,pointRadius:2,tension:.3,borderDash:[3,2]},
     {label:'负面',data:trend.map(function(d){return d.neg}),borderColor:'#e53935',borderWidth:1.5,pointRadius:3,tension:.3}
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{usePointStyle:true,boxWidth:6,font:{size:10}}}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{beginAtZero:true,ticks:{font:{size:10}},grid:{color:'#e8ece8'}}}}});
+  ]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{labels:{usePointStyle:true,boxWidth:6,font:{size:10}}}},scales:{x:{ticks:{font:{size:10}},grid:{display:false}},y:{beginAtZero:true,ticks:{font:{size:10}},grid:{color:'#e8ece8'}}}}});
 }
 
 function renderSentimentItems(data){
@@ -1854,7 +1854,7 @@ function renderWeeklyReports(){
         {label:'入群',data:joins.slice(0,monthOrder.length+4),borderColor:'#2d8a4e',backgroundColor:'rgba(45,138,78,0.05)',fill:true,tension:0.3,borderWidth:2,pointRadius:3},
         {label:'退群',data:quits.slice(0,monthOrder.length+4),borderColor:'#e53935',backgroundColor:'rgba(229,57,53,0.05)',fill:true,tension:0.3,borderWidth:2,pointRadius:3},
         {label:'留存率%',data:retention.slice(0,monthOrder.length+4),borderColor:'#1976d2',borderDash:[4,3],tension:0.3,borderWidth:1.5,pointRadius:2,yAxisID:'y1'}
-      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{type:'linear',position:'left',ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},y1:{type:'linear',position:'right',min:60,max:100,ticks:{font:{size:10}},grid:{display:false}}}}});
+      ]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{type:'linear',position:'left',ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},y1:{type:'linear',position:'right',min:60,max:100,ticks:{font:{size:10}},grid:{display:false}}}}});
     },200);
     // Churn alerts
     var churnAlerts=d.churn_alerts||[];
