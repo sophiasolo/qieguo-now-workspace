@@ -1825,7 +1825,7 @@ function renderWeeklyReports(){
     document.getElementById('communityDataKPI').innerHTML=kpi;
     // Trend chart — monthly aggregation
     setTimeout(function(){
-      var ctx=document.getElementById('communityTrendChart');if(!ctx)return;
+      var ctx=document.getElementById('communityTrendChart');if(!ctx)return;ctx.style.height='170px';ctx.parentElement.style.height='170px';
       var old=Chart.getChart('communityTrendChart');if(old)old.destroy();
       // Aggregate weekly to monthly
       var monthMap={},monthOrder=[];
