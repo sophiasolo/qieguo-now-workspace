@@ -2316,6 +2316,137 @@ function deleteTodo(i){todoItems.splice(i,1);saveTodos();renderTodos();}
 
 
 // ═══════ WEATHER ═══════
+var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',45:'🌫 雾',48:'🌫 雾凇',51:'🌧 毛毛雨',53:'🌧 毛毛雨',55:'🌧 毛毛雨',61:'🌧 小雨',63:'🌧 中雨',65:'🌧 大雨',71:'❄️ 小雪',73:'❄️ 中雪',75:'❄️ 大雪',77:'❄️ 雪粒',80:'🌧 阵雨',81:'🌧 中阵雨',82:'🌧 大阵雨',85:'❄️ 阵雪',86:'❄️ 阵雪',95:'⛈ 雷暴',96:'⛈ 雷暴+冰雹',99:'⛈ 雷暴+冰雹'};
+var weatherData=null; var weatherFilter='';
+
+function loadWeatherData(){
+  fetch('weather_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    weatherData=d; document.getElementById('weatherUpdated').textContent='更新 '+d.updated.slice(5,16);
+    renderWeather();
+  }).catch(function(){document.getElementById('weatherContent').innerHTML='<div style="padding:40px;color:var(--text-dim)">天气数据加载中，请稍后刷新</div>';});
+}
+
+function weatherRisk(city){
+  var w=city.current.weather_code;
+  var t=city.current.temperature_2m;
+  var p=city.daily.precipitation_probability_max[0]||0;
+  if([95,96,99,65,82].includes(w)||t>38) return {level:'🔴',label:'极端天气',order:0};
+  if([61,63,80,81].includes(w)||t>35||p>=60) return {level:'🟡',label:'关注',order:1};
+  return {level:'🟢',label:'正常',order:2};
+}
+
+function weatherSuggestion(city,wc){
+  var t=city.current.temperature_2m;
+  var p=city.daily.precipitation_probability_max[0]||0;
+  var w=city.current.weather_code;
+  if([95,96,99].includes(w)) return '⚡ 雷暴预警→提前群发+配送延迟提示';
+  if([65,82].includes(w)) return '🌧 大雨→主推外卖免配送费';
+  if([61,63,80,81].includes(w)) return '🌧 降雨→强调外卖便利+配送提示';
+  if(t>37) return '🔥 极端高温→冰镇西瓜+冰柠优先';
+  if(t>34) return '☀️ 高温→推冰镇果切+解暑单品';
+  if(p>=60) return '💧 高降水概率→备雨天话术';
+  return '🍉 天气良好→常规推送';
+}
+
+function renderWeather(){
+  if(!weatherData) return;
+  var cities=[];
+  for(var c in weatherData.cities){
+    var ci=weatherData.cities[c];
+    var risk=weatherRisk(ci);
+    ci._name=c; ci._risk=risk;
+    cities.push(ci);
+  }
+  cities.sort(function(a,b){return a._risk.order-b._risk.order || b.orders-a.orders;});
+
+  if(weatherFilter) cities=cities.filter(function(ci){return ci._name.indexOf(weatherFilter)>=0;});
+
+  var h=''; var currentRisk='';
+  var dayNames=['今天','明天','后天'];
+
+  cities.forEach(function(ci){
+    if(ci._risk.label!==currentRisk){
+      currentRisk=ci._risk.label;
+      var group=cities.filter(function(c){return c._risk.label===currentRisk;});
+      h+='<div style="font-weight:700;font-size:13px;margin:16px 0 8px;color:var(--text)">━━━ '+ci._risk.level+' '+currentRisk+'（'+group.length+'城）</div>';
+    }
+
+    h+='<div class="card" style="margin-bottom:8px;padding:12px 16px;cursor:pointer" onclick="toggleWeatherDetail(this)">';
+    h+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">';
+    h+='<span style="font-weight:700;font-size:14px;min-width:40px">'+ci._name+'</span>';
+    h+='<span style="font-size:11px;color:var(--text-dim);background:var(--bg);padding:2px 8px;border-radius:10px">'+ci.orders+'单</span>';
+    h+='<span style="font-size:11px;color:var(--brand)">💡 '+weatherSuggestion(ci)+'</span>';
+    h+='</div>';
+
+    h+='<div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);gap:6px">';
+    for(var i=0;i<3;i++){
+      var wc=weatherCodes[ci.daily.weather_code[i]]||'';
+      var rain=ci.daily.precipitation_probability_max[i]||0;
+      h+='<div style="text-align:center;background:var(--bg);border-radius:8px;padding:8px 4px">';
+      h+='<div style="font-size:10px;color:var(--text-dim);margin-bottom:2px">'+dayNames[i]+'</div>';
+      h+='<div style="font-size:20px">'+wc.split(' ')[0]+'</div>';
+      h+='<div style="font-size:11px;font-weight:600">'+ci.daily.temperature_2m_min[i]+'°~'+ci.daily.temperature_2m_max[i]+'°</div>';
+      if(rain>0) h+='<div style="font-size:10px;color:#1565c0">💧 '+rain+'%</div>';
+      h+='</div>';
+    }
+    h+='</div>';
+
+    var cur=ci.current;
+    h+='<div class="weather-detail" style="display:none;margin-top:8px;font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:8px">';
+    h+='🌡 '+cur.temperature_2m+'°C · 💨 '+cur.wind_speed_10m+'km/h · 💧 '+cur.relative_humidity_2m+'%';
+    h+='</div>';
+    h+='</div>';
+  });
+
+  if(!cities.length) h='<div style="text-align:center;padding:40px;color:var(--text-dim)">无匹配城市</div>';
+  document.getElementById('weatherContent').innerHTML=h;
+}
+
+function toggleWeatherDetail(el){
+  var detail=el.querySelector('.weather-detail');
+  if(detail) detail.style.display=detail.style.display==='none'?'block':'none';
+}
+
+function filterWeather(){
+  weatherFilter=document.getElementById('weatherCity').value.trim();
+  renderWeather();
+}
+
+loadWeatherData();
+
+// ═══════ TODO ═══════
+var todoItems=[];
+function loadTodos(){
+  try{todoItems=JSON.parse(localStorage.getItem('qg_todos')||'[]');}catch(e){todoItems=[];}
+  renderTodos();
+}
+function saveTodos(){localStorage.setItem('qg_todos',JSON.stringify(todoItems));}
+function renderTodos(){
+  var h=''; var done=0;
+  todoItems.forEach(function(t,i){
+    var cls=t.done?' style="text-decoration:line-through;color:var(--text-dim)"':'';
+    h+='<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border)">';
+    h+='<input type="checkbox" onchange="toggleTodo('+i+')" '+ (t.done?'checked':'') +' style="cursor:pointer">';
+    h+='<span '+cls+'>'+t.text+'</span>';
+    h+='<button onclick="deleteTodo('+i+')" style="margin-left:auto;background:none;border:none;color:var(--red);cursor:pointer;font-size:12px">✕</button>';
+    h+='</div>';
+    if(t.done) done++;
+  });
+  document.getElementById('todoList').innerHTML=h||'<div style="color:var(--text-dim);text-align:center;padding:20px">暂无待办，试试添加一条</div>';
+  document.getElementById('todoCount').textContent=todoItems.length+' 条 · '+done+' 已完成';
+}
+function addTodo(){
+  var v=document.getElementById('todoInput').value.trim();
+  if(!v)return;
+  todoItems.push({text:v,done:false,time:new Date().toISOString()});
+  document.getElementById('todoInput').value='';
+  saveTodos();renderTodos();
+}
+function toggleTodo(i){todoItems[i].done=!todoItems[i].done;saveTodos();renderTodos();}
+function deleteTodo(i){todoItems.splice(i,1);saveTodos();renderTodos();}
+
+
+// ═══════ WEATHER ═══════
 var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',45:'🌫 雾',48:'🌫 雾凇',51:'🌧 小毛毛雨',53:'🌧 毛毛雨',55:'🌧 大毛毛雨',61:'🌧 小雨',63:'🌧 中雨',65:'🌧 大雨',71:'❄️ 小雪',73:'❄️ 中雪',75:'❄️ 大雪',77:'❄️ 雪粒',80:'🌧 阵雨',81:'🌧 中阵雨',82:'🌧 大阵雨',85:'❄️ 小阵雪',86:'❄️ 大阵雪',95:'⛈ 雷暴',96:'⛈ 雷暴+小冰雹',99:'⛈ 雷暴+大冰雹'};
 function fetchWeather(){
   var city=document.getElementById('weatherCity').value.trim();
