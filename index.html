@@ -120,7 +120,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
   <div class="nav-item" data-page="community"><span class="icon">📅</span><span>社群运营</span></div>
   <div class="nav-item" data-page="communitydata"><span class="icon">👥</span><span>社群数据</span></div>
   <div class="nav-item" data-page="acquisition"><span class="icon">🔗</span><span>社群引流</span></div>
-  <div class="nav-item" data-page="activities"><span class="icon">🎯</span><span>小程序活动</span></div>
   <div class="nav-section">创作</div>
   <div class="nav-item" data-page="products">
     <span class="icon">📦</span> <span>产品库</span>
@@ -226,31 +225,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
         </div>
       </div>
     </div>
-    <div class="page" id="page-activities">
-      <div style="display:flex;gap:8px;margin-bottom:16px">
-        <button class="btn btn-primary" onclick="switchActTab('member')" id="actBtnMember" style="font-size:13px">🍎 周三会员日</button>
-        <button class="btn btn-ghost" onclick="switchActTab('weekend')" id="actBtnWeekend" style="font-size:13px">🛒 周末套餐</button>
-        <button class="btn btn-ghost" onclick="switchActTab('monthly')" id="actBtnMonthly" style="font-size:13px">💰 月末宠粉周</button>
-      </div>
-      <div id="actContentMember" class="act-tab">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-          <span style="font-size:13px;font-weight:600;color:var(--text-dim)">📅 选择日期：</span>
-          <select id="memberDateSelect" onchange="renderMemberDay()" style="padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:#fff">
-            <option value="2026-07-15">7月15日 vs 7月8日</option>
-            <option value="2026-07-08">7月8日 vs 7月1日</option>
-            <option value="2026-07-01">7月1日 vs 6月24日</option>
-          </select>
-          <a href="#" onclick="window.open('切果NOW周三会员日复盘报告_2026-07-15.html','_blank')" class="btn btn-primary" style="text-decoration:none;font-size:12px;margin-left:auto">📊 完整复盘看板</a>
-        </div>
-        <div class="grid2" id="memberDayContent"></div>
-      </div>
-      <div id="actContentWeekend" class="act-tab" style="display:none">
-        <div class="card"><div class="card-header"><div class="card-title">🛒 自选3盒套餐 · 三轮推送对比</div></div><div style="font-size:13px;line-height:2.2;color:var(--text-dim)"><div>R1(6.18-21): 日均48.2单 · 连带率24.9% · 193单</div><div>R2(7.3-5): 日均52.0单 · 连带率28.2% · 156单 🔥高温红利</div><div>R3(7.10-12): 日均47.7单 · 连带率<b style="color:var(--brand)">33.6%</b> · 143单 🌧暴雨拖累</div><div style="margin-top:8px;font-size:11px">💡 剔除天气因素后R3质量最优（前2天日均54.5单），新客连带率37%三轮最高</div></div></div>
-      </div>
-      <div id="actContentMonthly" class="act-tab" style="display:none">
-        <div class="card"><div class="card-header"><div class="card-title">💰 月末9.9宠粉特价周 · 5-6月对比</div></div><div style="font-size:13px;line-height:2.2;color:var(--text-dim)"><div>5月: 679单 · ¥13,541 · 328家店 · 客单价¥19.94</div><div>6月: 713单 · ¥13,952 · 334家店 · 客单价¥19.57</div><div style="margin-top:8px;font-size:11px">📈 6月订单↑5%、门店↑6家，环比基线周提升显著（6月基线仅182单→713单）</div></div></div>
-      </div>
-    </div>
+    
 <div class="page" id="page-products">
       <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;min-height:calc(100vh - 100px)">
         <!-- LEFT -->
@@ -541,7 +516,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
-<script src="js/app_v8.js?v=56"></script>
+<script src="js/app_v8.js?v=57"></script>
   <div id="cardModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
     <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)">
       <div style="font-weight:700;margin-bottom:16px;font-size:15px">➕ 添加花字卡片</div>

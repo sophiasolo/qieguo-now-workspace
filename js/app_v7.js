@@ -2283,7 +2283,7 @@ loadAilItems();
 
 
 // ═══════ INIT ═══════
-renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderMemberDay();renderAcquisition();loadCopyConfig();applyCopyConfig();
+renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();
 setInterval(function(){loadSentimentData();},30*60*1000);
 document.getElementById('noteModal').addEventListener('click',function(e){if(e.target===this)closeNoteModal();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeNoteModal();closeApiKeyModal();}});
