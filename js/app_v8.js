@@ -1814,6 +1814,9 @@ var recipeTypeMap={cover:'小程序封面',community:'社群群发'};
 
 
 // ═══════ COMMUNITY ═══════
+function openReport(type,file){
+  window.open(file,"_blank");
+}
 function renderWeeklyReports(){
   fetch('community_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     if(!d)return;
