@@ -2282,8 +2282,40 @@ loadAilItems();
 })();
 
 
+
+// ═══════ TODO ═══════
+var todoItems=[];
+function loadTodos(){
+  try{todoItems=JSON.parse(localStorage.getItem('qg_todos')||'[]');}catch(e){todoItems=[];}
+  renderTodos();
+}
+function saveTodos(){localStorage.setItem('qg_todos',JSON.stringify(todoItems));}
+function renderTodos(){
+  var h=''; var done=0;
+  todoItems.forEach(function(t,i){
+    var cls=t.done?' style="text-decoration:line-through;color:var(--text-dim)"':'';
+    h+='<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border)">';
+    h+='<input type="checkbox" onchange="toggleTodo('+i+')" '+ (t.done?'checked':'') +' style="cursor:pointer">';
+    h+='<span '+cls+'>'+t.text+'</span>';
+    h+='<button onclick="deleteTodo('+i+')" style="margin-left:auto;background:none;border:none;color:var(--red);cursor:pointer;font-size:12px">✕</button>';
+    h+='</div>';
+    if(t.done) done++;
+  });
+  document.getElementById('todoList').innerHTML=h||'<div style="color:var(--text-dim);text-align:center;padding:20px">暂无待办，试试添加一条</div>';
+  document.getElementById('todoCount').textContent=todoItems.length+' 条 · '+done+' 已完成';
+}
+function addTodo(){
+  var v=document.getElementById('todoInput').value.trim();
+  if(!v)return;
+  todoItems.push({text:v,done:false,time:new Date().toISOString()});
+  document.getElementById('todoInput').value='';
+  saveTodos();renderTodos();
+}
+function toggleTodo(i){todoItems[i].done=!todoItems[i].done;saveTodos();renderTodos();}
+function deleteTodo(i){todoItems.splice(i,1);saveTodos();renderTodos();}
+
 // ═══════ INIT ═══════
-renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();
+loadTodos();renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();
 setInterval(function(){loadSentimentData();},30*60*1000);
 document.getElementById('noteModal').addEventListener('click',function(e){if(e.target===this)closeNoteModal();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeNoteModal();closeApiKeyModal();}});
