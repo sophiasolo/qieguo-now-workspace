@@ -193,11 +193,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans G
       </div>
       <div class="card" style="margin-bottom:16px;overflow:hidden"><div class="card-header"><div class="card-title">📈 2026年累计趋势</div></div><div style="position:relative;height:200px"><canvas id="communityTrendChart"></canvas></div></div>
       <div class="grid2">
-        <div class="card"><div class="card-header"><div class="card-title">📊 社群周报</div></div><div id="weeklyReportsList" style="font-size:13px;line-height:2"></div></div>
-      </div>
-      <div class="grid2">
-        <div class="card"><div class="card-header"><div class="card-title">📈 月度报告</div></div><div id="monthlyReportsList" style="font-size:13px;line-height:2"></div></div>
-        <div class="card"><div class="card-header"><div class="card-title">📖 社群半年报</div></div><div style="font-size:13px;line-height:2"><div>📄 <a href="#" onclick="openReport('half','社群半年报_2026H1')" style="color:var(--brand)">2026H1 社群半年报（3-6月）</a></div><div style="color:var(--text-dim);font-size:11px;margin-top:4px">1,013家门店 · 1,045个群 · 半年净增+27,455人</div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">📊 定期报告</div></div>
+          <div style="font-size:13px;line-height:2">
+            <div style="font-weight:600;color:var(--text);margin-bottom:4px">📈 月度报告</div>
+            <div id="monthlyReportsList"></div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+              <div style="font-weight:600;color:var(--text);margin-bottom:4px">📖 社群半年报</div>
+              <div>📄 <a href="#" onclick="openReport('half','社群半年报_2026H1')" style="color:var(--brand)">2026H1 社群半年报（3-6月）</a></div>
+              <div style="color:var(--text-dim);font-size:11px;margin-top:4px">1,013家门店 · 1,045个群 · 半年净增+27,455人</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="page" id="page-acquisition">
