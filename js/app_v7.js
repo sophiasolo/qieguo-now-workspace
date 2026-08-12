@@ -1823,10 +1823,10 @@ var MEMBER_DATA={"2026-07-15":{prev:"2026-07-08",orders:707,prevOrders:712,sales
     var ctx=document.getElementById('communityTrendChart');
     if(!ctx)return;
     var old=Chart.getChart('communityTrendChart');if(old)old.destroy();
-    var weeks=['W27','W28','W29','W30','W31','W32','W33','W34'];
-    var members=[31100,31400,31700,32100,32500,32800,33100,33321];
-    var join=[620,580,540,490,440,410,395,391];
-    var quit=[580,560,530,520,510,520,510,502];
+    var weeks=['1月','2月','3月','4月','5月','6月','7月','8月'];
+    var members=[22300,24800,27100,29000,30800,32200,33321,33600];
+    var join=[2800,2300,1900,1800,1400,1121,391,380];
+    var quit=[1500,1400,1200,1100,1000,950,502,400];
     new Chart(ctx,{
       type:'line',
       data:{
