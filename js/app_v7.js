@@ -1862,10 +1862,13 @@ function renderWeeklyReports(){
       ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{type:'linear',position:'left',ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},y1:{type:'linear',position:'right',min:60,max:100,ticks:{font:{size:10}},grid:{display:false}}}}});
     },200);
     // Churn alerts
-    var churnAlerts=d.churn_alerts||[];
+    var churnCount=d.churn_count||0;
     var ahtml='';
-    if(churnAlerts.length===0) ahtml='<div style="text-align:center;padding:20px;color:var(--g)">✅ 本周无退群率>10%门店</div>';
-    else churnAlerts.forEach(function(a){ahtml+='<div style="padding:6px 0;border-bottom:1px solid var(--border)">🏪 '+a.store+' <span style="color:#e53935;font-weight:600">'+a.rate+'%</span></div>';});
+    if(churnCount===0){
+      ahtml='<div style="text-align:center;padding:20px;color:var(--brand)">✅ 本周无退群率>10%门店</div>';
+    }else{
+      ahtml='<div style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:800;color:#e53935">'+churnCount+'家</div><div style="font-size:12px;color:var(--text-dim);margin-top:4px">门店退群率>10%，明细看统一周报</div></div>';
+    }
     document.getElementById('churnAlertList').innerHTML=ahtml;
   }).catch(function(e){console.log('community data load error',e);});
   // Week/Month report links
