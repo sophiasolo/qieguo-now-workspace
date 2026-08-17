@@ -1,0 +1,257 @@
+#!/usr/bin/env python3
+"""小H 热搜抓取 v2 —— 百度 + 微博双平台实时热搜
+功能：
+  1. 抓取百度热搜榜（top.baidu.com API）
+  2. 抓取微博热搜榜（weibo.com/ajax/side/hotSearch）
+  3. 合并去重（模糊匹配）
+  4. 关键词分类（果切相关优先）
+  5. 数据保护：去重后少于 10 条不写入
+  6. 写入 hotspot.json 并自动 git push
+"""
+import json
+import re
+import sys
+import urllib.request
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+
+import requests
+
+WORKSPACE = Path.home() / "Desktop" / "切果NOW工作台"
+HOTSPOT_FILE = WORKSPACE / "hotspot.json"
+
+# 数据保护阈值：去重后条目少于该值，不写入文件
+MIN_ITEMS = 10
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*",
+}
+
+BAIDU_API = "https://top.baidu.com/api/board?platform=wise&tab=realtime"
+WEIBO_API = "https://weibo.com/ajax/side/hotSearch"
+
+
+# ── 抓取 ──────────────────────────────────────────────────
+def fetch_baidu():
+    """抓取百度热搜榜，返回 [{"word", "url"}, ...]"""
+    try:
+        r = requests.get(BAIDU_API, headers={**HEADERS, "Referer": "https://top.baidu.com/"},
+                         timeout=15)
+        r.raise_for_status()
+        d = r.json()
+    except Exception as e:
+        print(f"❌ 百度抓取失败: {e}")
+        return []
+
+    cards = d.get("data", {}).get("cards", [])
+    items = []
+
+    def collect(obj):
+        if isinstance(obj, dict):
+            if obj.get("word") and obj.get("url"):
+                items.append({"word": obj["word"].strip(), "url": obj["url"]})
+            for v in obj.values():
+                collect(v)
+        elif isinstance(obj, list):
+            for v in obj:
+                collect(v)
+
+    collect(cards)
+    # 按出现顺序去重
+    seen = set()
+    uniq = []
+    for it in items:
+        if it["word"] and it["word"] not in seen:
+            seen.add(it["word"])
+            uniq.append(it)
+    return uniq
+
+
+def fetch_weibo():
+    """抓取微博热搜榜，返回 [{"word", "num"}, ...]"""
+    try:
+        r = requests.get(WEIBO_API, headers={**HEADERS, "Referer": "https://weibo.com/"},
+                         timeout=15)
+        r.raise_for_status()
+        d = r.json()
+    except Exception as e:
+        print(f"❌ 微博抓取失败: {e}")
+        return []
+
+    realtime = d.get("data", {}).get("realtime", [])
+    items = []
+    for it in realtime:
+        word = (it.get("word") or "").strip()
+        if word:
+            items.append({"word": word, "num": it.get("num", 0)})
+    return items
+
+
+# ── 去重 ──────────────────────────────────────────────────
+def normalize(word):
+    """去除标点符号和空格，用于模糊去重"""
+    return re.sub(r"[^\u4e00-\u9fa5a-zA-Z0-9]", "", word).lower()
+
+
+# ── 分类 ──────────────────────────────────────────────────
+CATEGORY_KEYWORDS = {
+    # 果切相关：严格限定为「水果品种 + 果切核心词 + 清凉解暑卖点」，
+    # 不再混入季节/天气/娱乐泛词（凉鞋、暑期档、夏天、高温等）以免误伤。
+    "🍉果切相关": [
+        "水果", "果切", "鲜切", "现切", "鲜榨", "果汁", "果盘", "果篮",
+        "西瓜", "芒果", "葡萄", "阳光玫瑰", "麒麟瓜", "榴莲", "凤梨",
+        "哈密瓜", "荔枝", "车厘子", "蜜桃", "蜜瓜", "草莓", "椰子",
+        "椰青", "蓝莓", "桑葚", "火龙果", "猕猴桃", "橙子", "柑橘",
+        "柚子", "枇杷", "杨梅", "山竹", "龙眼", "香蕉", "苹果", "梨",
+        "消暑", "解暑", "冰镇", "清凉", "解渴",
+    ],
+    "🎬娱乐": [
+        "明星", "演员", "歌手", "电影", "电视剧", "综艺", "演唱会",
+        "官宣", "恋情", "真人秀", "八卦", "演唱", "新歌", "专辑",
+        "撤档", "定档", "杀青", "首映", "票房", "男团", "女团",
+    ],
+    "🍜美食": [
+        "美食", "小吃", "火锅", "烧烤", "餐厅", "探店", "网红店",
+        "外卖", "食材", "食安", "添加剂", "餐饮", "零食", "夜市",
+    ],
+    "🏠生活": [
+        "健康", "睡眠", "养生", "运动", "健身", "减肥", "天气", "高温",
+        "台风", "暴雨", "地震", "开学", "放假", "高考", "考研", "加班",
+        "辞职", "工资", "房子", "房租", "装修", "旅游", "出行", "机票",
+        "酒店", "存款", "产假", "安全", "消防",
+    ],
+    "🏷️品牌": [
+        "华为", "苹果", "特斯拉", "小米", "比亚迪", "淘宝", "京东",
+        "拼多多", "抖音", "快手", "支付宝", "美团", "饿了么",
+        "瑞幸", "星巴克", "海底捞", "奈雪", "喜茶", "蜜雪冰城",
+        "上市", "市值", "发布会", "融资", "联名",
+    ],
+    "🎉节日": [
+        "七夕", "中秋", "国庆", "元旦", "春节", "端午", "清明",
+        "劳动节", "圣诞", "情人节", "双十一", "618", "双十二",
+    ],
+}
+
+
+# 否定词：命中这些短语时，即使包含该分类关键词也不归入该类（规避比喻/多义误伤）
+NEGATIVE_EXCLUDE = {
+    "🏠生活": ["人事地震"],  # “人事地震”是人事变动的比喻，非自然灾害
+}
+
+
+def classify(word):
+    """按优先级匹配分类，果切相关优先，命中否定词则跳过，未命中归入综合"""
+    for cat, kws in CATEGORY_KEYWORDS.items():
+        if any(neg in word for neg in NEGATIVE_EXCLUDE.get(cat, [])):
+            continue
+        for kw in kws:
+            if kw in word:
+                return cat
+    return "📌综合"
+
+
+# ── 主流程 ────────────────────────────────────────────────
+def main():
+    print("📡 抓取百度热搜 ...")
+    baidu = fetch_baidu()
+    print(f"   百度: {len(baidu)} 条")
+
+    print("📡 抓取微博热搜 ...")
+    weibo = fetch_weibo()
+    print(f"   微博: {len(weibo)} 条")
+
+    # 合并去重：先放百度，微博做宽松包含去重
+    merged = []
+    seen_norm = set()
+
+    for it in baidu:
+        n = normalize(it["word"])
+        if n and n not in seen_norm:
+            seen_norm.add(n)
+            merged.append({
+                "word": it["word"],
+                "source": "百度",
+                "url": f"https://www.baidu.com/s?wd={urllib.request.quote(it['word'])}",
+            })
+
+    for it in weibo:
+        n = normalize(it["word"])
+        if not n:
+            continue
+        is_dup = any(n in s or s in n for s in seen_norm)
+        if not is_dup:
+            seen_norm.add(n)
+            merged.append({
+                "word": it["word"],
+                "source": "微博",
+                "url": f"https://s.weibo.com/weibo?q={urllib.request.quote(it['word'])}",
+            })
+
+    # 分类
+    for item in merged:
+        item["category"] = classify(item["word"])
+
+    total = len(merged)
+    print(f"\n🔗 合并去重后共 {total} 条")
+
+    # ── 数据保护：少于 MIN_ITEMS 条不写入 ──────────────────
+    if total < MIN_ITEMS:
+        print(f"⚠️ 数据保护：去重后仅 {total} 条（< {MIN_ITEMS}），跳过写入，保持现有数据不变。")
+        return 0
+
+    # ── 写入 hotspot.json ──────────────────────────────────
+    tz = timezone(timedelta(hours=8))
+    now = datetime.now(tz)
+    result = {
+        "date": now.strftime("%Y-%m-%d %H:%M"),
+        "items": merged,
+    }
+    HOTSPOT_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2),
+                            encoding="utf-8")
+    print(f"✅ 已写入 {HOTSPOT_FILE}（{total} 条）")
+
+    # 分类统计
+    from collections import Counter
+    cat_count = Counter(i["category"] for i in merged)
+    for cat in ["🍉果切相关", "🎬娱乐", "🍜美食", "🏠生活", "🏷️品牌", "🎉节日", "📌综合"]:
+        if cat_count.get(cat):
+            print(f"   {cat}: {cat_count[cat]} 条")
+
+    # ── git push ───────────────────────────────────────────
+    git_push(total)
+    return 0
+
+
+def git_push(total):
+    """提交并推送 hotspot.json（仅提交本文件，避免夹带无关改动）"""
+    import subprocess
+    try:
+        subprocess.run(["git", "add", "--", str(HOTSPOT_FILE)], cwd=WORKSPACE, check=True)
+        commit_msg = f"🔥 热搜更新: {datetime.now(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')} ({total}条)"
+        r = subprocess.run(["git", "commit", "-m", commit_msg], cwd=WORKSPACE,
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            print(f"✅ git commit: {commit_msg}")
+        else:
+            out = (r.stdout + r.stderr).strip()
+            if "nothing to commit" in out or "nothing added" in out:
+                print("ℹ️ 无变更，跳过 commit")
+            else:
+                print(f"⚠️ git commit 未成功: {out}")
+                return
+        push = subprocess.run(["git", "push"], cwd=WORKSPACE, capture_output=True, text=True, timeout=60)
+        print(push.stdout.strip() or push.stderr.strip())
+        if push.returncode == 0:
+            print("✅ git push 成功")
+        else:
+            print(f"⚠️ git push 失败: {(push.stderr or push.stdout).strip()}")
+    except subprocess.TimeoutExpired:
+        print("⚠️ git push 超时")
+    except Exception as e:
+        print(f"⚠️ git 操作异常: {e}")
+
+
+if __name__ == "__main__":
+    sys.exit(main())
