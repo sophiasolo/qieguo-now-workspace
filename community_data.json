@@ -109,6 +109,9 @@
       "join": 56
     },
     "hist_join_rate": 82.9,
+    "scan_qoq": 2.3,
+    "join_qoq": 2.1,
+    "loss_qoq": 17.6,
     "week_join_rate": 74.7,
     "retention": {
       "h24": 90.4,
