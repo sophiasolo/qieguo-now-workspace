@@ -2329,7 +2329,46 @@ var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',4
 })();
 
 // ═══════ INIT ═══════
-loadTodos();renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();
+
+// ═══════ SYNC ═══════
+var SYNC_KEYS=['qg_custom_cards','qg_deleted_cards','qg_copy_config','qg_copy_history','qg_prompt_favs','qg_prompt_recipes','qg_schedule_overrides','qg_stars','qg_hidden','qg_products'];
+function exportPersonalData(){
+  var data={exported_at:new Date().toISOString(),version:1};
+  var count=0;
+  SYNC_KEYS.forEach(function(k){
+    var v=localStorage.getItem(k);
+    if(v!==null){data[k]=v;count++;}
+  });
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='personal_data.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('✅ 已导出 '+count+' 项个人数据，下载后自动同步云端');
+}
+function importPersonalData(){
+  fetch('personal_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    var restored=false;
+    SYNC_KEYS.forEach(function(k){
+      if(d[k] && !localStorage.getItem(k)){
+        localStorage.setItem(k,d[k]);
+        restored=true;
+      }
+    });
+    if(restored){
+      toast('✅ 个人数据已从云端恢复');
+      try{renderStarPage();}catch(e){}
+      try{renderSchedule();}catch(e){}
+      try{loadCopyConfig();applyCopyConfig();}catch(e){}
+    }
+  }).catch(function(){});
+}
+
+loadTodos();renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();importPersonalData();
 setInterval(function(){loadSentimentData();},30*60*1000);
 document.getElementById('noteModal').addEventListener('click',function(e){if(e.target===this)closeNoteModal();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeNoteModal();closeApiKeyModal();}});
