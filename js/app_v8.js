@@ -1887,17 +1887,20 @@ function renderAcquisition(){
     var qr=a.qr||{};
     if(!f.scan && !a.scan_total){return;}
     var fmt=function(v){return (v||0).toLocaleString();};
-    var qoq=function(v){
+    var qoq=function(v,inverse){
       if(v===undefined||v===null) return '';
-      if(v>0) return '<span style="color:var(--brand);font-weight:600">↑ +'+v+'%</span>';
-      if(v<0) return '<span style="color:#e53935;font-weight:600">↓ '+v+'%</span>';
+      var color;
+      if(inverse){ color = (v>0) ? '#e53935' : 'var(--brand)'; }
+      else { color = (v>0) ? 'var(--brand)' : '#e53935'; }
+      if(v>0) return '<span style="color:'+color+';font-weight:600">↑ +'+v+'%</span>';
+      if(v<0) return '<span style="color:'+color+';font-weight:600">↓ '+v+'%</span>';
       return '<span style="color:var(--text-dim)">→ 持平</span>';
     };
     var rate=function(a,b){return (b&&a!==undefined&&a!==null)?Math.round(a/b*1000)/10:'?';};
     var kpi='<div class="kpi accent-blue"><div class="kpi-label">📣 本周扫码</div><div class="kpi-value">'+(f.scan||0)+'<span class="kpi-change flat">次</span></div><div class="kpi-sub">累计'+fmt(a.scan_total)+' '+qoq(a.scan_qoq)+'</div></div>';
     kpi+='<div class="kpi accent-teal"><div class="kpi-label">➕ 本周加好友</div><div class="kpi-value">'+(f.add||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">扫码转化 '+rate(f.add,f.scan)+'%</div></div>';
     kpi+='<div class="kpi accent-amber"><div class="kpi-label">📥 本周进群</div><div class="kpi-value">'+(f.join||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">进群率'+(a.week_join_rate||'?')+'% · 历史'+(a.hist_join_rate||'?')+'%</div></div>';
-    kpi+='<div class="kpi accent-red"><div class="kpi-label">📤 本周流失</div><div class="kpi-value">'+(a.week_loss||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+qoq(a.loss_qoq)+'</div></div>';
+    kpi+='<div class="kpi accent-red"><div class="kpi-label">📤 本周流失</div><div class="kpi-value">'+(a.week_loss||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+qoq(a.loss_qoq,true)+'</div></div>';
     kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 累计进群</div><div class="kpi-value">'+fmt(a.join_total)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+qoq(a.join_qoq)+'</div></div>';
     document.getElementById('acquisitionKPI').innerHTML=kpi;
     var funnel='<div style="background:var(--bg);border-radius:8px;padding:16px">';
