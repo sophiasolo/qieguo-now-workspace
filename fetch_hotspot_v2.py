@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""小H 热搜抓取 v2 —— 百度 + 微博双平台实时热搜
+"""小H 热搜抓取 v2 —— 百度 + 微博 + 抖音三平台实时热搜
 功能：
   1. 抓取百度热搜榜（top.baidu.com API）
   2. 抓取微博热搜榜（weibo.com/ajax/side/hotSearch）
-  3. 合并去重（模糊匹配）
-  4. 关键词分类（果切相关优先）
-  5. 数据保护：去重后少于 10 条不写入
-  6. 写入 hotspot.json 并自动 git push
+  3. 抓取抖音热榜（douyin.com/aweme/v1/web/hot/search/list）
+  4. 合并去重（模糊匹配）
+  5. 关键词分类（果切相关优先，窄而准）
+  6. 数据保护：去重后少于 10 条不写入
+  7. 写入 hotspot.json 并自动 git push
 """
 import json
 import re
@@ -31,6 +32,7 @@ HEADERS = {
 
 BAIDU_API = "https://top.baidu.com/api/board?platform=wise&tab=realtime"
 WEIBO_API = "https://weibo.com/ajax/side/hotSearch"
+DOUYIN_API = "https://www.douyin.com/aweme/v1/web/hot/search/list/?detail_list=1&source=0"
 
 
 # ── 抓取 ──────────────────────────────────────────────────
@@ -89,6 +91,27 @@ def fetch_weibo():
     return items
 
 
+def fetch_douyin():
+    """抓取抖音热榜（热点榜 word_list），返回 [{"word"}, ...]。
+    该接口为公开热榜 API，无需登录 cookie 即可返回完整榜单。"""
+    try:
+        r = requests.get(DOUYIN_API, headers={**HEADERS, "Referer": "https://www.douyin.com/"},
+                         timeout=15)
+        r.raise_for_status()
+        d = r.json()
+    except Exception as e:
+        print(f"❌ 抖音抓取失败: {e}")
+        return []
+
+    word_list = d.get("data", {}).get("word_list", [])
+    items = []
+    for it in word_list:
+        word = (it.get("word") or "").strip()
+        if word:
+            items.append({"word": word})
+    return items
+
+
 # ── 去重 ──────────────────────────────────────────────────
 def normalize(word):
     """去除标点符号和空格，用于模糊去重"""
@@ -138,6 +161,17 @@ CATEGORY_KEYWORDS = {
 # 否定词：命中这些短语时，即使包含该分类关键词也不归入该类（规避比喻/多义误伤）
 NEGATIVE_EXCLUDE = {
     "🏠生活": ["人事地震"],  # “人事地震”是人事变动的比喻，非自然灾害
+    # 果切相关：严格规避「水果品种词」的多义误伤，勿把国名/公司/医学术语当水果
+    "🍉果切相关": [
+        "葡萄牙",      # 「葡萄牙」是国名（含“葡萄”二字），非水果
+        "葡萄球菌",    # 医学名词（含“葡萄”）
+        "葡萄糖",      # 化学名词（含“葡萄”）
+        "苹果发布会",  # 苹果公司新品发布会，非水果
+        "苹果手机", "苹果新品", "苹果公司", "苹果官网", "苹果股价",
+        "苹果市值", "苹果耳机", "苹果电脑", "苹果笔记本", "苹果生态",
+        "苹果税", "苹果表",
+        "梨园",        # 「梨园」指戏曲界，非水果
+    ],
 }
 
 
@@ -162,7 +196,11 @@ def main():
     weibo = fetch_weibo()
     print(f"   微博: {len(weibo)} 条")
 
-    # 合并去重：先放百度，微博做宽松包含去重
+    print("📡 抓取抖音热榜 ...")
+    douyin = fetch_douyin()
+    print(f"   抖音: {len(douyin)} 条")
+
+    # 合并去重：先放百度，微博/抖音做宽松包含去重
     merged = []
     seen_norm = set()
 
@@ -187,6 +225,19 @@ def main():
                 "word": it["word"],
                 "source": "微博",
                 "url": f"https://s.weibo.com/weibo?q={urllib.request.quote(it['word'])}",
+            })
+
+    for it in douyin:
+        n = normalize(it["word"])
+        if not n:
+            continue
+        is_dup = any(n in s or s in n for s in seen_norm)
+        if not is_dup:
+            seen_norm.add(n)
+            merged.append({
+                "word": it["word"],
+                "source": "抖音",
+                "url": f"https://www.douyin.com/search/{urllib.request.quote(it['word'])}",
             })
 
     # 分类
