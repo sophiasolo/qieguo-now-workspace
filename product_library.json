@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-24T13:12:41.513497",
+  "updated": "2026-08-24T13:15:38.644352",
   "source": "点单平台订单明细表-2026-08-23.xls",
   "total_products": 188,
   "categories": [
@@ -153,7 +153,7 @@
       "price": 18.8,
       "sales": 126,
       "orders": 125,
-      "category": "🆕 网红创新"
+      "category": "📦 经典果切"
     },
     {
       "name": "【大三拼】自选",
@@ -369,7 +369,7 @@
       "price": 16.8,
       "sales": 62,
       "orders": 53,
-      "category": "🆕 网红创新"
+      "category": "📦 经典果切"
     },
     {
       "name": "【乐纯干噎酸奶】阳光玫瑰夹干噎酸奶",
@@ -569,7 +569,7 @@
       "price": 13.8,
       "sales": 39,
       "orders": 33,
-      "category": "💎 高客单"
+      "category": "🥗 拼盘套餐"
     },
     {
       "name": "【自选】",
@@ -809,7 +809,7 @@
       "price": 13.8,
       "sales": 20,
       "orders": 11,
-      "category": "💎 高客单"
+      "category": "🥗 拼盘套餐"
     },
     {
       "name": "【果切】红心芭乐",
@@ -1161,7 +1161,7 @@
       "price": 16.8,
       "sales": 8,
       "orders": 8,
-      "category": "💎 高客单"
+      "category": "🥗 拼盘套餐"
     },
     {
       "name": "【果切】红心芭乐",
@@ -1217,7 +1217,7 @@
       "price": 22.8,
       "sales": 7,
       "orders": 7,
-      "category": "💎 高客单"
+      "category": "🥗 拼盘套餐"
     },
     {
       "name": "【果切】佳沛金果",
@@ -1337,7 +1337,7 @@
       "price": 500.0,
       "sales": 4,
       "orders": 1,
-      "category": "📦 经典果切"
+      "category": "💎 高客单"
     },
     {
       "name": "【四拼】吊干杏+梨+网纹甜瓜+千禧小红果.600g",
@@ -1393,7 +1393,7 @@
       "price": 17.8,
       "sales": 3,
       "orders": 3,
-      "category": "💎 高客单"
+      "category": "🥗 拼盘套餐"
     },
     {
       "name": "【四拼】阳光玫瑰+圣女果+哈密瓜+蓝莓.600g",
