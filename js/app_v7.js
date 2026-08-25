@@ -1471,7 +1471,7 @@ function generateCopyAI(){
     var linkParts=[];
     if(CopyConfig.linkMeituan)linkParts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
     if(CopyConfig.linkEleme)linkParts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
-    if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/LFtIEeLhMcgq0Rx');
+    if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/ZeXqPLeKOqtolPo');
     var linkFooter=linkParts.length?String.fromCharCode(10,10)+linkParts.join(String.fromCharCode(10)):"";
     // Append links to all versions
     for(var v=0;v<3;v++){if(versions[v]&&linkFooter)versions[v]=versions[v]+linkFooter;}
@@ -1882,47 +1882,73 @@ function switchActTab(tab){['Member','Weekend','Monthly'].forEach(function(t){va
 function renderAcquisition(){
   fetch('community_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     var a=d.acquisition||{};
-    var f=a.funnel||{};
-    var ret=a.retention||{};
-    var qr=a.qr||{};
+    var f=a.funnel||{};              // 合并漏斗(随单+台卡)
+    var ret=a.retention||{};         // 留存(比率不合并,保留随单卡口径)
+    var s=a.suidan||{};              // 随单卡明细
+    var sf=s.funnel||f;              // 随单卡漏斗(旧数据无 suidan 时回退 a.funnel)
+    var t=a.taika||{};               // 台卡明细
+    var tf=t.funnel||null;           // 台卡漏斗(无则隐藏台卡区)
     if(!f.scan && !a.scan_total){return;}
     var fmt=function(v){return (v||0).toLocaleString();};
-    var qoq=function(v,inverse){
-      if(v===undefined||v===null) return '';
-      var color;
-      if(inverse){ color = (v>0) ? '#e53935' : 'var(--brand)'; }
-      else { color = (v>0) ? 'var(--brand)' : '#e53935'; }
-      if(v>0) return '<span style="color:'+color+';font-weight:600">↑ +'+v+'%</span>';
-      if(v<0) return '<span style="color:'+color+';font-weight:600">↓ '+v+'%</span>';
-      return '<span style="color:var(--text-dim)">→ 持平</span>';
-    };
     var rate=function(a,b){return (b&&a!==undefined&&a!==null)?Math.round(a/b*1000)/10:'?';};
-    var kpi='<div class="kpi accent-blue"><div class="kpi-label">📣 本周扫码</div><div class="kpi-value">'+(f.scan||0)+'<span class="kpi-change flat">次</span></div><div class="kpi-sub">累计'+fmt(a.scan_total)+' '+qoq(a.scan_qoq)+'</div></div>';
-    kpi+='<div class="kpi accent-teal"><div class="kpi-label">➕ 本周加好友</div><div class="kpi-value">'+(f.add||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">扫码转化 '+rate(f.add,f.scan)+'%</div></div>';
-    kpi+='<div class="kpi accent-amber"><div class="kpi-label">📥 本周进群</div><div class="kpi-value">'+(f.join||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">进群率'+(a.week_join_rate||'?')+'% · 历史'+(a.hist_join_rate||'?')+'%</div></div>';
-    kpi+='<div class="kpi accent-red"><div class="kpi-label">📤 本周流失</div><div class="kpi-value">'+(a.week_loss||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+qoq(a.loss_qoq,true)+'</div></div>';
-    kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 累计进群</div><div class="kpi-value">'+fmt(a.join_total)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+qoq(a.join_qoq)+'</div></div>';
+    var fw=t.first_week;
+    var firstBadge=fw?'<span style="color:var(--text-dim)">🆕 含台卡首周 · 环比待下周</span>':'';
+    // ===== 合计 5 KPI(随单卡+台卡直接相加) =====
+    var sub1='随单'+(sf.scan||0)+(tf?' · 台卡'+(tf.scan||0):'');
+    var kpi='<div class="kpi accent-blue"><div class="kpi-label">📣 本周扫码客户</div><div class="kpi-value">'+(f.scan||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+sub1+'</div></div>';
+    kpi+='<div class="kpi accent-teal"><div class="kpi-label">➕ 本周加好友</div><div class="kpi-value">'+(f.add||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">扫码转化 '+rate(f.add,f.scan)+'% · 累计'+fmt(a.scan_total)+'</div></div>';
+    kpi+='<div class="kpi accent-amber"><div class="kpi-label">📥 本周进群</div><div class="kpi-value">'+(f.join||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">进群率 '+rate(f.join,f.add)+'% · 累计'+fmt(a.join_total)+'</div></div>';
+    kpi+='<div class="kpi accent-red"><div class="kpi-label">📤 本周流失</div><div class="kpi-value">'+(a.week_loss||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+firstBadge+'</div></div>';
+    kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 累计进群</div><div class="kpi-value">'+fmt(a.join_total)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+firstBadge+'</div></div>';
     document.getElementById('acquisitionKPI').innerHTML=kpi;
+    // ===== 随单卡 · 本周转化漏斗 =====
     var funnel='<div style="background:var(--bg);border-radius:8px;padding:16px">';
     funnel+='<div style="display:flex;align-items:center;gap:0;font-size:13px;margin-bottom:8px">';
-    funnel+='<div style="background:var(--brand);color:#fff;padding:8px 0;text-align:center;border-radius:6px 0 0 6px;flex:1">扫码 '+(f.scan||0)+'</div>';
+    funnel+='<div style="background:var(--brand);color:#fff;padding:8px 0;text-align:center;border-radius:6px 0 0 6px;flex:1">扫码 '+(sf.scan||0)+'</div>';
     funnel+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
-    funnel+='<div style="background:#00897b;color:#fff;padding:8px 0;text-align:center;flex:1">加好友 '+(f.add||0)+'</div>';
+    funnel+='<div style="background:#00897b;color:#fff;padding:8px 0;text-align:center;flex:1">加好友 '+(sf.add||0)+'<span style="font-size:9px;opacity:.8"> '+rate(sf.add,sf.scan)+'%</span></div>';
     funnel+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
-    funnel+='<div style="background:var(--blue);color:#fff;padding:8px 0;text-align:center;border-radius:0 6px 6px 0;flex:1">进群 '+(f.join||0)+'</div>';
+    funnel+='<div style="background:var(--blue);color:#fff;padding:8px 0;text-align:center;border-radius:0 6px 6px 0;flex:1">进群 '+(sf.join||0)+'<span style="font-size:9px;opacity:.8"> '+rate(sf.join,sf.add)+'%</span></div>';
     funnel+='</div>';
-    funnel+='<div style="font-size:11px;color:var(--text-dim)">本周进群率 '+(a.week_join_rate||'?')+'% · 历史累计 '+(a.hist_join_rate||'?')+'% · 活码'+(qr.active||'?')+'家 · '+(qr.scan||0)+'家有扫码</div>';
+    funnel+='<div style="font-size:11px;color:var(--text-dim)">本周进群率 '+rate(sf.join,sf.add)+'% · 历史累计 '+(s.hist_join_rate||'?')+'%</div>';
     funnel+='</div>';
     document.getElementById('communityFunnel').innerHTML=funnel;
+    // ===== 随单卡 · 历史留存率(4档) =====
     var rh='<div style="display:flex;gap:16px">';
-    rh+='<div style="flex:1;text-align:center;background:var(--brand-light);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--brand)">'+(ret.h24||'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">24h留存</div></div>';
-    rh+='<div style="flex:1;text-align:center;background:#e0f2f1;border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#00897b">'+(ret.d7||'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">7天留存</div></div>';
-    rh+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--text)">'+(ret.d30||'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">30天留存</div></div>';
+    rh+='<div style="flex:1;text-align:center;background:var(--brand-light);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--brand)">'+(((ret.h24)!=null)?(ret.h24).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">24h留存</div></div>';
+    rh+='<div style="flex:1;text-align:center;background:#e0f2f1;border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#00897b">'+(((ret.d7)!=null)?(ret.d7).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">7天留存</div></div>';
+    rh+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#f59f00">'+(((ret.d15)!=null)?(ret.d15).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">15天留存</div></div>';
+    rh+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--text)">'+(((ret.d30)!=null)?(ret.d30).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">30天留存</div></div>';
     rh+='</div>';
+    rh+='<div style="font-size:10px;color:var(--text-dim);margin-top:8px;text-align:center">历史总留存率 · 非本周新增 cohort 留存</div>';
     document.getElementById('communityRetention').innerHTML=rh;
+    // ===== 台卡区(无数据自动隐藏) =====
+    var taiSec=document.getElementById('taikaSection');
+    if(taiSec) taiSec.style.display=(tf?'':'none');
+    if(tf){
+      var tf2='<div style="background:var(--bg);border-radius:8px;padding:16px">';
+      tf2+='<div style="display:flex;align-items:center;gap:0;font-size:13px;margin-bottom:8px">';
+      tf2+='<div style="background:var(--brand);color:#fff;padding:8px 0;text-align:center;border-radius:6px 0 0 6px;flex:1">扫码 '+(tf.scan||0)+'</div>';
+      tf2+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
+      tf2+='<div style="background:#00897b;color:#fff;padding:8px 0;text-align:center;flex:1">加好友 '+(tf.add||0)+'<span style="font-size:9px;opacity:.8"> '+rate(tf.add,tf.scan)+'%</span></div>';
+      tf2+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
+      tf2+='<div style="background:var(--blue);color:#fff;padding:8px 0;text-align:center;border-radius:0 6px 6px 0;flex:1">进群 '+(tf.join||0)+'<span style="font-size:9px;opacity:.8"> '+rate(tf.join,tf.add)+'%</span></div>';
+      tf2+='</div>';
+      tf2+='<div style="font-size:11px;color:var(--text-dim)">本周进群率 '+rate(tf.join,tf.add)+'% · 历史累计 '+(t.hist_join_rate||'?')+'%'+(fw?' · 🆕 首周上线':'')+'</div>';
+      tf2+='</div>';
+      document.getElementById('taikaFunnel').innerHTML=tf2;
+      var tr=t.retention||{};
+      var rh2='<div style="display:flex;gap:16px">';
+      rh2+='<div style="flex:1;text-align:center;background:var(--brand-light);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--brand)">'+(((tr.h24)!=null)?(tr.h24).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">24h留存</div></div>';
+      rh2+='<div style="flex:1;text-align:center;background:#e0f2f1;border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#00897b">'+(((tr.d7)!=null)?(tr.d7).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">7天留存</div></div>';
+      rh2+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#f59f00">'+(((tr.d15)!=null)?(tr.d15).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">15天留存</div></div>';
+      rh2+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--text)">'+(((tr.d30)!=null)?(tr.d30).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">30天留存</div></div>';
+      rh2+='</div>';
+      rh2+='<div style="font-size:10px;color:var(--text-dim);margin-top:8px;text-align:center">'+(fw?'首周数据 · 留存待积累（非真实历史分层）':'历史总留存率 · 非本周新增 cohort 留存')+'</div>';
+      document.getElementById('taikaRetention').innerHTML=rh2;
+    }
   }).catch(function(){});
 }
-
 
 var inspTab='card';
 function switchInspTab(tab){

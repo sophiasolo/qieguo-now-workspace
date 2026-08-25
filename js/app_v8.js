@@ -1471,7 +1471,7 @@ function generateCopyAI(){
     var linkParts=[];
     if(CopyConfig.linkMeituan)linkParts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
     if(CopyConfig.linkEleme)linkParts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
-    if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/LFtIEeLhMcgq0Rx');
+    if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/ZeXqPLeKOqtolPo');
     var linkFooter=linkParts.length?String.fromCharCode(10,10)+linkParts.join(String.fromCharCode(10)):"";
     // Append links to all versions
     for(var v=0;v<3;v++){if(versions[v]&&linkFooter)versions[v]=versions[v]+linkFooter;}
