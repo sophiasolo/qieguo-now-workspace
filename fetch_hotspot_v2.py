@@ -175,10 +175,21 @@ NEGATIVE_EXCLUDE = {
 }
 
 
+# 否定正则：命中即从该分类排除（处理「苹果+数字型号」「芒果TV/台/夜」等无法穷举的多义品牌词）
+NEGATIVE_REGEX = {
+    "🍉果切相关": [
+        re.compile(r"苹果\s*\d+", re.IGNORECASE),            # 苹果18/苹果17 等 iPhone 型号
+        re.compile(r"芒果(?:夜|台|tv|视频|网络|超媒|娱乐)", re.IGNORECASE),  # 芒果TV/芒果台/青春芒果夜 等品牌
+    ],
+}
+
+
 def classify(word):
-    """按优先级匹配分类，果切相关优先，命中否定词则跳过，未命中归入综合"""
+    """按优先级匹配分类，果切相关优先，命中否定词/否定正则则跳过，未命中归入综合"""
     for cat, kws in CATEGORY_KEYWORDS.items():
         if any(neg in word for neg in NEGATIVE_EXCLUDE.get(cat, [])):
+            continue
+        if any(rx.search(word) for rx in NEGATIVE_REGEX.get(cat, [])):
             continue
         for kw in kws:
             if kw in word:
