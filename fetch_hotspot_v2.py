@@ -184,7 +184,7 @@ NEGATIVE_EXCLUDE = {
 NEGATIVE_REGEX = {
     "🍉果切相关": [
         re.compile(r"苹果\s*\d+", re.IGNORECASE),            # 苹果18/苹果17 等 iPhone 型号
-        re.compile(r"芒果(?:夜|台|tv|视频|网络|超媒|娱乐)", re.IGNORECASE),  # 芒果TV/芒果台/青春芒果夜 等品牌
+        re.compile(r"芒果(?:夜|台|tv|视频|网络|超媒|娱乐|影像)", re.IGNORECASE),  # 芒果TV/芒果台/青春芒果夜 等品牌
         # 苹果公司科技语境：苹果与手机/数码/发布/新品等词同现（非连续），规避「苹果首款折叠屏手机」类误伤
         re.compile(
             r"苹果.{0,8}(?:手机|折叠|屏幕|屏|新品|发布|电脑|笔记本|平板|手表|耳机|芯片|系统|"
@@ -203,6 +203,10 @@ NEGATIVE_REGEX = {
         ),
         # 苹果公司CEO语境（“苹果CEO”“苹果新任CEO”等，非水果）
         re.compile(r"苹果.{0,8}CEO|CEO.{0,8}苹果", re.IGNORECASE),
+        # 苹果手机双卡双待语境（“苹果首次四卡双待”），非水果
+        re.compile(r"苹果.{0,8}双待|双待.{0,8}苹果", re.IGNORECASE),
+        # 苹果“挤牙膏”创新梗（“苹果 牙膏挤爆”），非水果
+        re.compile(r"苹果.{0,8}牙膏|牙膏.{0,8}苹果", re.IGNORECASE),
         # 歌曲《小苹果》（筷子兄弟）舞蹈挑战/广场舞语境，非水果
         re.compile(r"小苹果.{0,6}(?:舞蹈|挑战|歌|曲|MV|广场舞|洗脑)", re.IGNORECASE),
     ],
