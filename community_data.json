@@ -1,12 +1,12 @@
 {
-  "updated": "0831-0906",
+  "updated": "0907-0913",
   "kpi": {
-    "groups": 746,
-    "stores": 709,
-    "members": 32259,
-    "join": 359,
-    "quit": 432,
-    "net": -73,
+    "groups": 744,
+    "stores": 703,
+    "members": 31985,
+    "join": 431,
+    "quit": 503,
+    "net": -72,
     "penetration": 92.2
   },
   "weeks": [
@@ -27,7 +27,8 @@
     "0810-0816",
     "0817-0823",
     "0824-0830",
-    "0831-0906"
+    "0831-0906",
+    "0907-0913"
   ],
   "data": {
     "0504-0510": {
@@ -76,96 +77,101 @@
       "net": -80
     },
     "0706-0712": {
-      "join": 46,
-      "quit": 120,
-      "net": 718
-    },
-    "0713-0719": {
       "join": 266,
       "quit": 570,
       "net": -304
     },
-    "0720-0726": {
+    "0713-0719": {
       "join": 391,
       "quit": 502,
       "net": -111
     },
-    "0727-0802": {
+    "0720-0726": {
       "join": 223,
       "quit": 509,
       "net": -277
     },
-    "0803-0809": {
+    "0727-0802": {
       "join": 220,
       "quit": 421,
       "net": -201
     },
-    "0810-0816": {
+    "0803-0809": {
       "join": 110,
       "quit": 387,
       "net": -277
     },
-    "0817-0823": {
-      "join": 17,
-      "quit": 159,
-      "net": 525
-    },
-    "0824-0830": {
+    "0810-0816": {
       "join": 414,
       "quit": 418,
       "net": -4
     },
-    "0831-0906": {
+    "0817-0823": {
       "join": 249,
       "quit": 430,
       "net": -181
+    },
+    "0824-0830": {
+      "join": 333,
+      "quit": 369,
+      "net": -36
+    },
+    "0831-0906": {
+      "join": 359,
+      "quit": 432,
+      "net": -73
+    },
+    "0907-0913": {
+      "join": 431,
+      "quit": 503,
+      "net": -72
     }
   },
-  "churn_count": 1,
+  "churn_count": 4,
   "acquisition": {
-    "scan_total": 4229,
-    "join_total": 3418,
-    "week_loss": 51,
+    "scan_total": 4619,
+    "join_total": 3717,
+    "week_loss": 72,
     "funnel": {
-      "scan": 824,
-      "add": 368,
-      "join": 267
+      "scan": 832,
+      "add": 379,
+      "join": 299
     },
-    "week_join_rate": 72.6,
+    "week_join_rate": 78.9,
     "retention": {
-      "h24": 90.5,
-      "d7": 89.1,
-      "d15": 88.2,
-      "d30": 86.8
+      "h24": 90.6,
+      "d7": 89.2,
+      "d15": 88.3,
+      "d30": 86.9
     },
-    "hist_join_rate": 82.5,
+    "hist_join_rate": 82.4,
     "suidan": {
-      "scan_total": 3668,
-      "join_total": 3025,
-      "week_loss": 26,
+      "scan_total": 3918,
+      "join_total": 3227,
+      "week_loss": 49,
       "funnel": {
-        "scan": 227,
-        "add": 157,
-        "join": 128
+        "scan": 337,
+        "add": 242,
+        "join": 202
       },
-      "hist_join_rate": 82.5
+      "hist_join_rate": 82.4
     },
     "taika": {
-      "scan_total": 561,
-      "join_total": 393,
-      "week_loss": 25,
+      "scan_total": 701,
+      "join_total": 490,
+      "week_loss": 23,
       "funnel": {
-        "scan": 597,
-        "add": 211,
-        "join": 139
+        "scan": 495,
+        "add": 137,
+        "join": 97
       },
       "retention": {
-        "h24": 90.4,
-        "d7": 90.0,
-        "d15": 89.8,
-        "d30": 89.8
+        "h24": 89.9,
+        "d7": 88.9,
+        "d15": 88.7,
+        "d30": 88.6
       },
-      "hist_join_rate": 70.1,
+      "hist_join_rate": 69.9,
       "first_week": false
     },
     "scan_qoq": null,
