@@ -5,7 +5,19 @@ var currentNoteDate=null;
 
 var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:''};
 
-var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-17":"春节","04-05":"清明","05-01":"劳动节","06-19":"端午","09-25":"中秋","10-01":"国庆","12-25":"圣诞"}};
+// ═══════════════════════════════════════════════════════════════════════════
+// 📅 文案创作 · 今日节日数据（仅供「📅 推送日」今日信息 + AI 节日增强 Prompt 使用）
+// 数据源：与下方 SCHEDULE_DATA 排期表「节日」字段完全对齐 —— 每年 14 个品宣节日/节气
+// 2026 阳历 ↔ 农历/节气 对应（已核：国办发〔2025〕7号放假通知 + 香港天文台公农历对照表）
+//   春节 正月初一 = 02-17 ｜ 端午 五月初五 = 06-19 ｜ 中秋 八月十五 = 09-25
+//   清明(节气) = 04-05 ｜ 立秋(节气) = 08-07
+// 2027 阳历 ↔ 农历/节气 对应（已核：香港天文台《2027丁未年公历与农历日期对照表》）
+//   春节 正月初一 = 02-06 ｜ 端午 五月初五 = 06-09 ｜ 中秋 八月十五 = 09-15
+//   清明(节气) = 04-05 ｜ 立秋(节气) = 08-08
+// ⚠️ 改任何日期前必须双源核对：农历节日 → toolbox.html 的 LUNAR_DATES；
+//    节气 → toolbox.html 的 SOLAR_TERMS（2026-2035）；严禁凭记忆填写。
+// ═══════════════════════════════════════════════════════════════════════════
+var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-14":"情人节","02-17":"春节","03-08":"妇女节","04-05":"清明","05-01":"劳动节","05-20":"520","06-01":"儿童节","06-19":"端午","08-07":"立秋","09-25":"中秋","10-01":"国庆","12-25":"圣诞","12-31":"跨年"},"2027":{"01-01":"元旦","02-06":"春节","02-14":"情人节","03-08":"妇女节","04-05":"清明","05-01":"劳动节","05-20":"520","06-01":"儿童节","06-09":"端午","08-08":"立秋","09-15":"中秋","10-01":"国庆","12-25":"圣诞","12-31":"跨年"}};
 
 var MEMBER_DATA={"2026-07-15":{prev:"07-08",orders:73,sales:2360,stores:51,prevOrders:81,prevSales:2600,prevStores:53,couponUseRate:42.5,prevCouponUseRate:41.2,members:4,deliveryOrders:42,prevDeliveryOrders:46,customerPrice:32.3,prevCustomerPrice:32.1,conclusion:"7月15日会员日受下雨影响订单↓10%，但客单价和券核销率微增。外卖占比57%与上期持平。动销门店51家较上期53家略降。"},"2026-07-08":{prev:"07-01",orders:81,sales:2600,stores:53,prevOrders:76,prevSales:2420,prevStores:52,couponUseRate:41.2,prevCouponUseRate:40.5,members:6,deliveryOrders:46,prevDeliveryOrders:43,customerPrice:32.1,prevCustomerPrice:31.8,conclusion:"7月8日会员日订单↑6.6%，销售额↑7.4%。券核销率连续上升。新增会员6人，外卖56.8%。"},"2026-07-01":{prev:"06-24",orders:76,sales:2420,stores:52,prevOrders:72,prevSales:2290,prevStores:51,couponUseRate:40.5,prevCouponUseRate:39.8,members:5,deliveryOrders:43,prevDeliveryOrders:40,customerPrice:31.8,prevCustomerPrice:31.8,conclusion:"7月1日会员日订单↑5.6%。客单价持平。券核销率突破40%。动销门店稳定。"}};
 
