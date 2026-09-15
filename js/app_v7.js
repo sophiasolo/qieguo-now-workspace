@@ -799,7 +799,125 @@ function setCopyConfig(key,val){
 }
 function updateGenBtnLabel(){}
 function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;updateGenBtnLabel();}
-function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2)label='周二 · 热销风向';else if(day===3)label='周三 · 会员日88折';else if(day===4)label='周四 · 外卖双平台';else if(day===5)label='周五 · 周末套餐';else if(day===6)label='周六 · 外卖双平台';else label='今天无推送';document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML='📅 '+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日'+festToday;}
+
+// ═══════════════════════════════════════════
+// SECTION LUNAR: 农历 / 节气引擎（文案创作「📅 推送日」卡片显示用）
+// 与 toolbox.html 同源：农历编码表 1900-2100 / 节气表 2026-2035（表格由 toolbox.html 原文抽取）
+// ⚠️ 更新节气表时 toolbox.html 与这里必须同步；农历算法勿改。
+// ═══════════════════════════════════════════
+var LUNAR_YEAR_INFO = [0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
+      0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
+      0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
+      0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
+      0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
+      0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,
+      0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
+      0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,
+      0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
+      0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x05ac0,0x0ab60,0x096d5,0x092e0,
+      0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
+      0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
+      0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
+      0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
+      0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,
+      0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x068a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,
+      0x0a2e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,
+      0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,
+      0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,
+      0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a4d0,0x0d150,0x0f252,
+      0x0d520];
+var LUNAR_MONTH_NAMES = ['正','二','三','四','五','六','七','八','九','十','冬','腊'];
+var LUNAR_DAY_NAMES = ['','初一','初二','初三','初四','初五','初六','初七','初八','初九','初十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'];
+var LUNAR_BASE = new Date(1900, 0, 31);
+
+function lunarYearDays(y) {
+  var sum = 348;
+  for (var i = 0x8000; i > 0x8; i >>= 1) sum += (LUNAR_YEAR_INFO[y - 1900] & i) ? 1 : 0;
+  return sum + leapDays(y);
+}
+function leapMonth(y) { return LUNAR_YEAR_INFO[y - 1900] & 0xf; }
+function leapDays(y) { return leapMonth(y) ? (LUNAR_YEAR_INFO[y - 1900] & 0x10000 ? 30 : 29) : 0; }
+function monthDays(y, m) { return (LUNAR_YEAR_INFO[y - 1900] & (0x10000 >> m)) ? 30 : 29; }
+
+function solarToLunar(date) {
+  var offset = Math.floor((date.getTime() - LUNAR_BASE.getTime()) / 86400000);
+  if (offset < 0) return null;
+  var year = 1900, daysInYear;
+  while (year < 2101 && offset > 0) {
+    daysInYear = lunarYearDays(year);
+    if (offset < daysInYear) break;
+    offset -= daysInYear; year++;
+  }
+  var month = 1, isLeap = false;
+  var leap = leapMonth(year);
+  for (var m = 1; m <= 12; m++) {
+    if (leap > 0 && m === leap + 1) {
+      var ld = leapDays(year);
+      if (offset < ld) { month = leap; isLeap = true; break; }
+      offset -= ld;
+    }
+    var md = monthDays(year, m);
+    if (offset < md) { month = m; break; }
+    offset -= md;
+  }
+  return { year: year, month: month, day: offset + 1, isLeap: isLeap,
+           monthName: (isLeap ? '闰' : '') + LUNAR_MONTH_NAMES[month - 1] + '月',
+           dayName: LUNAR_DAY_NAMES[offset + 1] };
+}
+
+// 24 节气对照表（2026-2035），由 toolbox.html 原文抽取
+var SOLAR_TERMS = {2026:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2027:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-06',春分:'03-21',清明:'04-05',谷雨:'04-20',立夏:'05-06',小满:'05-21',芒种:'06-06',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-08',处暑:'08-23',白露:'09-08',秋分:'09-23',寒露:'10-08',霜降:'10-24',立冬:'11-08',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2028:{小寒:'01-06',大寒:'01-20',立春:'02-04',雨水:'02-19',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-22',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-22',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-21'},
+      2029:{小寒:'01-05',大寒:'01-20',立春:'02-03',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-22',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-22',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-21'},
+      2030:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2031:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-06',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-06',小满:'05-21',芒种:'06-06',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-08',处暑:'08-23',白露:'09-08',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2032:{小寒:'01-06',大寒:'01-21',立春:'02-04',雨水:'02-19',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-19',立夏:'05-05',小满:'05-20',芒种:'06-05',夏至:'06-21',小暑:'07-06',大暑:'07-22',立秋:'08-07',处暑:'08-22',白露:'09-07',秋分:'09-22',寒露:'10-07',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-06',冬至:'12-21'},
+      2033:{小寒:'01-05',大寒:'01-20',立春:'02-03',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-04',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-22',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-21'},
+      2034:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-18',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-05',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+      2035:{小寒:'01-05',大寒:'01-20',立春:'02-04',雨水:'02-19',惊蛰:'03-05',春分:'03-20',清明:'04-05',谷雨:'04-20',立夏:'05-05',小满:'05-21',芒种:'06-06',夏至:'06-21',小暑:'07-07',大暑:'07-23',立秋:'08-07',处暑:'08-23',白露:'09-07',秋分:'09-23',寒露:'10-08',霜降:'10-23',立冬:'11-07',小雪:'11-22',大雪:'12-07',冬至:'12-22'},
+};
+
+function pad2(n) { return String(n).padStart(2, '0'); }
+function mmdd(d) { return pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+
+// → '农历八月初五'（初一显示为「农历八月」）
+function getLunarText(date) {
+  try {
+    var l = solarToLunar(date);
+    if (!l) return '';
+    return '农历' + l.monthName + (l.day === 1 ? '' : l.dayName);
+  } catch (e) { return ''; }
+}
+
+// → '白露' / '立秋' … 无节气返回 ''
+function getSolarTermText(date) {
+  try {
+    var t = SOLAR_TERMS[date.getFullYear()];
+    if (!t) return '';
+    var key = mmdd(date);
+    for (var k in t) { if (t[k] === key) return k; }
+    return '';
+  } catch (e) { return ''; }
+}
+
+// 「📅 推送日」卡片今日信息 = 阳历日期 · 农历日期 + 节日/节气标签行
+function buildDayInfoHTML(d) {
+  var fest = '';
+  try {
+    var yf = (typeof FESTIVAL_DATA !== 'undefined' && FESTIVAL_DATA) ? (FESTIVAL_DATA[String(d.getFullYear())] || {}) : {};
+    if (yf[mmdd(d)]) fest = yf[mmdd(d)];
+  } catch (e) {}
+  var lun = getLunarText(d);
+  var term = getSolarTermText(d);
+  var line1 = '📅 ' + d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日' + (lun ? ' · ' + lun : '');
+  var tags = [];
+  if (fest) tags.push('🎋 ' + fest);                  // 节日/品宣日（含立秋这类节气品宣）
+  if (term && term !== fest) tags.push('🌾 ' + term); // 节气（与节日同名时不重复）
+  return line1 + (tags.length ? '<br>' + tags.join('  ') : '');
+}
+
+function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2)label='周二 · 热销风向';else if(day===3)label='周三 · 会员日88折';else if(day===4)label='周四 · 外卖双平台';else if(day===5)label='周五 · 周末套餐';else if(day===6)label='周六 · 外卖双平台';else label='今天无推送';document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML=buildDayInfoHTML(now);}
 function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');if(!el)return;if(!el)return;if(!el)return;if(!el)return;if(!el)return;fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
 
 // ═══════ COPY GENERATOR ═══════
