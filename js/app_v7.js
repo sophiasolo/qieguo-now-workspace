@@ -2580,6 +2580,7 @@ function cloudPull(manual,cb){
       cloudEnsure(true);
       CLOUD_KEYS.forEach(function(x){var v=localStorage.getItem(x.k);if(v!==null)cloudState[x.k]={t:Date.now(),v:v};});
       cloudSaveState();
+      cloudMarkFirst();
       if(cloudHasLocal()){cloudDirty=true;cloudSetStatus('dirty','云端还没有数据，正在上传本机数据…');cloudPush(false);}
       else cloudSetStatus('ok','云端与本机都还没有数据');
       if(cb)cb(null,null);
@@ -2595,6 +2596,7 @@ function cloudPull(manual,cb){
     cloudEnsure(false);
     var applied=cloudMergeRemote(res.data,first);
     cloudSaveState();
+    cloudMarkFirst();
     cloudLastSync=Date.now();try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
     cloudSetStatus('ok',(first?'已采用云端数据（本机原有数据已备份，可点「恢复本机旧数据」）':'已拉取云端数据')+' · '+cloudAgo(cloudLastSync));
     if(applied)cloudRerender();
