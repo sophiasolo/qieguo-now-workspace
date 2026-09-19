@@ -2422,45 +2422,277 @@ var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',4
 
 // ═══════ INIT ═══════
 
-// ═══════ SYNC ═══════
-var SYNC_KEYS=['qg_custom_cards','qg_deleted_cards','qg_copy_config','qg_copy_history','qg_prompt_favs','qg_prompt_recipes','qg_schedule_overrides','qg_stars','qg_hidden','qg_products'];
-function exportPersonalData(){
-  var data={exported_at:new Date().toISOString(),version:1};
-  var count=0;
-  SYNC_KEYS.forEach(function(k){
-    var v=localStorage.getItem(k);
-    if(v!==null){data[k]=v;count++;}
-  });
-  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;
-  a.download='personal_data.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  toast('✅ 已导出 '+count+' 项个人数据，下载后自动同步云端');
+// ═══════ CLOUD SYNC · GitHub API（2026-09-19 新增）═══════
+// 只同步 3 个 key；不删数据，只按时间戳合并（新者胜）
+var CLOUD_REPO='sophiasolo/qieguo-now-workspace';
+var CLOUD_PATH='sync/personal_data.json';
+var CLOUD_KEYS=[{k:'qg_schedule_overrides',n:'社群运营排期'},{k:'qg_custom_cards',n:'自定义花字'},{k:'qg_deleted_cards',n:'已删花字'}];
+var CLOUD_POLL_MS=2500;
+var CLOUD_PULL_MS=5*60*1000;
+var cloudState=null, cloudDirty=false, cloudBusy=false, cloudWatch=null, cloudPushTimer=null;
+var cloudStatus='noconfig', cloudDetail='', cloudLastSync=0;
+
+function cloudToken(){return localStorage.getItem('qg_ghtoken')||'';}
+function cloudLoadState(){try{cloudState=JSON.parse(localStorage.getItem('qg_cloud_state')||'null');}catch(e){cloudState=null;}}
+function cloudSaveState(){try{localStorage.setItem('qg_cloud_state',JSON.stringify(cloudState||{}));}catch(e){}}
+function cloudSnapshot(){var o={};CLOUD_KEYS.forEach(function(x){o[x.k]=localStorage.getItem(x.k);});return o;}
+function cloudHasLocal(){var c=cloudSnapshot();for(var i=0;i<CLOUD_KEYS.length;i++){if(c[CLOUD_KEYS[i].k]!==null)return true;}return false;}
+function cloudEnc(str){var u=new TextEncoder().encode(str),b='';for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b);}
+function cloudDec(b64){var s=atob(String(b64).replace(/[^A-Za-z0-9+/=]/g,'')),u=new Uint8Array(s.length);for(var i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return new TextDecoder().decode(u);}
+function cloudAgo(t){if(!t)return '从未';var d=Math.floor((Date.now()-t)/1000);if(d<10)return '刚刚';if(d<60)return d+' 秒前';if(d<3600)return Math.floor(d/60)+' 分钟前';if(d<86400)return Math.floor(d/3600)+' 小时前';return Math.floor(d/86400)+' 天前';}
+function cloudDevice(){var d=localStorage.getItem('qg_device_name');if(!d){d=((navigator.platform||'Device')+'·'+Math.random().toString(36).slice(2,6));try{localStorage.setItem('qg_device_name',d);}catch(e){}}return d;}
+function cloudFirst(){return !localStorage.getItem('qg_cloud_first_done');}
+function cloudMarkFirst(){try{localStorage.setItem('qg_cloud_first_done','1');}catch(e){}}
+
+function cloudApi(method,body){
+  var url='https://api.github.com/repos/'+CLOUD_REPO+'/contents/'+CLOUD_PATH;
+  var opt={method:method,cache:'no-store',headers:{'Authorization':'Bearer '+cloudToken(),'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}};
+  if(body){opt.headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}
+  return fetch(url+(method==='GET'?'?ref=main':''),opt);
 }
-function importPersonalData(){
-  fetch('personal_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    var restored=false;
-    SYNC_KEYS.forEach(function(k){
-      if(d[k] && !localStorage.getItem(k)){
-        localStorage.setItem(k,d[k]);
-        restored=true;
-      }
-    });
-    if(restored){
-      toast('✅ 个人数据已从云端恢复');
-      try{renderStarPage();}catch(e){}
-      try{renderSchedule();}catch(e){}
-      try{loadCopyConfig();applyCopyConfig();}catch(e){}
+function cloudErr(e){
+  var m=String((e&&e.message)||e||'');
+  if(m.indexOf('TOKEN')>=0)return 'Token 无效或权限不足 → 请重新生成 Token 并保存';
+  if(m.indexOf('Failed to fetch')>=0||m.indexOf('NetworkError')>=0)return '网络请求被拦截或断网（检查是否装了什么拦截扩展）';
+  return m;
+}
+function cloudSetStatus(s,d){cloudStatus=s;cloudDetail=d||'';cloudRenderPanel();cloudDot();}
+
+function cloudEnsure(seedNow){
+  if(!cloudState)cloudState={};
+  var cur=cloudSnapshot();
+  CLOUD_KEYS.forEach(function(x){
+    if(!cloudState[x.k])cloudState[x.k]={t:(seedNow&&cur[x.k]!==null)?Date.now():0,v:cur[x.k]};
+  });
+}
+function cloudApply(k,v){
+  try{
+    if(v===null||v===undefined)return;         // 永不由云端删除本机数据
+    if(localStorage.getItem(k)!==v)localStorage.setItem(k,v);
+  }catch(e){}
+}
+function cloudMergeRemote(remote,force){
+  if(!remote||!remote.keys)return false;
+  var applied=false,cur=cloudSnapshot();
+  CLOUD_KEYS.forEach(function(x){
+    var r=remote.keys[x.k];if(!r)return;
+    if(r.v===null||r.v===undefined)return;      // 云端空值不覆盖本机
+    if(!cloudState[x.k])cloudState[x.k]={t:0,v:cur[x.k]};
+    var st=cloudState[x.k];
+    if(force||(r.t||0)>(st.t||0)){
+      cloudApply(x.k,r.v);
+      cloudState[x.k]={t:r.t||0,v:r.v};
+      applied=true;
     }
-  }).catch(function(){});
+  });
+  return applied;
+}
+function cloudPayload(){
+  var keys={},cur=cloudSnapshot();
+  CLOUD_KEYS.forEach(function(x){
+    var v=(cloudState&&cloudState[x.k]&&cloudState[x.k].v!==undefined)?cloudState[x.k].v:cur[x.k];
+    if(v===null||v===undefined)return;          // 空值不上传
+    var t=(cloudState&&cloudState[x.k]&&cloudState[x.k].t)||Date.now();
+    keys[x.k]={t:t,v:v};
+  });
+  return {v:2,updated:new Date().toISOString(),source:cloudDevice(),keys:keys};
+}
+function cloudRerender(){
+  try{renderSchedule();}catch(e){}
+  try{loadCustomCards();renderCardLib();}catch(e){}
+}
+function cloudSchedulePush(){
+  if(cloudPushTimer)clearTimeout(cloudPushTimer);
+  cloudPushTimer=setTimeout(function(){cloudPush(false);},2000);
+}
+function cloudTick(){
+  if(!cloudToken())return;
+  cloudLoadState();
+  if(!cloudState)cloudState={};
+  var cur=cloudSnapshot(),changed=false;
+  CLOUD_KEYS.forEach(function(x){
+    var st=cloudState[x.k];
+    if(!st){cloudState[x.k]={t:0,v:cur[x.k]};return;}
+    if(cur[x.k]!==st.v){cloudState[x.k]={t:Date.now(),v:cur[x.k]};changed=true;}
+  });
+  if(changed){cloudSaveState();cloudDirty=true;cloudSetStatus('dirty','检测到本机修改，2 秒后自动上传…');cloudSchedulePush();}
+}
+function cloudPush(manual,retry){
+  if(cloudBusy)return;
+  if(!cloudToken()){cloudSetStatus('noconfig','未配置 Token —— 粘贴后即可开始同步');if(manual)toast('请先保存 GitHub Token');return;}
+  cloudBusy=true;
+  if(manual)cloudSetStatus('syncing','正在上传…');
+  cloudApi('GET').then(function(r){
+    if(r.status===401||r.status===403)throw new Error('TOKEN');
+    if(r.status===404)return {data:null,sha:null};
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json().then(function(j){var d=null;try{d=JSON.parse(cloudDec(j.content));}catch(e){}return {data:d,sha:j.sha};});
+  }).then(function(res){
+    if(res.data)cloudMergeRemote(res.data,false);
+    cloudEnsure(false);cloudSaveState();
+    var payload=cloudPayload();
+    cloudBusy=false;
+    if(res.data&&JSON.stringify(res.data.keys||{})===JSON.stringify(payload.keys)){
+      cloudDirty=false;cloudLastSync=Date.now();try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
+      cloudSetStatus('ok','云端已是最新 · '+cloudAgo(cloudLastSync));
+      if(manual)toast('✅ 云端已是最新');
+      return;
+    }
+    var body={message:'☁️ 同步个人数据 · '+new Date().toLocaleString('zh-CN'),content:cloudEnc(JSON.stringify(payload,null,2)),branch:'main'};
+    if(res.sha)body.sha=res.sha;
+    cloudBusy=true;
+    cloudApi('PUT',body).then(function(r2){
+      if(r2.status===409){
+        cloudBusy=false;
+        if(!retry){setTimeout(function(){cloudPush(manual,true);},1500);}
+        else cloudSetStatus('error','两处同时修改冲突，请再点一次「立即上传」');
+        return;
+      }
+      if(!r2.ok)return r2.text().then(function(t){throw new Error('HTTP '+r2.status+' '+String(t).slice(0,120));});
+      cloudBusy=false;cloudDirty=false;cloudLastSync=Date.now();
+      try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
+      cloudMarkFirst();
+      cloudSetStatus('ok','已同步到云端 · '+cloudAgo(cloudLastSync));
+      if(manual)toast('✅ 已上传到云端');
+      cloudRerender();
+    }).catch(function(e){
+      cloudBusy=false;cloudSetStatus('error','上传失败：'+cloudErr(e));
+      if(manual)toast('⚠️ 上传失败');
+    });
+  }).catch(function(e){
+    cloudBusy=false;cloudSetStatus('error',cloudErr(e));
+    if(manual)toast('⚠️ 上传失败');
+  });
+}
+function cloudPull(manual,cb){
+  if(!cloudToken()){cloudSetStatus('noconfig','未配置 Token —— 粘贴后即可开始同步');if(cb)cb('noconfig');return;}
+  if(cloudBusy){if(cb)cb('busy');return;}
+  cloudBusy=true;
+  if(manual)cloudSetStatus('syncing','正在拉取…');
+  cloudApi('GET').then(function(r){
+    if(r.status===401||r.status===403)throw new Error('TOKEN');
+    if(r.status===404)return {data:null,sha:null};
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json().then(function(j){var d=null;try{d=JSON.parse(cloudDec(j.content));}catch(e){}return {data:d,sha:j.sha};});
+  }).then(function(res){
+    cloudBusy=false;
+    if(!res.data){
+      cloudEnsure(true);
+      CLOUD_KEYS.forEach(function(x){var v=localStorage.getItem(x.k);if(v!==null)cloudState[x.k]={t:Date.now(),v:v};});
+      cloudSaveState();
+      if(cloudHasLocal()){cloudDirty=true;cloudSetStatus('dirty','云端还没有数据，正在上传本机数据…');cloudPush(false);}
+      else cloudSetStatus('ok','云端与本机都还没有数据');
+      if(cb)cb(null,null);
+      return;
+    }
+    cloudLoadState();
+    var first=cloudFirst();
+    if(first){
+      var bk={};CLOUD_KEYS.forEach(function(x){bk[x.k]=localStorage.getItem(x.k);});
+      try{localStorage.setItem('qg_cloud_backup',JSON.stringify({at:Date.now(),keys:bk}));}catch(e){}
+      cloudState={};
+    }
+    cloudEnsure(false);
+    var applied=cloudMergeRemote(res.data,first);
+    cloudSaveState();
+    cloudLastSync=Date.now();try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
+    cloudSetStatus('ok',(first?'已采用云端数据（本机原有数据已备份，可点「恢复本机旧数据」）':'已拉取云端数据')+' · '+cloudAgo(cloudLastSync));
+    if(applied)cloudRerender();
+    cloudTick();
+    if(cb)cb(null,res);
+  }).catch(function(e){
+    cloudBusy=false;cloudSetStatus('error',cloudErr(e));
+    if(cb)cb('err');
+  });
+}
+function cloudPullNow(){cloudPull(true);}
+function cloudStartWatch(){
+  if(cloudWatch)clearInterval(cloudWatch);
+  cloudWatch=setInterval(cloudTick,CLOUD_POLL_MS);
+  setInterval(function(){if(cloudToken()&&!cloudDirty&&!cloudBusy)cloudPull(false);},CLOUD_PULL_MS);
+  window.addEventListener('beforeunload',function(){cloudTick();});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')cloudTick();});
+}
+function cloudInit(){
+  cloudLastSync=parseInt(localStorage.getItem('qg_cloud_last')||'0',10)||0;
+  cloudLoadState();
+  if(!cloudToken()){cloudSetStatus('noconfig','未配置 Token —— 点这里粘贴后即可跨电脑同步');return;}
+  cloudTick();
+  cloudPull(false);
+  cloudStartWatch();
+}
+function cloudDot(){
+  var b=document.getElementById('cloudBtn');if(!b)return;
+  var map={ok:'☁️ 云同步',syncing:'⏳ 同步中…',dirty:'📤 待上传',error:'⚠️ 同步异常',noconfig:'☁️ 云同步'};
+  b.textContent=map[cloudStatus]||'☁️ 云同步';
+  b.style.color=(cloudStatus==='error')?'var(--red)':'';
+}
+function openCloudModal(){cloudRenderPanel();document.getElementById('cloudModal').classList.add('show');}
+function closeCloudModal(){document.getElementById('cloudModal').classList.remove('show');}
+function cloudRenderPanel(){
+  var box=document.getElementById('cloudStatusBox');if(!box)return;
+  var color={ok:'var(--brand)',syncing:'var(--text-dim)',dirty:'#b26a00',error:'var(--red)',noconfig:'var(--text-dim)'}[cloudStatus]||'var(--text-dim)';
+  var head={ok:'✅ 已连接',syncing:'⏳ 同步中…',dirty:'📤 本机有新修改，排队上传',error:'⚠️ 同步异常',noconfig:'⚪ 未配置 Token'}[cloudStatus]||'';
+  var h='<div style="font-weight:700;color:'+color+';margin-bottom:6px">'+head+'</div>';
+  if(cloudDetail)h+='<div style="margin-bottom:6px">'+cloudDetail+'</div>';
+  h+='<div>🕒 上次成功同步：'+cloudAgo(cloudLastSync)+'</div>';
+  var tk=cloudToken();
+  h+='<div>🔑 Token：'+(tk?('已保存（仅显示前缀 '+tk.slice(0,11)+'⚪⚪⚪⚪）'):'未保存')+'</div>';
+  CLOUD_KEYS.forEach(function(x){
+    var s=(cloudState||{})[x.k]||{},v=localStorage.getItem(x.k);
+    h+='<div style="color:var(--text-dim)">· '+x.n+'：'+(v?'有数据':'无数据')+(s.t?'（本机最后修改 '+cloudAgo(s.t)+'）':'')+'</div>';
+  });
+  box.innerHTML=h;
+}
+function cloudSaveToken(){
+  var v=document.getElementById('cloudTokenInput').value.trim();
+  if(!v){toast('请先粘贴 Token');return;}
+  if(v.indexOf('github_pat_')!==0&&v.indexOf('ghp_')!==0){
+    if(!confirm('这看起来不像 GitHub Token（通常以 github_pat_ 或 ghp_ 开头），仍要保存吗？'))return;
+  }
+  localStorage.setItem('qg_ghtoken',v);
+  document.getElementById('cloudTokenInput').value='';
+  toast('✅ Token 已保存到本机浏览器');
+  cloudSetStatus('syncing','正在验证 Token 并同步…');
+  cloudPull(true);
+  cloudStartWatch();
+}
+function cloudClearToken(){
+  if(!confirm('清除本机保存的 Token？清除后会停止云同步（云端数据不受影响）。'))return;
+  localStorage.removeItem('qg_ghtoken');
+  if(cloudWatch)clearInterval(cloudWatch);
+  cloudSetStatus('noconfig','Token 已清除，云同步已停止');
+}
+function cloudRestoreBackup(){
+  var raw=localStorage.getItem('qg_cloud_backup');
+  if(!raw){toast('没有可恢复的本机旧数据');return;}
+  var bk;try{bk=JSON.parse(raw);}catch(e){toast('备份文件损坏');return;}
+  if(!confirm('用本机备份（'+new Date(bk.at).toLocaleString('zh-CN')+'）覆盖当前数据，并上传到云端？'))return;
+  cloudLoadState();if(!cloudState)cloudState={};
+  CLOUD_KEYS.forEach(function(x){
+    if(bk.keys&&Object.prototype.hasOwnProperty.call(bk.keys,x.k)){
+      var v=bk.keys[x.k];
+      if(v===null){try{localStorage.removeItem(x.k);}catch(e){}}
+      else{try{localStorage.setItem(x.k,v);}catch(e){}cloudState[x.k]={t:Date.now(),v:v};}
+    }
+  });
+  cloudSaveState();cloudRerender();cloudDirty=true;
+  toast('已恢复本机旧数据，正在上传…');cloudPush(true);
+}
+function cloudExportBackup(){
+  var data={exported_at:new Date().toISOString(),version:2};
+  var n=0;
+  CLOUD_KEYS.forEach(function(x){var v=localStorage.getItem(x.k);if(v!==null){data[x.k]=v;n++;}});
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='qg_personal_backup_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  toast('💾 已导出备份文件（'+n+' 项）');
 }
 
-renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();importPersonalData();
+renderSchedule();renderWeeklyReports();loadSentimentData();renderStarPage();renderAcquisition();loadCopyConfig();applyCopyConfig();cloudInit();
 setInterval(function(){loadSentimentData();},30*60*1000);
 document.getElementById('noteModal').addEventListener('click',function(e){if(e.target===this)closeNoteModal();});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeNoteModal();closeApiKeyModal();}});
+document.getElementById('cloudModal').addEventListener('click',function(e){if(e.target===this)closeCloudModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeNoteModal();closeApiKeyModal();closeCloudModal();}});

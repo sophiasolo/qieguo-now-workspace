@@ -134,7 +134,7 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
   <div class="nav-item" data-page="recipe"><span class="icon">🧪</span><span>Prompt配方</span></div>
   <div class="nav-item" data-page="inspiration"><span class="icon">📚</span><span>素材灵感库</span></div>
   <div style="padding:12px;margin-top:8px">
-    <button class="btn btn-ghost" onclick="exportPersonalData()" style="width:100%;font-size:12px;padding:8px">💾 同步数据</button>
+    <button class="btn btn-ghost" id="cloudBtn" onclick="openCloudModal()" style="width:100%;font-size:12px;padding:8px">☁️ 云同步</button>
   </div>
 </aside>
 <div class="main">
@@ -478,7 +478,24 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#c62828">🔴 节日/节气</label><input id="editFestival" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="如：劳动节"></div>
 <div style="margin-bottom:8px"><label style="font-size:11px;font-weight:600;color:#f9a825">🟡 备注/Tips</label><input id="editNote" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px" placeholder="个人提醒..."></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeNoteModal()">取消</button><button class="btn btn-ghost" onclick="clearDateOverrides(currentNoteDate)" id="btnDeleteNote" style="color:var(--red)">清除自定义</button><button class="btn btn-primary" onclick="saveScheduleCell()">保存</button></div></div></div>
-<script src="js/app_v8.js?v=79"></script>
+<div class="modal-overlay" id="cloudModal"><div class="modal" style="max-width:540px"><h3>☁️ 云同步 · 跨电脑一致</h3>
+<div id="cloudStatusBox" style="font-size:12px;padding:10px 12px;border-radius:8px;background:var(--bg);margin-bottom:14px;line-height:1.9">未配置</div>
+<label style="font-size:11px;font-weight:600;color:var(--text-dim)">GitHub Token（仅保存在这台电脑的浏览器里，不会上传到任何服务器）</label>
+<input id="cloudTokenInput" type="password" placeholder="github_pat_..." style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:monospace;margin-top:4px">
+<div class="btn-row" style="justify-content:flex-start;margin-top:8px">
+<button class="btn btn-primary" onclick="cloudSaveToken()" style="font-size:12px;padding:6px 16px">保存 Token</button>
+<button class="btn btn-ghost" onclick="cloudClearToken()" style="font-size:12px;padding:6px 16px">清除 Token</button>
+</div>
+<div class="btn-row" style="justify-content:flex-start;flex-wrap:wrap;margin-top:14px">
+<button class="btn btn-ghost" onclick="cloudPush(true)" style="font-size:12px;padding:6px 14px">⬆️ 立即上传</button>
+<button class="btn btn-ghost" onclick="cloudPullNow()" style="font-size:12px;padding:6px 14px">⬇️ 立即拉取</button>
+<button class="btn btn-ghost" onclick="cloudRestoreBackup()" style="font-size:12px;padding:6px 14px">↩️ 恢复本机旧数据</button>
+<button class="btn btn-ghost" onclick="cloudExportBackup()" style="font-size:12px;padding:6px 14px">💾 导出备份文件</button>
+</div>
+<div style="font-size:11px;color:var(--text-dim);margin-top:14px;line-height:1.9">同步范围：📅 社群运营排期编辑 · 🧠 素材灵感库自定义花字<br>打开页面自动拉取云端；你的任何修改会在 2 秒后自动上传。<br>Token 权限：仅本仓库 Contents 读写；撤销入口 → <a href="https://github.com/settings/personal-access-tokens" target="_blank" style="color:var(--brand)">github.com/settings/personal-access-tokens</a></div>
+<div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeCloudModal()">关闭</button></div>
+</div></div>
+<script src="js/app_v8.js?v=80"></script>
   <div id="cardModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
     <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)">
       <div style="font-weight:700;margin-bottom:16px;font-size:15px">➕ 添加花字卡片</div>
