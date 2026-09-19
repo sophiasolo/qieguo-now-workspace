@@ -2597,10 +2597,18 @@ function cloudPull(manual,cb){
     var applied=cloudMergeRemote(res.data,first);
     cloudSaveState();
     cloudMarkFirst();
+    var orphaned=false;
+    CLOUD_KEYS.forEach(function(x){
+      var r=(res.data.keys&&res.data.keys[x.k])?res.data.keys[x.k]:null;
+      var v=localStorage.getItem(x.k);
+      if(v!==null&&!r){cloudState[x.k]={t:Date.now(),v:v};orphaned=true;}
+    });
+    if(orphaned){cloudSaveState();cloudDirty=true;}
     cloudLastSync=Date.now();try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
     cloudSetStatus('ok',(first?'已采用云端数据（本机原有数据已备份，可点「恢复本机旧数据」）':'已拉取云端数据')+' · '+cloudAgo(cloudLastSync));
     if(applied)cloudRerender();
     cloudTick();
+    if(orphaned)cloudPush(false);
     if(cb)cb(null,res);
   }).catch(function(e){
     cloudBusy=false;cloudSetStatus('error',cloudErr(e));
