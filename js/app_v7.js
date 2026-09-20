@@ -21,7 +21,7 @@ var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-14":"情人节","02-17":"春节"
 
 var MEMBER_DATA={"2026-07-15":{prev:"07-08",orders:73,sales:2360,stores:51,prevOrders:81,prevSales:2600,prevStores:53,couponUseRate:42.5,prevCouponUseRate:41.2,members:4,deliveryOrders:42,prevDeliveryOrders:46,customerPrice:32.3,prevCustomerPrice:32.1,conclusion:"7月15日会员日受下雨影响订单↓10%，但客单价和券核销率微增。外卖占比57%与上期持平。动销门店51家较上期53家略降。"},"2026-07-08":{prev:"07-01",orders:81,sales:2600,stores:53,prevOrders:76,prevSales:2420,prevStores:52,couponUseRate:41.2,prevCouponUseRate:40.5,members:6,deliveryOrders:46,prevDeliveryOrders:43,customerPrice:32.1,prevCustomerPrice:31.8,conclusion:"7月8日会员日订单↑6.6%，销售额↑7.4%。券核销率连续上升。新增会员6人，外卖56.8%。"},"2026-07-01":{prev:"06-24",orders:76,sales:2420,stores:52,prevOrders:72,prevSales:2290,prevStores:51,couponUseRate:40.5,prevCouponUseRate:39.8,members:5,deliveryOrders:43,prevDeliveryOrders:40,customerPrice:31.8,prevCustomerPrice:31.8,conclusion:"7月1日会员日订单↑5.6%。客单价持平。券核销率突破40%。动销门店稳定。"}};
 
-const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库'};
+const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库',weather:'🌦️ 天气简报'};
 document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='prompt'){}if(page==='recipe'){renderPromptLib();}if(page==='inspiration'){switchInspTab('card');}if(page==='acquisition')renderAcquisition();});});
 var now=new Date();document.getElementById('currentDate').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+['日','一','二','三','四','五','六'][now.getDay()]+'曜日';
 function toast(msg){var el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(function(){el.remove()},2000);}
@@ -433,10 +433,6 @@ function filterSentimentItems(filter){
   }
 }
 
-function updateOverviewSentimentData(){
-  if(sentimentCache&&sentimentCache.today){updateOverviewSentiment(sentimentCache);updateSentimentBadge(sentimentCache);}
-}
-
 // ─── Historical date switching ───
 function populateSentimentDates(){
   var sel=document.getElementById('sentimentDateSelect');
@@ -554,7 +550,7 @@ function unstarItem(date,title){var stars=getStars();var idx=stars.findIndex(fun
 
 // ═══════ PRODUCTS ═══════
 var productData=null;
-function renderProducts(){if(!productData)return;var search=(document.getElementById("productSearch").value||"").toLowerCase();var cat=document.getElementById("productCat").value;var items=productData.items.filter(function(p){if(!p.price||p.price<=0)return false;if(search&&!p.name.toLowerCase().includes(search))return false;if(cat!=="all"&&p.category!==cat)return false;return true;});var maxSales=items.length>0?items[0].sales:1;var html="";items.slice(0,80).forEach(function(p,i){var w=Math.round(p.sales/maxSales*100);var rank=i+1;var medal=rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":rank;var tag="";if(p.sales>1000)tag="🔥";else if(p.price<15&&p.sales>200)tag="💰";html+='<div style="display:grid;grid-template-columns:35px 1fr 90px 70px 80px;gap:0;padding:6px 8px;border-bottom:1px solid var(--border);align-items:center;'+(rank<=3?'background:var(--brand-light)':(p.price<15&&p.sales>200?'background:var(--yellow-light)':''))+'"><div style="text-align:center;font-weight:700;color:'+(rank<=3?'var(--brand)':'var(--text-dim)')+'">'+medal+'</div><div><span style="font-weight:600;color:var(--text);font-size:12px">'+tag+' '+p.name+'</span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">'+p.spec+'</span><div style="height:2px;background:var(--border);border-radius:1px;margin-top:2px"><div style="height:2px;width:'+w+'%;background:'+(rank<=3?'var(--brand)':'#c8e6c9')+';border-radius:1px;min-width:2px"></div></div></div><div style="text-align:right;font-weight:700;font-size:12px;color:var(--text)">¥'+p.price+'</div><div style="text-align:right;font-weight:700;font-size:12px;color:var(--text)">'+p.sales+'</div><div style="text-align:center"><button class="btn btn-ghost" onclick="useProductForCopy(\''+p.name.replace(/'/g,"\\'")+'\','+p.price+')" style="font-size:10px;padding:2px 8px;white-space:nowrap">📝 写文案</button></div></div>'});document.getElementById("productsGrid").innerHTML+=html||'<div style="text-align:center;padding:40px;color:var(--text-dim)">无匹配产品</div>';}
+function renderProducts(){if(!productData)return;var search=(document.getElementById("productSearch").value||"").toLowerCase();var cat=document.getElementById("productCat").value;var items=productData.items.filter(function(p){if(!p.price||p.price<=0)return false;if(search&&!p.name.toLowerCase().includes(search))return false;if(cat!=="all"&&p.category!==cat)return false;return true;});var maxSales=items.length>0?items[0].sales:1;var html="";items.slice(0,80).forEach(function(p,i){var w=Math.round(p.sales/maxSales*100);var rank=i+1;var medal=rank===1?"🥇":rank===2?"🥈":rank===3?"🥉":rank;var tag="";if(p.sales>1000)tag="🔥";else if(p.price<15&&p.sales>200)tag="💰";html+='<div style="display:grid;grid-template-columns:35px 1fr 90px 70px 80px;gap:0;padding:6px 8px;border-bottom:1px solid var(--border);align-items:center;'+(rank<=3?'background:var(--brand-light)':(p.price<15&&p.sales>200?'background:var(--yellow-light)':''))+'"><div style="text-align:center;font-weight:700;color:'+(rank<=3?'var(--brand)':'var(--text-dim)')+'">'+medal+'</div><div><span style="font-weight:600;color:var(--text);font-size:12px">'+tag+' '+p.name+'</span><span style="font-size:10px;color:var(--text-dim);margin-left:4px">'+p.spec+'</span><div style="height:2px;background:var(--border);border-radius:1px;margin-top:2px"><div style="height:2px;width:'+w+'%;background:'+(rank<=3?'var(--brand)':'#c8e6c9')+';border-radius:1px;min-width:2px"></div></div></div><div style="text-align:right;font-weight:700;font-size:12px;color:var(--text)">¥'+p.price+'</div><div style="text-align:right;font-weight:700;font-size:12px;color:var(--text)">'+p.sales+'</div><div style="text-align:center"><button class="btn btn-ghost" onclick="useProductForCopy(\''+p.name.replace(/'/g,"\\'")+'\','+p.price+')" style="font-size:10px;padding:2px 8px;white-space:nowrap">📝 写文案</button></div></div>'});document.getElementById("productsGrid").innerHTML=html||'<div style="text-align:center;padding:40px;color:var(--text-dim)">无匹配产品</div>';}
 
 function renderProductRecs(){
   var el=document.getElementById("productRecs");
@@ -2119,7 +2115,7 @@ function filterCards(cat,el){
   all.forEach(function(item){
     var p=item.phrase;
     if(!p.trim())return; if(p.trim().length<2)return;
-      html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="navigator.clipboard.writeText(this.textContent);toast(\'📋 已复制\')" title="点击复制">'+p+'<span onclick="event.stopPropagation();delCardClick(this)" data-cat="'+item.cat+'" data-idx="'+encodeURIComponent(p)+'" style="position:absolute;top:2px;right:4px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25" title="删除自定义花字">🗑</span></div>';
+      html+='<div style="position:relative;background:#fff;border-radius:8px;padding:14px 12px;border:1px solid var(--border);font-size:14px;line-height:1.5;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;min-height:50px;cursor:pointer;word-break:break-word;white-space:normal" onclick="copyCardPhrase(this)" title="点击复制">'+p+'<span onclick="event.stopPropagation();delCardClick(this)" data-cat="'+item.cat+'" data-idx="'+encodeURIComponent(p)+'" style="position:absolute;top:2px;right:4px;font-size:10px;opacity:0.25;cursor:pointer" onmouseenter="this.style.opacity=0.7" onmouseleave="this.style.opacity=0.25" title="删除这条花字">🗑</span></div>';
  });
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim)">无匹配</div>';
 }
@@ -2304,6 +2300,68 @@ function deleteCustomCard(cat, idx){
   renderCardLib();
 }
 
+// ─── 花字卡「点击复制」：只复制原文，不带右上角 🗑 ───
+function copyCardPhrase(el){
+  var s=el?el.querySelector('span[data-cat]'):null;
+  var t='';
+  if(s&&s.dataset&&s.dataset.idx){try{t=decodeURIComponent(s.dataset.idx);}catch(e){t=s.dataset.idx;}}
+  if(!t)t=((el&&el.textContent)||'').replace(/🗑/g,'').replace(/️/g,'').trim();
+  if(!t)return;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){toast('📋 已复制');},function(){fallbackCopy(t);});
+  }else{
+    fallbackCopy(t);
+  }
+}
+function fallbackCopy(t){
+  var ta=document.createElement('textarea');
+  ta.value=t; ta.style.position='fixed'; ta.style.left='-9999px'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  var ok=false;
+  try{ok=document.execCommand('copy');}catch(e){ok=false;}
+  document.body.removeChild(ta);
+  toast(ok?'📋 已复制':'❌ 复制失败，请手动选中');
+}
+
+// ─── 花字删除：内置花字写入「已删列表」，自定义花字从 customCards 移除 ───
+function delCardClick(el){
+  if(!el||!el.dataset)return;
+  var cat=el.dataset.cat||'';
+  var raw=el.dataset.idx||'';
+  var phrase=raw;
+  try{phrase=decodeURIComponent(raw);}catch(e){}
+  if(!cat||!phrase)return;
+  if(!confirm('删除这条花字？\n\n'+phrase.slice(0,40)+(phrase.length>40?'…':'')))return;
+  var isCustom=false;
+  if(typeof customCards!=='undefined'&&customCards&&customCards[cat]){
+    var ci=customCards[cat].indexOf(phrase);
+    if(ci>=0){
+      customCards[cat].splice(ci,1);
+      if(!customCards[cat].length)delete customCards[cat];
+      saveCustomCards();
+      isCustom=true;
+    }
+  }
+  if(!isCustom){
+    var d=[];
+    try{d=JSON.parse(localStorage.getItem('qg_deleted_cards')||'[]');}catch(e){d=[];}
+    if(!(d instanceof Array))d=[];
+    var key=cat+':::'+phrase;
+    if(d.indexOf(key)<0){d.push(key);localStorage.setItem('qg_deleted_cards',JSON.stringify(d));}
+  }
+  rerenderCardLibKeepFilter();
+  toast('🗑 已删除');
+}
+
+function rerenderCardLibKeepFilter(){
+  var keep=currentCardFilter||'all';
+  renderCardLib();
+  if(keep==='all')return;
+  var pill=null;
+  document.querySelectorAll('#inspContent .insp-pill').forEach(function(p){if(p.textContent===keep)pill=p;});
+  if(pill)filterCards(keep,pill);
+}
+
 // Override getCardCats to merge custom
 
 
@@ -2474,9 +2532,12 @@ function cloudApply(k,v){
 function cloudMergeRemote(remote,force){
   if(!remote||!remote.keys)return false;
   var applied=false,cur=cloudSnapshot();
+  var primary=schedIsPrimary(),ownOv=Object.keys(schedOv()).length>0;
   CLOUD_KEYS.forEach(function(x){
     var r=remote.keys[x.k];if(!r)return;
     if(r.v===null||r.v===undefined)return;      // 云端空值不覆盖本机
+    // 排期：远端已带叶子 -> 交给叶子合并；主设备且本机确有排期编辑 -> 不让整块快照覆盖本机排期
+    if(x.k===SCHED_KEY&&(remote.schedule||(primary&&ownOv)))return;
     if(!cloudState[x.k])cloudState[x.k]={t:0,v:cur[x.k]};
     var st=cloudState[x.k];
     if(force||(r.t||0)>(st.t||0)){
@@ -2485,17 +2546,183 @@ function cloudMergeRemote(remote,force){
       applied=true;
     }
   });
+  if(remote.schedule){
+    var m=schedMergeRemote(schedState(),remote.schedule,primary,Date.now());
+    cloudState.schedule=m.state;
+    cloudState.schedPrimary=primary?cloudDevice():(remote.schedule.primary||cloudState.schedPrimary||null);
+    if(m.applied){schedRebuildLocal();applied=true;}
+  }else{
+    // 第二台还是旧版（只推整块快照）：把当前本机排期展开成叶子，不丢数据
+    var d0=schedDiffLocal(schedState(),schedOv(),Date.now(),schedDefVal);
+    if(d0.changed)cloudState.schedule=d0.state;
+    if(primary)cloudState.schedPrimary=cloudDevice();
+  }
   return applied;
 }
+// ═══ SCHED MERGE PURE (纯函数，默认值由 defVal 回调提供；可被 node 单测抽取) ═══
+var SCHED_FIELDS=['小程序','市场','品宣','朋友圈','节日','备注'];
+
+function schedNorm(o){var r={};Object.keys(o||{}).sort().forEach(function(k){r[k]=o[k];});return r;}
+
+// 状态 = {leaves:{'日期|字段':{t,v}}, tomb:{'日期|字段':t}}
+function schedCopyState(state){
+  var st={leaves:{},tomb:{}},src=state||{};
+  Object.keys(src.leaves||{}).forEach(function(k){
+    var c=src.leaves[k]||{};
+    if(c.v===null||c.v===undefined)return;
+    st.leaves[k]={t:c.t||0,v:c.v};
+  });
+  Object.keys(src.tomb||{}).forEach(function(k){st.tomb[k]=src.tomb[k]||0;});
+  return st;
+}
+
+// 本机展示态 + 默认排期 -> 叶子状态（只保留「与默认不同」的字段）
+function schedDiffLocal(state,ov,now,defVal){
+  var st=schedCopyState(state),changed=false,want={};
+  Object.keys(ov||{}).forEach(function(d){
+    var o=ov[d]||{};
+    SCHED_FIELDS.forEach(function(f){
+      var v=(o[f]===null||o[f]===undefined)?'':String(o[f]);
+      var dv=String(defVal?defVal(d,f):'');
+      if(v!==dv)want[d+'|'+f]=v;
+    });
+  });
+  Object.keys(want).forEach(function(k){
+    var v=want[k],cur=st.leaves[k];
+    if(!cur||cur.v!==v){st.leaves[k]={t:now,v:v};changed=true;}
+    if(st.tomb[k]){delete st.tomb[k];changed=true;}
+  });
+  Object.keys(st.leaves).forEach(function(k){
+    if(!Object.prototype.hasOwnProperty.call(want,k)){delete st.leaves[k];st.tomb[k]=now;changed=true;}
+  });
+  return {state:st,changed:changed};
+}
+
+// 叶子状态 -> 完整展示态（只有含叶子的日期才写 override；其余字段补默认值，避免吃掉默认排期）
+function schedBuildOv(state,defVal){
+  var ov={},by={};
+  Object.keys((state&&state.leaves)||{}).forEach(function(k){
+    var i=k.indexOf('|');if(i<0)return;
+    var d=k.slice(0,i),f=k.slice(i+1);
+    if(!by[d])by[d]={};
+    by[d][f]=state.leaves[k].v;
+  });
+  Object.keys(by).forEach(function(d){
+    var e={};
+    SCHED_FIELDS.forEach(function(f){
+      e[f]=Object.prototype.hasOwnProperty.call(by[d],f)?by[d][f]:String(defVal?defVal(d,f):'');
+    });
+    ov[d]=e;
+  });
+  return ov;
+}
+
+// 远端 -> 本机（逐条比时间戳；主设备对本机已有叶子 / 删除行使否决权）
+function schedMergeRemote(state,remote,isPrimary,now){
+  var st=schedCopyState(state),applied=false;
+  var rl=(remote&&remote.leaves)||{},rt=(remote&&remote.tomb)||{};
+  if(!Object.keys(rl).length&&!Object.keys(rt).length)return {state:st,applied:false,hasRemote:false};
+  Object.keys(rl).forEach(function(k){
+    var r=rl[k]||{},cur=st.leaves[k];
+    if(r.v===null||r.v===undefined)return;
+    if(!(isPrimary&&cur)&&(!cur||(r.t||0)>(cur.t||0))){st.leaves[k]={t:r.t||0,v:r.v};applied=true;}
+    if(st.tomb[k]&&(r.t||0)>(st.tomb[k]||0)){delete st.tomb[k];applied=true;}
+  });
+  Object.keys(rt).forEach(function(k){
+    var t=rt[k]||0,cur=st.leaves[k];
+    if(isPrimary&&cur)return;
+    if(!cur||t>(cur.t||0)){
+      if(cur){delete st.leaves[k];applied=true;}
+      if(!st.tomb[k]||t>st.tomb[k])st.tomb[k]=t;
+    }
+  });
+  return {state:st,applied:applied,hasRemote:true};
+}
+// ═══ /SCHED MERGE PURE ═══
+
+var SCHED_KEY='qg_schedule_overrides';
+function schedOv(){try{return JSON.parse(localStorage.getItem(SCHED_KEY)||'{}')||{};}catch(e){return {};}}
+function schedState(){
+  if(!cloudState)cloudState={};
+  if(!cloudState.schedule)cloudState.schedule={leaves:{},tomb:{}};
+  var x=cloudState.schedule;
+  if(!x.leaves)x.leaves={};
+  if(!x.tomb)x.tomb={};
+  return x;
+}
+// 该日期的默认排期（与渲染同源：SCHEDULE_DATA，键 'YYYY-MM' / 日 'DD'）
+function schedDefEntry(d){
+  var e={},key=String(d||'').substring(0,7),dd=String(d||'').substring(8);
+  SCHED_FIELDS.forEach(function(f){e[f]='';});
+  try{
+    var data=SCHEDULE_DATA&&SCHEDULE_DATA[key];
+    var day=(data&&data.days)?data.days[dd]:null;
+    if(day)SCHED_FIELDS.forEach(function(f){if(day[f])e[f]=String(day[f]);});
+  }catch(err){}
+  return e;
+}
+function schedDefVal(d,f){return schedDefEntry(d)[f]||'';}
+function schedIsPrimary(){try{return localStorage.getItem('qg_cloud_primary')==='1';}catch(e){return false;}}
+function schedWriteOv(ov){
+  try{
+    if(ov&&Object.keys(ov).length)localStorage.setItem(SCHED_KEY,JSON.stringify(ov));
+    else localStorage.removeItem(SCHED_KEY);
+  }catch(e){}
+}
+function schedSyncLocalWith(ts){
+  var d=schedDiffLocal(schedState(),schedOv(),(ts===undefined?Date.now():ts),schedDefVal);
+  if(d.changed){cloudState.schedule=d.state;try{cloudSaveState();}catch(e){}}
+  return d.changed;
+}
+function schedSyncLocal(){return schedSyncLocalWith(Date.now());}
+function schedRebuildLocal(){
+  try{schedWriteOv(schedBuildOv(cloudState.schedule||{},schedDefVal));}catch(e){}
+}
+function schedTogglePrimary(){
+  if(schedIsPrimary()){
+    try{localStorage.removeItem('qg_cloud_primary');}catch(e){}
+    toast('已取消主设备');
+  }else{
+    try{localStorage.setItem('qg_cloud_primary','1');}catch(e){}
+    cloudState.schedPrimary=cloudDevice();
+    toast('⭐ 本机已设为主设备：排期以本机为准');
+  }
+  try{cloudSaveState();}catch(e){}
+  cloudRenderPanel();cloudDirty=true;cloudPush(false);
+}
+function cloudKeysNorm(keys){
+  var r={};
+  Object.keys(keys||{}).forEach(function(k){if(k===SCHED_KEY)return;r[k]=keys[k];});
+  return r;
+}
+// 「云端已与本机一致」判断（排期整块快照的键序会漂，故排除后单独比叶子），避免每次同步都产生空提交
+function cloudSame(a,b){
+  if(!a||!b)return false;
+  if(JSON.stringify(cloudKeysNorm(a.keys))!==JSON.stringify(cloudKeysNorm(b.keys)))return false;
+  var sa=a.schedule||{},sb=b.schedule||{};
+  return JSON.stringify(schedNorm(sa.leaves))===JSON.stringify(schedNorm(sb.leaves))&&
+         JSON.stringify(schedNorm(sa.tomb))===JSON.stringify(schedNorm(sb.tomb));
+}
+
 function cloudPayload(){
-  var keys={},cur=cloudSnapshot();
+  schedSyncLocal();                              // 上传前把本机排期刷成叶子
+  var keys={},cur=cloudSnapshot(),st=schedState();
   CLOUD_KEYS.forEach(function(x){
+    if(x.k===SCHED_KEY){                         // 排期：另出 v2 兼容整块快照（供旧版客户端读）
+      var ov=schedBuildOv(st,schedDefVal),ks=Object.keys(ov);
+      if(ks.length){
+        var maxT=0;Object.keys(st.leaves).forEach(function(k){var t=st.leaves[k].t||0;if(t>maxT)maxT=t;});
+        keys[x.k]={t:maxT,v:JSON.stringify(ov)};
+      }
+      return;
+    }
     var v=(cloudState&&cloudState[x.k]&&cloudState[x.k].v!==undefined)?cloudState[x.k].v:cur[x.k];
     if(v===null||v===undefined)return;          // 空值不上传
     var t=(cloudState&&cloudState[x.k]&&cloudState[x.k].t)||Date.now();
     keys[x.k]={t:t,v:v};
   });
-  return {v:2,updated:new Date().toISOString(),source:cloudDevice(),keys:keys};
+  return {v:3,updated:new Date().toISOString(),source:cloudDevice(),keys:keys,
+          schedule:{leaves:st.leaves,tomb:st.tomb,primary:schedIsPrimary()?cloudDevice():(cloudState.schedPrimary||null)}};
 }
 function cloudRerender(){
   try{renderSchedule();}catch(e){}
@@ -2511,16 +2738,19 @@ function cloudTick(){
   if(!cloudState)cloudState={};
   var cur=cloudSnapshot(),changed=false;
   CLOUD_KEYS.forEach(function(x){
+    if(x.k===SCHED_KEY)return;                   // 排期走逐条合并
     var st=cloudState[x.k];
     if(!st){cloudState[x.k]={t:0,v:cur[x.k]};return;}
     if(cur[x.k]!==st.v){cloudState[x.k]={t:Date.now(),v:cur[x.k]};changed=true;}
   });
+  if(schedSyncLocal())changed=true;               // 本机排期逐条改动 -> 打时间戳
   if(changed){cloudSaveState();cloudDirty=true;cloudSetStatus('dirty','检测到本机修改，2 秒后自动上传…');cloudSchedulePush();}
 }
 function cloudPush(manual,retry){
   if(cloudBusy)return;
   if(!cloudToken()){cloudSetStatus('noconfig','未配置 Token —— 粘贴后即可开始同步');if(manual)toast('请先保存 GitHub Token');return;}
   cloudBusy=true;
+  schedSyncLocal();                              // 合并前先让本机编辑成为叶子
   if(manual)cloudSetStatus('syncing','正在上传…');
   cloudApi('GET').then(function(r){
     if(r.status===401||r.status===403)throw new Error('TOKEN');
@@ -2532,7 +2762,7 @@ function cloudPush(manual,retry){
     cloudEnsure(false);cloudSaveState();
     var payload=cloudPayload();
     cloudBusy=false;
-    if(res.data&&JSON.stringify(res.data.keys||{})===JSON.stringify(payload.keys)){
+    if(res.data&&cloudSame(res.data,payload)){
       cloudDirty=false;cloudLastSync=Date.now();try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
       cloudSetStatus('ok','云端已是最新 · '+cloudAgo(cloudLastSync));
       if(manual)toast('✅ 云端已是最新');
@@ -2593,6 +2823,8 @@ function cloudPull(manual,cb){
       try{localStorage.setItem('qg_cloud_backup',JSON.stringify({at:Date.now(),keys:bk}));}catch(e){}
       cloudState={};
     }
+    // 本机叶子必须参与合并，否则会被云端内容整体覆盖（首次同步用 t=0：同名字段云端取胜，本机独有编辑保留）
+    schedSyncLocalWith(first?0:undefined);
     cloudEnsure(false);
     var applied=cloudMergeRemote(res.data,first);
     cloudSaveState();
@@ -2652,6 +2884,11 @@ function cloudRenderPanel(){
     var s=(cloudState||{})[x.k]||{},v=localStorage.getItem(x.k);
     h+='<div style="color:var(--text-dim)">· '+x.n+'：'+(v?'有数据':'无数据')+(s.t?'（本机最后修改 '+cloudAgo(s.t)+'）':'')+'</div>';
   });
+  var st=schedState();
+  var leafN=Object.keys(st.leaves).length,tombN=Object.keys(st.tomb).length;
+  h+='<div style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px">📅 排期逐条合并：<b>'+leafN+'</b> 条（按日期+字段），已删日期 '+tombN+' 条</div>';
+  h+='<div>⭐ 主设备：'+(schedIsPrimary()?'<b>本机</b>（排期以本机为准，其他电脑改同一日期会被本机覆盖）':(cloudState.schedPrimary?('其他设备 '+cloudState.schedPrimary+'（排期以它为准）'):'未设置'))+
+     ' <button class="btn btn-ghost" style="font-size:10px;padding:1px 8px" onclick="schedTogglePrimary()">'+(schedIsPrimary()?'取消主设备':'设为主设备')+'</button></div>';
   box.innerHTML=h;
 }
 function cloudSaveToken(){
@@ -2686,6 +2923,7 @@ function cloudRestoreBackup(){
       else{try{localStorage.setItem(x.k,v);}catch(e){}cloudState[x.k]={t:Date.now(),v:v};}
     }
   });
+  schedSyncLocal();schedRebuildLocal();
   cloudSaveState();cloudRerender();cloudDirty=true;
   toast('已恢复本机旧数据，正在上传…');cloudPush(true);
 }
