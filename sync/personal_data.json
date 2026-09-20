@@ -1,6 +1,6 @@
 {
   "v": 3,
-  "updated": "2026-09-20T07:09:49.000Z",
+  "updated": "2026-09-20T07:13:55.748Z",
   "source": "MacIntel·ggrs",
   "keys": {
     "qg_schedule_overrides": {
@@ -384,6 +384,9 @@
       }
     },
     "tomb": {},
-    "primary": null
+    "primary": {
+      "id": "MacIntel·ggrs",
+      "t": 0
+    }
   }
 }
