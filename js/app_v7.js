@@ -2536,6 +2536,21 @@ function cloudMergeRemote(remote,force){
   CLOUD_KEYS.forEach(function(x){
     var r=remote.keys[x.k];if(!r)return;
     if(r.v===null||r.v===undefined)return;      // 云端空值不覆盖本机
+    // 新加入同步的键：本机有数据、云端也有、而本机从无该键的同步历史 -> 按内容并集，谁都不丢
+    var noHist=!cloudState[x.k]||!(cloudState[x.k].t>0);
+    if(CLOUD_UNION_KEYS.indexOf(x.k)>=0&&noHist&&cur[x.k]!==null&&cur[x.k]!==undefined){
+      var merged=cloudUnionValue(x.k,cur[x.k],r.v);
+      if(merged!==null){
+        if(merged!==cur[x.k]){
+          cloudBackupNow();                        // 覆盖前自动备份，面板可一键还原
+          cloudApply(x.k,merged);
+          applied=true;
+        }
+        cloudState[x.k]={t:Date.now(),v:merged};
+        if(merged!==r.v)cloudDirty=true;           // 本机独有的条目需要回传
+        return;
+      }
+    }
     // 排期：远端已带叶子 -> 交给叶子合并；主设备且本机确有排期编辑 -> 不让整块快照覆盖本机排期
     if(x.k===SCHED_KEY&&(remote.schedule||(primary&&ownOv)))return;
     if(!cloudState[x.k])cloudState[x.k]={t:0,v:cur[x.k]};
@@ -2655,6 +2670,53 @@ function schedMergeRemote(state,remote,isPrimary,now){
 }
 // ═══ /SCHED MERGE PURE ═══
 
+// ═══ CLOUD UNION PURE (新键首次采纳时按内容并集合并；纯函数，可被 node 单测抽取) ═══
+var CLOUD_UNION_KEYS=['qg_prompt_favs','qg_prompt_recipes'];
+
+// 按 keyName（如 text）去重；同一条取 time 较新的；结果按 time 倒序
+function cloudArrUnion(a,b,keyName){
+  var out=[],seen={};
+  function take(list){
+    (list||[]).forEach(function(it){
+      if(!it||typeof it!=='object')return;
+      var k=String(it[keyName]===null||it[keyName]===undefined?'':it[keyName])+'||'+String(it.type||'');
+      var cur=seen[k];
+      if(!cur){seen[k]=it;out.push(it);return;}
+      if(String(it.time||'')>String(cur.time||'')){
+        seen[k]=it;
+        var i=out.indexOf(cur);
+        if(i>=0)out[i]=it;
+      }
+    });
+  }
+  take(a);take(b);
+  out.sort(function(x,y){return String(y.time||'').localeCompare(String(x.time||''));});
+  return out;
+}
+
+// 两个 JSON 字符串的并集；无法解析时返回 null（调用方退化为按时间戳处理）
+function cloudUnionValue(k,localStr,remoteStr){
+  try{
+    if(localStr===null||localStr===undefined)return remoteStr;
+    if(remoteStr===null||remoteStr===undefined)return localStr;
+    if(localStr===remoteStr)return localStr;
+    if(k==='qg_prompt_favs'){
+      return JSON.stringify(cloudArrUnion(JSON.parse(localStr||'[]'),JSON.parse(remoteStr||'[]'),'text'));
+    }
+    if(k==='qg_prompt_recipes'){
+      var L=JSON.parse(localStr||'{}')||{},R=JSON.parse(remoteStr||'{}')||{},out={};
+      Object.keys(L).concat(Object.keys(R)).forEach(function(t){
+        if(Object.prototype.hasOwnProperty.call(out,t))return;
+        out[t]=cloudArrUnion(L[t],R[t],'text');
+      });
+      return JSON.stringify(out);
+    }
+  }catch(e){}
+  return null;
+}
+// ═══ /CLOUD UNION PURE ═══
+
+
 var SCHED_KEY='qg_schedule_overrides';
 function schedOv(){try{return JSON.parse(localStorage.getItem(SCHED_KEY)||'{}')||{};}catch(e){return {};}}
 function schedState(){
@@ -2718,6 +2780,12 @@ function schedTogglePrimary(){
   try{cloudSaveState();}catch(e){}
   cloudRenderPanel();cloudDirty=true;cloudPush(false);
 }
+function cloudBackupNow(){
+  try{
+    var bk={};CLOUD_KEYS.forEach(function(x){bk[x.k]=localStorage.getItem(x.k);});
+    localStorage.setItem('qg_cloud_backup',JSON.stringify({at:Date.now(),keys:bk}));
+  }catch(e){}
+}
 function cloudKeysNorm(keys){
   var r={};
   Object.keys(keys||{}).forEach(function(k){if(k===SCHED_KEY)return;r[k]=keys[k];});
@@ -2726,7 +2794,15 @@ function cloudKeysNorm(keys){
 // 「云端已与本机一致」判断（排期整块快照的键序会漂，故排除后单独比叶子），避免每次同步都产生空提交
 function cloudSame(a,b){
   if(!a||!b)return false;
-  if(JSON.stringify(cloudKeysNorm(a.keys))!==JSON.stringify(cloudKeysNorm(b.keys)))return false;
+  var ka=cloudKeysNorm(a.keys),kb=cloudKeysNorm(b.keys),names={};
+  Object.keys(ka).forEach(function(k){names[k]=1;});Object.keys(kb).forEach(function(k){names[k]=1;});
+  var sameKeys=true;
+  Object.keys(names).forEach(function(k){
+    var x=ka[k]||{},y=kb[k]||{};
+    if(CLOUD_UNION_KEYS.indexOf(k)>=0){ if(String(x.v)!==String(y.v))sameKeys=false; }
+    else if(JSON.stringify(x)!==JSON.stringify(y))sameKeys=false;
+  });
+  if(!sameKeys)return false;
   var sa=a.schedule||{},sb=b.schedule||{};
   if(JSON.stringify(schedNorm(sa.leaves))!==JSON.stringify(schedNorm(sb.leaves)))return false;
   if(JSON.stringify(schedNorm(sa.tomb))!==JSON.stringify(schedNorm(sb.tomb)))return false;
@@ -2874,7 +2950,7 @@ function cloudPull(manual,cb){
     cloudSetStatus('ok',(first?'已采用云端数据（本机原有数据已备份，可点「恢复本机旧数据」）':'已拉取云端数据')+' · '+cloudAgo(cloudLastSync));
     if(applied)cloudRerender();
     cloudTick();
-    if(orphaned)cloudPush(false);
+    if(orphaned||cloudDirty)cloudPush(false);
     if(cb)cb(null,res);
   }).catch(function(e){
     cloudBusy=false;cloudSetStatus('error',cloudErr(e));
