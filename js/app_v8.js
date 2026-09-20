@@ -2484,7 +2484,7 @@ var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',4
 // 只同步 3 个 key；不删数据，只按时间戳合并（新者胜）
 var CLOUD_REPO='sophiasolo/qieguo-now-workspace';
 var CLOUD_PATH='sync/personal_data.json';
-var CLOUD_KEYS=[{k:'qg_schedule_overrides',n:'社群运营排期'},{k:'qg_custom_cards',n:'自定义花字'},{k:'qg_deleted_cards',n:'已删花字'}];
+var CLOUD_KEYS=[{k:'qg_schedule_overrides',n:'社群运营排期'},{k:'qg_custom_cards',n:'自定义花字'},{k:'qg_deleted_cards',n:'已删花字'},{k:'qg_prompt_favs',n:'配图Prompt收藏'},{k:'qg_prompt_recipes',n:'Prompt配方'}];
 var CLOUD_POLL_MS=2500;
 var CLOUD_PULL_MS=5*60*1000;
 var cloudState=null, cloudDirty=false, cloudBusy=false, cloudWatch=null, cloudPushTimer=null;
@@ -2756,6 +2756,8 @@ function cloudPayload(){
 function cloudRerender(){
   try{renderSchedule();}catch(e){}
   try{loadCustomCards();renderCardLib();}catch(e){}
+  try{renderPromptLib();}catch(e){}
+  try{renderRecipeHistory();}catch(e){}
 }
 function cloudSchedulePush(){
   if(cloudPushTimer)clearTimeout(cloudPushTimer);
