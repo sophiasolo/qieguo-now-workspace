@@ -2532,7 +2532,7 @@ function cloudApply(k,v){
 function cloudMergeRemote(remote,force){
   if(!remote||!remote.keys)return false;
   var applied=false,cur=cloudSnapshot();
-  var primary=schedIsPrimary(),ownOv=Object.keys(schedOv()).length>0;
+  var primary=schedAmPrimary(),ownOv=Object.keys(schedOv()).length>0;
   CLOUD_KEYS.forEach(function(x){
     var r=remote.keys[x.k];if(!r)return;
     if(r.v===null||r.v===undefined)return;      // 云端空值不覆盖本机
@@ -2549,7 +2549,8 @@ function cloudMergeRemote(remote,force){
   if(remote.schedule){
     var m=schedMergeRemote(schedState(),remote.schedule,primary,Date.now());
     cloudState.schedule=m.state;
-    cloudState.schedPrimary=primary?cloudDevice():(remote.schedule.primary||cloudState.schedPrimary||null);
+    var rc=normClaim(remote.schedule.primary);
+    if(rc)cloudState.schedPrimary=rc;
     if(m.applied){schedRebuildLocal();applied=true;}
   }else{
     // 第二台还是旧版（只推整块快照）：把当前本机排期展开成叶子，不丢数据
@@ -2563,6 +2564,20 @@ function cloudMergeRemote(remote,force){
 var SCHED_FIELDS=['小程序','市场','品宣','朋友圈','节日','备注'];
 
 function schedNorm(o){var r={};Object.keys(o||{}).sort().forEach(function(k){r[k]=o[k];});return r;}
+
+// 主设备声明：{id:'设备标识', t:认领时间戳}；兼容早期只存设备名字符串的写法
+function normClaim(c){
+  if(!c)return null;
+  if(typeof c==='string')return c?{id:c,t:0}:null;
+  if(typeof c!=='object'||!c.id)return null;
+  return {id:String(c.id),t:Number(c.t)||0};
+}
+function schedWinner(my,remote){
+  var a=normClaim(my),b=normClaim(remote);
+  if(!a)return b;
+  if(!b)return a;
+  return (a.t>=b.t)?a:b;
+}
 
 // 状态 = {leaves:{'日期|字段':{t,v}}, tomb:{'日期|字段':t}}
 function schedCopyState(state){
@@ -2663,6 +2678,20 @@ function schedDefEntry(d){
 }
 function schedDefVal(d,f){return schedDefEntry(d)[f]||'';}
 function schedIsPrimary(){try{return localStorage.getItem('qg_cloud_primary')==='1';}catch(e){return false;}}
+function schedMyClaim(){
+  if(!schedIsPrimary())return null;
+  var t=0;try{t=Number(localStorage.getItem('qg_cloud_primary_at'))||0;}catch(e){}
+  return {id:cloudDevice(),t:t};
+}
+// 有效主设备 = 本机声明 与 云端声明 中较新的那个
+function schedEffectivePrimary(){
+  var remote=null;try{remote=cloudState?cloudState.schedPrimary:null;}catch(e){}
+  return schedWinner(schedMyClaim(),remote);
+}
+function schedAmPrimary(){
+  var w=schedEffectivePrimary();
+  return !!(w&&w.id===cloudDevice());
+}
 function schedWriteOv(ov){
   try{
     if(ov&&Object.keys(ov).length)localStorage.setItem(SCHED_KEY,JSON.stringify(ov));
@@ -2680,11 +2709,10 @@ function schedRebuildLocal(){
 }
 function schedTogglePrimary(){
   if(schedIsPrimary()){
-    try{localStorage.removeItem('qg_cloud_primary');}catch(e){}
-    toast('已取消主设备');
+    try{localStorage.removeItem('qg_cloud_primary');localStorage.removeItem('qg_cloud_primary_at');}catch(e){}
+    toast('已取消本机主设备标记');
   }else{
-    try{localStorage.setItem('qg_cloud_primary','1');}catch(e){}
-    cloudState.schedPrimary=cloudDevice();
+    try{localStorage.setItem('qg_cloud_primary','1');localStorage.setItem('qg_cloud_primary_at',String(Date.now()));}catch(e){}
     toast('⭐ 本机已设为主设备：排期以本机为准');
   }
   try{cloudSaveState();}catch(e){}
@@ -2700,8 +2728,9 @@ function cloudSame(a,b){
   if(!a||!b)return false;
   if(JSON.stringify(cloudKeysNorm(a.keys))!==JSON.stringify(cloudKeysNorm(b.keys)))return false;
   var sa=a.schedule||{},sb=b.schedule||{};
-  return JSON.stringify(schedNorm(sa.leaves))===JSON.stringify(schedNorm(sb.leaves))&&
-         JSON.stringify(schedNorm(sa.tomb))===JSON.stringify(schedNorm(sb.tomb));
+  if(JSON.stringify(schedNorm(sa.leaves))!==JSON.stringify(schedNorm(sb.leaves)))return false;
+  if(JSON.stringify(schedNorm(sa.tomb))!==JSON.stringify(schedNorm(sb.tomb)))return false;
+  return JSON.stringify(normClaim(sa.primary))===JSON.stringify(normClaim(sb.primary));
 }
 
 function cloudPayload(){
@@ -2722,7 +2751,7 @@ function cloudPayload(){
     keys[x.k]={t:t,v:v};
   });
   return {v:3,updated:new Date().toISOString(),source:cloudDevice(),keys:keys,
-          schedule:{leaves:st.leaves,tomb:st.tomb,primary:schedIsPrimary()?cloudDevice():(cloudState.schedPrimary||null)}};
+          schedule:{leaves:st.leaves,tomb:st.tomb,primary:schedEffectivePrimary()}};
 }
 function cloudRerender(){
   try{renderSchedule();}catch(e){}
@@ -2744,6 +2773,7 @@ function cloudTick(){
     if(cur[x.k]!==st.v){cloudState[x.k]={t:Date.now(),v:cur[x.k]};changed=true;}
   });
   if(schedSyncLocal())changed=true;               // 本机排期逐条改动 -> 打时间戳
+  if(JSON.stringify(normClaim(schedEffectivePrimary()))!==JSON.stringify(normClaim(cloudState.pubPrimary)))changed=true;   // 主设备声明尚未发布
   if(changed){cloudSaveState();cloudDirty=true;cloudSetStatus('dirty','检测到本机修改，2 秒后自动上传…');cloudSchedulePush();}
 }
 function cloudPush(manual,retry){
@@ -2764,6 +2794,7 @@ function cloudPush(manual,retry){
     cloudBusy=false;
     if(res.data&&cloudSame(res.data,payload)){
       cloudDirty=false;cloudLastSync=Date.now();try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
+      cloudState.pubPrimary=normClaim(payload.schedule.primary);cloudSaveState();
       cloudSetStatus('ok','云端已是最新 · '+cloudAgo(cloudLastSync));
       if(manual)toast('✅ 云端已是最新');
       return;
@@ -2781,6 +2812,7 @@ function cloudPush(manual,retry){
       if(!r2.ok)return r2.text().then(function(t){throw new Error('HTTP '+r2.status+' '+String(t).slice(0,120));});
       cloudBusy=false;cloudDirty=false;cloudLastSync=Date.now();
       try{localStorage.setItem('qg_cloud_last',String(cloudLastSync));}catch(e){}
+      cloudState.pubPrimary=normClaim(payload.schedule.primary);cloudSaveState();
       cloudMarkFirst();
       cloudSetStatus('ok','已同步到云端 · '+cloudAgo(cloudLastSync));
       if(manual)toast('✅ 已上传到云端');
@@ -2887,8 +2919,11 @@ function cloudRenderPanel(){
   var st=schedState();
   var leafN=Object.keys(st.leaves).length,tombN=Object.keys(st.tomb).length;
   h+='<div style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px">📅 排期逐条合并：<b>'+leafN+'</b> 条（按日期+字段），已删日期 '+tombN+' 条</div>';
-  h+='<div>⭐ 主设备：'+(schedIsPrimary()?'<b>本机</b>（排期以本机为准，其他电脑改同一日期会被本机覆盖）':(cloudState.schedPrimary?('其他设备 '+cloudState.schedPrimary+'（排期以它为准）'):'未设置'))+
-     ' <button class="btn btn-ghost" style="font-size:10px;padding:1px 8px" onclick="schedTogglePrimary()">'+(schedIsPrimary()?'取消主设备':'设为主设备')+'</button></div>';
+  var eff=schedEffectivePrimary(),me=cloudDevice();
+  var effTxt=(eff&&eff.id===me)?'<b>本机</b>（排期以本机为准，其他电脑改同一日期会被本机覆盖）'
+            :(eff?('其他设备 '+eff.id+'（排期以它为准）'):'未设置');
+  h+='<div>⭐ 主设备：'+effTxt+
+     ' <button class="btn btn-ghost" style="font-size:10px;padding:1px 8px" onclick="schedTogglePrimary()">'+(schedIsPrimary()?'取消本机主设备标记':'设为主设备')+'</button></div>';
   box.innerHTML=h;
 }
 function cloudSaveToken(){
