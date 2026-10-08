@@ -1503,6 +1503,111 @@ function getSeasonWordRule(d){
   }
   return '【时令铁律】当前不是夏季：严禁出现「三伏天／高温／解暑／消暑／炎炎夏日／凉爽一夏／冰爽一夏／盛夏／35℃」等夏季专属词，严禁写"夏天"。要把产品写得冰爽，只能用「冰镇／冷藏／冰一下」这类与气温无关的口感词（例：冰镇一下更好吃）。所有季节、气候、穿着、场景描写必须严格符合上面【当下时令】。';
 }
+// ── 通用季节层（2026-10-08）：季节不再是某个推送日的专属，所有推送日 / 所有方向都生效 ──
+var SEASON_NAME_CN = {spring:'春季', summer:'夏季', autumn:'秋季', winter:'冬季'};
+var SEASON_HUA = {
+  spring:['🌸春天的甜，先尝一口｜','🌱春日限定｜','🌿春困醒一醒，来一盒｜','☀️春天就要清爽一点点｜','🌷换季的第一口鲜｜','🍃春日里的小清甜'],
+  summer:['🌡️热到不想动？试试','🧊打败高温的快乐源泉｜','💦高温天的清爽选择｜','☀️35°C+的夏天，你需要','🍃三伏天的续命果切｜','📋今日处方：冰镇鲜切×1 即刻服用'],
+  autumn:['🍂入秋的第一口甜｜','🌰秋日限定｜','🍁秋风起，来一盒甜的｜','🌾秋燥时节，润一润｜','🧣早晚转凉，甜度在线｜','📋今日处方：当季鲜切×1 即刻服用'],
+  winter:['❄️暖气房里来一盒｜','🧣冬天也要补维C｜','🥶外面越冷越想吃点甜的｜','🔥冬日里的一口清甜｜','☕配一杯热饮刚刚好｜','📋今日处方：暖房鲜切×1 即刻服用']
+};
+var SOLAR_SEGMENT_HUA = {
+  '立春':['🌱立春了，开年第一口鲜｜','🌸春天从这一盒开始｜'],
+  '雨水':['🌧雨水时节，来点清甜｜','☔雨天在家吃点甜的｜'],
+  '惊蛰':['🐛惊蛰醒一醒，清爽一盒｜','🌱万物醒，甜也醒｜'],
+  '春分':['🌸春分昼夜平分，甜也分你一半｜','🌿春分宜清甜｜'],
+  '清明':['🌿清明踏青带一盒｜','🍃清明时节，清爽正好｜'],
+  '谷雨':['🍃谷雨了，春天最后一口鲜｜','🌦谷雨时节雨纷纷，甜要趁早｜'],
+  '立夏':['☀️立夏了，冰镇的安排上｜','🍧夏天的第一口冰甜｜'],
+  '小满':['🌾小满，尝一口满分的甜｜','🌿小满未满，甜度刚好｜'],
+  '芒种':['🌱芒种忙，来盒甜的补一补｜','🌦芒种时节，清爽续命｜'],
+  '夏至':['☀️夏至这天最长的白天，配一盒冰的｜','🍧夏至，白天最长甜最多｜'],
+  '小暑':['🥵小暑大暑，冰镇续命｜','☀️小暑了，一天热过一天｜'],
+  '大暑':['🔥大暑最热，来一盒冰的｜','🧊大暑天，只有冰的能救｜'],
+  '立秋':['🍂立秋了，秋天的第一口甜｜','🌾立秋不下凉，甜先安排上｜'],
+  '处暑':['🌤处暑了，暑气退了甜还在｜','🍃处暑过后，早晚要加件外套｜'],
+  '秋分':['🍁秋分昼夜平分，甜也分你一半｜','🌾秋分时节，当季最甜｜'],
+  '寒露':['🍂寒露过后，天燥得慌｜','🌾寒露了，润一润再睡｜'],
+  '霜降':['🍁霜降了，甜度更足｜','🧣霜降天冷，来口甜的｜'],
+  '立冬':['❄️立冬第一口甜｜','🔥入冬了，来盒暖一点的｜'],
+  '小雪':['❄️小雪天，屋里吃点甜的｜','🧣小雪了，记得加衣｜'],
+  '大雪':['🌨大雪天，暖气房必备｜','❄️大雪纷飞，甜在屋里｜'],
+  '冬至':['🥟冬至不只有饺子，还有这一盒｜','🔥冬至日短，甜要够暖｜'],
+  '小寒':['🥶小寒天，甜到心里｜','🧣小寒了，最冷的时候要吃点甜的｜'],
+  '大寒':['❄️大寒了，来点甜的暖一暖｜','🧣大寒过后就是年｜']
+};
+var SEASON_VIBE = {
+  spring:'春困、换季、回暖、午后犯困、踏青、野餐、开学季',
+  summer:'高温、空调房、出汗、冰饮、夜宵、解暑、冰镇',
+  autumn:'秋燥、昼夜温差大、早晚转凉、换季、暖阳、贴秋膘、桂花、外套',
+  winter:'暖气、室内干燥、围巾、热饮、夜长、冬日暖阳、囤货'
+};
+// 当季果品判定名单（内部使用：只把"是否当季"的结论告诉 AI，不列举果名 → 避免多水果泄露）
+var SEASON_FRUIT = {
+  1:['砂糖橘','草莓','车厘子','甘蔗','青枣','橙'],
+  2:['草莓','柑橘','甘蔗','菠萝','橙'],
+  3:['菠萝','草莓','芒果','枇杷','青枣'],
+  4:['芒果','菠萝','枇杷','樱桃','草莓'],
+  5:['樱桃','枇杷','荔枝','杨梅','芒果','西瓜'],
+  6:['西瓜','荔枝','桃','杨梅','芒果','山竹'],
+  7:['西瓜','葡萄','桃','哈密瓜','蓝莓','龙眼'],
+  8:['葡萄','无花果','龙眼','哈密瓜','西梅','桃'],
+  9:['葡萄','石榴','梨','冬枣','猕猴桃','柿子'],
+  10:['柚子','柿子','石榴','梨','冬枣','猕猴桃','葡萄'],
+  11:['柚子','柿子','橙','冬枣','甘蔗','苹果'],
+  12:['砂糖橘','橙','草莓','车厘子','甘蔗','柚子']
+};
+function joinHua(list){ var out = [], i; for (i = 0; i < list.length; i++) { out.push(String(list[i]).replace(/｜\s*$/, "")); } return out.join("｜"); }
+function getSeasonKey(d){
+  d = d || new Date();
+  var m = d.getMonth() + 1;
+  if (m >= 3 && m <= 5) return 'spring';
+  if (m >= 6 && m <= 8) return 'summer';
+  if (m >= 9 && m <= 11) return 'autumn';
+  return 'winter';
+}
+// 非同类果名（单字误命中屏蔽）：凤梨≠梨、猕猴桃/樱桃≠桃
+var SEASON_MASK = ['凤梨', '猕猴桃', '樱桃'];
+function isProductInSeason(product, d){
+  if (!product) return null;
+  d = d || new Date();
+  var p = String(product), list = SEASON_FRUIT[d.getMonth() + 1] || [], i;
+  // 1) 多字果名直接匹配（猕猴桃/葡萄/柚子…）
+  for (i = 0; i < list.length; i++) { if (list[i].length >= 2 && p.indexOf(list[i]) >= 0) return true; }
+  // 2) 单字果名（梨/桃/橙）先屏蔽非同类果名再匹配：凤梨≠梨、樱桃≠桃
+  var pm = p;
+  for (i = 0; i < SEASON_MASK.length; i++) { pm = pm.split(SEASON_MASK[i]).join('▩'); }
+  for (i = 0; i < list.length; i++) { if (list[i].length === 1 && pm.indexOf(list[i]) >= 0) return true; }
+  return false;
+}
+// 非夏季时把含夏季词的卡片从 Prompt 样本里剔除（不动用户的库数据，只影响注入）
+function filterSeasonCards(list, d){
+  d = d || new Date();
+  if (isSummerNow(d)) return list;
+  var re = /夏|𝑠𝑢𝑚𝑚𝑒𝑟|Summer|SUMMER|summer|雪糕|海邊|海边|Soda|冰镇/;
+  var out = [], i;
+  for (i = 0; i < list.length; i++) { if (!re.test(list[i])) out.push(list[i]); }
+  return out.length ? out : list;
+}
+function getSeasonHuaPrompt(d, product){
+  d = d || new Date();
+  var key = getSeasonKey(d);
+  var out = '';
+  out += '【当季花字（' + SEASON_NAME_CN[key] + ' · 任何推送日都优先使用；本次至少用 1 条放在花字行，可自由创作变体）】\n' + joinHua(SEASON_HUA[key]) + '\n\n';
+  var term = ''; try { term = getSolarTermText(d); } catch (e) {}
+  if (term && SOLAR_SEGMENT_HUA[term]) {
+    out += '【节气时令（今天=' + term + '）】这一条最贴今天，优先用：' + joinHua(SOLAR_SEGMENT_HUA[term]) + '\n\n';
+  }
+  out += '【当季氛围元素（可自然融入正文，别堆砌、别和产品冲突）】' + SEASON_VIBE[key] + '\n\n';
+  var ins = isProductInSeason(product, d);
+  if (ins === true) {
+    out += '【当季判定】所选产品正当时令 → 可放心强调"正当季 / 这个季节最好吃"。\n\n';
+  } else if (ins === false) {
+    out += '【当季判定】所选产品当前不是主产季 → 严禁写"正当季 / 时令 / 只有这个季节才有"，改用口感、便利、价格、场景角度。\n\n';
+  }
+  return out;
+}
+
 function loadCopySeasonWeather(){
   fetch('weather_data.json?v='+Date.now()).then(function(r){ return r.json(); }).then(function(dd){
     try {
@@ -1607,7 +1712,7 @@ function generateCopyAI(){
   var seasonPrompt='';
   try{
     var seasonText=getSeasonContextText(now);
-    if(seasonText)seasonPrompt='【当下时令（写文案必须严格据此判断季节与气候）】\n'+seasonText+'\n\n'+getSeasonWordRule(now)+'\n\n';
+    if(seasonText)seasonPrompt='【当下时令（写文案必须严格据此判断季节与气候）】\n'+seasonText+'\n\n'+getSeasonWordRule(now)+'\n\n'+getSeasonHuaPrompt(now, product);
   }catch(e){seasonPrompt='';}
   
   // Build rich 花字 prompt with festival context
@@ -1618,14 +1723,15 @@ function generateCopyAI(){
     var samples=[];
     cats.forEach(function(c){
       var entries=huaData[c]||[];
+      entries=filterSeasonCards(entries,now);
       var pick=entries.slice(0,Math.min(8,entries.length));
       samples.push(c+': '+pick.join('｜'));
     });
     huaZiPrompt='【花字库（来自素材灵感库，参考风格和句式自由创作变体，不必原样复制）】\\n'+samples.join('\\n')+'\\n\\n';
   }catch(e){huaZiPrompt='';}
   var huaZiDaily=''+
-    '【'+dayName+'专属花字（从8类中选，花字开头必用）】\\n'+
-    (day===2?'周二·热销风向：🌡️热到不想动｜🧊打败高温的快乐｜💼工作日解暑方案｜一周过半该奖励自己｜🤔今日诊断：缺一份｜📋今日处方｜🍃三伏天续命果切｜💦高温天清爽选择\\n':'')+
+    '【'+dayName+'专属花字（花字开头优先用；当季花字见下方【当季花字】段）】\\n'+
+    (day===2?'周二·热销风向：一周过半该奖励自己｜🤔今日诊断：缺一份｜📋今日处方｜😴➡🍉😋 .ᐟ.ᐟ｜🥱😪➡😋🤩✨｜一周快过半了！拿什么犒劳自己？\\n':'')+
     (day===3?'周三·会员日88折：🎫今日份福利领了再走｜🎁一周一次的宠爱｜💫会员日仪式感｜🎫会员专享88折\\n':'')+
     (day===4?'周四·外卖双平台：🛵外卖特价｜⚡限时特价｜💨鲜切直达｜🧊冰鲜到家｜🔥今日外卖活动品｜📱外卖特惠\\n':'')+
     (day===5?'周五·周末套餐：😆周五福来day｜周末宅家公式=沙发+空调+｜🎉周五解放日｜周末快乐公式｜𝐅𝐫𝐢𝐝𝐚𝐲\\n':'')+
@@ -1670,7 +1776,7 @@ function generateCopyAI(){
     (CopyConfig.comboNote?'【套餐详情（必须融入文案，不可忽略！】'+CopyConfig.comboNote+'\\n':'')+
     '【价格要求】'+priceRule+'\n'+
     '【配送费要求】'+deliveryRule+'\n'+
-    '【方向】'+getDirectionPrompt(direction,day)+
+    '【方向】'+getDirectionPrompt(direction,day)+'\n\n'+
     '生成3版差异化社群文案，每版5-8行，花字类型和风格要明显不同。\\n'+
     '至少1版要带价格（格式：💰¥XX或💰¥XX起）。\\n'+
     '输出格式（严格）：\\n'+
