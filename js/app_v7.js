@@ -910,7 +910,9 @@ function buildDayInfoHTML(d) {
   var tags = [];
   if (fest) tags.push('🎋 ' + fest);                  // 节日/品宣日（含立秋这类节气品宣）
   if (term && term !== fest) tags.push('🌾 ' + term); // 节气（与节日同名时不重复）
-  return line1 + (tags.length ? '<br>' + tags.join('  ') : '');
+  var sI = (typeof getSeasonInfo === 'function') ? getSeasonInfo(d) : null;
+  var line3 = sI ? ('🍃 ' + sI.sub + '（' + sI.name + '）' + (copySeasonTempHint ? ' · ' + copySeasonTempHint : '')) : '';
+  return line1 + (tags.length ? '<br>' + tags.join('  ') : '') + (line3 ? '<br>' + line3 : '');
 }
 
 function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2)label='周二 · 热销风向';else if(day===3)label='周三 · 会员日88折';else if(day===4)label='周四 · 外卖双平台';else if(day===5)label='周五 · 周末套餐';else if(day===6)label='周六 · 外卖双平台';else label='今天无推送';document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML=buildDayInfoHTML(now);}
@@ -1446,6 +1448,123 @@ function showCopyLoading(){
   document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='none';});
 }
 
+// ═══════════════════════════════════════════
+// SECTION SEASON: 时令上下文（文案 Prompt 注入 + 「📅 今日推送」卡片显示）
+// 2026-10-08 新增：此前 Prompt 里没有任何日期/季节信息，AI 只能按盛夏默认写 → 出现"三伏天/高温"。
+// 数据来源全部已有：getLunarText / getSolarTermText / FESTIVAL_DATA / weather_data.json
+// ⚠️ 季节词只在本段定义；禁止再把季节词硬编码进 Prompt（历史坑：周二花字池写死三伏天/高温）
+// ═══════════════════════════════════════════
+var SEASON_TABLE = {
+  1:{name:'冬',sub:'隆冬',tip:'天寒干燥、室内暖气干，适合讲润燥补水、维C补给'},
+  2:{name:'冬',sub:'晚冬',tip:'乍暖还寒，适合讲润燥、维C、清爽解腻'},
+  3:{name:'春',sub:'早春',tip:'春困易乏、气温回升，适合讲清爽开胃、解春困'},
+  4:{name:'春',sub:'仲春',tip:'天气回暖、午后易犯困，适合讲多汁清甜、酸甜开胃'},
+  5:{name:'春',sub:'暮春',tip:'气温升高渐有热意，适合讲清爽多汁'},
+  6:{name:'夏',sub:'初夏',tip:'天气转热，适合讲冰镇、多汁解渴'},
+  7:{name:'夏',sub:'盛夏',tip:'高温闷热，适合讲冰镇解暑、清凉'},
+  8:{name:'夏',sub:'夏末',tip:'暑热未退、秋燥初现，适合讲冰爽加清甜'},
+  9:{name:'秋',sub:'初秋',tip:'暑气渐消、开始转凉干燥，适合讲润燥、当季清甜'},
+  10:{name:'秋',sub:'深秋',tip:'秋燥明显、昼夜温差大，适合讲润燥补水、当季清甜'},
+  11:{name:'秋',sub:'秋末',tip:'天气转冷干燥，适合讲润燥、温润清甜'},
+  12:{name:'冬',sub:'初冬',tip:'寒冷干燥，适合讲维C、润燥、暖意'}
+};
+var WEEKDAY_CN = ['周日','周一','周二','周三','周四','周五','周六'];
+var copySeasonTempHint = '';
+
+function getSeasonInfo(d){ d = d || new Date(); return SEASON_TABLE[d.getMonth()+1] || {name:'',sub:'',tip:''}; }
+function isSummerNow(d){ d = d || new Date(); var m = d.getMonth()+1; return m >= 6 && m <= 8; }
+function getCopyFestToday(d){
+  var f = '';
+  try {
+    var yf = (typeof FESTIVAL_DATA !== 'undefined' && FESTIVAL_DATA) ? (FESTIVAL_DATA[String(d.getFullYear())] || {}) : {};
+    f = yf[mmdd(d)] || '';
+  } catch (e) {}
+  return f;
+}
+function getSeasonContextText(d){
+  d = d || new Date();
+  var s = getSeasonInfo(d);
+  var parts = [];
+  parts.push(d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+WEEKDAY_CN[d.getDay()]+'）');
+  var lun = ''; try { lun = getLunarText(d); } catch (e) {}
+  if (lun) parts.push(lun);
+  var term = ''; try { term = getSolarTermText(d); } catch (e) {}
+  if (term) parts.push('节气：'+term);
+  var fest = getCopyFestToday(d);
+  if (fest) parts.push('节日：'+fest);
+  parts.push('季节：'+s.sub+'·'+s.name+'（'+s.tip+'）');
+  if (copySeasonTempHint) parts.push(copySeasonTempHint);
+  return parts.join('｜');
+}
+function getSeasonWordRule(d){
+  d = d || new Date();
+  if (isSummerNow(d)) {
+    return '【时令铁律】当前是夏季，可用高温／冰镇／解暑类词；但所有气候、穿着、场景描写必须严格符合上面【当下时令】，禁止写其它季节。';
+  }
+  return '【时令铁律】当前不是夏季：严禁出现「三伏天／高温／解暑／消暑／炎炎夏日／凉爽一夏／冰爽一夏／盛夏／35℃」等夏季专属词，严禁写"夏天"。要把产品写得冰爽，只能用「冰镇／冷藏／冰一下」这类与气温无关的口感词（例：冰镇一下更好吃）。所有季节、气候、穿着、场景描写必须严格符合上面【当下时令】。';
+}
+function loadCopySeasonWeather(){
+  fetch('weather_data.json?v='+Date.now()).then(function(r){ return r.json(); }).then(function(dd){
+    try {
+      var n0 = new Date();
+      var t = n0.getFullYear()+'-'+mmdd(n0);
+      var cities = dd.cities || {}, mins = [], maxs = [], n = 0;
+      for (var c in cities) {
+        var dl = cities[c].daily || {}, ts = dl.time || [], i = ts.indexOf(t);
+        if (i < 0) continue;
+        var mn = dl.temperature_2m_min ? dl.temperature_2m_min[i] : null;
+        var mx = dl.temperature_2m_max ? dl.temperature_2m_max[i] : null;
+        if (typeof mn === 'number') mins.push(mn);
+        if (typeof mx === 'number') maxs.push(mx);
+        n++;
+      }
+      if (mins.length >= 3 && maxs.length >= 3) {
+        mins.sort(function(a, b){ return a - b; });
+        maxs.sort(function(a, b){ return a - b; });
+        var lo = mins[Math.floor(mins.length * 0.1)];
+        var hi = maxs[Math.floor(maxs.length * 0.9)];
+        copySeasonTempHint = '主要城市 '+Math.round(lo)+'~'+Math.round(hi)+'℃';
+      }
+    } catch (e) {}
+    var el = document.getElementById('copyWeather');
+    if (el) { try { el.innerHTML = buildDayInfoHTML(new Date()); } catch (e2) {} }
+  }).catch(function(){});
+}
+
+// ── 方向语义化：中文标签 + 子场景池（每次生成随机抽 3 条不同子场景分配给三版，治"每版雷同"）──
+var DIRECTION_SPEC = {
+  'emotion':{label:'情感缺口',pool:['加班到很晚犒劳自己','被工作气到想被治愈','周一综合症','心情低落想被安慰','熬夜赶工的深夜','带娃到崩溃的午后']},
+  'seasonal':{label:'时令稀缺',pool:['当季最后一波','刚上市的头茬','再过两周就下架','只有这段时间才有的甜','换季时节的当季果']},
+  'scene':{label:'场景共鸣',pool:['办公室下午茶','加班夜宵','追剧零食','周末野餐','健身房练完','通勤地铁上','打游戏上头','麻将桌上','课间十分钟','活动前垫肚子','熬夜写方案','接娃放学的路上']},
+  'social':{label:'社交裂变',pool:['和同事拼单','@上爱吃水果的朋友','办公室拼单团','家庭分享装','闺蜜下午茶拼单']},
+  'surprise':{label:'惊喜彩蛋',pool:['今天多送一份','随机隐藏款','今天有彩蛋','限时小惊喜']},
+  'hotspot':{label:'热点借势',pool:['最近大家都在吃','全网同款','热门话题同款']},
+  'health':{label:'健康密码',pool:['维C补给','比奶茶健康','健身后的补给','减脂期的快乐']},
+  'contrast':{label:'对比锚定',pool:['比奶茶还便宜','外面买X元这里Y元','同样的钱多一倍分量']},
+  'lazy':{label:'懒人救星',pool:['不用洗不用切','打开就吃','懒人下午茶','不用洗碗']},
+  'member':{label:'会员权益',pool:['会员价到手','会员日专享']},
+  'direct':{label:'直给重点',pool:['今天特价','直接说重点']},
+  'habit':{label:'习惯绑定',pool:['每天下午的固定快乐','午后果切时间']},
+  'data':{label:'数据种草',pool:['回购率超高','群里都在回购']}
+};
+function pickDistinct(pool, n){
+  var a = pool.slice(), out = [], i, j, t;
+  for (i = a.length - 1; i > 0; i--) { j = Math.floor(Math.random() * (i + 1)); t = a[i]; a[i] = a[j]; a[j] = t; }
+  for (i = 0; i < n && i < a.length; i++) out.push(a[i]);
+  for (i = 0; out.length < n && i < pool.length; i++) { if (out.indexOf(pool[i]) < 0) out.push(pool[i]); }
+  return out;
+}
+function getDirectionPrompt(dir, day){
+  var s = DIRECTION_SPEC[dir];
+  if (!s) {
+    var mix = DIRECTION_SPEC['scene'].pool.concat(DIRECTION_SPEC['emotion'].pool).concat(DIRECTION_SPEC['habit'].pool);
+    var p0 = pickDistinct(mix, 3);
+    return 'AI推荐（自行判断最佳角度）——三版必须写三个完全不同的切入角度，禁止三版用同一个场景或同一句话开头。可参考这三个不同场景分配：① '+p0[0]+' ② '+p0[1]+' ③ '+p0[2];
+  }
+  var p = pickDistinct(s.pool, 3);
+  return s.label+' —— 三版分别围绕以下三个完全不同的具体场景/角度写，严禁三版重复同一个场景或用同一句话开头：① '+p[0]+' ② '+p[1]+' ③ '+p[2];
+}
+
 function generateCopyAI(){
   var key=getApiKey();
   if(!key){toast('⚠️ 请先设置 API Key');openApiKeyModal();return;}
@@ -1484,6 +1603,12 @@ function generateCopyAI(){
   var festToday='';
   try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=yearFests[mmdd];}catch(e){}
   var isFestival=(CopyConfig.customDay==='festival'||(!CopyConfig.customDay&&festToday));
+  // ── 时令上下文（2026-10-08 新增：解决文案不随日期变化、出现三伏天/高温的问题）──
+  var seasonPrompt='';
+  try{
+    var seasonText=getSeasonContextText(now);
+    if(seasonText)seasonPrompt='【当下时令（写文案必须严格据此判断季节与气候）】\n'+seasonText+'\n\n'+getSeasonWordRule(now)+'\n\n';
+  }catch(e){seasonPrompt='';}
   
   // Build rich 花字 prompt with festival context
     var huaZiPrompt='';
@@ -1521,7 +1646,7 @@ function generateCopyAI(){
   var prompt;
   if(isFestival){
     var festName=CopyConfig.festivalName||festToday||'节气';
-    prompt='你是切果NOW品牌社群文案专家。今天是「'+festName+'」节日品宣，严格模仿以下切果NOW已验证的节日文案风格。'+
+    prompt=seasonPrompt+'你是切果NOW品牌社群文案专家。今天是「'+festName+'」节日品宣，严格模仿以下切果NOW已验证的节日文案风格。'+
   '\n\n'+huaZiPrompt+'\n\n'+
   '【结构要求】\n'+
   '第1行=醒目Unicode节日花字标题\n（参考：✩·‿· ɢᴏᴏᴅ ᴛɪᴍᴇ☄✦—5.1、🎡𝗛𝗮𝗽𝗽𝘆 𝗰𝗵𝗶𝗹𝗱𝗿𝗲𝗻𝘀𝗗𝗮𝘆🫶、🌷 𝗠𝗼𝘁𝗵𝗲𝗿𝘀 𝗗𝗮𝘆）\n'+
@@ -1532,7 +1657,7 @@ function generateCopyAI(){
   '输出3版差异化品宣，格式：\n'+
   '【版本一 · 花字风格A】\n文案\n\n【版本二 · 花字风格B】\n文案\n\n【版本三 · 花字风格C】\n文案';
   }else{
-    prompt='你是切果NOW品牌社群文案专家。⚠️严格遵守：全文只写产品「'+product+'」，严禁出现任何其他水果名。以下为风格参考，务必模仿。\\\\n\\\\n'+
+    prompt=seasonPrompt+'你是切果NOW品牌社群文案专家。⚠️严格遵守：全文只写产品「'+product+'」，严禁出现任何其他水果名。以下为风格参考，务必模仿。\\\\n\\\\n'+
     '【品牌】鲜切水果外卖，健康活力、口语化亲切、朋友聊天语气。\\n\\n'+
     huaZiPrompt+
     huaZiDaily+
@@ -1545,7 +1670,7 @@ function generateCopyAI(){
     (CopyConfig.comboNote?'【套餐详情（必须融入文案，不可忽略！】'+CopyConfig.comboNote+'\\n':'')+
     '【价格要求】'+priceRule+'\n'+
     '【配送费要求】'+deliveryRule+'\n'+
-    '【方向】'+(direction==='auto'?'根据推送日自由选择':direction)+'\n\n'+
+    '【方向】'+getDirectionPrompt(direction,day)+
     '生成3版差异化社群文案，每版5-8行，花字类型和风格要明显不同。\\n'+
     '至少1版要带价格（格式：💰¥XX或💰¥XX起）。\\n'+
     '输出格式（严格）：\\n'+
@@ -1621,7 +1746,7 @@ function generateCopyAI(){
 }
 
 // ─── Init ───
-function initCopyPage(){initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyHotspots();loadCopyProducts();renderCopyHistory();}
+function initCopyPage(){loadCopySeasonWeather();initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyHotspots();loadCopyProducts();renderCopyHistory();}
 
 // ═══════ PROMPT ═══════
 var promptType='cover';
