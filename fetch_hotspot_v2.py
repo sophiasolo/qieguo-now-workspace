@@ -349,12 +349,22 @@ def git_push(total):
             else:
                 print(f"⚠️ git commit 未成功: {out}")
                 return
-        push = subprocess.run(["git", "push"], cwd=WORKSPACE, capture_output=True, text=True, timeout=60)
+        # 推送前先 fetch + pull --rebase，避免远端并发提交导致 reject（历史踩坑：sync_personal_data 等 job 会撞车）
+        subprocess.run(["git", "fetch", "origin"], cwd=WORKSPACE, capture_output=True, text=True, timeout=120)
+        subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=WORKSPACE, capture_output=True, text=True, timeout=120)
+        push = subprocess.run(["git", "push"], cwd=WORKSPACE, capture_output=True, text=True, timeout=120)
         print(push.stdout.strip() or push.stderr.strip())
         if push.returncode == 0:
             print("✅ git push 成功")
         else:
-            print(f"⚠️ git push 失败: {(push.stderr or push.stdout).strip()}")
+            # 撞车兜底：再 rebase 一次后重推
+            subprocess.run(["git", "fetch", "origin"], cwd=WORKSPACE, capture_output=True, text=True, timeout=120)
+            subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=WORKSPACE, capture_output=True, text=True, timeout=120)
+            push = subprocess.run(["git", "push"], cwd=WORKSPACE, capture_output=True, text=True, timeout=120)
+            if push.returncode == 0:
+                print("✅ git push 成功（rebase 后重试）")
+            else:
+                print(f"⚠️ git push 失败: {(push.stderr or push.stdout).strip()}")
     except subprocess.TimeoutExpired:
         print("⚠️ git push 超时")
     except Exception as e:
