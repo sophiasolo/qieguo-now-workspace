@@ -2795,8 +2795,9 @@ function cloudMergeRemote(remote,force){
   if(remote.schedule){
     var m=schedMergeRemote(schedState(),remote.schedule,primary,Date.now());
     cloudState.schedule=m.state;
-    var rc=normClaim(remote.schedule.primary);
-    if(rc)cloudState.schedPrimary=rc;
+    var rc=normClaim(remote.schedule.primary),rv0=schedRevokeIntent();
+    // 本机撤销意图比云端声明新 -> 保持撤销；否则采纳云端声明（含 id='' 的撤销声明）
+    cloudState.schedPrimary=(rv0>0&&(!rc||rv0>=(rc.t||0)))?{id:'',t:rv0}:rc;
     if(m.applied){schedRebuildLocal();applied=true;}
   }else{
     // 第二台还是旧版（只推整块快照）：把当前本机排期展开成叶子，不丢数据
@@ -2815,8 +2816,10 @@ function schedNorm(o){var r={};Object.keys(o||{}).sort().forEach(function(k){r[k
 function normClaim(c){
   if(!c)return null;
   if(typeof c==='string')return c?{id:c,t:0}:null;
-  if(typeof c!=='object'||!c.id)return null;
-  return {id:String(c.id),t:Number(c.t)||0};
+  if(typeof c!=='object')return null;
+  var id=(c.id===null||c.id===undefined)?'':String(c.id),ct=Number(c.t)||0;
+  if(!id&&!ct)return null;
+  return {id:id,t:ct};                         // id='' + t>0 = 撤销声明（与认领一起按时间戳仲裁）
 }
 function schedWinner(my,remote){
   var a=normClaim(my),b=normClaim(remote);
@@ -2976,10 +2979,14 @@ function schedMyClaim(){
   var t=0;try{t=Number(localStorage.getItem('qg_cloud_primary_at'))||0;}catch(e){}
   return {id:cloudDevice(),t:t};
 }
-// 有效主设备 = 本机声明 与 云端声明 中较新的那个
+// 本机「撤销主设备」意图时间戳：点「取消本机主设备标记」写入，重新「设为主设备」清掉
+function schedRevokeIntent(){try{return Number(localStorage.getItem('qg_cloud_primary_off'))||0;}catch(e){return 0;}}
+// 有效主设备 = 本机声明 / 云端声明 / 本机撤销意图 三者中时间戳最新者；撤销胜出 = 无主设备（双向逐条合并）
 function schedEffectivePrimary(){
   var remote=null;try{remote=cloudState?cloudState.schedPrimary:null;}catch(e){}
-  return schedWinner(schedMyClaim(),remote);
+  var w=schedWinner(schedMyClaim(),remote),rv=schedRevokeIntent();
+  if(rv>0&&(!w||rv>=(w.t||0)))return {id:'',t:rv};
+  return w;
 }
 function schedAmPrimary(){
   var w=schedEffectivePrimary();
@@ -3002,10 +3009,15 @@ function schedRebuildLocal(){
 }
 function schedTogglePrimary(){
   if(schedIsPrimary()){
-    try{localStorage.removeItem('qg_cloud_primary');localStorage.removeItem('qg_cloud_primary_at');}catch(e){}
-    toast('已取消本机主设备标记');
+    try{localStorage.removeItem('qg_cloud_primary');localStorage.removeItem('qg_cloud_primary_at');
+        localStorage.setItem('qg_cloud_primary_off',String(Date.now()));}catch(e){}
+    // 撤销必须带时间戳并发布到云端：否则推送前的 GET 会把云端旧声明读回来 -> 否决权复活
+    cloudLoadState();if(!cloudState)cloudState={};
+    cloudState.schedPrimary={id:'',t:schedRevokeIntent()};
+    toast('已取消本机主设备标记（排期恢复逐条按时间合并）');
   }else{
-    try{localStorage.setItem('qg_cloud_primary','1');localStorage.setItem('qg_cloud_primary_at',String(Date.now()));}catch(e){}
+    try{localStorage.setItem('qg_cloud_primary','1');localStorage.setItem('qg_cloud_primary_at',String(Date.now()));
+        localStorage.removeItem('qg_cloud_primary_off');}catch(e){}
     toast('⭐ 本机已设为主设备：排期以本机为准');
   }
   try{cloudSaveState();}catch(e){}
@@ -3229,8 +3241,8 @@ function cloudRenderPanel(){
   var leafN=Object.keys(st.leaves).length,tombN=Object.keys(st.tomb).length;
   h+='<div style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px">📅 排期逐条合并：<b>'+leafN+'</b> 条（按日期+字段），已删日期 '+tombN+' 条</div>';
   var eff=schedEffectivePrimary(),me=cloudDevice();
-  var effTxt=(eff&&eff.id===me)?'<b>本机</b>（排期以本机为准，其他电脑改同一日期会被本机覆盖）'
-            :(eff?('其他设备 '+eff.id+'（排期以它为准）'):'未设置');
+  var effTxt=(eff&&eff.id&&eff.id===me)?'<b>本机</b>（排期以本机为准，其他电脑改同一日期会被本机覆盖）'
+            :((eff&&eff.id)?('其他设备 '+eff.id+'（排期以它为准）'):'未设置（排期按时间戳逐条合并）');
   h+='<div>⭐ 主设备：'+effTxt+
      ' <button class="btn btn-ghost" style="font-size:10px;padding:1px 8px" onclick="schedTogglePrimary()">'+(schedIsPrimary()?'取消本机主设备标记':'设为主设备')+'</button></div>';
   box.innerHTML=h;
