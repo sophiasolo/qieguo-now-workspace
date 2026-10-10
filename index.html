@@ -117,7 +117,6 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
   <div class="nav-section">监控</div>
   <div class="nav-item active" data-page="sentiment"><span class="icon">🛡️</span><span>舆情监控</span><span class="badge" id="sentimentBadge">3</span></div>
   <div class="nav-item nav-sub" data-page="star"><span class="icon">⭐</span><span>精选正面</span></div>
-  <div class="nav-item nav-sub" data-page="weather"><span class="icon">🌦️</span><span>天气简报</span></div>
   <div class="nav-section">运营</div>
   <div class="nav-item" data-page="community"><span class="icon">📅</span><span>社群运营</span></div>
   <div class="nav-item" data-page="communitydata"><span class="icon">👥</span><span>社群数据</span></div>
@@ -459,13 +458,6 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
       </div>
       <div id="inspContent" style="font-size:13px;color:var(--text-dim)"></div>
     </div>
-    <div class="page" id="page-weather">
-      <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
-        <input id="weatherCity" placeholder="🔍 搜索城市…" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px" oninput="filterWeather()">
-        <span style="font-size:11px;color:var(--text-dim);white-space:nowrap" id="weatherUpdated"></span>
-      </div>
-      <div id="weatherContent" style="text-align:center;color:var(--text-dim);padding:40px 0">加载中…</div>
-    </div>
   </div>
 </div>
 <div class="modal-overlay" id="apiKeyModal"><div class="modal" style="max-width:420px"><h3>🔑 DeepSeek API Key</h3><div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">仅保存在你浏览器本地，不上传任何服务器。<br>Key 获取：<a href="https://platform.deepseek.com/api_keys" target="_blank" style="color:var(--brand)">platform.deepseek.com/api_keys</a></div><input id="apiKeyInput" placeholder="sk-..." style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:monospace"><div class="btn-row" style="margin-top:12px"><button class="btn btn-ghost" onclick="closeApiKeyModal()">取消</button><button class="btn btn-primary" onclick="saveApiKey()">保存</button></div></div></div>
@@ -495,7 +487,7 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
 <div style="font-size:11px;color:var(--text-dim);margin-top:14px;line-height:1.9">同步范围：📅 社群运营排期编辑 · 🧠 素材灵感库自定义花字<br>打开页面自动拉取云端；你的任何修改会在 2 秒后自动上传。<br>Token 权限：仅本仓库 Contents 读写；撤销入口 → <a href="https://github.com/settings/personal-access-tokens" target="_blank" style="color:var(--brand)">github.com/settings/personal-access-tokens</a></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeCloudModal()">关闭</button></div>
 </div></div>
-<script src="js/app_v8.js?v=91"></script>
+<script src="js/app_v8.js?v=92"></script>
   <div id="cardModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
     <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)">
       <div style="font-weight:700;margin-bottom:16px;font-size:15px">➕ 添加花字卡片</div>

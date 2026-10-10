@@ -21,7 +21,7 @@ var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-14":"情人节","02-17":"春节"
 
 var MEMBER_DATA={"2026-07-15":{prev:"07-08",orders:73,sales:2360,stores:51,prevOrders:81,prevSales:2600,prevStores:53,couponUseRate:42.5,prevCouponUseRate:41.2,members:4,deliveryOrders:42,prevDeliveryOrders:46,customerPrice:32.3,prevCustomerPrice:32.1,conclusion:"7月15日会员日受下雨影响订单↓10%，但客单价和券核销率微增。外卖占比57%与上期持平。动销门店51家较上期53家略降。"},"2026-07-08":{prev:"07-01",orders:81,sales:2600,stores:53,prevOrders:76,prevSales:2420,prevStores:52,couponUseRate:41.2,prevCouponUseRate:40.5,members:6,deliveryOrders:46,prevDeliveryOrders:43,customerPrice:32.1,prevCustomerPrice:31.8,conclusion:"7月8日会员日订单↑6.6%，销售额↑7.4%。券核销率连续上升。新增会员6人，外卖56.8%。"},"2026-07-01":{prev:"06-24",orders:76,sales:2420,stores:52,prevOrders:72,prevSales:2290,prevStores:51,couponUseRate:40.5,prevCouponUseRate:39.8,members:5,deliveryOrders:43,prevDeliveryOrders:40,customerPrice:31.8,prevCustomerPrice:31.8,conclusion:"7月1日会员日订单↑5.6%。客单价持平。券核销率突破40%。动销门店稳定。"}};
 
-const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库',weather:'🌦️ 天气简报'};
+const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库'};
 document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='prompt'){}if(page==='recipe'){renderPromptLib();}if(page==='inspiration'){switchInspTab('card');}if(page==='acquisition')renderAcquisition();});});
 var now=new Date();document.getElementById('currentDate').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+['日','一','二','三','四','五','六'][now.getDay()]+'曜日';
 function toast(msg){var el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(function(){el.remove()},2000);}
@@ -2598,116 +2598,6 @@ function rerenderCardLibKeepFilter(){
 
 // Initialize
 loadCustomCards();
-
-// ═══════ WEATHER ═══════
-var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',45:'🌫 雾',48:'🌫 雾凇',51:'🌧 毛毛雨',53:'🌧 毛毛雨',55:'🌧 毛毛雨',61:'🌧 小雨',63:'🌧 中雨',65:'🌧 大雨',71:'❄️ 小雪',73:'❄️ 中雪',75:'❄️ 大雪',77:'❄️ 雪粒',80:'🌧 阵雨',81:'🌧 中阵雨',82:'🌧 大阵雨',85:'❄️ 阵雪',86:'❄️ 阵雪',95:'⛈ 雷暴',96:'⛈ 雷暴+冰雹',99:'⛈ 雷暴+冰雹'};
-var weatherData=null; var weatherFilter='';
-
-function loadWeatherData(){
-  fetch('weather_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    weatherData=d; document.getElementById('weatherUpdated').textContent='更新 '+d.updated.slice(5,16);
-    renderWeather();
-  }).catch(function(){document.getElementById('weatherContent').innerHTML='<div style="padding:40px;color:var(--text-dim)">天气数据加载中，请稍后刷新</div>';});
-}
-
-function weatherRisk(city){
-  var w=city.current.weather_code;
-  var t=city.current.temperature_2m;
-  var p=city.daily.precipitation_probability_max[0]||0;
-  if([95,96,99,65,82].includes(w)||t>38) return {level:'🔴',label:'极端天气',order:0};
-  if([61,63,80,81].includes(w)||t>35||p>=60) return {level:'🟡',label:'关注',order:1};
-  return {level:'🟢',label:'正常',order:2};
-}
-
-function weatherSuggestion(city,wc){
-  var t=city.current.temperature_2m;
-  var p=city.daily.precipitation_probability_max[0]||0;
-  var w=city.current.weather_code;
-  if([95,96,99].includes(w)) return '⚡ 雷暴预警→提前群发+配送延迟提示';
-  if([65,82].includes(w)) return '🌧 大雨→主推外卖免配送费';
-  if([61,63,80,81].includes(w)) return '🌧 降雨→强调外卖便利+配送提示';
-  if(t>37) return '🔥 极端高温→冰镇西瓜+冰柠优先';
-  if(t>34) return '☀️ 高温→推冰镇果切+解暑单品';
-  if(p>=60) return '💧 高降水概率→备雨天话术';
-  return '🍉 天气良好→常规推送';
-}
-
-function renderWeather(){
-  if(!weatherData) return;
-  var cities=[];
-  for(var c in weatherData.cities){
-    var ci=weatherData.cities[c];
-    var risk=weatherRisk(ci);
-    ci._name=c; ci._risk=risk;
-    cities.push(ci);
-  }
-  cities.sort(function(a,b){return a._risk.order-b._risk.order || b.orders-a.orders;});
-
-  if(weatherFilter) cities=cities.filter(function(ci){return ci._name.indexOf(weatherFilter)>=0;});
-
-  var h=''; var currentRisk='';
-  var dayNames=['今天','明天','后天'];
-
-  cities.forEach(function(ci){
-    if(ci._risk.label!==currentRisk){
-      currentRisk=ci._risk.label;
-      var group=cities.filter(function(c){return c._risk.label===currentRisk;});
-      h+='<div style="font-weight:700;font-size:13px;margin:16px 0 8px;color:var(--text)">━━━ '+ci._risk.level+' '+currentRisk+'（'+group.length+'城）</div>';
-    }
-
-    h+='<div class="card" style="margin-bottom:8px;padding:12px 16px;cursor:pointer" onclick="toggleWeatherDetail(this)">';
-    h+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">';
-    h+='<span style="font-weight:700;font-size:14px;min-width:40px">'+ci._name+'</span>';
-    h+='<span style="font-size:11px;color:var(--text-dim);background:var(--bg);padding:2px 8px;border-radius:10px">'+ci.orders+'单</span>';
-    h+='<span style="font-size:11px;color:var(--brand)">💡 '+weatherSuggestion(ci)+'</span>';
-    h+='</div>';
-
-    h+='<div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);gap:6px">';
-    for(var i=0;i<3;i++){
-      var wc=weatherCodes[ci.daily.weather_code[i]]||'';
-      var rain=ci.daily.precipitation_probability_max[i]||0;
-      h+='<div style="text-align:center;background:var(--bg);border-radius:8px;padding:8px 4px">';
-      h+='<div style="font-size:10px;color:var(--text-dim);margin-bottom:2px">'+dayNames[i]+'</div>';
-      h+='<div style="font-size:20px">'+wc.split(' ')[0]+'</div>';
-      h+='<div style="font-size:11px;font-weight:600">'+ci.daily.temperature_2m_min[i]+'°~'+ci.daily.temperature_2m_max[i]+'°</div>';
-      if(rain>0) h+='<div style="font-size:10px;color:#1565c0">💧 '+rain+'%</div>';
-      h+='</div>';
-    }
-    h+='</div>';
-
-    var cur=ci.current;
-    h+='<div class="weather-detail" style="display:none;margin-top:8px;font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:8px">';
-    h+='🌡 '+cur.temperature_2m+'°C · 💨 '+cur.wind_speed_10m+'km/h · 💧 '+cur.relative_humidity_2m+'%';
-    h+='</div>';
-    h+='</div>';
-  });
-
-  if(!cities.length) h='<div style="text-align:center;padding:40px;color:var(--text-dim)">无匹配城市</div>';
-  document.getElementById('weatherContent').innerHTML=h;
-}
-
-function toggleWeatherDetail(el){
-  var detail=el.querySelector('.weather-detail');
-  if(detail) detail.style.display=detail.style.display==='none'?'block':'none';
-}
-
-function filterWeather(){
-  weatherFilter=document.getElementById('weatherCity').value.trim();
-  renderWeather();
-}
-
-loadWeatherData();
-
-// ═══════ WEATHER ═══════
-var weatherCodes={0:'☀️ 晴',1:'🌤 少云',2:'⛅ 多云',3:'☁️ 阴',45:'🌫 雾',48:'🌫 雾凇',51:'🌧 小毛毛雨',53:'🌧 毛毛雨',55:'🌧 大毛毛雨',61:'🌧 小雨',63:'🌧 中雨',65:'🌧 大雨',71:'❄️ 小雪',73:'❄️ 中雪',75:'❄️ 大雪',77:'❄️ 雪粒',80:'🌧 阵雨',81:'🌧 中阵雨',82:'🌧 大阵雨',85:'❄️ 小阵雪',86:'❄️ 大阵雪',95:'⛈ 雷暴',96:'⛈ 雷暴+小冰雹',99:'⛈ 雷暴+大冰雹'};
-
-(function(){
-  var saved=localStorage.getItem('qg_wx_city');
-  if(saved){
-    document.getElementById('weatherCity').value=saved;
-    fetchWeather();
-  }
-})();
 
 // ═══════ INIT ═══════
 
