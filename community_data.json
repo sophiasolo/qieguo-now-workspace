@@ -1,13 +1,13 @@
 {
-  "updated": "0928-1004",
+  "updated": "1005-1011",
   "kpi": {
-    "groups": 753,
-    "stores": 709,
-    "members": 31440,
-    "join": 180,
-    "quit": 344,
-    "net": -164,
-    "penetration": 92.0
+    "groups": 754,
+    "stores": 712,
+    "members": 31311,
+    "join": 189,
+    "quit": 331,
+    "net": -142,
+    "penetration": 91.9
   },
   "weeks": [
     "0504-0510",
@@ -31,7 +31,8 @@
     "0907-0913",
     "0914-0920",
     "0921-0927",
-    "0928-1004"
+    "0928-1004",
+    "1005-1011"
   ],
   "data": {
     "0504-0510": {
@@ -143,53 +144,58 @@
       "join": 180,
       "quit": 344,
       "net": -164
+    },
+    "1005-1011": {
+      "join": 189,
+      "quit": 331,
+      "net": -142
     }
   },
   "churn_count": 2,
   "acquisition": {
-    "scan_total": 5334,
-    "join_total": 4246,
-    "week_loss": 48,
+    "scan_total": 5536,
+    "join_total": 4399,
+    "week_loss": 35,
     "funnel": {
-      "scan": 418,
-      "add": 170,
-      "join": 126
+      "scan": 501,
+      "add": 202,
+      "join": 153
     },
-    "week_join_rate": 74.1,
+    "week_join_rate": 75.7,
     "retention": {
-      "h24": 90.6,
-      "d7": 89.2,
-      "d15": 88.1,
-      "d30": 86.7
+      "h24": 90.8,
+      "d7": 89.4,
+      "d15": 88.2,
+      "d30": 86.8
     },
-    "hist_join_rate": 81.8,
+    "hist_join_rate": 81.9,
     "suidan": {
-      "scan_total": 4364,
-      "join_total": 3570,
-      "week_loss": 27,
+      "scan_total": 4481,
+      "join_total": 3668,
+      "week_loss": 17,
       "funnel": {
-        "scan": 124,
-        "add": 86,
-        "join": 67
+        "scan": 188,
+        "add": 117,
+        "join": 98
       },
-      "hist_join_rate": 81.8
+      "hist_join_rate": 81.9
     },
     "taika": {
-      "scan_total": 970,
-      "join_total": 676,
-      "week_loss": 21,
+      "scan_total": 1055,
+      "join_total": 731,
+      "week_loss": 18,
       "funnel": {
-        "scan": 294,
-        "add": 84,
-        "join": 59
+        "scan": 313,
+        "add": 85,
+        "join": 55
       },
       "retention": {
-        "h24": 89.1,
+        "h24": 89.0,
         "d7": 87.2,
         "d15": 86.5,
-        "d30": 84.5
+        "d30": 84.6
       },
-      "hist_join_rate": 69.7,
+      "hist_join_rate": 69.3,
       "first_week": false
     },
     "scan_qoq": null,
