@@ -196,7 +196,7 @@ NEGATIVE_EXCLUDE = {
 # 否定正则：命中即从该分类排除（处理「苹果+数字型号」「芒果TV/台/夜」等无法穷举的多义品牌词）
 NEGATIVE_REGEX = {
     "🍉果切相关": [
-        re.compile(r"苹果\s*\d+", re.IGNORECASE),            # 苹果18/苹果17 等 iPhone 型号
+        re.compile(r"苹果\s*[0-9一二三四五六七八九十]+", re.IGNORECASE),  # 苹果18/苹果17/苹果五 等 iPhone 型号（含中文数字型号）
         re.compile(r"芒果(?:夜|台|tv|视频|网络|超媒|娱乐|影像|剧)", re.IGNORECASE),  # 芒果TV/芒果台/青春芒果夜 等品牌
         # 芒果TV 影视剧/综艺语境（"芒果一口气推出89部大剧"等），非水果
         re.compile(r"芒果.{0,10}(?:剧|综艺|开播|播出|首播|定档|上线|拍了|开拍|出品|自制)", re.IGNORECASE),
