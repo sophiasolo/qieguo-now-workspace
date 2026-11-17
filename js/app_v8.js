@@ -1967,12 +1967,6 @@ function renderAcquisition(){
           '<div style="font-size:10px;color:var(--text-muted);margin-top:4px">※ 扫码客户为去重客户数，加好友为「按日期表」未去重口径 → 扫码→加好友可能 &gt;100%，非同口径</div>'+
           covNote(m.coverage,'门店群活码');
         document.getElementById('miniappRetention').innerHTML=acqRetentionHtml(m.retention,'历史总留存率 · 渠道标签 11-06 上线，7d/15d/30d 分档未满期');
-        var meta=document.getElementById('miniappMeta');
-        if(meta)meta.innerHTML='<div style="font-size:11px;color:var(--text-dim);line-height:1.9">'+
-          '📱 <b style="color:var(--text)">小程序社群入口</b> · 2026-11-06 上线 · 链路：小程序首页 → 门店群活码 → 加好友 → 进群'+
-          '<br>累计加好友 '+fmt(m.scan_total)+'（CSV 去重）· 累计进群 '+fmt(m.join_total)+' · 本周流失 '+(m.week_loss||0)+'（含补打存量，实际新增流失更低）'+
-          '<br>进群口径：渠道标签归因（本周入群明细 × 客户标签）；门店群活码入群为未去重人次，不作漏斗分母'+
-          '</div>';
       }
     }
 
