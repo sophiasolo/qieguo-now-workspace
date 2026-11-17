@@ -1,5 +1,6 @@
 {
   "updated": "1109-1115",
+  "generated": "2026-11-17 10:21",
   "kpi": {
     "groups": 749,
     "stores": 709,
@@ -43,155 +44,183 @@
     "0504-0510": {
       "join": 1177,
       "quit": 1169,
-      "net": 8
+      "net": 8,
+      "retention": 92.46
     },
     "0511-0517": {
       "join": 669,
       "quit": 798,
-      "net": -129
+      "net": -129,
+      "retention": 90.01
     },
     "0518-0524": {
       "join": 617,
       "quit": 763,
-      "net": -146
+      "net": -146,
+      "retention": 89.05
     },
     "0525-0531": {
       "join": 706,
       "quit": 860,
-      "net": -154
+      "net": -154,
+      "retention": 88.42
     },
     "0601-0607": {
       "join": 636,
       "quit": 616,
-      "net": 20
+      "net": 20,
+      "retention": 88.26
     },
     "0608-0614": {
       "join": 416,
       "quit": 653,
-      "net": -237
+      "net": -237,
+      "retention": 88.28
     },
     "0615-0621": {
       "join": 382,
       "quit": 542,
-      "net": -160
+      "net": -160,
+      "retention": 88.48
     },
     "0622-0628": {
       "join": 378,
       "quit": 570,
-      "net": -192
+      "net": -192,
+      "retention": 88.1
     },
     "0629-0705": {
       "join": 466,
       "quit": 530,
-      "net": -64
+      "net": -64,
+      "retention": 87.77
     },
     "0706-0712": {
       "join": 260,
       "quit": 534,
-      "net": -274
+      "net": -274,
+      "retention": 83.08
     },
     "0713-0719": {
       "join": 390,
       "quit": 465,
-      "net": -75
+      "net": -75,
+      "retention": 87.21
     },
     "0720-0726": {
       "join": 223,
       "quit": 494,
-      "net": -271
+      "net": -271,
+      "retention": 81.55
     },
     "0727-0802": {
       "join": 208,
       "quit": 403,
-      "net": -195
+      "net": -195,
+      "retention": 82.27
     },
     "0803-0809": {
       "join": 108,
       "quit": 379,
-      "net": -271
+      "net": -271,
+      "retention": 81.82
     },
     "0810-0816": {
       "join": 409,
       "quit": 408,
-      "net": 1
+      "net": 1,
+      "retention": 87.92
     },
     "0817-0823": {
       "join": 247,
       "quit": 423,
-      "net": -176
+      "net": -176,
+      "retention": 82.33
     },
     "0824-0830": {
       "join": 330,
       "quit": 365,
-      "net": -35
+      "net": -35,
+      "retention": 86.79
     },
     "0831-0906": {
       "join": 358,
       "quit": 426,
-      "net": -68
+      "net": -68,
+      "retention": 91.36
     },
     "0907-0913": {
       "join": 427,
       "quit": 489,
-      "net": -62
+      "net": -62,
+      "retention": 87.01
     },
     "0914-0920": {
       "join": 332,
       "quit": 494,
-      "net": -162
+      "net": -162,
+      "retention": 89.19
     },
     "0921-0927": {
       "join": 223,
       "quit": 324,
-      "net": -101
+      "net": -101,
+      "retention": 86.55
     },
     "0928-1004": {
       "join": 180,
       "quit": 344,
-      "net": -164
+      "net": -164,
+      "retention": 85.08
     },
     "1005-1011": {
       "join": 189,
       "quit": 331,
-      "net": -142
+      "net": -142,
+      "retention": 88.36
     },
     "1012-1018": {
       "join": 164,
       "quit": 339,
-      "net": -175
+      "net": -175,
+      "retention": 90.24
     },
     "1019-1025": {
       "join": 136,
       "quit": 332,
-      "net": -196
+      "net": -196,
+      "retention": 86.03
     },
     "1026-1101": {
       "join": 128,
       "quit": 300,
-      "net": -172
+      "net": -172,
+      "retention": 87.6
     },
     "1102-1108": {
       "join": 210,
       "quit": 317,
-      "net": -107
+      "net": -107,
+      "retention": 82.03
     },
     "1109-1115": {
       "join": 278,
       "quit": 278,
-      "net": 0
+      "net": 0,
+      "retention": 88.85
     }
   },
   "churn_count": 1,
   "acquisition": {
-    "scan_total": 6301,
-    "join_total": 4937,
-    "week_loss": 26,
+    "scan_total": 6508,
+    "join_total": 5081,
+    "week_loss": 54,
     "funnel": {
-      "scan": 384,
-      "add": 158,
-      "join": 113
+      "scan": 528,
+      "add": 305,
+      "join": 194
     },
-    "week_join_rate": 71.5,
+    "week_join_rate": 63.6,
     "retention": {
       "h24": 91.3,
       "d7": 89.9,
@@ -199,6 +228,12 @@
       "d30": 87.3
     },
     "hist_join_rate": 81.4,
+    "channels_total": {
+      "add": 305,
+      "join": 194,
+      "join_share": 69.8
+    },
+    "week_total_join": 278,
     "suidan": {
       "scan_total": 4911,
       "join_total": 3998,
@@ -208,7 +243,43 @@
         "add": 87,
         "join": 67
       },
-      "hist_join_rate": 81.4
+      "retention": {
+        "h24": 91.3,
+        "d7": 89.9,
+        "d15": 88.8,
+        "d30": 87.3
+      },
+      "hist_join_rate": 81.4,
+      "coverage": {
+        "rate": 26.5,
+        "a": 11,
+        "b": 177,
+        "c": 521
+      }
+    },
+    "miniapp": {
+      "scan_total": 207,
+      "join_total": 144,
+      "week_loss": 28,
+      "funnel": {
+        "scan": 144,
+        "add": 147,
+        "join": 81
+      },
+      "retention": {
+        "h24": 87.4,
+        "d7": 86.0,
+        "d15": 86.0,
+        "d30": 86.0
+      },
+      "hist_join_rate": 69.6,
+      "coverage": {
+        "rate": 93.5,
+        "a": 115,
+        "b": 548,
+        "c": 46
+      },
+      "launch": "2026-11-06"
     },
     "taika": {
       "scan_total": 1390,
@@ -226,6 +297,12 @@
         "d30": 85.4
       },
       "hist_join_rate": 67.5,
+      "coverage": {
+        "rate": 93.5,
+        "a": 50,
+        "b": 613,
+        "c": 46
+      },
       "first_week": false
     },
     "scan_qoq": null,

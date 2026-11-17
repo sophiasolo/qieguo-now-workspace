@@ -21,8 +21,8 @@ var FESTIVAL_DATA={"2026":{"01-01":"元旦","02-14":"情人节","02-17":"春节"
 
 var MEMBER_DATA={"2026-07-15":{prev:"07-08",orders:73,sales:2360,stores:51,prevOrders:81,prevSales:2600,prevStores:53,couponUseRate:42.5,prevCouponUseRate:41.2,members:4,deliveryOrders:42,prevDeliveryOrders:46,customerPrice:32.3,prevCustomerPrice:32.1,conclusion:"7月15日会员日受下雨影响订单↓10%，但客单价和券核销率微增。外卖占比57%与上期持平。动销门店51家较上期53家略降。"},"2026-07-08":{prev:"07-01",orders:81,sales:2600,stores:53,prevOrders:76,prevSales:2420,prevStores:52,couponUseRate:41.2,prevCouponUseRate:40.5,members:6,deliveryOrders:46,prevDeliveryOrders:43,customerPrice:32.1,prevCustomerPrice:31.8,conclusion:"7月8日会员日订单↑6.6%，销售额↑7.4%。券核销率连续上升。新增会员6人，外卖56.8%。"},"2026-07-01":{prev:"06-24",orders:76,sales:2420,stores:52,prevOrders:72,prevSales:2290,prevStores:51,couponUseRate:40.5,prevCouponUseRate:39.8,members:5,deliveryOrders:43,prevDeliveryOrders:40,customerPrice:31.8,prevCustomerPrice:31.8,conclusion:"7月1日会员日订单↑5.6%。客单价持平。券核销率突破40%。动销门店稳定。"}};
 
-const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',hotspot:'📡 热点捕捉',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库'};
-document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='hotspot')renderHotspot();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='prompt'){}if(page==='recipe'){renderPromptLib();}if(page==='inspiration'){switchInspTab('card');}if(page==='acquisition')renderAcquisition();});});
+const PAGE_TITLES={overview:'🏠 总览',sentiment:'🛡️ 舆情监控',community:'📅 社群运营',communitydata:'👥 社群数据',star:'⭐ 精选正面',acquisition:'🔗 社群引流',activities:'🎯 小程序活动',products:'📦 产品库',copy:'✍️ 文案创作',prompt:'🎨 配图Prompt',recipe:'🧪 Prompt配方',inspiration:'📚 素材灵感库'};
+document.querySelectorAll('.nav-item').forEach(function(item){item.addEventListener('click',function(){var page=item.dataset.page;document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});item.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').textContent=PAGE_TITLES[page];if(page==='community')setTimeout(renderSchedule,50);if(page==='star')renderStarPage();if(page==='products')loadProducts();if(page==='copy'){initCopyPage();}if(page==='prompt'){}if(page==='recipe'){renderPromptLib();}if(page==='inspiration'){switchInspTab('card');}if(page==='acquisition')renderAcquisition();if(page==='communitydata'){setTimeout(paintCommunityTrend,60);}});});
 var now=new Date();document.getElementById('currentDate').textContent=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 '+['日','一','二','三','四','五','六'][now.getDay()]+'曜日';
 function toast(msg){var el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(function(){el.remove()},2000);}
 
@@ -682,103 +682,6 @@ toast('✅ '+items.length+'个产品 | '+priceSamples);
   reader.readAsArrayBuffer(file);
 }
 
-
-// ═══════ HOTSPOT ═══════
-function refreshHotspot(){var el=document.getElementById('hotspotContent');el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">🔄 刷新中...</div>';var btn=document.getElementById('hotspotRefreshBtn');if(btn){btn.textContent='⏳';btn.disabled=true;}setTimeout(function(){renderHotspot();if(btn){btn.textContent='🔄 刷新';btn.disabled=false;}},500);}
-var hotspotCache=null;
-var hotspotFilter='all';
-var hotspotCat='all';
-
-
-function filterHotspot(f){
-  hotspotFilter=f;
-  var btns=document.querySelectorAll('#hotspotSourceBtns button');
-  btns.forEach(function(b){
-    b.classList.remove('btn-primary','btn-ghost');
-    b.classList.add((b.textContent||'').indexOf(f)>=0||(f==='all'&&b.textContent.indexOf('全部')>=0)?'btn-primary':'btn-ghost');
-  });
-  if(hotspotCache)renderHotspotItems(hotspotCache);
-}
-
-function filterHotspotCat(c){
-  hotspotCat=c;
-  var btns=document.querySelectorAll('#hotspotCatBtns button');
-  btns.forEach(function(b){
-    b.classList.remove('btn-primary','btn-ghost');
-    b.classList.add(b.dataset.cat===c?'btn-primary':'btn-ghost');
-  });
-  if(hotspotCache)renderHotspotItems(hotspotCache);
-}
-
-function renderHotspot(){
-  var el=document.getElementById('hotspotContent');
-  fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
-    hotspotCache=d;
-        var cats={};var items=d.items||[];
-    items.forEach(function(i){
-      var c=i.category||'';
-      if(c==='热榜')c='📱 抖音'; // Douyin items
-      c=c.replace(/[🎬🍉🍜🏠🏷️📌🎉]/g,'').trim(); // Strip emoji prefix
-      if(!c)c='综合';
-      cats[c]=(cats[c]||0)+1;
-    });
-    var sortedCats=Object.keys(cats).sort(function(a,b){
-      if(a.indexOf('果切')>=0)return -1;if(b.indexOf('果切')>=0)return 1;
-      return cats[b]-cats[a];
-    });
-    var catHtml='<button class="btn btn-primary" onclick="filterHotspotCat(&apos;all&apos;)" data-cat="all" style="font-size:11px;padding:5px 10px;text-align:left">🏷️ 全部 ('+items.length+')</button>';
-    sortedCats.forEach(function(c){
-      var icon=c.indexOf('果切')>=0?'🍉':c.indexOf('娱乐')>=0?'🎬':c.indexOf('美食')>=0?'🍜':c.indexOf('生活')>=0?'🏠':c.indexOf('抖音')>=0?'🎵':'📌';
-      catHtml+='<button class="btn btn-ghost" onclick="filterHotspotCat(&apos;'+c+'&apos;)" data-cat="'+c+'" style="font-size:11px;padding:5px 10px;text-align:left">'+icon+' '+c+' ('+cats[c]+')</button>';
-    });
-    document.getElementById('hotspotCatBtns').innerHTML=catHtml;
-    renderHotspotItems(d);
-  }).catch(function(e){
-    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">加载失败: '+e.message+'</div>';
-  });
-}
-
-function isFruitRelated(item){
-  var kw=['果切','水果','西瓜','榴莲','芒果','凤梨','哈密瓜','葡萄','草莓','荔枝','车厘子','蜜桃','蜜瓜','甜品','零食','解暑','冰镇','冰淇淋','果汁','冰粉','椰','刨冰'];
-  var text=(item.word||'')+(item.category||'')+(item.source||'');
-  for(var i=0;i<kw.length;i++){if(text.indexOf(kw[i])>=0)return true;}
-  return false;
-}
-
-function renderHotspotItems(d){
-  var el=document.getElementById('hotspotContent');
-  var items=d.items||[];
-  if(hotspotFilter!=='all'){items=items.filter(function(i){return (i.source||'').indexOf(hotspotFilter)>=0;});}
-  if(hotspotCat!=='all'){items=items.filter(function(i){var c=i.category||'';c=c.replace(/[🎬🍉🍜🏠🏷️📌🎉]/g,'').trim();return c===hotspotCat;});}
-  items.sort(function(a,b){
-    var aFruit=isFruitRelated(a)?0:1;
-    var bFruit=isFruitRelated(b)?0:1;
-    return aFruit-bFruit;
-  });
-  if(items.length===0){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">暂无匹配热点</div>';return;}
-  var sem={百度:'🔍',微博:'💬',抖音:'🎵'};
-  var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px">';
-  items.forEach(function(item){
-    var si='📌';for(var k in sem){if((item.source||'').indexOf(k)>=0){si=sem[k];break;}}
-    var fruit=isFruitRelated(item);
-    var catClean=(item.category||'').replace(/[🎬🍉🍜🏠🏷️📌🎉]/g,'').trim()||'';
-    html+='<div style="background:#fff;border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border)'+(fruit?'border-left:3px solid var(--brand);background:var(--brand-light)':'')+'">'+
-      '<div style="display:flex;gap:4px;align-items:center;margin-bottom:4px;flex-wrap:wrap">'+
-      '<span style="font-size:10px;background:var(--bg);padding:1px 6px;border-radius:10px;color:var(--text-dim)">'+si+' '+item.source+'</span>'+
-      (catClean?'<span style="font-size:10px;background:'+(fruit?'var(--brand);color:#fff':'var(--bg);color:var(--text-dim)')+';padding:1px 6px;border-radius:10px">'+catClean+'</span>':'')+
-      (fruit?'<span style="font-size:10px;color:var(--brand);font-weight:600">🍉 相关</span>':'')+
-      '</div>'+
-      '<div style="font-weight:600;color:var(--text);font-size:13px;line-height:1.5">'+item.word+'</div>'+
-      '<div style="display:flex;gap:8px;font-size:11px;margin-top:6px">'+
-      (item.url?'<a href="'+item.url+'" target="_blank" style="color:var(--brand);text-decoration:none">查看原帖 ↗</a>':'')+
-      '<span onclick="copyHotspot(this)" data-word="'+item.word+'" style="color:var(--text-dim);cursor:pointer">📋 复制</span>'+
-    '</div></div>';
-  });
-  html+='</div>';el.innerHTML=html;
-}
-
-
-function copyHotspot(el){var word=el.dataset.word;navigator.clipboard.writeText(word).then(function(){toast('📋 已复制: '+word);}).catch(function(){});}
 
 // ═══════ COPY ═══════
 var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:''};
@@ -2174,137 +2077,274 @@ var recipeTypeMap={cover:'小程序封面',community:'社群群发'};
 function openReport(type,file){
   window.open(file,"_blank");
 }
+function cqNum(v){return (v===null||v===undefined)?'—':Number(v).toLocaleString();}
+function cqDelta(cur,prev){
+  if(cur===null||cur===undefined||prev===null||prev===undefined||prev===0)return null;
+  return Math.round((cur-prev)/Math.abs(prev)*1000)/10;
+}
+function cqWeekLabel(wk){
+  if(!wk)return '—';
+  var s=String(wk).replace(/[^0-9]/g,'');
+  if(s.length<8)return String(wk);
+  return s.slice(0,2)+'/'+s.slice(2,4)+' - '+s.slice(4,6)+'/'+s.slice(6,8);
+}
+var cTrendData=null;
+function paintCommunityTrend(){
+  var cv=document.getElementById('communityTrendChart');
+  if(!cv||!cTrendData||typeof Chart==='undefined')return;
+  var box=cv.parentNode;
+  var w=Math.round(box.clientWidth||0),h=Math.round(box.clientHeight||0);
+  if(w<60||h<60)return;           // 页面不可见（display:none）时不绘制，等进页面再画
+  var old=Chart.getChart('communityTrendChart');if(old)old.destroy();
+  cv.width=w;cv.height=h;
+  new Chart(cv,{type:'bar',data:{labels:cTrendData.labels,datasets:[
+    {label:'入群',data:cTrendData.joins,backgroundColor:'rgba(45,138,78,.75)',borderRadius:4,order:2},
+    {label:'退群',data:cTrendData.quits,backgroundColor:'rgba(229,57,53,.65)',borderRadius:4,order:2},
+    {type:'line',label:'留存率%',data:cTrendData.rets,borderColor:'#1976d2',borderDash:[4,3],tension:0.35,borderWidth:1.8,pointRadius:2.5,fill:false,yAxisID:'y1',order:1}
+  ]},options:{responsive:false,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}},tooltip:{callbacks:{label:function(ct){return ct.dataset.label+': '+ct.formattedValue+(ct.dataset.label==='留存率%'?'%':'');}}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{type:'linear',position:'left',beginAtZero:true,ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},y1:{type:'linear',position:'right',min:70,max:100,ticks:{font:{size:10},callback:function(v){return v+'%';}},grid:{display:false}}}}});
+}
+if(!window.__cTrendResizeBound){
+  window.__cTrendResizeBound=1;
+  window.addEventListener('resize',function(){
+    var pg=document.getElementById('page-communitydata');
+    if(pg&&pg.classList.contains('active'))paintCommunityTrend();
+  });
+}
 function renderWeeklyReports(){
   fetch('community_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     if(!d)return;
-    var k=d.kpi||{};
-    var kpi='<div class="kpi accent-teal"><div class="kpi-label">🏪 覆盖门店</div><div class="kpi-value">'+(k.stores||'?')+'<span class="kpi-change flat">家</span></div><div class="kpi-sub">最新</div></div>';
-    kpi+='<div class="kpi accent-blue"><div class="kpi-label">💬 社群数量</div><div class="kpi-value">'+(k.groups||'?')+'<span class="kpi-change flat">个</span></div><div class="kpi-sub">最新</div></div>';
-    kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 群客户数</div><div class="kpi-value">'+(k.members||0).toLocaleString()+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">渗透'+(k.penetration||'?')+'%</div></div>';
-    kpi+='<div class="kpi accent-teal"><div class="kpi-label">📈 本周入群</div><div class="kpi-value">'+(k.join||0)+'<span class="kpi-change up">最新</span></div><div class="kpi-sub">'+d.updated+'</div></div>';
-    kpi+='<div class="kpi accent-red"><div class="kpi-label">📉 本周退群</div><div class="kpi-value">'+(k.quit||0)+'<span class="kpi-change down">最新</span></div><div class="kpi-sub">'+d.updated+'</div></div>';
-    kpi+='<div class="kpi accent-amber"><div class="kpi-label">📊 本周净增</div><div class="kpi-value">'+(k.net||0)+'<span class="kpi-change flat">最新</span></div><div class="kpi-sub">'+d.updated+'</div></div>';
+    var k=d.kpi||{},ws=d.weeks||[],dm=d.data||{};
+    var cur=ws[ws.length-1]||'',prev=ws[ws.length-2]||'';
+    var c=dm[cur]||{},pv=dm[prev]||{};
+    var pctTxt=function(a,b){
+      var v=cqDelta(a,b);
+      if(v===null)return '—';
+      if(Math.abs(v)<0.05)return '持平';
+      return (v>0?'↑':'↓')+Math.abs(v).toFixed(1)+'%';
+    };
+    var cls=function(a,b,goodUp){
+      var v=cqDelta(a,b);
+      if(v===null||Math.abs(v)<0.05)return 'var(--text-dim)';
+      var good=goodUp?(v>0):(v<0);
+      return good?'#2e7d32':'var(--red)';
+    };
+
+    // ===== 6 KPI（带真实环比）=====
+    var kpi='';
+    kpi+='<div class="kpi accent-teal"><div class="kpi-label">🏪 覆盖门店</div><div class="kpi-value">'+cqNum(k.stores)+'<span class="kpi-change flat">家</span></div><div class="kpi-sub">'+cqWeekLabel(cur)+'</div></div>';
+    kpi+='<div class="kpi accent-teal"><div class="kpi-label">💬 社群数量</div><div class="kpi-value">'+cqNum(k.groups)+'<span class="kpi-change flat">个</span></div><div class="kpi-sub">'+cqWeekLabel(cur)+'</div></div>';
+    kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 群客户数</div><div class="kpi-value">'+cqNum(k.members)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">渗透 '+(k.penetration||'—')+'%</div></div>';
+    kpi+='<div class="kpi accent-blue"><div class="kpi-label">📈 本周入群</div><div class="kpi-value">'+cqNum(k.join)+'<span class="kpi-change" style="color:'+cls(k.join,pv.join,true)+'">'+pctTxt(k.join,pv.join)+'</span></div><div class="kpi-sub">较上周 '+cqNum(pv.join)+' · 去重</div></div>';
+    kpi+='<div class="kpi accent-red"><div class="kpi-label">📉 本周退群</div><div class="kpi-value">'+cqNum(k.quit)+'<span class="kpi-change" style="color:'+cls(k.quit,pv.quit,false)+'">'+pctTxt(k.quit,pv.quit)+'</span></div><div class="kpi-sub">较上周 '+cqNum(pv.quit)+' · 去重</div></div>';
+    kpi+='<div class="kpi accent-amber"><div class="kpi-label">📊 本周净增</div><div class="kpi-value" style="color:'+((k.net||0)>=0?'#2e7d32':'var(--red)')+'">'+((k.net||0)>0?'+':'')+cqNum(k.net)+'</div><div class="kpi-sub">较上周 '+((pv.net||0)>0?'+':'')+cqNum(pv.net)+'</div></div>';
     document.getElementById('communityDataKPI').innerHTML=kpi;
-    // Trend chart — monthly aggregation
-    setTimeout(function(){
-      var ctx=document.getElementById('communityTrendChart');if(!ctx)return;
-      var old=Chart.getChart('communityTrendChart');if(old)old.destroy();
-      // Aggregate weekly to monthly
-      var monthMap={},monthOrder=[];
-      (d.weeks||[]).forEach(function(wk){
-        var m=wk.slice(0,2);
-        if(!monthMap[m]){monthMap[m]={join:0,quit:0};monthOrder.push(m);}
-        var dd=d.data[wk]||{};
-        monthMap[m].join+=dd.join||0;
-        monthMap[m].quit+=dd.quit||0;
-      });
-      var labels=['1月','2月','3月','4月','5月','6月','7月','8月'];
-      var joins=[2800,2600,2200,2000,0,0,0,0],quits=[1500,1400,1300,1100,0,0,0,0],retention=[92,91,90,89,0,0,0,0];
-      monthOrder.forEach(function(m){
-        var mi=['05','06','07','08'].indexOf(m);
-        if(mi>=0){joins[4+mi]=monthMap[m].join;quits[4+mi]=monthMap[m].quit;}
-      });
-      // Compute retention: (end - quit) / end * 100
-      var mb=[28000,29400,30300,31200,0,0,0,0];
-      for(var i=4;i<Math.min(8,joins.length+3);i++){
-        var prevEnd=mb[i-1];
-        var net=joins[i]-quits[i];
-        mb[i]=prevEnd+net;
-        retention[i]=Math.round((1-quits[i]/Math.max(1,prevEnd+joins[i]))*100);
+
+    // ===== 本周要点（全部由 community_data 实时计算, 不再硬编码）=====
+    var ins=document.getElementById('communityInsights');
+    var per=document.getElementById('communityInsightsPeriod');
+    if(per)per.textContent=cqWeekLabel(cur);
+    if(ins){
+      var a=d.acquisition||{},f=a.funnel||{},su=a.suidan||{},mi=a.miniapp||{},tk=a.taika||{};
+      var totalJoin=k.join||a.week_total_join||null;
+      var share=(totalJoin&&f.join)?Math.round(f.join/totalJoin*1000)/10:null;
+      var row=function(icon,html){return '<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed rgba(0,0,0,.05)"><span style="flex-shrink:0;width:16px">'+icon+'</span><div style="flex:1">'+html+'</div></div>';};
+      var retTxt='—',retCls='var(--text-dim)';
+      if(c.retention!==undefined&&pv.retention!==undefined&&c.retention!==null){
+        var rp=Math.round((c.retention-pv.retention)*100)/100;
+        retTxt=c.retention.toFixed(2)+'%（'+(rp>0?'+':'')+rp.toFixed(2)+'pp）';
+        retCls=rp>0?'#2e7d32':(rp<0?'var(--red)':'var(--text-dim)');
+      }else if(c.retention!==undefined&&c.retention!==null){
+        retTxt=c.retention.toFixed(2)+'%';
       }
-      new Chart(ctx,{type:'line',data:{labels:labels.slice(0,monthOrder.length+4),datasets:[
-        {label:'入群',data:joins.slice(0,monthOrder.length+4),borderColor:'#2d8a4e',backgroundColor:'rgba(45,138,78,0.05)',fill:true,tension:0.3,borderWidth:2,pointRadius:3},
-        {label:'退群',data:quits.slice(0,monthOrder.length+4),borderColor:'#e53935',backgroundColor:'rgba(229,57,53,0.05)',fill:true,tension:0.3,borderWidth:2,pointRadius:3},
-        {label:'留存率%',data:retention.slice(0,monthOrder.length+4),borderColor:'#1976d2',borderDash:[4,3],tension:0.3,borderWidth:1.5,pointRadius:2,yAxisID:'y1'}
-      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:10}}}},scales:{y:{type:'linear',position:'left',ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},y1:{type:'linear',position:'right',min:60,max:100,ticks:{font:{size:10}},grid:{display:false}}}}});
-    },200);
-    // Churn alerts
+      var html='';
+      html+=row('📈','入群 <b style="color:var(--text)">'+cqNum(k.join)+'</b> <span style="color:'+cls(k.join,pv.join,true)+'">'+pctTxt(k.join,pv.join)+'</span> · 退群 <b style="color:var(--text)">'+cqNum(k.quit)+'</b> <span style="color:'+cls(k.quit,pv.quit,false)+'">'+pctTxt(k.quit,pv.quit)+'</span> · 净增 <b style="color:'+((k.net||0)>=0?'#2e7d32':'var(--red)')+'">'+((k.net||0)>0?'+':'')+cqNum(k.net)+'</b>');
+      html+=row('👥','群客户 <b style="color:var(--text)">'+cqNum(k.members)+'</b> · '+cqNum(k.groups)+' 群 · '+cqNum(k.stores)+' 门店 · 渗透 '+(k.penetration||'—')+'%');
+      html+=row('⏳','本周留存率 <b style="color:'+retCls+'">'+retTxt+'</b>');
+      html+=row('🧩','三渠道进群 <b style="color:var(--text)">'+cqNum(f.join)+'</b>（占社群进群 '+(share===null?'—':share.toFixed(1)+'%')+'）· 加好友 '+cqNum(f.add)+'（随单'+(su.funnel?su.funnel.add:0)+' / 小程序'+(mi.funnel?mi.funnel.add:0)+' / 台卡'+(tk.funnel?tk.funnel.add:0)+'）');
+      html+=row('⚠️',(d.churn_count?('<b style="color:var(--red)">退群率&gt;10% 门店 '+d.churn_count+' 家</b> · 明细见统一周报'):'<b style="color:var(--brand)">本周无退群率&gt;10% 门店</b>'));
+      html+=row('🗓','数据周期 <b style="color:var(--text)">'+cqWeekLabel(cur)+'</b>'+(d.generated?' · 同步于 '+d.generated:''));
+      ins.innerHTML=html;
+    }
+
+    // ===== 2026 累计趋势（真实月度聚合, 05/04 起可比口径）=====
+    var mm={},order=[];
+    ws.forEach(function(wk){
+      var mon=wk.slice(0,2);
+      if(!mm[mon]){mm[mon]={join:0,quit:0,rsum:0,rw:0};order.push(mon);}
+      var dd=dm[wk]||{};
+      mm[mon].join+=(dd.join||0);
+      mm[mon].quit+=(dd.quit||0);
+      if(dd.retention!==undefined&&dd.retention!==null){
+        mm[mon].rsum+=dd.retention*(dd.join||0);
+        mm[mon].rw+=(dd.join||0);
+      }
+    });
+    var sumJ=0,sumQ=0;
+    ws.forEach(function(wk){sumJ+=(dm[wk]||{}).join||0;sumQ+=(dm[wk]||{}).quit||0;});
+    var tsub=document.getElementById('communityTrendSub');
+    if(tsub)tsub.textContent='05/04 起累计：入群 '+sumJ.toLocaleString()+' · 退群 '+sumQ.toLocaleString()+' · 净增 '+((sumJ-sumQ)>=0?'+':'')+(sumJ-sumQ).toLocaleString()+' · '+ws.length+' 周';
+    cTrendData={
+      labels:order.map(function(m){return parseInt(m,10)+'月';}),
+      joins:order.map(function(m){return mm[m].join;}),
+      quits:order.map(function(m){return mm[m].quit;}),
+      rets:order.map(function(m){return mm[m].rw?Math.round(mm[m].rsum/mm[m].rw*10)/10:null;})
+    };
+    paintCommunityTrend();
+
+    // ===== 退群预警 =====
     var churnCount=d.churn_count||0;
     var ahtml='';
     if(churnCount===0){
-      ahtml='<div style="text-align:center;padding:20px;color:var(--brand)">✅ 本周无退群率>10%门店</div>';
+      ahtml='<div style="text-align:center;padding:20px;color:var(--brand)">✅ 本周无退群率&gt;10%门店</div>';
     }else{
-      ahtml='<div style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:800;color:#e53935">'+churnCount+'家</div><div style="font-size:12px;color:var(--text-dim);margin-top:4px">门店退群率>10%，明细看统一周报</div></div>';
+      ahtml='<div style="text-align:center;padding:16px"><div style="font-size:26px;font-weight:800;color:#e53935">'+churnCount+'家</div><div style="font-size:12px;color:var(--text-dim);margin-top:4px">门店退群率&gt;10%，明细见统一周报</div></div>';
     }
-    document.getElementById('churnAlertList').innerHTML=ahtml;
+    var cel=document.getElementById('churnAlertList');
+    if(cel)cel.innerHTML=ahtml;
+    var rper=document.getElementById('communityReportPeriod');
+    if(rper)rper.textContent=cqWeekLabel(cur);
   }).catch(function(e){console.log('community data load error',e);});
-  // Week/Month report links
+  // 周报链接（固定最近 5 期归档）
   var weeks=[{label:'08/03 - 08/09',file:'社群周报看板_20260803-0809.html'},{label:'07/27 - 08/02',file:'社群周报看板_20260727-0802.html'},{label:'07/20 - 07/26',file:'社群周报看板_20260720-0726.html'},{label:'07/13 - 07/19',file:'社群周报看板_20260713-0719.html'},{label:'07/06 - 07/12',file:'社群周报看板_20260706-0712.html'}];
   var h='';weeks.forEach(function(w){h+='<div style="display:flex;align-items:center;gap:8px"><a href="#" data-type="weekly" data-file="'+w.file+'" onclick="openReport(this.dataset.type,this.dataset.file);return false" style="color:var(--brand);font-size:13px">📄 社群周报</a><span style="font-size:10px;background:var(--bg);color:var(--text-dim);padding:1px 8px;border-radius:10px">'+w.label+'</span></div>';});
   try{document.getElementById('weeklyReportsList').innerHTML=h;}catch(e){}
-  document.getElementById('monthlyReportsList').innerHTML='';
+  var mr=document.getElementById('monthlyReportsList');
+  if(mr)mr.innerHTML='<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">周度看板（最新一期在统一看板顶部选择）</div>';
 }
 function renderMemberDay(){var date=document.getElementById('memberDateSelect').value;var d=MEMBER_DATA[date];if(!d)return;var wow=function(cur,prev){var pct=prev?((cur-prev)/prev*100):0;var cls=pct>0.5?'up':pct<-0.5?'down':'flat';var arrow=pct>0.5?'↑':pct<-0.5?'↓':'→';return '<span style="color:'+(cls==='up'?'#2e7d32':cls==='down'?'var(--red)':'var(--amber)')+'">'+arrow+Math.abs(pct).toFixed(1)+'%</span>';};var html='<div class="card"><div class="card-header"><div class="card-title">📊 核心指标（'+date.slice(5)+' vs '+d.prev.slice(5)+'）</div></div><div style="font-size:13px;line-height:2.2;color:var(--text-dim)"><div>📦 有效订单 <b style="color:var(--text)">'+d.orders+'</b>（←'+d.prevOrders+'，'+wow(d.orders,d.prevOrders)+'）</div><div>💰 有效销售额 <b style="color:var(--text)">¥'+d.sales.toLocaleString()+'</b>（←¥'+d.prevSales.toLocaleString()+'，'+wow(d.sales,d.prevSales)+'）</div><div>🏪 动销门店 <b style="color:var(--text)">'+d.stores+'</b>（←'+d.prevStores+'，'+wow(d.stores,d.prevStores)+'）</div><div>🎫 券核销率 <b style="color:var(--text)">'+d.couponUseRate+'%</b>（←'+d.prevCouponUseRate+'%）</div><div>👤 新增会员 <b style="color:var(--text)">'+d.members+'</b>人</div><div>🛵 外卖订单 <b style="color:var(--text)">'+d.deliveryOrders+'</b>（←'+d.prevDeliveryOrders+'）</div><div>💵 客单价 <b style="color:var(--text)">¥'+d.customerPrice+'</b>（←¥'+d.prevCustomerPrice+'）</div></div></div><div class="card"><div class="card-header"><div class="card-title">📋 复盘结论</div></div><div style="font-size:12px;color:var(--text-dim);line-height:1.8">'+d.conclusion+'</div></div>';document.getElementById('memberDayContent').innerHTML=html;}
 function switchActTab(tab){['Member','Weekend','Monthly'].forEach(function(t){var c=document.getElementById('actContent'+t);if(c)c.style.display=(t.toLowerCase()===tab)?'':'none';var b=document.getElementById('actBtn'+t);if(b){b.classList.remove('btn-primary','btn-ghost');b.classList.add(t.toLowerCase()===tab?'btn-primary':'btn-ghost');}});}
+// ═══ 社群引流 · 三渠道（随单卡 / 小程序社群入口 / 台卡）═══
+var ACQ_COLOR={suidan:'#2d8a4e',miniapp:'#1976d2',taika:'#00897b'};
+function acqPct(a,b){return (b&&a!==null&&a!==undefined)?Math.round(a/b*1000)/10:null;}
+function acqPctText(v){return (v===null||v===undefined)?'—':v.toFixed(1)+'%';}
+function covNote(cov,label){
+  if(!cov)return '';
+  return '<div style="font-size:10px;color:var(--text-muted);margin-top:6px">※ '+label+'覆盖 '+cov.rate+'% · A 有量 '+cov.a+' / B 无量 '+cov.b+' / C 未配 '+cov.c+'</div>';
+}
+function acqFunnelHtml(f,mainColor){
+  if(!f)return '<div style="font-size:12px;color:var(--text-dim);padding:8px">暂无该渠道数据</div>';
+  var s=f.scan||0,a=f.add||0,j=f.join||0;
+  var h='<div style="background:var(--bg);border-radius:8px;padding:16px">';
+  h+='<div style="display:flex;align-items:center;gap:0;font-size:13px;margin-bottom:4px">';
+  h+='<div style="background:'+mainColor+';color:#fff;padding:8px 0;text-align:center;border-radius:6px 0 0 6px;flex:1;min-width:0">扫码客户 '+s+'</div>';
+  h+='<div style="padding:0 5px;font-size:17px;color:var(--text-muted)">→</div>';
+  h+='<div style="background:#00897b;color:#fff;padding:8px 0;text-align:center;flex:1;min-width:0">加好友 '+a+'<span style="font-size:9px;opacity:.8"> '+acqPctText(acqPct(a,s))+'</span></div>';
+  h+='<div style="padding:0 5px;font-size:17px;color:var(--text-muted)">→</div>';
+  h+='<div style="background:var(--blue);color:#fff;padding:8px 0;text-align:center;border-radius:0 6px 6px 0;flex:1;min-width:0">进群 '+j+'<span style="font-size:9px;opacity:.8"> '+acqPctText(acqPct(j,a))+'</span></div>';
+  h+='</div></div>';
+  return h;
+}
+function acqRetentionHtml(ret,note){
+  ret=ret||{};
+  var v=function(x){return (x!==null&&x!==undefined)?x.toFixed(1)+'%':'—';};
+  var cell=function(val,label,bg,color){
+    return '<div style="flex:1;text-align:center;background:'+bg+';border-radius:8px;padding:14px 6px;min-width:0"><div style="font-size:25px;font-weight:700;color:'+color+';letter-spacing:-.5px">'+v(val)+'</div><div style="font-size:11px;color:var(--text-dim);margin-top:2px">'+label+'</div></div>';
+  };
+  var h='<div style="display:flex;gap:10px">';
+  h+=cell(ret.h24,'24h 留存','var(--brand-light)','var(--brand)');
+  h+=cell(ret.d7,'7天留存','#e0f2f1','#00897b');
+  h+=cell(ret.d15,'15天留存','var(--bg)','var(--amber)');
+  h+=cell(ret.d30,'30天留存','var(--bg)','var(--text)');
+  h+='</div>';
+  if(note)h+='<div style="font-size:10px;color:var(--text-muted);margin-top:10px;text-align:center">'+note+'</div>';
+  return h;
+}
 function renderAcquisition(){
   fetch('community_data.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
     var a=d.acquisition||{};
-    var f=a.funnel||{};              // 合并漏斗(随单+台卡)
-    var ret=a.retention||{};         // 留存(比率不合并,保留随单卡口径)
-    var s=a.suidan||{};              // 随单卡明细
-    var sf=s.funnel||f;              // 随单卡漏斗(旧数据无 suidan 时回退 a.funnel)
-    var t=a.taika||{};               // 台卡明细
-    var tf=t.funnel||null;           // 台卡漏斗(无则隐藏台卡区)
-    if(!f.scan && !a.scan_total){return;}
+    var f=a.funnel||{};
+    if(!f.scan&&!a.scan_total)return;
+    var s=a.suidan||{},m=a.miniapp||{},t=a.taika||{};
+    var sf=s.funnel||f,mf=m.funnel||null,tf=t.funnel||null;
     var fmt=function(v){return (v||0).toLocaleString();};
-    var rate=function(a,b){return (b&&a!==undefined&&a!==null)?Math.round(a/b*1000)/10:'?';};
-    var fw=t.first_week;
-    var firstBadge=fw?'<span style="color:var(--text-dim)">🆕 含台卡首周 · 环比待下周</span>':'';
-    // ===== 合计 5 KPI(随单卡+台卡直接相加) =====
-    var sub1='随单'+(sf.scan||0)+(tf?' · 台卡'+(tf.scan||0):'');
-    var kpi='<div class="kpi accent-blue"><div class="kpi-label">📣 本周扫码客户</div><div class="kpi-value">'+(f.scan||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+sub1+'</div></div>';
-    kpi+='<div class="kpi accent-teal"><div class="kpi-label">➕ 本周加好友</div><div class="kpi-value">'+(f.add||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">扫码转化 '+rate(f.add,f.scan)+'% · 累计'+fmt(a.scan_total)+'</div></div>';
-    kpi+='<div class="kpi accent-amber"><div class="kpi-label">📥 本周进群</div><div class="kpi-value">'+(f.join||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">进群率 '+rate(f.join,f.add)+'% · 累计'+fmt(a.join_total)+'</div></div>';
-    kpi+='<div class="kpi accent-red"><div class="kpi-label">📤 本周流失</div><div class="kpi-value">'+(a.week_loss||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+firstBadge+'</div></div>';
-    kpi+='<div class="kpi accent-green"><div class="kpi-label">👥 累计进群</div><div class="kpi-value">'+fmt(a.join_total)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">'+firstBadge+'</div></div>';
+    var totalJoin=(d.kpi&&d.kpi.join)||a.week_total_join||null;
+    var share=(totalJoin&&f.join)?Math.round(f.join/totalJoin*1000)/10:null;
+    document.getElementById('acqPeriod').textContent='数据周期 '+cqWeekLabel(d.updated)+' · 来源：社群周报看板_统一（三渠道合计口径）'+(d.generated?' · 同步于 '+d.generated:'');
+
+    // ===== 顶部 5 KPI（三渠道合计口径）=====
+    var kpi='';
+    kpi+='<div class="kpi accent-blue"><div class="kpi-label">📣 本周扫码客户</div><div class="kpi-value">'+(f.scan||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">随单'+(sf.scan||0)+' · 小程序'+(mf?mf.scan:0)+' · 台卡'+(tf?tf.scan:0)+'</div></div>';
+    kpi+='<div class="kpi accent-teal"><div class="kpi-label">➕ 本周加好友</div><div class="kpi-value">'+(f.add||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">扫码转化 '+acqPctText(acqPct(f.add,f.scan))+' · 累计 '+fmt(a.scan_total)+'</div></div>';
+    kpi+='<div class="kpi accent-amber"><div class="kpi-label">📥 本周进群</div><div class="kpi-value">'+(f.join||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">加好友转化 '+acqPctText(acqPct(f.join,f.add))+' · 累计 '+fmt(a.join_total)+'</div></div>';
+    kpi+='<div class="kpi accent-red"><div class="kpi-label">📤 本周流失</div><div class="kpi-value">'+(a.week_loss||0)+'<span class="kpi-change flat">人</span></div><div class="kpi-sub">随单'+(s.week_loss||0)+' · 小程序'+(m.week_loss||0)+' · 台卡'+(t.week_loss||0)+'</div></div>';
+    kpi+='<div class="kpi accent-green"><div class="kpi-label">🎯 三渠道占社群进群</div><div class="kpi-value">'+acqPctText(share)+'</div><div class="kpi-sub">社群总进群 '+fmt(totalJoin)+' · 余为邀请/未归因</div></div>';
     document.getElementById('acquisitionKPI').innerHTML=kpi;
-    // ===== 随单卡 · 本周转化漏斗 =====
-    var funnel='<div style="background:var(--bg);border-radius:8px;padding:16px">';
-    funnel+='<div style="display:flex;align-items:center;gap:0;font-size:13px;margin-bottom:8px">';
-    funnel+='<div style="background:var(--brand);color:#fff;padding:8px 0;text-align:center;border-radius:6px 0 0 6px;flex:1">扫码 '+(sf.scan||0)+'</div>';
-    funnel+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
-    funnel+='<div style="background:#00897b;color:#fff;padding:8px 0;text-align:center;flex:1">加好友 '+(sf.add||0)+'<span style="font-size:9px;opacity:.8"> '+rate(sf.add,sf.scan)+'%</span></div>';
-    funnel+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
-    funnel+='<div style="background:var(--blue);color:#fff;padding:8px 0;text-align:center;border-radius:0 6px 6px 0;flex:1">进群 '+(sf.join||0)+'<span style="font-size:9px;opacity:.8"> '+rate(sf.join,sf.add)+'%</span></div>';
-    funnel+='</div>';
-    funnel+='<div style="font-size:11px;color:var(--text-dim)">本周进群率 '+rate(sf.join,sf.add)+'% · 历史累计 '+(s.hist_join_rate||'?')+'%</div>';
-    funnel+='</div>';
-    document.getElementById('communityFunnel').innerHTML=funnel;
-    // ===== 随单卡 · 历史留存率(4档) =====
-    var rh='<div style="display:flex;gap:16px">';
-    rh+='<div style="flex:1;text-align:center;background:var(--brand-light);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--brand)">'+(((ret.h24)!=null)?(ret.h24).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">24h留存</div></div>';
-    rh+='<div style="flex:1;text-align:center;background:#e0f2f1;border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#00897b">'+(((ret.d7)!=null)?(ret.d7).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">7天留存</div></div>';
-    rh+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#f59f00">'+(((ret.d15)!=null)?(ret.d15).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">15天留存</div></div>';
-    rh+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--text)">'+(((ret.d30)!=null)?(ret.d30).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">30天留存</div></div>';
-    rh+='</div>';
-    rh+='<div style="font-size:10px;color:var(--text-dim);margin-top:8px;text-align:center">历史总留存率 · 非本周新增 cohort 留存</div>';
-    document.getElementById('communityRetention').innerHTML=rh;
-    // ===== 台卡区(无数据自动隐藏) =====
-    var taiSec=document.getElementById('taikaSection');
-    if(taiSec) taiSec.style.display=(tf?'':'none');
-    if(tf){
-      var tf2='<div style="background:var(--bg);border-radius:8px;padding:16px">';
-      tf2+='<div style="display:flex;align-items:center;gap:0;font-size:13px;margin-bottom:8px">';
-      tf2+='<div style="background:var(--brand);color:#fff;padding:8px 0;text-align:center;border-radius:6px 0 0 6px;flex:1">扫码 '+(tf.scan||0)+'</div>';
-      tf2+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
-      tf2+='<div style="background:#00897b;color:#fff;padding:8px 0;text-align:center;flex:1">加好友 '+(tf.add||0)+'<span style="font-size:9px;opacity:.8"> '+rate(tf.add,tf.scan)+'%</span></div>';
-      tf2+='<div style="padding:0 4px;font-size:18px;color:var(--text-dim)">→</div>';
-      tf2+='<div style="background:var(--blue);color:#fff;padding:8px 0;text-align:center;border-radius:0 6px 6px 0;flex:1">进群 '+(tf.join||0)+'<span style="font-size:9px;opacity:.8"> '+rate(tf.join,tf.add)+'%</span></div>';
-      tf2+='</div>';
-      tf2+='<div style="font-size:11px;color:var(--text-dim)">本周进群率 '+rate(tf.join,tf.add)+'% · 历史累计 '+(t.hist_join_rate||'?')+'%'+(fw?' · 🆕 首周上线':'')+'</div>';
-      tf2+='</div>';
-      document.getElementById('taikaFunnel').innerHTML=tf2;
-      var tr=t.retention||{};
-      var rh2='<div style="display:flex;gap:16px">';
-      rh2+='<div style="flex:1;text-align:center;background:var(--brand-light);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--brand)">'+(((tr.h24)!=null)?(tr.h24).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">24h留存</div></div>';
-      rh2+='<div style="flex:1;text-align:center;background:#e0f2f1;border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#00897b">'+(((tr.d7)!=null)?(tr.d7).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">7天留存</div></div>';
-      rh2+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:#f59f00">'+(((tr.d15)!=null)?(tr.d15).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">15天留存</div></div>';
-      rh2+='<div style="flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:16px"><div style="font-size:28px;font-weight:800;color:var(--text)">'+(((tr.d30)!=null)?(tr.d30).toFixed(1):'?')+'%</div><div style="font-size:11px;color:var(--text-dim)">30天留存</div></div>';
-      rh2+='</div>';
-      rh2+='<div style="font-size:10px;color:var(--text-dim);margin-top:8px;text-align:center">'+(fw?'首周数据 · 留存待积累（非真实历史分层）':'历史总留存率 · 非本周新增 cohort 留存')+'</div>';
-      document.getElementById('taikaRetention').innerHTML=rh2;
+
+    // ===== 引流渠道对比 =====
+    var rows=[
+      {name:'随单卡',icon:'📣',color:ACQ_COLOR.suidan,o:s},
+      {name:'小程序社群入口',icon:'📱',color:ACQ_COLOR.miniapp,o:m},
+      {name:'台卡',icon:'🪧',color:ACQ_COLOR.taika,o:t}
+    ];
+    var th='<th style="text-align:left;padding:7px 8px;font-weight:600">渠道</th>'+
+           '<th style="text-align:right;padding:7px 8px;font-weight:600">扫码客户</th>'+
+           '<th style="text-align:right;padding:7px 8px;font-weight:600">加好友</th>'+
+           '<th style="text-align:right;padding:7px 8px;font-weight:600">进群</th>'+
+           '<th style="text-align:right;padding:7px 8px;font-weight:600">本周流失</th>'+
+           '<th style="text-align:right;padding:7px 8px;font-weight:600">累计进群</th>'+
+           '<th style="text-align:left;padding:7px 8px;font-weight:600;width:26%">进群占比</th>';
+    var tb='';
+    rows.forEach(function(r){
+      var fn=r.o.funnel||{};
+      var sh=f.join?((fn.join||0)/f.join*100):0;
+      tb+='<tr style="border-top:1px solid var(--border)">';
+      tb+='<td style="padding:9px 8px;white-space:nowrap"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+r.color+';margin-right:6px"></span>'+r.icon+' '+r.name+'</td>';
+      tb+='<td style="text-align:right;padding:9px 8px">'+(fn.scan||0)+'</td>';
+      tb+='<td style="text-align:right;padding:9px 8px">'+(fn.add||0)+'</td>';
+      tb+='<td style="text-align:right;padding:9px 8px;font-weight:600">'+(fn.join||0)+'</td>';
+      tb+='<td style="text-align:right;padding:9px 8px;color:var(--red)">'+(r.o.week_loss||0)+'</td>';
+      tb+='<td style="text-align:right;padding:9px 8px">'+fmt(r.o.join_total)+'</td>';
+      tb+='<td style="padding:9px 8px"><div style="display:flex;align-items:center;gap:8px"><div style="height:6px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden;flex:1;min-width:40px"><div style="height:6px;width:'+Math.min(100,Math.max(2,sh)).toFixed(1)+'%;background:'+r.color+';border-radius:3px"></div></div><span style="font-size:11px;color:var(--text-dim);width:44px;text-align:right">'+sh.toFixed(1)+'%</span></div></td>';
+      tb+='</tr>';
+    });
+    tb+='<tr style="border-top:2px solid var(--brand);background:var(--brand-light)">';
+    tb+='<td style="padding:9px 8px;font-weight:700">三渠道合计</td>';
+    tb+='<td style="text-align:right;padding:9px 8px;font-weight:700">'+(f.scan||0)+'</td>';
+    tb+='<td style="text-align:right;padding:9px 8px;font-weight:700">'+(f.add||0)+'</td>';
+    tb+='<td style="text-align:right;padding:9px 8px;font-weight:700;color:var(--brand-dark)">'+(f.join||0)+'</td>';
+    tb+='<td style="text-align:right;padding:9px 8px;font-weight:700;color:var(--red)">'+(a.week_loss||0)+'</td>';
+    tb+='<td style="text-align:right;padding:9px 8px;font-weight:700">'+fmt(a.join_total)+'</td>';
+    tb+='<td style="padding:9px 8px;font-size:11px;color:var(--text-dim)">占社群总进群 '+acqPctText(share)+'</td>';
+    tb+='</tr>';
+    document.getElementById('channelCompare').innerHTML='<table style="width:100%;font-size:12px;border-collapse:collapse"><thead><tr style="color:var(--text-dim);font-size:11px">'+th+'</tr></thead><tbody>'+tb+'</tbody></table>'+
+      '<div style="font-size:10px;color:var(--text-muted);margin-top:10px;line-height:1.6">※ 合计＝三渠道直接相加（看板口径）：同一客户带多个渠道标签会重复计入；进群占比分母＝三渠道进群合计 '+(f.join||0)+' 人；累计＝各渠道历史累计进群（含去重口径差异，仅供参考）。</div>';
+
+    // ===== 随单卡 =====
+    document.getElementById('communityFunnel').innerHTML=acqFunnelHtml(sf,ACQ_COLOR.suidan)+
+      '<div style="font-size:11px;color:var(--text-dim);margin-top:10px">本周进群率 '+acqPctText(acqPct(sf.join,sf.add))+' · 历史累计 '+(s.hist_join_rate||'—')+'% · 累计加好友 '+fmt(s.scan_total)+' · 本周流失 '+(s.week_loss||0)+'</div>'+
+      covNote(s.coverage,'活码');
+    document.getElementById('communityRetention').innerHTML=acqRetentionHtml(s.retention,'历史总留存率 · 非本周新增 cohort 留存');
+
+    // ===== 小程序社群入口 =====
+    var msec=document.getElementById('miniappSection');
+    if(msec){
+      if(!mf){msec.style.display='none';}
+      else{
+        msec.style.display='';
+        document.getElementById('miniappFunnel').innerHTML=acqFunnelHtml(mf,ACQ_COLOR.miniapp)+
+          '<div style="font-size:11px;color:var(--text-dim);margin-top:10px">本周进群率 '+acqPctText(acqPct(mf.join,mf.add))+' · 累计进群率 '+(m.hist_join_rate||'—')+'% · 累计加好友 '+fmt(m.scan_total)+' · 本周流失 '+(m.week_loss||0)+'</div>'+
+          '<div style="font-size:10px;color:var(--text-muted);margin-top:4px">※ 扫码客户为去重客户数，加好友为「按日期表」未去重口径 → 扫码→加好友可能 &gt;100%，非同口径</div>'+
+          covNote(m.coverage,'门店群活码');
+        document.getElementById('miniappRetention').innerHTML=acqRetentionHtml(m.retention,'历史总留存率 · 渠道标签 11-06 上线，7d/15d/30d 分档未满期');
+        var meta=document.getElementById('miniappMeta');
+        if(meta)meta.innerHTML='<div style="font-size:11px;color:var(--text-dim);line-height:1.9">'+
+          '📱 <b style="color:var(--text)">小程序社群入口</b> · 2026-11-06 上线 · 链路：小程序首页 → 门店群活码 → 加好友 → 进群'+
+          '<br>累计加好友 '+fmt(m.scan_total)+'（CSV 去重）· 累计进群 '+fmt(m.join_total)+' · 本周流失 '+(m.week_loss||0)+'（含补打存量，实际新增流失更低）'+
+          '<br>进群口径：渠道标签归因（本周入群明细 × 客户标签）；门店群活码入群为未去重人次，不作漏斗分母'+
+          '</div>';
+      }
     }
-  }).catch(function(){});
+
+    // ===== 台卡 =====
+    var taiSec=document.getElementById('taikaSection');
+    if(taiSec)taiSec.style.display=(tf?'':'none');
+    if(tf){
+      document.getElementById('taikaFunnel').innerHTML=acqFunnelHtml(tf,ACQ_COLOR.taika)+
+        '<div style="font-size:11px;color:var(--text-dim);margin-top:10px">本周进群率 '+acqPctText(acqPct(tf.join,tf.add))+' · 历史累计 '+(t.hist_join_rate||'—')+'% · 累计加好友 '+fmt(t.scan_total)+' · 本周流失 '+(t.week_loss||0)+(t.first_week?' · 🆕 首周上线':'')+'</div>'+
+        covNote(t.coverage,'台卡');
+      document.getElementById('taikaRetention').innerHTML=acqRetentionHtml(t.retention,t.first_week?'首周数据 · 留存待积累（非真实历史分层）':'历史总留存率 · 非本周新增 cohort 留存');
+    }
+  }).catch(function(e){console.log('acquisition load error',e);});
 }
 
 var inspTab='card';

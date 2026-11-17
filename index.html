@@ -125,9 +125,6 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
   <div class="nav-item" data-page="products">
     <span class="icon">📦</span> <span>产品库</span>
   </div>
-  <div class="nav-item" data-page="hotspot">
-    <span class="icon">📡</span> <span>热点捕捉</span>
-  </div>
   <div class="nav-item" data-page="copy"><span class="icon">✍️</span><span>文案创作</span></div>
   <div class="nav-item" data-page="prompt"><span class="icon">🎨</span><span>配图Prompt</span></div>
   <div class="nav-item" data-page="recipe"><span class="icon">🧪</span><span>Prompt配方</span></div>
@@ -178,12 +175,26 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
     <div class="page" id="page-communitydata">
       <div class="kpi-grid" id="communityDataKPI" style="grid-template-columns:repeat(6,1fr)"></div>
       <div class="grid2" style="margin-bottom:16px">
-        <div class="card"><div class="card-header"><div class="card-title">📝 本周要点</div></div><div id="communityInsights" style="font-size:12px;line-height:1.8;color:var(--text-dim)"><div>🔴 入群110人（↓50%），净增-277</div><div>🟢 退群387人（↓8.1%），持续改善</div><div>🟢 0家退群率>10%门店</div><div>📊 736群 · 701门店 · 92.3%渗透</div></div></div>
-        <div class="card"><div class="card-header"><div class="card-title">⚠️ 退群预警</div><div class="card-sub">退群率 &gt;10%</div></div><div id="churnAlertList" style="font-size:12px;line-height:1.8;max-height:200px;overflow-y:auto;padding-right:8px"></div></div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📝 本周要点</div><div class="card-sub" id="communityInsightsPeriod"></div></div>
+          <div id="communityInsights" style="font-size:12px;line-height:1.8;color:var(--text-dim);min-height:120px">加载中…</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚠️ 退群预警</div><div class="card-sub">退群率 &gt;10%</div></div>
+          <div id="churnAlertList" style="font-size:12px;line-height:1.8;max-height:240px;overflow-y:auto;padding-right:8px"></div>
+        </div>
       </div>
-      <div class="card" style="margin-bottom:16px;overflow:hidden"><div class="card-header"><div class="card-title">📈 2026年累计趋势</div></div><div style="position:relative;height:200px"><canvas id="communityTrendChart"></canvas></div></div>
+      <div class="card" style="margin-bottom:16px;overflow:hidden">
+        <div class="card-header">
+          <div class="card-title">📈 2026年累计趋势</div>
+          <div class="card-sub" id="communityTrendSub">加载中…</div>
+        </div>
+        <div style="position:relative;height:230px"><canvas id="communityTrendChart"></canvas></div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px;line-height:1.6">※ 口径：起点 2026-05/04（随单卡上线同期，可比起点）；2026-02~04 为早期不同口径，不计入。柱＝月度入群/退群合计，虚线＝月度留存率（按周入群量加权）。数据源：社群周报看板_统一。</div>
+      </div>
       <div class="grid2">
-        <div class="card"><div class="card-header"><div class="card-title">📊 定期报告</div></div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 定期报告</div><div class="card-sub" id="communityReportPeriod"></div></div>
           <div style="font-size:13px;line-height:2">
             <div id="monthlyReportsList"></div>
             <div style="margin-top:6px">
@@ -194,7 +205,17 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
       </div>
     </div>
     <div class="page" id="page-acquisition">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:-4px 0 12px">
+        <div style="font-size:11px;color:var(--text-muted)" id="acqPeriod">数据周期加载中…</div>
+      </div>
       <div class="kpi-grid" id="acquisitionKPI" style="grid-template-columns:repeat(5,1fr)"></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">
+          <div class="card-title">🧩 引流渠道对比 · 本周</div>
+          <div class="card-sub">随单卡 · 小程序社群入口 · 台卡</div>
+        </div>
+        <div id="channelCompare" style="font-size:12px;color:var(--text-dim)">加载中…</div>
+      </div>
       <div class="grid2">
         <div class="card">
           <div class="card-header"><div class="card-title">📣 随单卡 · 本周转化漏斗</div></div>
@@ -205,6 +226,17 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
           <div id="communityRetention" style="font-size:13px"></div>
         </div>
       </div>
+      <div class="grid2" id="miniappSection" style="margin-top:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📱 小程序社群入口 · 本周转化漏斗</div><div class="card-sub">11-06 上线</div></div>
+          <div id="miniappFunnel" style="font-size:13px"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⏳ 小程序入口历史留存率</div></div>
+          <div id="miniappRetention" style="font-size:13px"></div>
+        </div>
+      </div>
+      <div class="card" id="miniappMeta" style="margin-top:16px;padding:14px 18px"></div>
       <div class="grid2" id="taikaSection" style="margin-top:16px">
         <div class="card">
           <div class="card-header"><div class="card-title">🪧 台卡 · 本周转化漏斗</div></div>
@@ -215,11 +247,7 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
           <div id="taikaRetention" style="font-size:13px"></div>
         </div>
       </div>
-      <div class="card" style="margin-top:16px;opacity:0.55;padding:12px 16px">
-        <div style="font-size:12px;color:var(--text-dim)">📱 小程序社群入口 <span style="opacity:0.7">· 待执行</span></div>
-      </div>
     </div>
-    
 <div class="page" id="page-products">
       <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;min-height:calc(100vh - 100px)">
         <!-- LEFT -->
@@ -258,29 +286,6 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="page" id="page-hotspot">
-      <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
-        <button class="btn btn-ghost" id="hotspotRefreshBtn" onclick="refreshHotspot()" style="font-size:11px;padding:3px 10px">🔄 刷新</button>
-      </div>
-      <div style="display:grid;grid-template-columns:200px 1fr;gap:16px">
-        <div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-title" style="font-size:13px;margin-bottom:8px">📡 来源</div>
-            <div style="display:flex;flex-direction:column;gap:4px" id="hotspotSourceBtns">
-              <button class="btn btn-primary" onclick="filterHotspot('all')" style="font-size:11px;padding:5px 10px;text-align:left">🌐 全部</button>
-              <button class="btn btn-ghost" onclick="filterHotspot('百度')" style="font-size:11px;padding:5px 10px;text-align:left">🔍 百度</button>
-              <button class="btn btn-ghost" onclick="filterHotspot('微博')" style="font-size:11px;padding:5px 10px;text-align:left">💬 微博</button>
-              <button class="btn btn-ghost" onclick="filterHotspot('抖音')" style="font-size:11px;padding:5px 10px;text-align:left">🎵 抖音</button>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-title" style="font-size:13px;margin-bottom:8px">🏷️ 分类</div>
-            <div id="hotspotCatBtns" style="display:flex;flex-direction:column;gap:4px;font-size:11px"></div>
-          </div>
-        </div>
-        <div id="hotspotContent" style="font-size:13px;color:var(--text-dim)">抓取中...</div>
       </div>
     </div>
     <div class="page" id="page-copy">
@@ -487,7 +492,7 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
 <div style="font-size:11px;color:var(--text-dim);margin-top:14px;line-height:1.9">同步范围：📅 社群运营排期编辑 · 🧠 素材灵感库自定义花字<br>打开页面自动拉取云端；你的任何修改会在 2 秒后自动上传。<br>Token 权限：仅本仓库 Contents 读写；撤销入口 → <a href="https://github.com/settings/personal-access-tokens" target="_blank" style="color:var(--brand)">github.com/settings/personal-access-tokens</a></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeCloudModal()">关闭</button></div>
 </div></div>
-<script src="js/app_v8.js?v=92"></script>
+<script src="js/app_v8.js?v=97"></script>
   <div id="cardModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
     <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)">
       <div style="font-weight:700;margin-bottom:16px;font-size:15px">➕ 添加花字卡片</div>
