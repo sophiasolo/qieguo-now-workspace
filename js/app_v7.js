@@ -694,7 +694,7 @@ function setCopyConfig(key,val){
   if(key==='aiMode'){updateGenBtnLabel();}
 }
 function updateGenBtnLabel(){}
-function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}document.getElementById('copyDirection').value=CopyConfig.direction;updateGenBtnLabel();}
+function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}(function(){var sel=document.getElementById('copyDirection');if(!sel)return;var v=CopyConfig.direction||'auto';if(!sel.querySelector('option[value="'+v+'"]')){v='auto';CopyConfig.direction='auto';try{localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}catch(e){}}sel.value=v;})();updateGenBtnLabel();}
 
 // ═══════════════════════════════════════════
 // SECTION LUNAR: 农历 / 节气引擎（文案创作「📅 推送日」卡片显示用）
@@ -1190,7 +1190,6 @@ var DIRECTION_SPEC = {
   'scene':{label:'场景共鸣',pool:['办公室下午茶','加班夜宵','追剧零食','周末野餐','健身房练完','通勤地铁上','打游戏上头','麻将桌上','课间十分钟','活动前垫肚子','熬夜写方案','接娃放学的路上']},
   'social':{label:'社交裂变',pool:['和同事拼单','@上爱吃水果的朋友','办公室拼单团','家庭分享装','闺蜜下午茶拼单']},
   'surprise':{label:'惊喜彩蛋',pool:['今天多送一份','随机隐藏款','今天有彩蛋','限时小惊喜']},
-  'hotspot':{label:'热点借势',pool:['最近大家都在吃','全网同款','热门话题同款']},
   'health':{label:'健康密码',pool:['维C补给','比奶茶健康','健身后的补给','减脂期的快乐']},
   'contrast':{label:'对比锚定',pool:['比奶茶还便宜','外面买X元这里Y元','同样的钱多一倍分量']},
   'lazy':{label:'懒人救星',pool:['不用洗不用切','打开就吃','懒人下午茶','不用洗碗']},
