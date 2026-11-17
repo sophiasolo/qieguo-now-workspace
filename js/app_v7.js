@@ -287,8 +287,6 @@ function updateOverviewSentimentData(){
   }
 }
 
-
-
 // ═══════ SENTIMENT MODULE (clean rebuild) ═══════
 var sentimentCache=null;
 var sentimentFilter='all';
@@ -682,7 +680,6 @@ toast('✅ '+items.length+'个产品 | '+priceSamples);
   reader.readAsArrayBuffer(file);
 }
 
-
 // ═══════ COPY ═══════
 var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:''};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
@@ -819,15 +816,8 @@ function buildDayInfoHTML(d) {
 }
 
 function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2)label='周二 · 热销风向';else if(day===3)label='周三 · 会员日88折';else if(day===4)label='周四 · 外卖双平台';else if(day===5)label='周五 · 周末套餐';else if(day===6)label='周六 · 外卖双平台';else label='今天无推送';document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML=buildDayInfoHTML(now);}
-function loadCopyHotspots(){var el=document.getElementById('copyHotspotBar');if(!el)return;if(!el)return;if(!el)return;if(!el)return;if(!el)return;fetch('hotspot.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){var items=(d.items||[]).slice(0,5);if(items.length===0){el.innerHTML='<span style="color:var(--text-dim)">暂无热点数据</span>';return;}var html='';items.forEach(function(item){html+='<span style="background:var(--brand-light);color:var(--brand);padding:3px 8px;border-radius:12px;cursor:pointer;white-space:nowrap" title="'+item.word+'">'+(item.category||'')+' '+item.word.substring(0,15)+'</span>';});el.innerHTML=html;}).catch(function(){el.innerHTML='<span style="color:var(--text-dim)">热点加载中...</span>';});}
 
 // ═══════ COPY GENERATOR ═══════
-
-var HUA_ZI_POOLS = {"thu": ["🛵外卖特价｜", "🛵外卖专享｜", "🔥今日外卖活动品｜", "📱外卖特惠｜", "🛵鲜切直达｜", "💨外卖速递｜", "🧊冰凉到家｜", "⚡外卖限定｜", "📱动动手指｜", "🛵一键下单｜", "🔥外卖专享价｜", "💨30分钟冰鲜到家｜", "🧊冰镇", "🛵"], "fri": ["😆周五福来day！追剧搭档已就位🍉", "周末宅家公式：沙发🛋️+空调❄️+", "🎉周五解放日｜", "🎮周五开黑夜，", "✨周五了！", "周末模式开启🔛", "TGIF！", "一周辛苦结束，", "🔓周五解放倒计时｜", "周末追剧神器｜", "🍿周末宅家必备｜", "周五啦.ᐟ.ᐟ", "🎬周末片单+", "周五下班快乐水｜"], "tue": ["🌡️热到不想动？试试", "☀️35°C+的夏天，你需要", "💼周二工作日的解暑方案｜", "🧊打败高温的快乐源泉｜", "🍃三伏天的续命果切｜", "💦高温天的清爽选择｜", "一周过半⏳该奖励自己了", "😴➡🍉😋 .ᐟ.ᐟ", "🤔今日诊断：你缺一份鲜果切", "📋今日处方：冰镇西瓜×1 即刻服用", "🥱😪➡😋🤩✨", "一周快过半了！拿什么犒劳自己？"], "sat": ["𝐒𝐚𝐭𝐮𝐫𝐝𝐚𝐲｜周末门面担当🍉", "🤔周六冷知识：原来", "🎬周末追剧人的充电方案：", "周末诊断书：你缺一份", "周六懒day，", "⋆⁺₊☾ 周六限定｜", "周末进度 50%｜", "周六下午茶｜", "🌿周末好时光｜", "🔍正在搜索：这个周末吃什么→", "周六放松模式｜", "周末就是要"]};
-
-var CTA_POOLS = {"thu": ["🛵 动动手指，鲜切到家", "💨 鲜切直达，比外卖小哥还快", "🧊 冰凉一夏，从这一单开始", "📱 戳一下，冰鲜马上到", "⚡ 限时特价，手慢无", "🍉 今天不吃，明天就没有这个价了", "💨 鲜切外卖，30分钟到家", "🔥 特价只在今天"], "fri": ["🛋️ 周末快乐入口", "🎬 追剧搭子已就位，就差你下单", "✨ 快乐周末，果切先行", "🍿 周末模式，一键开启", "🎉 周五解放，从这一盒开始"], "tue": ["🛵 冰鲜直达，点一下就到", "🍉 热天也要对自己好一点", "🧊 一键降温，鲜切到家", "💆 犒赏周二的自己", "💚 新鲜直达，今天不将就"], "sat": ["🌟 发现一份好吃的", "💫 周末小惊喜，藏在链接里", "✨ 舌尖上的新鲜感，一键解锁", "🔍 探索周末美味"]};
-
-var PRODUCT_SELLING = {"西瓜": "麒麟瓜正值甜度巅峰🍉冰甜多汁超解渴", "哈密瓜": "蜜甜脆爽🍈冰镇一下绝了", "芒果": "肉厚核薄🥭甜到心里", "凤梨": "酸甜刚好🍍不涩口不麻嘴", "乌梅": "酸甜开胃🫐一粒一粒停不下来", "榴莲": "金枕肉厚香甜💛冰镇像吃冰淇淋", "青柠": "酸甜清爽🍋夏天的味道", "葡萄": "颗颗脆甜🍇带着花香", "default": "当季鲜切🍉冰一下更好吃"};
 
 var copyProducts=[];
 var allProductsData=[];
@@ -880,7 +870,6 @@ function filterCopyProducts(){
   el.innerHTML=html;
 }
 
-
 function toggleCopyProduct(cb,name){
   if(cb.checked){copyProducts=[name];renderCopyProductSelector();}
   else{copyProducts=[];}
@@ -888,316 +877,20 @@ function toggleCopyProduct(cb,name){
 }
 
 // ─── 花字引擎 ───
-function pickHuaZi(poolKey,storageKey,avoidCount){
-  var pool=HUA_ZI_POOLS[poolKey]||[];
-  if(!pool.length)return '';
-  var used=[];
-  try{used=JSON.parse(localStorage.getItem(storageKey)||'[]');}catch(e){}
-  var candidates=[];
-  for(var i=0;i<pool.length;i++){if(used.indexOf(i)<0)candidates.push(i);}
-  if(!candidates.length){candidates=[];for(var j=0;j<pool.length;j++)candidates.push(j);}
-  var pick=candidates[Math.floor(Math.random()*candidates.length)];
-  used.push(pick);
-  while(used.length>avoidCount)used.shift();
-  localStorage.setItem(storageKey,JSON.stringify(used));
-  return pool[pick];
-}
-
-function pickCTA(dayKey,storageKey){
-  var pool=CTA_POOLS[dayKey]||CTA_POOLS['thu'];
-  var used=[];
-  try{used=JSON.parse(localStorage.getItem(storageKey)||'[]');}catch(e){}
-  var candidates=[];
-  for(var i=0;i<pool.length;i++){if(used.indexOf(i)<0)candidates.push(i);}
-  if(!candidates.length){for(var j=0;j<pool.length;j++)candidates.push(j);}
-  var pick=candidates[Math.floor(Math.random()*candidates.length)];
-  used.push(pick);
-  while(used.length>3)used.shift();
-  localStorage.setItem(storageKey,JSON.stringify(used));
-  return pool[pick];
-}
 
 // ─── 品类卖点 ───
-function getSellingPoint(productName){
-  if(!productName)return PRODUCT_SELLING['default'];
-  for(var k in PRODUCT_SELLING){if(k==='default')continue;if(productName.indexOf(k)>=0)return PRODUCT_SELLING[k];}
-  return PRODUCT_SELLING['default'];
-}
 
 // ─── 行处理（≤22字，emoji行尾）───
-function wrapLine(text){
-  if(!text)return '';
-  if(text.length<=22)return text;
-  var result=[];
-  var current='';
-  for(var i=0;i<text.length;i++){
-    current+=text[i];
-    if(current.length>=22||'，。！？、｜'.indexOf(text[i])>=0){
-      if(current.trim())result.push(current.trim());
-      current='';
-    }
-  }
-  if(current.trim())result.push(current.trim());
-  if(!result.length)result=[text];
-  return result;
-}
-
-function eji(line){
-  if(!line||!line.trim())return line;
-  if(line.charAt(0)==='#'||line.indexOf('http')===0||line.indexOf('//')===0)return line;
-  if(/[\u{1F300}-\u{1FAFF}]/u.test(line))return line;
-  // Contextual emoji based on content
-  if(/外卖|配送|到家|下单|直达/.test(line))return line+'🛵';
-  if(/冰|冻|凉|冷|降温/.test(line))return line+'🧊';
-  if(/热|高温|暑|晒|闷/.test(line))return line+'🔥';
-  if(/甜|蜜|好吃|美味/.test(line))return line+'😋';
-  if(/健康|维C|营养|养生/.test(line))return line+'💪';
-  if(/懒|轻松|方便|省/.test(line))return line+'😎';
-  if(/福利|惊喜|会员|特权|彩蛋/.test(line))return line+'🎁';
-  if(/价格|¥|元|钱|省/.test(line))return line+'💰';
-  if(/快|秒|速|限时|倒计时/.test(line))return line+'⚡';
-  if(/周末|宅|追剧|聚会|沙发/.test(line))return line+'🎬';
-  return line+'🍉';
-}
-
-function linesToCopy(lines){
-  var out=[];
-  lines.forEach(function(l){
-    if(!l||!l.trim()){out.push('');return;}
-    var parts=wrapLine(l);
-    if(typeof parts==='string'){out.push(eji(parts));}
-    else{parts.forEach(function(p){out.push(eji(p));});}
-  });
-  return out.join('\n').replace(/\n\n\n+/g,'\n\n');
-}
 
 // ─── 缩短产品名 ───
-function shortName(name){
-  return name.replace(/【[^】]*】/g,'').replace(/[（(].*[）)]/g,'').trim()||name;
-}
-
-// ═══════ 三日文案生成器 ═══════
 
 // ─── 周四 · 三版差异化 ───
-function genThuV1(product,short,dir,hotspot){
-  var hz=pickHuaZi('thu','thuHuaUsed',3)+short;
-  var sellPoint=getSellingPoint(product);
-  var selling=wrapLine(sellPoint);
-  var cta=pickCTA('thu','ctaUsed_thu');
-  var price=formatPrice(CopyConfig.customPrice,product);
-  var dirHook=getDirectionHook(dir,product,short,'thu');
-  var lines=[hz,'','🔥 '+product,price,''];
-  if(typeof selling==='string')lines.push(selling);else selling.forEach(function(s){lines.push(s);});
-  if(dirHook)lines.push(dirHook);
-  lines.push('');lines.push(cta);lines.push('');lines.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');lines.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
-  return linesToCopy(lines);
-}
-
-function genThuV2(product,short,dir,hotspot){
-  var hz='⚡限时特价｜'+short;
-  var cta='💨 30分钟冰鲜到家🍉';
-  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
-  return linesToCopy(lines);
-}
-
-function genThuV3(product,short,dir,hotspot){
-  var hz=pickHuaZi('thu','thuHuaUsed2',2)+short;
-  var cta='🧊 冰镇鲜切🍉外卖直达';
-  var lines=[hz,'','📦 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
-  return linesToCopy(lines);
-}
 
 // ─── 周五 · 三版差异化 ───
-function genFriV1(product,short,dir,hotspot){
-  var hz='😆周五福来day🍉'+short+'已就位';
-  var cta=pickCTA('fri','ctaUsed_fri');
-  var lines=[hz,'','追剧·宅家·聚会🥳',short+'清爽不脏手🍴','边看边叉着吃',cta,'','👆小程序下单直送到手👇'];
-  return linesToCopy(lines);
-}
-
-function genFriV2(product,short,dir,hotspot){
-  var hz='周末宅家公式🏠：沙发🛋️+'+short;
-  var cta='🛋️ 周末快乐入口🍉';
-  var lines=[hz,'','空调房里一口冰果切🍃','谁还要出门呀',cta,'','👆小程序下单直送到手👇'];
-  return linesToCopy(lines);
-}
-
-function genFriV3(product,short,dir,hotspot){
-  var hz='🎉周五解放日🍉'+short;
-  var cta=pickCTA('fri','ctaUsed_fri2');
-  var lines=[hz,'','朋友局上少了它就离谱😤','分享装一人一口刚好🍴',cta,'','👆小程序下单直送到手👇'];
-  return linesToCopy(lines);
-}
 
 // ─── 周二 · 三版差异化 ───
-function genTueV1(product,short,dir,hotspot){
-  var hz=pickHuaZi('tue','tueHuaUsed',6)+short;
-  var cta=pickCTA('tue','ctaUsed_tue');
-  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
-  return linesToCopy(lines);
-}
-
-function genTueV2(product,short,dir,hotspot){
-  var hz='🤔今日诊断🍉你缺一份'+short;
-  var cta='💆 犒赏周二的自己🍉';
-  var lines=[hz,'','📋处方：冰镇'+short+'×1','即刻服用⚡',getSellingPoint(product),'',cta,''];
-  return linesToCopy(lines);
-}
-
-function genTueV3(product,short,dir,hotspot){
-  var hz='一周过半⏳该奖励自己了🥝';
-  var cta=pickCTA('tue','ctaUsed_tue2');
-  var lines=[hz,'','🔥 '+product,formatPrice(CopyConfig.customPrice,product),'',getSellingPoint(product),'',cta,''];
-  return linesToCopy(lines);
-}
 
 // ─── 周六 · 三版差异化 ───
-function genSatV1(product,short,dir,hotspot){
-  var hz=pickHuaZi('sat','satHuaUsed',3)+short;
-  var cta=pickCTA('sat','ctaUsed_sat');
-  var lines=[hz,'','这款宝藏果切我不允许你不知道😤',getSellingPoint(product),cta,'','👉小程序下单👇'];
-  return linesToCopy(lines);
-}
-
-function genSatV2(product,short,dir,hotspot){
-  var hz='⋆⁺₊☾ 周六限定🍉'+short;
-  var cta='💫 周末小惊喜在这里✨';
-  var lines=[hz,'','吃过一次就回不去了🤤',getSellingPoint(product),cta,'','👉小程序下单👇'];
-  return linesToCopy(lines);
-}
-
-function genSatV3(product,short,dir,hotspot){
-  var hz='周末就是要🍉'+short+'自由';
-  var cta=pickCTA('sat','ctaUsed_sat2');
-  var lines=[hz,'','周末的快乐就是它给的🥰',getSellingPoint(product),cta,'','👉小程序下单👇'];
-  return linesToCopy(lines);
-}
-
-// ─── 主生成函数 ───
-
-// ─── 最终注入方向话术+热点 ───
-// Inject方向+热点，n=1/2/3对应版本号
-function injectExtras(text,dir,hotspot,n){
-  var extra=[];
-  if(dir&&dir!=='auto'){
-    var dh=getDirectionHookPlain(dir,n);
-    if(dh)extra.push(dh);
-  }
-  // 热点：仅在auto或hotspot方向时注入
-  if(hotspot&&(dir==='auto'||dir==='hotspot')){
-    var hl=makeHotspotLine(hotspot);
-    if(hl)extra.push(hl);
-  }
-  if(extra.length===0)return text;
-  var lines=text.split('\n');
-  var insertAt=-1;
-  for(var i=lines.length-1;i>=0;i--){
-    if(lines[i].indexOf('🟡')>=0||lines[i].indexOf('🔵')>=0||lines[i].indexOf('#小程序')>=0){
-      insertAt=i;break;
-    }
-  }
-  if(insertAt>0){
-    var before=lines.slice(0,insertAt);
-    var after=lines.slice(insertAt);
-    return before.concat([''],extra,['']).concat(after).join('\n');
-  }
-  return text;
-}
-
-function makeHotspotLine(raw){
-  if(!raw)return '';
-  // 去掉分类前缀，只取纯关键词
-  var kw=raw.replace(/^(果切相关|娱乐|美食|生活|品牌|节日|综合|科技|体育|财经|社会|\\s)*/,'').trim().substring(0,15);
-  if(!kw||kw.length<2)return '';
-  // 天气关键词→自然融入
-  var weatherWords=['高温','暴雨','台风','降温','热','冷','闷热','潮湿','干燥','防晒','中暑','三伏','立秋','处暑','入伏'];
-  for(var i=0;i<weatherWords.length;i++){
-    if(kw.indexOf(weatherWords[i])>=0){
-      return '🌡️'+kw+'🍉冰镇果切续命中';
-    }
-  }
-  // 水果/食物关键词
-  if(/[瓜果莓桃梨橘橙柚柿葡榴芒椰]/.test(kw)){
-    return '🍉'+kw+'的季节来啦';
-  }
-  // 其他：用轻松语气融入
-  if(kw.length>=3){
-    return '🍉今日份 '+kw;
-  }
-  return '';
-}
-function getDirectionHookPlain(dir, variant){
-  var hooks={
-    'scene':[
-      '下午茶时间到🕒办公室人手一盒',
-      '追剧搭档已就位🍿就差这一盒',
-      '聚会桌上少了它就离谱😤',
-    ],
-    'emotion':[
-      '心情不好？来一份甜甜的🥰',
-      '工作累了😮‍💨犒赏自己一下',
-      '今天不开心？果切治愈你🍉',
-    ],
-    'data':[
-      '回购率超高📊大家嘴巴很诚实',
-      '群里都在回购的一款🤤',
-      '销量说明一切🔥不解释',
-    ],
-    'health':[
-      '每天维C补给💪比喝饮料健康',
-      '一份满足一天水果摄入🍃',
-      '比奶茶健康多了🥤维C满满',
-    ],
-    'habit':[
-      '每天下午的快乐源泉🍉',
-      '一周的仪式感从今天开始✨',
-      '午后果切时间到⏰已成习惯',
-    ],
-    'lazy':[
-      '不用洗不用切🍉打开就吃',
-      '懒人福音😴冰箱拿出来就吃',
-      '切好的水果🍉直接上嘴',
-    ],
-    'seasonal':[
-      '当季限定⏳错过等明年',
-      '这个季节的甜🍈都在这一盒里',
-      '时令鲜果🍑正当季最好吃',
-    ],
-    'surprise':[
-      '今天有个隐藏福利🎁',
-      '打开有惊喜✨这盒不一般',
-      '偷偷告诉你🤫今天有彩蛋',
-    ],
-    'hotspot':[
-      '全网都在吃的同款🔥',
-      '最近刷屏的一款🍉忍不住下单',
-      '抖音上都在吃🤤跟风了',
-    ],
-    'social':[
-      '@你那个爱吃水果的朋友🥝一起拼',
-      '拼单更划算👥叫上同事一起',
-      '分享装🍱一人一口刚好',
-    ],
-    'contrast':[
-      '比一杯奶茶还便宜🥤不香吗',
-      '外面X元这里Y元💰香太多了',
-      '同样的钱💸这里多一倍分量',
-    ],
-    'member':[
-      '会员价到手👑省下的都是赚的',
-      '今日会员专享🎫不买就亏了',
-      '会员特权✨今日份福利请查收',
-    ],
-    'direct':[
-      '直接说重点👇今日特价',
-      '不绕弯子⚡开门见山',
-      '一句话总结📢今天这个必看',
-    ],
-  };
-  var pool=hooks[dir]||hooks['scene'];
-  var idx=Math.min(variant||1,pool.length)-1;
-  return pool[idx]||pool[0];
-}
 
 // ─── 价格格式化 ───
 function formatPrice(customPrice,productName){
@@ -1213,28 +906,6 @@ function formatPrice(customPrice,productName){
     }
   }
   return '📱 各区域以平台实际价格为准';
-}
-
-// ─── 方向话术生成 ───
-function getDirectionHook(dir,product,short,dayKey){
-  if(dir==='auto')return '';
-  var hooks={
-    'habit':['每天下午的快乐源泉🍉','一周的仪式感从今天开始✨'],
-    'emotion':['工作日的救命稻草🍉','心情不好？来一份甜甜的'],
-    'seasonal':['当季限定⏳错过等明年','这一季的甜🍈都在这一盒里'],
-    'scene':['下午茶时间到🕒','办公室人手一盒的快乐🥰'],
-    'data':['回购率超高的一款📊','大家嘴巴很诚实🤤回购说明一切'],
-    'social':['和同事拼单更划算👥','@你那个爱吃水果的朋友🥝'],
-    'surprise':['今天有个隐藏福利🎁','解锁一份今日惊喜✨'],
-    'hotspot':['全网都在吃的同款🔥','刷到就忍不住下单了🤤'],
-    'health':['每天一份维C补给💪','比喝饮料健康多了🍃'],
-    'contrast':['比一杯奶茶还便宜🥤','外面X元这里Y元💰不香吗'],
-    'lazy':['不用洗不用切🍉打开就吃','懒人福音😴冰箱拿出来就吃'],
-    'member':['今日会员专享🎫','会员价到手👑省下的都是赚的'],
-    'direct':['直接说重点👇','不绕弯子⚡今日特价'],
-  };
-  var pool=hooks[dir]||hooks['scene'];
-  return pool[Math.floor(Math.random()*pool.length)];
 }
 
 // 存储当前3版文案纯文本
@@ -1262,33 +933,6 @@ function copyVersion(idx){
   // text is already plain from versions[] array — just copy it
   navigator.clipboard.writeText(text).then(function(){toast('📋 版本'+idx+'已复制');}).catch(function(){toast('复制失败');});
 }
-
-// ─── Strip ALL link fragments (gen functions have no more links, but cleanup debris) ───
-function stripLinkFragments(text){
-  var lines=text.split('\n');
-  var out=[];
-  lines.forEach(function(l){
-    var t=l.trim();
-    if(!t){out.push(l);return;}
-    // Skip lines that are link-related
-    if(/^美团[:：]/.test(t))return;
-    if(/^饿了么/.test(t))return;
-    if(/^(🟡美团|🔵饿了么)/.test(t))return;
-    if(/^(#小程序|👆小程序)/.test(t))return;
-    // Skip URL fragments
-    if(/^[a-zA-Z0-9]{4,}🍉$/.test(t))return;
-    if(/^[a-z]{2,}\.[a-z]{2,}\//.test(t))return;
-    if(/^\/[a-zA-Z0-9]{3,}🍉$/.test(t))return;
-    if(/^https?:\/\//.test(t))return;
-    // Skip URL path fragments (like le.me/wow/alsc/mod)
-    if(/^[a-z]+\.[a-z]+\/[a-z]+/.test(t)&&t.indexOf(' ')=== -1)return;
-    out.push(l);
-  });
-  return out.join('\n');
-}
-
-
-
 
 function generateCopy(){
   generateCopyAI();
@@ -1755,7 +1399,7 @@ function generateCopyAI(){
 }
 
 // ─── Init ───
-function initCopyPage(){loadCopySeasonWeather();initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyHotspots();loadCopyProducts();renderCopyHistory();}
+function initCopyPage(){loadCopySeasonWeather();initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyProducts();renderCopyHistory();}
 
 // ═══════ PROMPT ═══════
 var promptType='cover';
@@ -2070,8 +1714,6 @@ function extractRecipe(){
 }
 
 var recipeTypeMap={cover:'小程序封面',community:'社群群发'};
-
-
 
 // ═══════ COMMUNITY ═══════
 function openReport(type,file){
@@ -2635,7 +2277,6 @@ function rerenderCardLibKeepFilter(){
 
 // Override getCardCats to merge custom
 
-
 // Initialize
 loadCustomCards();
 
@@ -2879,7 +2520,6 @@ function cloudUnionValue(k,localStr,remoteStr){
   return null;
 }
 // ═══ /CLOUD UNION PURE ═══
-
 
 var SCHED_KEY='qg_schedule_overrides';
 function schedOv(){try{return JSON.parse(localStorage.getItem(SCHED_KEY)||'{}')||{};}catch(e){return {};}}
