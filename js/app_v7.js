@@ -3,7 +3,7 @@ var productData=null;
 var sentimentFilter='all';
 var currentNoteDate=null;
 
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:'',freeMode:'0',manualWeather:''};
 
 // ═══════════════════════════════════════════════════════════════════════════
 // 📅 文案创作 · 今日节日数据（仅供「📅 推送日」今日信息 + AI 节日增强 Prompt 使用）
@@ -685,7 +685,7 @@ toast('✅ '+items.length+'个产品 | '+priceSamples);
 }
 
 // ═══════ COPY ═══════
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:'',freeMode:'0',manualWeather:''};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
 function saveCopyConfig(){localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}
 function setCopyConfig(key,val){
@@ -698,7 +698,7 @@ function setCopyConfig(key,val){
   if(key==='aiMode'){updateGenBtnLabel();}
 }
 function updateGenBtnLabel(){}
-function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}(function(){var sel=document.getElementById('copyDirection');if(!sel)return;var v=CopyConfig.direction||'auto';if(!sel.querySelector('option[value="'+v+'"]')){v='auto';CopyConfig.direction='auto';try{localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}catch(e){}}sel.value=v;})();updateGenBtnLabel();}
+function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}(function(){var sel=document.getElementById('copyDirection');if(!sel)return;var v=CopyConfig.direction||'auto';if(!sel.querySelector('option[value="'+v+'"]')){v='auto';CopyConfig.direction='auto';try{localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}catch(e){}}sel.value=v;})();updateGenBtnLabel();var _fm=document.getElementById('modeStd'),_fz=document.getElementById('modeFree');if(_fm&&_fz){var _isf=String(CopyConfig.freeMode)==='1';_fm.className='btn '+(_isf?'btn-ghost':'btn-primary');_fz.className='btn '+(_isf?'btn-primary':'btn-ghost');}var _cf=document.getElementById('copyFeel');if(_cf&&! _cf.value)_cf.value=CopyConfig.manualWeather||'';}
 
 // ═══════════════════════════════════════════
 // SECTION LUNAR: 农历 / 节气引擎（文案创作「📅 推送日」卡片显示用）
@@ -943,10 +943,10 @@ function generateCopy(){
 }
 
 // ─── History ───
-function saveCopyHistory(product,versions){
+function saveCopyHistory(product,versions,meta){
   var history=[];
   try{history=JSON.parse(localStorage.getItem('qg_copy_history')||'[]');}catch(e){}
-  history.unshift({time:new Date().toISOString(),product:product||(CopyConfig.customDay==='festival'?(CopyConfig.festivalName||'节气'):''),v1:versions[0],v2:versions[1],v3:versions[2]});
+  history.unshift({time:new Date().toISOString(),product:product||(CopyConfig.customDay==='festival'?(CopyConfig.festivalName||'节气'):''),v1:versions[0],v2:versions[1],v3:versions[2],direction:CopyConfig.direction||'auto',styles:(meta||[]).map(function(m){return m&&m.style?m.style.name:''})});
   if(history.length>20)history=history.slice(0,20);
   localStorage.setItem('qg_copy_history',JSON.stringify(history));
   renderCopyHistory();
@@ -1022,8 +1022,56 @@ var SEASON_TABLE = {
 var WEEKDAY_CN = ['周日','周一','周二','周三','周四','周五','周六'];
 var copySeasonTempHint = '';
 
-function getSeasonInfo(d){ d = d || new Date(); return SEASON_TABLE[d.getMonth()+1] || {name:'',sub:'',tip:''}; }
-function isSummerNow(d){ d = d || new Date(); var m = d.getMonth()+1; return m >= 6 && m <= 8; }
+// ── 季节判定（2026-11-20 改：节气优先，不再按月份硬切）──
+// 旧版 11 月=「秋末」，但立冬(11/07)后用户体感已是冬天 → 文案季节错位。
+// 现规则：立春/立夏/立秋/立冬 四分，取当年 SOLAR_TERMS；无表年份回退月份。
+var SEASON_CN = {spring:'春', summer:'夏', autumn:'秋', winter:'冬'};
+var SEASON_TIPS = {
+  spring:'春困易乏、气温回升，适合讲清爽开胃、解春困',
+  summer:'高温闷热，适合讲冰镇解暑、清凉',
+  autumn:'秋燥明显、昼夜温差大，适合讲润燥补水、当季清甜',
+  winter:'天寒干燥、室内暖气干，适合讲润燥补水、维C补给、暖意'
+};
+var SEASON_SUB_BY_TERM = {
+  winter:[['立冬','初冬'],['大雪','隆冬']],
+  autumn:[['立秋','初秋'],['秋分','深秋']],
+  spring:[['立春','早春'],['清明','暮春']],
+  summer:[['立夏','初夏'],['小暑','盛夏']]
+};
+function termMMDD(d, name){
+  try{
+    var t = SOLAR_TERMS[d.getFullYear()];
+    if(!t || !t[name]) return null;
+    var a = String(t[name]).split('-');
+    return parseInt(a[0],10)*100 + parseInt(a[1],10);
+  }catch(e){ return null; }
+}
+function getSeasonKeyByTerm(d){
+  d = d || new Date();
+  var cur = (d.getMonth()+1)*100 + d.getDate();
+  var lc = termMMDD(d,'立春'), lx = termMMDD(d,'立夏'), lq = termMMDD(d,'立秋'), ld = termMMDD(d,'立冬');
+  if(lc===null || lx===null || lq===null || ld===null) return null;
+  if(cur>=ld || cur<lc) return 'winter';
+  if(cur>=lx && cur<lq) return 'summer';
+  if(cur>=lq && cur<ld) return 'autumn';
+  if(cur>=lc && cur<lx) return 'spring';
+  return null;
+}
+function getSeasonSubByTerm(d, key){
+  d = d || new Date();
+  var cur = (d.getMonth()+1)*100 + d.getDate();
+  var seg = SEASON_SUB_BY_TERM[key] || [], sub = '';
+  for(var i=0;i<seg.length;i++){ var v = termMMDD(d, seg[i][0]); if(v!==null && cur>=v) sub = seg[i][1]; }
+  return sub;
+}
+function getSeasonInfo(d){
+  d = d || new Date();
+  var m = SEASON_TABLE[d.getMonth()+1] || {name:'',sub:'',tip:''};
+  var k = getSeasonKeyByTerm(d);
+  if(!k) return m;
+  return {name:SEASON_CN[k], sub:getSeasonSubByTerm(d,k) || m.sub, tip:SEASON_TIPS[k] || m.tip};
+}
+function isSummerNow(d){ return getSeasonKey(d)==='summer'; }
 function getCopyFestToday(d){
   var f = '';
   try {
@@ -1045,22 +1093,46 @@ function getSeasonContextText(d){
   if (fest) parts.push('节日：'+fest);
   parts.push('季节：'+s.sub+'·'+s.name+'（'+s.tip+'）');
   if (copySeasonTempHint) parts.push(copySeasonTempHint);
+  if (typeof CopyConfig !== 'undefined' && CopyConfig && CopyConfig.manualWeather) parts.push('今日体感：' + CopyConfig.manualWeather);
   return parts.join('｜');
 }
+var COPY_BAN_NONSUMMER = '三伏天／高温／解暑／消暑／炎炎夏日／凉爽一夏／冰爽一夏／盛夏／35℃／冰镇／冰爽／冰凉／冷藏／冰一下／空调／降温／热到／冒热气／🧊';
+var COPY_BAN_SUMMER = '秋风／秋燥／凉秋／暖气／围炉／冬日／寒冬／初雪／雪天／毛衣／羽绒／霜降／寒露／立冬';
+var SEASON_REPLACE_WORDS = {
+  winter:'清甜／多汁／润／维C／果香／现切／暖房／屋里／窗外／配一杯热饮之后',
+  autumn:'清甜／当季／润燥／鲜切／果香／暖阳／早晚微凉',
+  spring:'清甜／鲜切／清爽开胃／解春困／果香',
+  summer:'冰镇／清凉／解暑／多汁（夏季可用）'
+};
+// 2026-11-20 修正：旧版在非夏季写「要把产品写得冰爽，只能用冰镇／冷藏／冰一下」
+// → 等于明着许可模型在冬天写冰镇。现改为硬禁词表 + 当季替代词库。
 function getSeasonWordRule(d){
   d = d || new Date();
-  if (isSummerNow(d)) {
-    return '【时令铁律】当前是夏季，可用高温／冰镇／解暑类词；但所有气候、穿着、场景描写必须严格符合上面【当下时令】，禁止写其它季节。';
+  var k = getSeasonKey(d);
+  if (k === 'summer') {
+    return '【时令铁律】当前是夏季，可用冰镇／解暑／清凉类词。以下词禁止出现：' + COPY_BAN_SUMMER + '。所有气候、穿着、场景描写必须符合盛夏实况。';
   }
-  return '【时令铁律】当前不是夏季：严禁出现「三伏天／高温／解暑／消暑／炎炎夏日／凉爽一夏／冰爽一夏／盛夏／35℃」等夏季专属词，严禁写"夏天"。要把产品写得冰爽，只能用「冰镇／冷藏／冰一下」这类与气温无关的口感词（例：冰镇一下更好吃）。所有季节、气候、穿着、场景描写必须严格符合上面【当下时令】。';
+  var s = getSeasonInfo(d);
+  return '【时令铁律】当前不是夏季（' + s.sub + '·' + s.name + '）。以下词一律禁止出现在文案任何位置（花字、正文、结尾都不行）：' + COPY_BAN_NONSUMMER + '。'
+    + '产品不要再写与"冰"相关的口感，改用这些词：' + (SEASON_REPLACE_WORDS[k] || '') + '。'
+    + '所有气候、穿着、场景、道具描写必须符合' + s.sub + '实况；不要写夏天，不要写空调。'
+    + '不要出现任何自我纠正或解释性文字（如“打错”“更正”“换个说法”“其实应该是”），直接写最终版本；也不要用🧊这类冰感emoji。';
 }
 // ── 通用季节层（2026-10-08）：季节不再是某个推送日的专属，所有推送日 / 所有方向都生效 ──
 var SEASON_NAME_CN = {spring:'春季', summer:'夏季', autumn:'秋季', winter:'冬季'};
 var SEASON_HUA = {
-  spring:['🌸春天的甜，先尝一口｜','🌱春日限定｜','🌿春困醒一醒，来一盒｜','☀️春天就要清爽一点点｜','🌷换季的第一口鲜｜','🍃春日里的小清甜'],
-  summer:['🌡️热到不想动？试试','🧊打败高温的快乐源泉｜','💦高温天的清爽选择｜','☀️35°C+的夏天，你需要','🍃三伏天的续命果切｜','📋今日处方：冰镇鲜切×1 即刻服用'],
-  autumn:['🍂入秋的第一口甜｜','🌰秋日限定｜','🍁秋风起，来一盒甜的｜','🌾秋燥时节，润一润｜','🧣早晚转凉，甜度在线｜','📋今日处方：当季鲜切×1 即刻服用'],
-  winter:['❄️暖气房里来一盒｜','🧣冬天也要补维C｜','🥶外面越冷越想吃点甜的｜','🔥冬日里的一口清甜｜','☕配一杯热饮刚刚好｜','📋今日处方：暖房鲜切×1 即刻服用']
+  spring:['🌸春天的甜，先尝一口｜','🌱春日限定｜','🌿春困醒一醒，来一盒｜','☀️春天就要清爽一点点｜','🌷换季的第一口鲜｜','🍃春日里的小清甜',
+          '🌼天气一回暖，嘴就馋｜','🌤换季脸干，先润一口｜','🧺踏青顺手带一盒｜','🐝春天该吃点甜的｜','🪴盘里绿一点，心情好一点｜','🍀清爽这件事，春天最认真｜',
+          '🌱该醒了，嘴先醒｜','🧺春游包里放一盒｜','🌸花开了，甜的也到了｜','🍓春天就是酸甜口｜'],
+  summer:['🌡️热到不想动？试试','🧊打败高温的快乐源泉｜','💦高温天的清爽选择｜','☀️35°C+的夏天，你需要','🍃三伏天的续命果切｜','📋今日处方：冰镇鲜切×1 即刻服用',
+          '🧊空调房里来一盒｜','🌴热到没胃口，就吃这个｜','💧出汗以后，甜得刚好｜','🍧冰过的果切，夏天才算完整｜','🛟夏天怎么过？一盒一盒过｜','🌊高温天的续命方案｜',
+          '🍉夏天只剩一件事：吃｜','🧊冰一下，才是夏天｜','🌞热浪里的小绿洲｜','🍑一口下去，凉快了｜'],
+  autumn:['🍂入秋的第一口甜｜','🌰秋日限定｜','🍁秋风起，来一盒甜的｜','🌾秋燥时节，润一润｜','🧣早晚转凉，甜度在线｜','📋今日处方：当季鲜切×1 即刻服用',
+          '🍊秋天就该吃点甜的｜','🌗早晚凉，中午正好吃一盒｜','🧺秋日野餐第一盒｜','🌙月亮圆了，果切也甜｜','🌾当季的甜，别错过｜','🪵秋天的果香最沉｜',
+          '🍁落叶的时候，吃口甜的｜','🌰秋天要润，也要甜｜','🧥外套穿上了，甜别忘了｜','🍇秋天的果，最浓｜'],
+  winter:['❄️暖气房里来一盒｜','🧣冬天也要补维C｜','🥶外面越冷越想吃点甜的｜','🔥冬日里的一口清甜｜','☕配一杯热饮刚刚好｜','📋今日处方：暖房鲜切×1 即刻服用',
+          '🧤手冷的时候，先吃口甜的｜','🌨外面风大，屋里甜一点｜','🛋️窝在沙发里，慢慢叉一盒｜','🍊冬日维C补给站｜','🪟窗外天灰，盘里是亮的｜','🧶围巾还没解，先吃两口｜',
+          '🍊冬天的甜，是暖的｜','🧑‍🍳现切的才算数｜','🌙天黑得早，甜得早点｜','🥝暖气太干，来点水润的｜']
 };
 var SOLAR_SEGMENT_HUA = {
   '立春':['🌱立春了，开年第一口鲜｜','🌸春天从这一盒开始｜'],
@@ -1108,9 +1180,33 @@ var SEASON_FRUIT = {
   11:['柚子','柿子','橙','冬枣','甘蔗','苹果'],
   12:['砂糖橘','橙','草莓','车厘子','甘蔗','柚子']
 };
+// 当季花字轮换：记录每季已用条目索引，相邻两轮不重复（池 12 抽 4，记最近 8）
+var SEASON_HUA_USED_KEY = 'qg_season_hua_used';
+function pickSeasonHua(key, n){
+  n = n || 4;
+  var pool = SEASON_HUA[key] || [];
+  if(!pool.length) return [];
+  var used = {}, hist = [], i, j, t;
+  try{ used = JSON.parse(localStorage.getItem(SEASON_HUA_USED_KEY)||'{}') || {}; }catch(e){}
+  hist = used[key] || [];
+  var avoid = Math.max(pool.length - n, 0);
+  var cand = [];
+  for(i=0;i<pool.length;i++){ if(hist.indexOf(i)<0) cand.push(i); }
+  if(cand.length < n){ cand = []; for(i=0;i<pool.length;i++) cand.push(i); hist = []; }
+  var a = cand.slice();
+  for(i=a.length-1;i>0;i--){ j = Math.floor(Math.random()*(i+1)); t = a[i]; a[i] = a[j]; a[j] = t; }
+  var picked = a.slice(0, Math.min(n, a.length)).sort(function(x,y){ return x-y; });
+  var newHist = hist.concat(picked);
+  while(newHist.length > avoid) newHist.shift();
+  used[key] = newHist;
+  try{ localStorage.setItem(SEASON_HUA_USED_KEY, JSON.stringify(used)); }catch(e){}
+  return picked.map(function(idx){ return pool[idx]; });
+}
 function joinHua(list){ var out = [], i; for (i = 0; i < list.length; i++) { out.push(String(list[i]).replace(/｜\s*$/, "")); } return out.join("｜"); }
 function getSeasonKey(d){
   d = d || new Date();
+  var k = getSeasonKeyByTerm(d);
+  if(k) return k;
   var m = d.getMonth() + 1;
   if (m >= 3 && m <= 5) return 'spring';
   if (m >= 6 && m <= 8) return 'summer';
@@ -1135,16 +1231,17 @@ function isProductInSeason(product, d){
 function filterSeasonCards(list, d){
   d = d || new Date();
   if (isSummerNow(d)) return list;
-  var re = /夏|𝑠𝑢𝑚𝑚𝑒𝑟|Summer|SUMMER|summer|雪糕|海邊|海边|Soda|冰镇/;
+  var re = /夏|𝑠𝑢𝑚𝑚𝑒𝑟|Summer|SUMMER|summer|雪糕|海邊|海边|Soda|冰镇|冰爽|冰凉|冷藏|空调|解暑|消暑|降温|热到|冒热气|三伏|高温/;
   var out = [], i;
   for (i = 0; i < list.length; i++) { if (!re.test(list[i])) out.push(list[i]); }
   return out.length ? out : list;
 }
-function getSeasonHuaPrompt(d, product){
+function getSeasonHuaPrompt(d, product, batch){
   d = d || new Date();
   var key = getSeasonKey(d);
+  var list = (batch && batch.length) ? batch : SEASON_HUA[key];
   var out = '';
-  out += '【当季花字（' + SEASON_NAME_CN[key] + ' · 任何推送日都优先使用；本次至少用 1 条放在花字行，可自由创作变体）】\n' + joinHua(SEASON_HUA[key]) + '\n\n';
+  out += '【当季花字（' + SEASON_NAME_CN[key] + ' · 本次只从下面这 ' + list.length + ' 条里挑 1 条放花字行，可换成本次产品的说法，但别另造完全不同的风格）】\n' + joinHua(list) + '\n\n';
   var term = ''; try { term = getSolarTermText(d); } catch (e) {}
   if (term && SOLAR_SEGMENT_HUA[term]) {
     out += '【节气时令（今天=' + term + '）】这一条最贴今天，优先用：' + joinHua(SOLAR_SEGMENT_HUA[term]) + '\n\n';
@@ -1189,14 +1286,13 @@ function loadCopySeasonWeather(){
 
 // ── 方向语义化：中文标签 + 子场景池（每次生成随机抽 3 条不同子场景分配给三版，治"每版雷同"）──
 var DIRECTION_SPEC = {
-  'emotion':{label:'情感缺口',pool:['加班到很晚犒劳自己','被工作气到想被治愈','周一综合症','心情低落想被安慰','熬夜赶工的深夜','带娃到崩溃的午后']},
-  'seasonal':{label:'时令稀缺',pool:['当季最后一波','刚上市的头茬','再过两周就下架','只有这段时间才有的甜','换季时节的当季果']},
-  'scene':{label:'场景共鸣',pool:['办公室下午茶','加班夜宵','追剧零食','周末野餐','健身房练完','通勤地铁上','打游戏上头','麻将桌上','课间十分钟','活动前垫肚子','熬夜写方案','接娃放学的路上']},
-  'social':{label:'社交裂变',pool:['和同事拼单','@上爱吃水果的朋友','办公室拼单团','家庭分享装','闺蜜下午茶拼单']},
-  'surprise':{label:'惊喜彩蛋',pool:['今天多送一份','随机隐藏款','今天有彩蛋','限时小惊喜']},
-  'health':{label:'健康密码',pool:['维C补给','比奶茶健康','健身后的补给','减脂期的快乐']},
-  'contrast':{label:'对比锚定',pool:['比奶茶还便宜','外面买X元这里Y元','同样的钱多一倍分量']},
-  'lazy':{label:'懒人救星',pool:['不用洗不用切','打开就吃','懒人下午茶','不用洗碗']},
+  'emotion':{label:'情感缺口',pool:['加班到很晚犒劳自己','被工作气到想被治愈','周一综合症','心情低落想被安慰','熬夜赶工的深夜','带娃到崩溃的午后','被甲方改了八版之后','地铁上挤了四十分钟','开完一场没用的会','早上起不来被闹钟连环打','连着上了六天班','一个人吃饭有点冷清']},
+  'scene':{label:'场景共鸣',pool:['办公室下午茶','加班夜宵','追剧零食','周末野餐','健身房练完','通勤地铁上','打游戏上头','麻将桌上','课间十分钟','活动前垫肚子','熬夜写方案','接娃放学的路上','窝在被子里看剧','逛完超市回家','下午三点犯困','洗澡后瘫在沙发上']},
+  'social':{label:'社交裂变',pool:['和同事拼单','@上爱吃水果的朋友','办公室拼单团','家庭分享装','闺蜜下午茶拼单','宿舍分着吃','给爸妈带一盒','开会前顺手买一份','朋友来家里坐坐','两个人分一盒刚好','发群里问一句谁要','分给邻座一半']},
+  'surprise':{label:'惊喜彩蛋',pool:['今天多送一份','随机隐藏款','今天有彩蛋','限时小惊喜','开盒有惊喜','今天多塞一样','运气好的那一份']},
+  'health':{label:'健康密码',pool:['维C补给','比奶茶健康','健身后的补给','减脂期的快乐','控糖也能吃的水果','夜宵换成这个','比喝饮料实在','下午不想喝第三杯咖啡','嘴馋但不想吃零食','补点水果踏实']},
+  'contrast':{label:'对比锚定',pool:['比奶茶还便宜','外面买贵一截','同样的钱多一倍分量','一杯奶茶的钱','比零食扛饿','比泡面清爽','比点外卖快','比饮料解腻']},
+  'lazy':{label:'懒人救星',pool:['不用洗不用切','打开就吃','懒人下午茶','不用洗碗','叉子一插就行','懒得动就吃这个','手都不想洗','连刀都不用拿']},
   'member':{label:'会员权益',pool:['会员价到手','会员日专享']},
   'direct':{label:'直给重点',pool:['今天特价','直接说重点']},
   'habit':{label:'习惯绑定',pool:['每天下午的固定快乐','午后果切时间']},
@@ -1220,185 +1316,596 @@ function getDirectionPrompt(dir, day){
   return s.label+' —— 三版分别围绕以下三个完全不同的具体场景/角度写，严禁三版重复同一个场景或用同一句话开头：① '+p[0]+' ② '+p[1]+' ③ '+p[2];
 }
 
-function generateCopyAI(){
-  var key=getApiKey();
-  if(!key){toast('⚠️ 请先设置 API Key');openApiKeyModal();return;}
-  showCopyLoading();
-  document.getElementById('btnGenerateCopy').disabled=true;
-  document.getElementById('btnGenerateCopy').textContent='⏳ 生成中...';
-  
-  var now=new Date();
-  var day=CopyConfig.customDay?parseInt(CopyConfig.customDay):now.getDay();
-  var dayNames={2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·外卖双平台'};
-  var dayName=dayNames[day]||'今日';
-  
-  var product=(CopyConfig.customDay==='festival')?'':getCopyProduct();
-  var direction=CopyConfig.direction||'auto';
-  var priceRule='';
-  if(CopyConfig.priceMode==='regional'){
-    priceRule='不要写具体价格！必须写「各区域以平台实际价格为准」';
-  }else{
-    var p;
-    if(CopyConfig.customPrice){p=CopyConfig.customPrice;}
-    else if(allProductsData.length>0){
-      var found=allProductsData.find(function(x){return x.name===product;});
-      if(found&&found.price)p=found.price;
-    }
-    priceRule=p?'必须包含价格行：💰 ¥'+p:'';
+// ═══════════════════════════════════════════════════════════════════
+// 文案引擎 v2（2026-11-20）
+// 病根：一次请求出 3 版 → 三版骨架同构（实测行数 8/8/8、平均行长 12.4/13.2/12.6、
+// 8/8 行全带 emoji、6 次复用库内花字），用户观感"同一人填同一张表"。
+// 改法：3 次独立调用，每版固定「不同格式槽位 + 不同风格卡 + 不同 temperature」，
+// 生成后用量化指标（行长节奏差）校验结构差异，最像的那版自动重写一次。
+// ═══════════════════════════════════════════════════════════════════
+var COPY_STYLES = [
+  {id:'boss',   name:'店长直给', how:'短句、结论先行，像干脆的店长在群里说话，不铺垫不煽情，可以一句一个句号'},
+  {id:'bff',    name:'闺蜜吐槽', how:'带点自嘲和抱怨，把今天的累当出口，像跟熟人吐槽，别喊口号别堆感叹号'},
+  {id:'diary',  name:'碎片日记', how:'第一人称碎碎念，节奏慢，写一件具体的小事，不总结不升华'},
+  {id:'danmu',  name:'弹幕冒泡', how:'像群里突然冒一句，句子短、略跳跃，可以自问自答'},
+  {id:'list',   name:'清单作答', how:'用①②③列理由，每条一句，信息密度高，不抒情'},
+  {id:'ask',    name:'反问钩子', how:'用连续提问推进，问题要具体到能回答，别空洞'},
+  {id:'cold',   name:'冷知识', how:'先说一个和这个水果有关的常识或小知识，再落到产品，不编造数据与来源'},
+  {id:'self',   name:'自嘲', how:'拿自己开涮（懒/穷/嘴馋），把产品写成顺手的解决方案'},
+  {id:'poem',   name:'短句诗', how:'三四行短句，留白多，有节奏感，不堆形容词'},
+  {id:'dialog', name:'对话体', how:'模拟两句对话（有人问、有人答），像群里的聊天'},
+  {id:'notice', name:'通知体', how:'像一条正经通知：时间、内容、价格三点说清，克制不喊'},
+  {id:'score',  name:'打分体', how:'给几个维度打分（如解馋9分、麻烦0分），带点幽默'},
+  {id:'compare',name:'对比体', how:'跟一个常见替代品对比（奶茶/泡面/零食），只讲自己的体验，不贬低别人'},
+  {id:'weather',name:'体感切入', how:'从这个季节此刻的体感切入（冷/干/风），落到想吃点甜的'},
+  {id:'child',  name:'童心', how:'语气轻快像哄小孩，多用短句和拟声词，但不要幼稚'},
+  {id:'hush',   name:'低声安利', how:'像偷偷告诉你一个好东西，语气轻、不嚷嚷，几乎不用感叹号'}
+];
+var COPY_FORMATS = [
+  {id:'huazi',  name:'花字开头型', emoji:'high', rule:'第1行必须是花字（Unicode装饰体/谐音梗/emoji叙事串），可参考下方花字库的句式，但必须改写成本次产品与当季的版本，禁止原样照搬'},
+  {id:'struct', name:'结构体型',   emoji:'low',  rule:'不要花字装饰开头，用排版结构承载信息（见下方结构要求），全文emoji最多2个，只在中段点缀'},
+  {id:'accent', name:'花字点缀型', emoji:'mid',  rule:'第1行用一句口语短句开头（不做装饰），正文中段放1处花字高亮（Unicode装饰/框线/进度条任选其一），结尾1处小花字；emoji 3-4个，不必每行都有'}
+];
+var COPY_STRUCTS = [
+  {id:'ticket', name:'小票/菜单体', how:'用分隔符或对齐排出像小票或菜单的信息块（产品名、价格、卖点），2-4行内说清，不要花字装饰'},
+  {id:'formula',name:'公式体', how:'用"XX+XX=XX"或"XX=XX"的公式句承载卖点，2-3行，句式要短'},
+  {id:'qa',     name:'问答体', how:'Q：… A：… 一问一答，2-3组，问题要像群友真的会问的'},
+  {id:'check',  name:'清单体', how:'①②③编号列理由，每条一句，不用抒情句'}
+];
+var COPY_EMOJI_DENSITY = {high:'高——几乎每行都带1个，但emoji必须贴合内容，不要全篇🍉', mid:'中——3~4处即可，位置分散', low:'低——最多2处，只放在中段'};
+var currentCopyMeta = [];
+
+function pickStyleSet(n){
+  var a = COPY_STYLES.slice(), out = [], i, j, t;
+  for(i=a.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=a[i]; a[i]=a[j]; a[j]=t; }
+  for(i=0;i<n&&i<a.length;i++) out.push(a[i]);
+  return out;
+}
+function nextStructKind(){
+  var last = -1;
+  try{ last = parseInt(localStorage.getItem('qg_copy_struct_used')||'-1',10); }catch(e){}
+  var idx = (isNaN(last)?-1:last) + 1;
+  if(idx >= COPY_STRUCTS.length) idx = 0;
+  try{ localStorage.setItem('qg_copy_struct_used', String(idx)); }catch(e){}
+  return COPY_STRUCTS[idx];
+}
+// 结构度量：把两版的行长序列插值到 10 点后求平均绝对差。
+// 实测现状机制≈2.07（同构），独立调用≈4.2（真不同），所以阈值取 2.5/对。
+function copyLineLens(t){
+  var o = [], a = String(t||'').split('\n'), i;
+  for(i=0;i<a.length;i++){ var s = a[i].trim(); if(s.length) o.push(s.length); }
+  return o;
+}
+// emoji 行占比（链接行不计）：区分「每行硬塞 emoji」和「中段点缀」
+function emojiLineRatio(t){
+  var lines = String(t||'').split('\n'), n = 0, withE = 0, i;
+  for(i=0;i<lines.length;i++){
+    var s = lines[i].trim();
+    if(!s || s.indexOf('://')>=0) continue;
+    n++;
+    if(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF\uFE0F]/.test(s)) withE++;
   }
-  var deliveryRule='';
-  if(CopyConfig.delivery==='custom'){
-    var dv=CopyConfig.deliveryCustomVal||'自定义配送';
-    deliveryRule='必须写配送费提示：💡'+dv;
-  }else{
-    deliveryRule='配送费可提可不提';
+  return n ? withE/n : 0;
+}
+// 结构差异综合分：行长节奏(0.5) + 行数差异(0.3) + emoji分布差异(0.5)
+// 只比行长会误判「16行/9行/8行」为同构（实测只得 1.93）。
+function copyStructGap(a, b){
+  var A = copyLineLens(a), B = copyLineLens(b);
+  if(!A.length || !B.length) return 99;
+  var k = 10, ia = [], ib = [], i, s = 0;
+  for(i=0;i<k;i++){
+    ia.push(A[Math.min(A.length-1, Math.floor(i*(A.length-1)/(k-1)))]);
+    ib.push(B[Math.min(B.length-1, Math.floor(i*(B.length-1)/(k-1)))]);
   }
-  
-  // Festival detection
-  var festToday='';
-  try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=yearFests[mmdd];}catch(e){}
-  var isFestival=(CopyConfig.customDay==='festival'||(!CopyConfig.customDay&&festToday));
-  // ── 时令上下文（2026-10-08 新增：解决文案不随日期变化、出现三伏天/高温的问题）──
-  var seasonPrompt='';
-  try{
-    var seasonText=getSeasonContextText(now);
-    if(seasonText)seasonPrompt='【当下时令（写文案必须严格据此判断季节与气候）】\n'+seasonText+'\n\n'+getSeasonWordRule(now)+'\n\n'+getSeasonHuaPrompt(now, product);
-  }catch(e){seasonPrompt='';}
-  
-  // Build rich 花字 prompt with festival context
-    var huaZiPrompt='';
-  try{
-    var huaData=getCardCats();
-    var cats=Object.keys(huaData);
-    var samples=[];
-    cats.forEach(function(c){
-      var entries=huaData[c]||[];
-      entries=filterSeasonCards(entries,now);
-      var pick=entries.slice(0,Math.min(8,entries.length));
-      samples.push(c+': '+pick.join('｜'));
+  for(i=0;i<k;i++) s += Math.abs(ia[i]-ib[i]);
+  var rhythm = s/k;
+  var nDiff = Math.abs(A.length - B.length) / Math.max(A.length, B.length) * 10;
+  var eDiff = Math.abs(emojiLineRatio(a) - emojiLineRatio(b)) * 10;
+  return Math.round((rhythm*0.5 + nDiff*0.3 + eDiff*0.5) * 10) / 10;
+}
+var COPY_SEASON_RE = {
+  ban_non: /冰镇|冰爽|冰凉|冷藏|冰一下|解暑|消暑|降温|空调|三伏|高温|炎夏|热到|冒热气|盛夏|35℃|🧊/,
+  ban_sum: /秋高|秋风起|秋燥|凉秋|暖气|围炉|冬日|寒冬|初雪|雪天|毛衣|羽绒|霜降|寒露/
+};
+function checkSeasonWords(text, d){
+  d = d || new Date();
+  var k = 'winter';
+  try{ k = getSeasonKey(d); }catch(e){}
+  var re = (k==='summer') ? COPY_SEASON_RE.ban_sum : COPY_SEASON_RE.ban_non;
+  var m = String(text||'').match(re);
+  if(!m) return [];
+  var out = [];
+  for(var i=0;i<m.length;i++){ if(out.indexOf(m[i])<0) out.push(m[i]); }
+  return out.slice(0,4);
+}
+function checkSelfCorrect(text){
+  var m = String(text||'').match(/打错|更正|说错|换个说法|其实应该|改为|重来一句/g);
+  if(!m) return [];
+  var out = [];
+  for(var i=0;i<m.length;i++){ if(out.indexOf(m[i])<0) out.push(m[i]); }
+  return out.slice(0,3);
+}
+function getRecentOpenerHint(){
+  var h = [];
+  try{ h = JSON.parse(localStorage.getItem('qg_copy_history')||'[]'); }catch(e){}
+  var opens = [];
+  h.slice(0,6).forEach(function(r){
+    ['v1','v2','v3'].forEach(function(k){
+      var ls = String(r[k]||'').split('\n'), f = '';
+      for(var i=0;i<ls.length;i++){ if(ls[i].trim()){ f = ls[i].trim(); break; } }
+      if(f){
+        var cp = '';
+        try{ cp = Array.from(f).slice(0,16).join(''); }catch(e){ cp = f.substring(0,16); }
+        opens.push(cp);
+      }
     });
-    huaZiPrompt='【花字库（来自素材灵感库，参考风格和句式自由创作变体，不必原样复制）】\\n'+samples.join('\\n')+'\\n\\n';
-  }catch(e){huaZiPrompt='';}
-  var huaZiDaily=''+
-    '【'+dayName+'专属花字（花字开头优先用；当季花字见下方【当季花字】段）】\\n'+
-    (day===2?'周二·热销风向：一周过半该奖励自己｜🤔今日诊断：缺一份｜📋今日处方｜😴➡🍉😋 .ᐟ.ᐟ｜🥱😪➡😋🤩✨｜一周快过半了！拿什么犒劳自己？\\n':'')+
-    (day===3?'周三·会员日88折：🎫今日份福利领了再走｜🎁一周一次的宠爱｜💫会员日仪式感｜🎫会员专享88折\\n':'')+
-    (day===4?'周四·外卖双平台：🛵外卖特价｜⚡限时特价｜💨鲜切直达｜🧊冰鲜到家｜🔥今日外卖活动品｜📱外卖特惠\\n':'')+
-    (day===5?'周五·周末套餐：😆周五福来day｜周末宅家公式=沙发+空调+｜🎉周五解放日｜周末快乐公式｜𝐅𝐫𝐢𝐝𝐚𝐲\\n':'')+
-    (day===6?'周六·外卖双平台+周末：⋆⁺₊☾周六限定｜𝐒𝐚𝐭𝐮𝐫𝐝𝐚𝐲门面担当｜🤔周六冷知识｜🎬周末追剧充电｜周末就是要\\n':'')+
-    '\\n';
-  
-  var festivalPrompt='';
-  if(festToday){
-    festivalPrompt=''+
-      '🎋【今日节日：'+festToday+'——花字必须升级！】\\n'+
-      '・框线体可选：┏━━'+festToday+'🐉━━┓\\n'+
-      '・节日谐音优先：端午→接粽而来、中秋→柚你真好、国庆→果庆同乐\\n'+
-      '・emoji叙事串可加长：3-5个emoji讲微型故事\\n'+
-      '・花字开头可2-3行（日常1行即可）\\n'+
-      '・必须在文案中呼应节日氛围，但锚点仍是果切产品\\n\\n';
+  });
+  if(!opens.length) return '';
+  return '【最近用过的开头（本次三版都禁止再用相同或高度相似的句式）】\n' + opens.join(' ／ ') + '\n\n';
+}
+function buildCopyLinkFooter(){
+  var parts = [];
+  if(CopyConfig.linkMeituan) parts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
+  if(CopyConfig.linkEleme) parts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
+  if(CopyConfig.linkMini) parts.push('#小程序://切果NOW/ZeXqPLeKOqtolPo');
+  return parts.length ? (String.fromCharCode(10,10) + parts.join(String.fromCharCode(10))) : '';
+}
+// 节日前后多少天内的节日分类才算「相关」（其余节日分类只给 1 条作风格参考）
+var CARD_FEST_RANGE_DAYS = 14;
+function getNearFestNames(now, days){
+  var out = [], i, yf, d, key;
+  for(i = -days; i <= days; i++){
+    d = new Date(now.getTime() + i*86400000);
+    try{ yf = FESTIVAL_DATA[String(d.getFullYear())] || {}; }catch(e){ yf = {}; }
+    key = String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    if(yf[key] && out.indexOf(yf[key]) < 0) out.push(yf[key]);
   }
-  
-  var prompt;
-  if(isFestival){
-    var festName=CopyConfig.festivalName||festToday||'节气';
-    prompt=seasonPrompt+'你是切果NOW品牌社群文案专家。今天是「'+festName+'」节日品宣，严格模仿以下切果NOW已验证的节日文案风格。'+
-  '\n\n'+huaZiPrompt+'\n\n'+
-  '【结构要求】\n'+
-  '第1行=醒目Unicode节日花字标题\n（参考：✩·‿· ɢᴏᴏᴅ ᴛɪᴍᴇ☄✦—5.1、🎡𝗛𝗮𝗽𝗽𝘆 𝗰𝗵𝗶𝗹𝗱𝗿𝗲𝗻𝘀𝗗𝗮𝘆🫶、🌷 𝗠𝗼𝘁𝗵𝗲𝗿𝘀 𝗗𝗮𝘆）\n'+
-  '第2-3行=2-3句简短节日氛围金句\n'+
-  '第4-5行=节日专属福利/礼盒话术\n'+
-  '最后=CTA引导+小程序码扫码提示\n'+
-  '【格式】每行≤25字。可用分隔线〰💨┊🌸┊🎐。所有元素贴合「'+festName+'」主题。\n\n'+
-  '输出3版差异化品宣，格式：\n'+
-  '【版本一 · 花字风格A】\n文案\n\n【版本二 · 花字风格B】\n文案\n\n【版本三 · 花字风格C】\n文案';
+  return out;
+}
+function isCardCatRelevant(cat, nearFests){
+  if(cat === '日常') return true;
+  var a = String(cat||'').replace(/[·\s节]/g, ''), i, b, len, s;
+  if(!a) return false;
+  for(i=0;i<nearFests.length;i++){
+    b = String(nearFests[i]||'').replace(/[·\s节]/g, '');
+    if(!b) continue;
+    if(a.indexOf(b) >= 0 || b.indexOf(a) >= 0) return true;
+    for(len = Math.min(a.length, b.length); len >= 2; len--){
+      for(s = 0; s + len <= a.length; s++){
+        if(b.indexOf(a.substr(s, len)) >= 0) return true;
+      }
+    }
+  }
+  return false;
+}
+// 花字注入（2026-11-20 重写）
+// 旧版每类 slice(0,5) 只喂最前 5 条 —— 用户新加的花字是追加在数组尾部的，
+// 所以「更新了花字卡片但生成没变化」。现规则：
+//   ① 自定义卡片（qg_custom_cards）单独成段并标「⭐优先」，取每类最近 6 条
+//   ② 日常分类随机抽 6 条（不再固定前 5）
+//   ③ 节日前后 14 天内的分类随机抽 3 条，其余节日分类只抽 1 条（保留风格多样性、减少串味）
+function buildHuaZiSample(now){
+  try{
+    var huaData = getCardCats(), cats = Object.keys(huaData);
+    var cc = (typeof customCards !== 'undefined' && customCards) ? customCards : {};
+    var nearFests = [];
+    try{ nearFests = getNearFestNames(now, CARD_FEST_RANGE_DAYS); }catch(e){}
+    var mineLines = [], mainLines = [], minorLines = [];
+    cats.forEach(function(c){
+      var entries = filterSeasonCards(huaData[c]||[], now);
+      if(!entries.length) return;
+      var mine = (cc[c]||[]).filter(function(x){ return entries.indexOf(x) >= 0; });
+      if(mine.length) mineLines.push(c + ': ' + mine.slice(-6).join('｜'));
+      var others = entries.filter(function(x){ return mine.indexOf(x) < 0; });
+      if(!others.length) return;
+      var relevant = isCardCatRelevant(c, nearFests);
+      var n = (c === '日常') ? 6 : (relevant ? 3 : 1);
+      var pick = pickDistinct(others, n);
+      if(!pick.length) return;
+      if(relevant) mainLines.push(c + ': ' + pick.join('｜'));
+      else minorLines.push(c + ': ' + pick.join('｜'));
+    });
+    var out = '';
+    if(mineLines.length){
+      out += '\n【⭐你自己新增的花字（本次优先从这里挑，至少用 1 条）】\n' + mineLines.join('\n') + '\n';
+    }
+    if(mainLines.length){
+      out += '\n【花字参考（随机抽自素材库，学句式与调性，改写成当次产品+当季版本，禁止原样照搬）】\n' + mainLines.join('\n') + '\n';
+    }
+    if(minorLines.length){
+      out += '\n【其他节日花字（只给少量风格参考，除非今天正好是这个节，否则不要用节日腔）】\n' + minorLines.join('\n') + '\n';
+    }
+    return out;
+  }catch(e){ return ''; }
+}
+// AI推荐 = 时令优先（2026-11-20）：旧版只是从 scene+emotion+habit 随机抽 3 条，
+// 名字叫「AI推荐」但没有任何依据。现改为「当季场景 2 条 + 通用场景 1 条」，
+// 四季池吸收了原「时令稀缺」方向的句子（当季最后一波/刚上市的头茬/就这几天最好吃…）。
+var SEASON_ANGLE_POOL = {
+  winter:['加班到很晚犒劳自己','熬夜赶工的深夜','窝在被子里看剧','下午三点犯困','洗澡后瘫在沙发上',
+          '心情低落想被安慰','一个人吃饭有点冷清','连着上了六天班','被甲方改了八版之后','地铁上挤了四十分钟',
+          '当季最后一波','刚上市的头茬','就这几天最好吃'],
+  spring:['办公室下午茶','周末野餐','课间十分钟','通勤地铁上','接娃放学的路上','早上起不来被闹钟连环打',
+          '活动前垫肚子','心情低落想被安慰','当季最后一波','刚上市的头茬','就这几天最好吃','换季时节的当季果'],
+  summer:['加班夜宵','办公室下午茶','健身房练完','通勤地铁上','打游戏上头','洗澡后瘫在沙发上',
+          '活动前垫肚子','熬夜写方案','当季最后一波','刚上市的头茬','就这几天最好吃'],
+  autumn:['办公室下午茶','周末野餐','接娃放学的路上','下午三点犯困','加班到很晚犒劳自己','心情低落想被安慰',
+          '当季最后一波','刚上市的头茬','就这几天最好吃','换季时节的当季果','这一批刚到店']
+};
+function getDirectionAngles(dir){
+  var s = DIRECTION_SPEC[dir];
+  if(s) return {label:s.label, angles:pickDistinct(s.pool,3)};
+  var k = 'winter';
+  try{ k = getSeasonKey(new Date()); }catch(e){}
+  var seasonPool = SEASON_ANGLE_POOL[k] || [];
+  var general = DIRECTION_SPEC['scene'].pool.concat(DIRECTION_SPEC['emotion'].pool).concat(DIRECTION_SPEC['habit'].pool);
+  var a = pickDistinct(seasonPool, 2);
+  var rest = general.filter(function(x){ return seasonPool.indexOf(x) < 0 && a.indexOf(x) < 0; });
+  var b = pickDistinct(rest, 1);
+  var angles = a.concat(b);
+  if(!angles.length) angles = pickDistinct(general, 3);
+  return {label:'AI推荐（时令优先·' + (SEASON_CN[k]||'') + '季）', angles:angles};
+}
+// 行长超限检测：emoji 按 1 个字符计（微信里占 1 格），只统计正文行，跳过链接行
+function copyLongLines(t, max){
+  max = max || 20;
+  var a = String(t||'').split('\n'), out = [], i, arr;
+  for(i=0;i<a.length;i++){
+    var s = a[i];
+    if(!s.trim()) continue;
+    if(s.indexOf('://')>=0 || s.indexOf('#')===0) continue;
+    try{ arr = Array.from(s); }catch(e){ arr = s.split(''); }
+    if(arr.length > max) out.push(arr.length);
+  }
+  return out;
+}
+// 排版兜底：超 max 字在标点处折行（微信对话框安全宽度 20 字）
+// 旧模板引擎的 splitLines 在 AI-only 迁移时被删，导致 AI 长句直接发出去会在微信折行难看。
+var COPY_WRAP_PUNCT = ['，','。','！','？','、','｜','；','：','”','）',',','.','!','?',' '];
+function wrapCopyLines(text, max){
+  max = max || 20;
+  var lines = String(text||'').split('\n'), out = [], i;
+  for(i=0;i<lines.length;i++){
+    var s = lines[i];
+    if(!s.trim() || s.indexOf('://')>=0 || s.indexOf('#')===0){ out.push(s); continue; }
+    var arr;
+    try{ arr = Array.from(s); }catch(e){ arr = s.split(''); }
+    while(arr.length > max){
+      var cut = -1, k;
+      var lower = Math.max(4, Math.floor(max*0.35));
+      for(k = Math.min(max, arr.length-1); k >= lower; k--){
+        if(COPY_WRAP_PUNCT.indexOf(arr[k-1]) >= 0){ cut = k; break; }
+      }
+      if(cut < 0) cut = max;
+      out.push(arr.slice(0,cut).join('').replace(/\s+$/,''));
+      arr = arr.slice(cut);
+      while(arr.length && arr[0]===' ') arr.shift();
+    }
+    if(arr.length) out.push(arr.join(''));
+  }
+  return out.join('\n');
+}
+function buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, angle){
+  var s = '你是切果NOW社群文案创作者，写的是发在微信门店群里的消息，像群里真人说话，不是广告海报。\n\n';
+  var seasonText = '';
+  try{ seasonText = getSeasonContextText(now); }catch(e){}
+  if(seasonText) s += '【今天】' + seasonText + '\n';
+  var rule = '';
+  try{ rule = getSeasonWordRule(now); }catch(e){}
+  if(rule) s += rule + '\n\n';
+  s += '【产品】' + product + '\n';
+  if(CopyConfig.comboNote) s += '【套餐详情（必须自然融入，不可忽略）】' + CopyConfig.comboNote + '\n';
+  if(priceRule) s += '【价格】' + priceRule + '\n';
+  if(deliveryRule) s += '【配送】' + deliveryRule + '\n';
+  var da = getDirectionAngles(direction);
+  s += '【方向：' + da.label + '】';
+  if(angle){
+    var others = [], oi;
+    for(oi=0;oi<da.angles.length;oi++){ if(da.angles[oi]!==angle) others.push(da.angles[oi]); }
+    s += '\n本版只写这一个具体角度：' + angle;
+    if(others.length) s += '\n（另两版分别写「' + others.join('」「') + '」，那是别的版本的任务，不要抢写）';
+  }else if(da.angles.length){
+    s += '\n可选角度：' + da.angles.join(' / ');
+  }
+  s += '\n\n';
+  s += getRecentOpenerHint();
+  s += '【硬约束（违反任何一条都不合格）】\n'
+     + '1. 全文只写「' + product + '」这一个产品，不得出现其他水果名、品类名或暗示多选\n'
+     + '2. 每行不超过20个中文字符（含emoji），不允许断词换行\n'
+     + '3. 产品名原样出现至少1次\n'
+     + '4. 不要写任何链接（系统会自动补）\n'
+     + '5. 不要承诺到店/自提/加盟/招募等policy\n'
+     + '6. 不要用"限时抢""手慢无""最后N份"这类强推销句式\n'
+     + '7. 结尾给一句轻CTA（提醒下单或问一句），不要喊口号\n\n';
+  return s;
+}
+function buildCopyPrompt(common, slot, style, structKind, now, seasonHuaBatch){
+  var p = common;
+  p += '【本次风格：' + style.name + '】' + style.how + '\n\n';
+  p += '【本次格式：' + slot.name + '】' + slot.rule + '\n';
+  p += '【emoji密度】' + (COPY_EMOJI_DENSITY[slot.emoji]||'') + '\n';
+  if(slot.id === 'struct' && structKind){
+    p += '【结构要求：' + structKind.name + '】' + structKind.how + '\n';
+  }
+  if(slot.id !== 'struct'){
+    var hua = '';
+    try{ hua = getSeasonHuaPrompt(now, CopyConfig.customProduct || getCopyProduct(), seasonHuaBatch); }catch(e){}
+    if(hua) p += '\n' + hua;
+    p += buildHuaZiSample(now);
+  }
+  p += '\n【只输出这一版的正文】不要任何解释、不要"版本一"这类标签、不要加分隔线。\n';
+  return p;
+}
+function buildCopyFreePrompt(common, style, now){
+  return common
+    + '【本次要求】自由创作，不要套模板。你自己决定用不用花字、怎么排版、几句，'
+    + '但必须让人一眼看出这是一条真人发的群消息。\n'
+    + '语气参考：' + style.name + '——' + style.how + '\n'
+    + '只输出正文。\n';
+}
+// 模型会把风格卡/格式槽位的名字当正文写出来（实测「店长直给：这批正甜。」），首行剥掉
+function stripStylePrefix(s){
+  var names = [], i, re;
+  try{ COPY_STYLES.forEach(function(x){ names.push(x.name); }); }catch(e){}
+  try{ COPY_FORMATS.forEach(function(x){ names.push(x.name); }); }catch(e){}
+  names.push('版本一','版本二','版本三','文案');
+  for(i=0;i<names.length;i++){
+    re = new RegExp('^\\s*' + names[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*[：:]\\s*');
+    if(re.test(s)) return s.replace(re, '');
+  }
+  return s;
+}
+function cleanCopyText(t){
+  var s = String(t||'');
+  s = s.replace(/^\s*【[^】\n]*】\s*/,'');
+  s = s.replace(/^\s*版本[一二三][^\n]*\n/,'');
+  s = stripStylePrefix(s);
+  return s.trim();
+}
+// 孤立代理兜底：任何来源（素材库花字/历史截断）留下的孤立 surrogate 会让
+// JSON.stringify 产出 \udXXX 片段，DeepSeek 侧报 "unexpected end of hex escape"。
+function sanitizePrompt(s){
+  try{
+    return String(s)
+      .replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/g, '')
+      .replace(/(^|[^\uD800-\uDBFF])[\uDC00-\uDFFF]/g, '$1');
+  }catch(e){ return String(s); }
+}
+function callCopyAPI(key, prompt, temperature){
+  return fetch('https://api.deepseek.com/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:sanitizePrompt(prompt)}],max_tokens:700,temperature:temperature})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(!d || !d.choices || !d.choices[0] || !d.choices[0].message){
+      throw new Error((d && d.error && d.error.message) || 'API 返回异常');
+    }
+    return sanitizePrompt(cleanCopyText(d.choices[0].message.content));
+  });
+}
+function renderCopyResults(results){
+  var labels = ['版本一','版本二','版本三'];
+  var footer = buildCopyLinkFooter();
+  var texts = [], now = new Date();
+  for(var i=0;i<3;i++){
+    var raw0 = results[i] ? results[i].text : '';
+    var raw = raw0 ? wrapCopyLines(raw0, 20) : '';
+    var full = raw ? (raw + footer) : '';
+    texts.push(full);
+    var el = document.getElementById('copyV'+(i+1));
+    if(!el) continue;
+    var warns = [];
+    var ban = raw ? checkSeasonWords(raw, now) : [];
+    if(ban.length) warns.push('含当前季节不宜的词：' + ban.join('、') + '（点「❄️季节重写」）');
+    var sc = raw ? checkSelfCorrect(raw) : [];
+    if(sc.length) warns.push('出现自我纠正痕迹：' + sc.join('、') + '（点「🎲重写」）');
+    var longN = raw ? copyLongLines(raw, 20).length : 0;
+    if(longN) warns.push(longN + ' 行超过20字，微信群发会折行（点「🎲重写」）');
+    var head = warns.length
+      ? '<div style="font-size:11px;color:#b45309;line-height:1.7;margin-bottom:6px">⚠️ ' + warns.join('<br>⚠️ ') + '</div>'
+      : '';
+    var tag = results[i] && results[i].slot ? results[i].slot.name : '';
+    el.innerHTML = head + formatCopyDisplay(full, labels[i], tag);
+    if(el.parentElement) el.parentElement.style.opacity = '1';
+  }
+  document.querySelectorAll('.copy-actions').forEach(function(a){ a.style.display = 'flex'; });
+  currentCopyTexts = texts;
+  currentCopyMeta = results;
+}
+function generateCopyAI(){
+  var key = getApiKey();
+  if(!key){ toast('⚠️ 请先设置 API Key'); openApiKeyModal(); return; }
+  showCopyLoading();
+  var btn = document.getElementById('btnGenerateCopy');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ 生成中...'; }
+
+  var now = new Date();
+  var day = CopyConfig.customDay ? parseInt(CopyConfig.customDay) : now.getDay();
+  var dayNames = {2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·外卖双平台'};
+  var dayName = dayNames[day] || '今日';
+  var product = (CopyConfig.customDay==='festival') ? '' : getCopyProduct();
+  var direction = CopyConfig.direction || 'auto';
+
+  var priceRule = '';
+  if(CopyConfig.priceMode==='regional'){
+    priceRule = '不要写具体价格！必须写「各区域以平台实际价格为准」';
   }else{
-    prompt=seasonPrompt+'你是切果NOW品牌社群文案专家。⚠️严格遵守：全文只写产品「'+product+'」，严禁出现任何其他水果名。以下为风格参考，务必模仿。\\\\n\\\\n'+
-    '【品牌】鲜切水果外卖，健康活力、口语化亲切、朋友聊天语气。\\n\\n'+
-    huaZiPrompt+
-    huaZiDaily+
-    festivalPrompt+
-        '【铁律】全文只围绕所选产品，严禁提及其他水果名或品类名。\n\n'+
-    '【emoji铁律】每行配1-2个贴合内容的emoji，拒绝全篇🍉！用🧊表冰爽、🛵表外卖、💰表价格、😋表口感、🔥表热度、✨表惊喜、🎁表福利、💪表健康、🥭🍍🍈根据水果灵活换。花字行的emoji要更有创意。\\n\\n'+
-    '【排版】每行≤20字，不允许断词换行。像朋友群发消息，不机械不模板。\\n\\n'+
-    '【推送日】'+dayName+'\n'+
-    '【产品名（必须原样使用，不可改！）】\n【铁律】全文只围绕这一个产品写，严禁出现其他水果名、品类名、或暗示多选的说法。'+product+'\\n'+
-    (CopyConfig.comboNote?'【套餐详情（必须融入文案，不可忽略！】'+CopyConfig.comboNote+'\\n':'')+
-    '【价格要求】'+priceRule+'\n'+
-    '【配送费要求】'+deliveryRule+'\n'+
-    '【方向】'+getDirectionPrompt(direction,day)+'\n\n'+
-    '生成3版差异化社群文案，每版5-8行，花字类型和风格要明显不同。\\n'+
-    '至少1版要带价格（格式：💰¥XX或💰¥XX起）。\\n'+
-    '输出格式（严格）：\\n'+
-    '【版本一 · 风格名】\\n文案\\n\\n'+
-    '【版本二 · 风格名】\\n文案\\n\\n'+
-    '【版本三 · 风格名】\\n文案';
-  
+    var p = '';
+    if(CopyConfig.customPrice){ p = CopyConfig.customPrice; }
+    else if(allProductsData.length>0){
+      for(var i=0;i<allProductsData.length;i++){
+        if(allProductsData[i].name===product && allProductsData[i].price){ p = allProductsData[i].price; break; }
+      }
+    }
+    priceRule = p ? ('必须包含价格行：💰 ¥' + p) : '';
   }
+  var deliveryRule = '';
+  if(CopyConfig.delivery==='custom'){
+    deliveryRule = '必须写配送费提示：💡' + (CopyConfig.deliveryCustomVal || '自定义配送');
+  }
+
+  // 节日品宣走独立分支（沿用旧结构，3 版一次出）
+  if(CopyConfig.customDay==='festival'){ generateCopyFestivalAI(key, now); return; }
+
+  var seasonHuaBatch = [];
+  try{ seasonHuaBatch = pickSeasonHua(getSeasonKey(now), 4); }catch(e){}
+  var anglePool = getDirectionAngles(direction).angles;
+  var commons = [0,1,2].map(function(i){
+    return buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, anglePool[i]);
+  });
+  var styles = pickStyleSet(3);
+  var isFree = String(CopyConfig.freeMode)==='1';
+  var slots = [
+    {slot: COPY_FORMATS[0]},
+    {slot: COPY_FORMATS[1], structKind: nextStructKind()},
+    {slot: COPY_FORMATS[2]}
+  ];
+  var temps = [0.85, 1.0, 1.1];
+
+  function restoreBtn(){
+    if(btn){ btn.disabled = false; btn.textContent = '🧠 AI 一键生成'; }
+  }
+  function fail(e){
+    restoreBtn();
+    console.error('AI call error:', e && e.message, e);
+    ['copyV1','copyV2','copyV3'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--red);font-size:13px">⚠️ ' + ((e&&e.message)||'生成失败') + '</div>';
+    });
+    toast('⚠️ ' + ((e&&e.message)||'生成失败'));
+  }
+
+  var jobs = slots.map(function(cfg, i){
+    var prompt = isFree ? buildCopyFreePrompt(commons[i], styles[i], now)
+                        : buildCopyPrompt(commons[i], cfg.slot, styles[i], cfg.structKind, now, seasonHuaBatch);
+    return callCopyAPI(key, prompt, temps[i]).then(function(txt){
+      return {text: txt, style: styles[i], slot: cfg.slot, temp: temps[i]};
+    });
+  });
+
+  Promise.all(jobs).then(function(res){
+    // 结构差异校验：找"跟另外两版最像"的那一版，差异过小则换槽位重写一次
+    var gaps = [copyStructGap(res[0].text,res[1].text), copyStructGap(res[0].text,res[2].text), copyStructGap(res[1].text,res[2].text)];
+    var scores = [gaps[0]+gaps[1], gaps[0]+gaps[2], gaps[1]+gaps[2]];
+    var minS = Math.min(scores[0], scores[1], scores[2]);
+    var worst = scores.indexOf(minS);
+    if(!isFree && minS < 3){
+      var usedIds = [];
+      for(var i=0;i<3;i++){ if(i!==worst && res[i].slot) usedIds.push(res[i].slot.id); }
+      var cand = COPY_FORMATS.filter(function(f){ return usedIds.indexOf(f.id)<0; });
+      var newSlot = cand.length ? cand[0] : COPY_FORMATS[2];
+      var newStyle = pickStyleSet(1)[0];
+      var newStruct = nextStructKind();
+      var np = buildCopyPrompt(commons[worst], newSlot, newStyle, newStruct, now, seasonHuaBatch);
+      return callCopyAPI(key, np, 1.15).then(function(txt){
+        res[worst] = {text: txt, style: newStyle, slot: newSlot, temp: 1.15, regen: true};
+        return res;
+      });
+    }
+    return res;
+  }).then(function(res){
+    restoreBtn();
+    renderCopyResults(res);
+    try{ saveCopyHistory(product, currentCopyTexts, res); }catch(e){}
+    var extra = res.filter(function(r){ return r.regen; }).length ? ' · 已自动重写 1 版' : '';
+    toast('🧠 已生成 3 版：' + product + extra);
+  }).catch(fail);
+}
+function generateCopyFestivalAI(key, now){
+  var festToday = '';
+  try{ festToday = getCopyFestToday(now); }catch(e){}
+  var festName = CopyConfig.festivalName || festToday || '节气';
+  var season = '';
+  try{ season = getSeasonContextText(now); }catch(e){}
+  var hua = '';
+  try{ hua = buildHuaZiSample(now); }catch(e){}
+  var rule = '';
+  try{ rule = getSeasonWordRule(now); }catch(e){}
+  var prompt = '你是切果NOW品牌社群文案专家。今天是「' + festName + '」节日品宣，严格模仿切果NOW已验证的节日文案风格。\n\n'
+    + (season ? '【当下时令】' + season + '\n' : '')
+    + (rule ? rule + '\n\n' : '')
+    + hua + '\n'
+    + '【结构要求】\n'
+    + '第1行=醒目Unicode节日花字标题\n'
+    + '第2-3行=2-3句简短节日氛围金句\n'
+    + '第4-5行=节日专属福利/礼盒话术\n'
+    + '最后=CTA引导\n'
+    + '【格式】每行≤25字。可用分隔线〰💨┊🌸┊🎐。所有元素贴合「' + festName + '」主题。\n\n'
+    + '输出3版差异化品宣，每版花字风格不同。格式：\n'
+    + '【版本一 · 风格A】\n文案\n\n【版本二 · 风格B】\n文案\n\n【版本三 · 风格C】\n文案';
+  var btn = document.getElementById('btnGenerateCopy');
   fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:prompt}],max_tokens:1200,temperature:0.8})
-  }).then(function(r){return r.json()}).then(function(d){
-    document.getElementById('btnGenerateCopy').disabled=false;
-    document.getElementById('btnGenerateCopy').textContent='🧠 AI 润色生成';
-    var raw=d.choices[0].message.content;
-    // Parse 3 versions from AI output (【版本一/二/三】...)
-    var versions=['','',''];
-    var cnMap={'一':1,'二':2,'三':3};
-    // Split at 【版本 markers
-    var parts=raw.split(/【版本[一二三]/);
-    // parts[0]=prefix, parts[1]=v1 content, parts[2]=v2 content, parts[3]=v3 content
+    body:JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:sanitizePrompt(prompt)}],max_tokens:1200,temperature:0.9})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(btn){ btn.disabled = false; btn.textContent = '🧠 AI 一键生成'; }
+    var raw = (d && d.choices && d.choices[0] && d.choices[0].message) ? d.choices[0].message.content : '';
+    if(!raw) throw new Error('API 返回异常');
+    var parts = raw.split(/【版本[一二三]/), versions = ['','',''];
     for(var v=1;v<=3;v++){
-      if(parts[v]&&parts[v].trim()){
-        // Strip leading style label "· 风格名】" and whitespace
-        var content=parts[v].replace(/^[^\\n]*】\\s*/,'').trim();
-        if(content)versions[v-1]=content;
-      }
+      if(parts[v] && parts[v].trim()) versions[v-1] = parts[v].replace(/^[^\n]*】\s*/,'').trim();
     }
-    // Fallback: if parsing fails, try splitting on 【
-    if(!versions[0]&&!versions[1]&&!versions[2]){
-      var parts2=raw.split('【');
-      for(var j=0;j<parts2.length;j++){
-        for(var c in cnMap){
-          if(parts2[j].indexOf(c+' ·')>=0||parts2[j].indexOf(c+'·')>=0){
-            var content2=parts2[j].replace(/^[^\\n]*】\\s*/,'').trim();
-            versions[cnMap[c]-1]=content2;
-          }
-        }
-      }
+    if(!versions[0] && !versions[1] && !versions[2]){
+      var p3 = raw.split(/\n{2,}/).filter(function(x){ return x.trim() && x.length>10; });
+      versions = [p3[0]||raw, p3[1]||'', p3[2]||''];
     }
-    // Last resort: split by blank lines
-    if(!versions[0]&&!versions[1]&&!versions[2]){
-      var p3=raw.split(/\\n{2,}/).filter(function(p){return p.trim()&&p.length>10;});
-      if(p3.length>=3){versions[0]=p3[0];versions[1]=p3[1];versions[2]=p3[2];}
-      else{versions=[p3[0]||raw,p3[1]||'',p3[2]||''];}
+    var footer = buildCopyLinkFooter();
+    for(var k=0;k<3;k++){ if(versions[k] && footer) versions[k] = versions[k] + footer; }
+    var labels = ['生成版一','生成版二','生成版三'];
+    for(var m=0;m<3;m++){
+      var el = document.getElementById('copyV'+(m+1));
+      if(el){ el.innerHTML = formatCopyDisplay(versions[m]||'', labels[m], '🎋 节日'); el.parentElement.style.opacity='1'; }
     }
-    // Build link footer based on config
-    var linkParts=[];
-    if(CopyConfig.linkMeituan)linkParts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
-    if(CopyConfig.linkEleme)linkParts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
-    if(CopyConfig.linkMini)linkParts.push('#小程序://切果NOW/ZeXqPLeKOqtolPo');
-    var linkFooter=linkParts.length?String.fromCharCode(10,10)+linkParts.join(String.fromCharCode(10)):"";
-    // Append links to all versions
-    for(var v=0;v<3;v++){if(versions[v]&&linkFooter)versions[v]=versions[v]+linkFooter;}
-    var labels=['生成版一','生成版二','生成版三'];
-    for(var v=0;v<3;v++){
-      var vid='copyV'+(v+1);
-      var el=document.getElementById(vid);
-      if(el){el.innerHTML=formatCopyDisplay(versions[v]||"",labels[v],"🧠 AI");el.parentElement.style.opacity="1";}
-    }
-    document.querySelectorAll('.copy-actions').forEach(function(a){a.style.display='flex';});
-    currentCopyTexts=versions;
-    saveCopyHistory(product,versions);
-    toast('🧠 已生成: '+product);
+    document.querySelectorAll('.copy-actions').forEach(function(a){ a.style.display='flex'; });
+    currentCopyTexts = versions;
+    try{ saveCopyHistory(festName, versions, []); }catch(e){}
+    toast('🎋 已生成节日品宣：' + festName);
   }).catch(function(e){
-    console.error('AI call error:', e.message, e);
-    document.getElementById('btnGenerateCopy').disabled=false;
-    document.getElementById('btnGenerateCopy').textContent='🧠 AI 一键生成';
-    ['copyV1','copyV2','copyV3'].forEach(function(id){document.getElementById(id).innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:13px">⚠️ '+e.message+'</div>';});
-    toast('⚠️ '+e.message);
+    if(btn){ btn.disabled = false; btn.textContent = '🧠 AI 一键生成'; }
+    toast('⚠️ ' + ((e&&e.message)||'生成失败'));
   });
+}
+// 单版局部改写：换开头 / 更活泼 / 更克制 / 季节重写 / 重写
+function rewriteVersion(idx, mode){
+  idx = parseInt(idx, 10);
+  var cur = String((currentCopyTexts[idx-1]||'')).trim();
+  if(!cur){ toast('这一版还没有内容'); return; }
+  var key = getApiKey();
+  if(!key){ toast('⚠️ 请先设置 API Key'); openApiKeyModal(); return; }
+  var now = new Date();
+  var cmds = {
+    opener: '把第一行换成一个完全不同的开头（不许和原文第一行句式相似），其余部分可以保留但要通顺',
+    lively: '语气更活泼一点，多一点口语，但不要喊口号、不要用"限时抢"这类词',
+    calm:   '语气更克制、像日常聊天，减少形容词和感叹号',
+    regen:  '换一个完全不同的切入角度重写这一版',
+    season: '这一版出现了不符合当前季节的词，必须重写：严格禁止出现冰镇/冰爽/冰凉/冷藏/解暑/空调/降温/热到/冒热气等词，改用清甜/多汁/润/维C/果香/暖房等表达'
+  };
+  var instr = cmds[mode] || '优化这一版，让句子更自然';
+  var rule = '';
+  try{ rule = getSeasonWordRule(now); }catch(e){}
+  var product = getCopyProduct();
+  var prompt = '你是切果NOW社群文案创作者。下面是一版已经生成的群发文案，请按要求改出一版新的。\n\n'
+    + '【产品】' + product + '\n'
+    + (rule ? rule + '\n' : '')
+    + '\n【原文】\n' + cur + '\n\n'
+    + '【改写要求】' + instr + '\n\n'
+    + '【硬约束】每行≤20字；只写「' + product + '」这一个产品；不要写任何链接；只输出改写后的正文，不要解释。\n';
+  var el = document.getElementById('copyV'+idx);
+  if(el) el.innerHTML = '<div style="text-align:center;padding:30px"><div style="display:inline-block;width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite"></div><div style="font-size:12px;color:var(--text-dim);margin-top:8px">正在改写…</div></div>';
+  callCopyAPI(key, prompt, 1.0).then(function(txt){
+    txt = wrapCopyLines(txt, 20);
+    var footer = buildCopyLinkFooter();
+    var full = txt + footer;
+    currentCopyTexts[idx-1] = full;
+    if(el){
+      var ban = checkSeasonWords(txt, now);
+      var head = ban.length ? '<div style="font-size:11px;color:#b45309;margin-bottom:6px">⚠️ 仍有季节不宜词：' + ban.join('、') + '</div>' : '';
+      el.innerHTML = head + formatCopyDisplay(full, '版本' + ['一','二','三'][idx-1], '✏️ 改写');
+      if(el.parentElement) el.parentElement.style.opacity = '1';
+    }
+    toast('✏️ 已改写版本' + idx);
+  }).catch(function(e){ toast('⚠️ ' + ((e&&e.message)||'改写失败')); });
 }
 
 // ─── Init ───
