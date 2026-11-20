@@ -712,7 +712,7 @@ function toggleCopyDrawer(name){
   }
   if(willShow) el.classList.add('show'); else el.classList.remove('show');
 }
-function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}(function(){var sel=document.getElementById('copyDirection');if(!sel)return;var v=CopyConfig.direction||'auto';if(!sel.querySelector('option[value="'+v+'"]')){v='auto';CopyConfig.direction='auto';try{localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}catch(e){}}sel.value=v;})();updateGenBtnLabel();var _fm=document.getElementById('modeStd'),_fz=document.getElementById('modeFree');if(_fm&&_fz){var _isf=String(CopyConfig.freeMode)==='1';_fm.className='btn '+(_isf?'btn-ghost':'btn-primary');_fz.className='btn '+(_isf?'btn-primary':'btn-ghost');}var _cf=document.getElementById('copyFeel');if(_cf&&! _cf.value)_cf.value=CopyConfig.manualWeather||'';var _ss=document.getElementById('copyStyleSel');if(_ss)_ss.value=CopyConfig.stylePick||'';var _en=document.getElementById('copyExtraNote');if(_en&&! _en.value)_en.value=CopyConfig.extraNote||'';}
+function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}(function(){var sel=document.getElementById('copyDirection');if(!sel)return;var v=CopyConfig.direction||'auto';if(!sel.querySelector('option[value="'+v+'"]')){v='auto';CopyConfig.direction='auto';try{localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}catch(e){}}sel.value=v;})();updateGenBtnLabel();var _fm=document.getElementById('modeStd'),_fz=document.getElementById('modeFree');if(_fm&&_fz){var _isf=String(CopyConfig.freeMode)==='1';_fm.className='btn '+(_isf?'btn-ghost':'btn-primary');_fz.className='btn '+(_isf?'btn-primary':'btn-ghost');}var _cf=document.getElementById('copyFeel');if(_cf&&! _cf.value)_cf.value=CopyConfig.manualWeather||'';var _ss=document.getElementById('copyStyleSel');if(_ss)_ss.value=CopyConfig.stylePick||'';var _en=document.getElementById('copyExtraNote');if(_en&&! _en.value)_en.value=CopyConfig.extraNote||'';var _ds=document.getElementById('copyDaySelect');if(_ds)_ds.value=CopyConfig.customDay||'';var _fi=document.getElementById('festivalNameInput');if(_fi)_fi.style.display=(CopyConfig.customDay==='festival')?'':'none';try{if(typeof initCopyDay==='function')initCopyDay();}catch(e){}}
 
 // ═══════════════════════════════════════════
 // SECTION LUNAR: 农历 / 节气引擎（文案创作「📅 推送日」卡片显示用）
@@ -833,7 +833,7 @@ function buildDayInfoHTML(d) {
   return line1 + (tags.length ? '<br>' + tags.join('  ') : '') + (line3 ? '<br>' + line3 : '');
 }
 
-function initCopyDay(){var now=new Date();var day=now.getDay();var label='';if(day===2)label='周二 · 热销风向';else if(day===3)label='周三 · 会员日88折';else if(day===4)label='周四 · 外卖双平台';else if(day===5)label='周五 · 周末套餐';else if(day===6)label='周六 · 外卖双平台';else label='今天无推送';document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML=buildDayInfoHTML(now);}
+function initCopyDay(){var now=new Date();var day=(CopyConfig.customDay&&CopyConfig.customDay!=='festival')?parseInt(CopyConfig.customDay,10):now.getDay();var label='';var _db=(typeof DAY_BRIEF!=='undefined')?DAY_BRIEF[day]:null;if(CopyConfig.customDay==='festival')label='🎋 节气品宣';else if(_db)label=_db.name;else label='今天无推送';if(CopyConfig.customDay&&CopyConfig.customDay!=='festival'&&day!==now.getDay())label+=' · 手动指定';document.getElementById('copyDayLabel').textContent=label;var festToday='';var todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');try{var yearFests=FESTIVAL_DATA?FESTIVAL_DATA[String(now.getFullYear())]||{}:{};var mmdd=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');if(yearFests[mmdd])festToday=' 🎋 '+yearFests[mmdd];}catch(e){}document.getElementById('copyWeather').innerHTML=buildDayInfoHTML(now);}
 
 // ═══════ COPY GENERATOR ═══════
 
@@ -1469,11 +1469,14 @@ function getRecentOpenerHint(){
   if(!opens.length) return '';
   return '【最近用过的开头（本次三版都禁止再用相同或高度相似的句式）】\n' + opens.join(' ／ ') + '\n\n';
 }
-function buildCopyLinkFooter(){
+// 周六以小程序为主（2026-11-20 用户确认）：只出小程序链接，不出美团／饿了么
+function buildCopyLinkFooter(day){
   var parts = [];
-  if(CopyConfig.linkMeituan) parts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
-  if(CopyConfig.linkEleme) parts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
+  var onlyMini = (day === 6);
+  if(!onlyMini && CopyConfig.linkMeituan) parts.push('🟡美团：#小程序://美团闪购/qLu5ftvWrGfSQbK');
+  if(!onlyMini && CopyConfig.linkEleme) parts.push('🔵饿了么：https://tb.ele.me/wow/alsc/mod/434a9c968141f59617ecb89b');
   if(CopyConfig.linkMini) parts.push('#小程序://切果NOW/ZeXqPLeKOqtolPo');
+  if(!parts.length && CopyConfig.linkMini === false && !onlyMini) return '';
   return parts.length ? (String.fromCharCode(10,10) + parts.join(String.fromCharCode(10))) : '';
 }
 // 节日前后多少天内的节日分类才算「相关」（其余节日分类只给 1 条作风格参考）
@@ -1622,11 +1625,23 @@ function wrapCopyLines(text, max){
   }
   return out.join('\n');
 }
-function buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, angle, dirInfo){
+// 推送日要点（2026-11-20 补回）：v108 重写 buildCopyCommon 时把 dayName 参数收了却没用，
+// 旧版靠 huaZiDaily 的 day===3 分支带出「会员日88折」，那段也被删了 →
+// 结果无论选哪天，模型都不知道今天是什么日子（用户报「周三却写不出会员日」就是这个）。
+var DAY_BRIEF = {
+  2:{ name:'周二 · 热销风向', brief:'生活共鸣 + 种草。绑定具体产品和当季体感，不要提任何折扣或优惠（今天不是活动日）。' },
+  3:{ name:'周三 · 会员日88折', brief:'今天是会员日。唯一可说的优惠是「全场88折」，必须自然带出会员日／88折这个信息（写成福利感、仪式感，不要喊口号），不要编造其他折扣、赠品或满减。' },
+  4:{ name:'周四 · 外卖双平台', brief:'外卖特价日：主推美团／饿了么下单，说清特价产品；不要提小程序折扣。' },
+  5:{ name:'周五 · 周末套餐', brief:'周末场景 + 套餐／拼盘，主推小程序下单，帮用户想好周末怎么吃。' },
+  6:{ name:'周六 · 周末种草', brief:'周末种草日：主推小程序下单，不要提外卖平台、外卖特价、满减。可写水果知识、生活场景、轻松互动，今天不是活动日，不提折扣。' }
+};
+function buildCopyCommon(now, dayNum, product, direction, priceRule, deliveryRule, angle, dirInfo){
   var s = '你是切果NOW社群文案创作者，写的是发在微信门店群里的消息，像群里真人说话，不是广告海报。\n\n';
   var seasonText = '';
   try{ seasonText = getSeasonContextText(now); }catch(e){}
   if(seasonText) s += '【今天】' + seasonText + '\n';
+  var db = DAY_BRIEF[dayNum] || {name:'今日推送', brief:'常规种草' };
+  s += '【推送日】' + db.name + '\n【本期重点】' + db.brief + '\n\n';
   var rule = '';
   try{ rule = getSeasonWordRule(now); }catch(e){}
   if(rule) s += rule + '\n\n';
@@ -1745,7 +1760,8 @@ function callCopyAPI(key, prompt, temperature){
 }
 function renderCopyResults(results){
   var labels = ['版本一','版本二','版本三'];
-  var footer = buildCopyLinkFooter();
+  var curDay = CopyConfig.customDay ? parseInt(CopyConfig.customDay,10) : new Date().getDay();
+  var footer = buildCopyLinkFooter(curDay);
   var texts = [], now = new Date();
   for(var i=0;i<3;i++){
     var raw0 = results[i] ? results[i].text : '';
@@ -1785,7 +1801,7 @@ function generateCopyAI(){
 
   var now = new Date();
   var day = CopyConfig.customDay ? parseInt(CopyConfig.customDay) : now.getDay();
-  var dayNames = {2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·外卖双平台'};
+  var dayNames = {2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·周末种草（小程序）'};
   var dayName = dayNames[day] || '今日';
   var product = (CopyConfig.customDay==='festival') ? '' : getCopyProduct();
   var direction = CopyConfig.direction || 'auto';
@@ -1816,7 +1832,7 @@ function generateCopyAI(){
   var dirInfo = getDirectionAngles(direction);
   var anglePool = dirInfo.angles;
   var commons = [0,1,2].map(function(i){
-    return buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, anglePool[i], dirInfo);
+    return buildCopyCommon(now, day, product, direction, priceRule, deliveryRule, anglePool[i], dirInfo);
   });
   var isFree = String(CopyConfig.freeMode)==='1';
   var styles = isFree ? [] : pickStyleSet(3);
@@ -1961,7 +1977,8 @@ function rewriteVersion(idx, mode){
   if(el) el.innerHTML = '<div style="text-align:center;padding:30px"><div style="display:inline-block;width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite"></div><div style="font-size:12px;color:var(--text-dim);margin-top:8px">正在改写…</div></div>';
   callCopyAPI(key, prompt, 1.0).then(function(txt){
     txt = wrapCopyLines(txt, 20);
-    var footer = buildCopyLinkFooter();
+    var rwDay = CopyConfig.customDay ? parseInt(CopyConfig.customDay,10) : new Date().getDay();
+    var footer = buildCopyLinkFooter(rwDay);
     var full = txt + footer;
     currentCopyTexts[idx-1] = full;
     if(el){
@@ -1975,7 +1992,7 @@ function rewriteVersion(idx, mode){
 }
 
 // ─── Init ───
-function initCopyPage(){loadCopySeasonWeather();initCopyDay();loadCopyConfig();applyCopyConfig();loadCopyProducts();renderCopyHistory();}
+function initCopyPage(){loadCopySeasonWeather();loadCopyConfig();initCopyDay();applyCopyConfig();loadCopyProducts();renderCopyHistory();}
 
 // ═══════ PROMPT ═══════
 var promptType='cover';
