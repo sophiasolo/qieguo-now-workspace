@@ -208,6 +208,7 @@ function saveScheduleCell(){
   
   localStorage.setItem('qg_schedule_overrides',JSON.stringify(overrides));
   document.getElementById('noteModal').classList.remove('show');
+  try{cloudTick();}catch(e){}
   
   // Rerender
   var parts=currentNoteDate.split('-');
@@ -225,6 +226,8 @@ function clearDateOverrides(dateKey){
   document.getElementById('noteModal').classList.remove('show');
   var parts=dateKey.split('-');
   renderMonthSchedule(parseInt(parts[0]),parseInt(parts[1]));
+  // ③ 删除当场打成墓碑并排队上传，别等 2.5s 轮询（窗口期越短越不容易被云端旧叶子盖回来）
+  try{cloudTick();}catch(e){}
   toast('🗑 已清除自定义');
   currentNoteDate=null;
 }
@@ -269,6 +272,7 @@ function clearScheduleEdits(){
   var cleared=0;
   for(var k in overrides){if(k.indexOf(prefix)===0){delete overrides[k];cleared++;}}
   localStorage.setItem('qg_schedule_overrides',JSON.stringify(overrides));
+  try{cloudTick();}catch(e){}
   renderSchedule();
   toast('🔄 已清除 '+cleared+' 条编辑，恢复默认');
 }
@@ -2327,7 +2331,7 @@ function cloudApply(k,v){
 function cloudMergeRemote(remote,force){
   if(!remote||!remote.keys)return false;
   var applied=false,cur=cloudSnapshot();
-  var primary=schedAmPrimary(),ownOv=Object.keys(schedOv()).length>0;
+  var primary=schedAmPrimary();
   CLOUD_KEYS.forEach(function(x){
     var r=remote.keys[x.k];if(!r)return;
     if(r.v===null||r.v===undefined)return;      // 云端空值不覆盖本机
@@ -2346,8 +2350,8 @@ function cloudMergeRemote(remote,force){
         return;
       }
     }
-    // 排期：远端已带叶子 -> 交给叶子合并；主设备且本机确有排期编辑 -> 不让整块快照覆盖本机排期
-    if(x.k===SCHED_KEY&&(remote.schedule||(primary&&ownOv)))return;
+    // ④ 排期只由叶子合并维护：整块快照覆盖会把「已删除 / 被本机否决」的内容整块盖回来，一律跳过
+    if(x.k===SCHED_KEY)return;
     if(!cloudState[x.k])cloudState[x.k]={t:0,v:cur[x.k]};
     var st=cloudState[x.k];
     if(force||(r.t||0)>(st.t||0)){
@@ -2418,7 +2422,8 @@ function schedDiffLocal(state,ov,now,defVal){
   Object.keys(want).forEach(function(k){
     var v=want[k],cur=st.leaves[k];
     if(!cur||cur.v!==v){st.leaves[k]={t:now,v:v};changed=true;}
-    if(st.tomb[k]){delete st.tomb[k];changed=true;}
+    // ② 只有「本机叶子比墓碑新」= 删除后又真的重填过，才清墓碑；否则保留，防云端旧值借重建再复活
+    if(st.tomb[k]&&st.leaves[k]&&(st.leaves[k].t||0)>(st.tomb[k]||0)){delete st.tomb[k];changed=true;}
   });
   Object.keys(st.leaves).forEach(function(k){
     if(!Object.prototype.hasOwnProperty.call(want,k)){delete st.leaves[k];st.tomb[k]=now;changed=true;}
@@ -2451,8 +2456,10 @@ function schedMergeRemote(state,remote,isPrimary,now){
   var rl=(remote&&remote.leaves)||{},rt=(remote&&remote.tomb)||{};
   if(!Object.keys(rl).length&&!Object.keys(rt).length)return {state:st,applied:false,hasRemote:false};
   Object.keys(rl).forEach(function(k){
-    var r=rl[k]||{},cur=st.leaves[k];
+    var r=rl[k]||{},cur=st.leaves[k],tb=st.tomb[k]||0;
     if(r.v===null||r.v===undefined)return;
+    // ① 本机墓碑不旧于云端叶子 -> 用户确实删过这条，拒绝复活（否则上传前那次 GET 就会把删掉的内容盖回来）
+    if(tb&&tb>=(r.t||0))return;
     if(!(isPrimary&&cur)&&(!cur||(r.t||0)>(cur.t||0))){st.leaves[k]={t:r.t||0,v:r.v};applied=true;}
     if(st.tomb[k]&&(r.t||0)>(st.tomb[k]||0)){delete st.tomb[k];applied=true;}
   });
