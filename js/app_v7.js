@@ -1110,7 +1110,7 @@ function getSeasonContextText(d){
   if (typeof CopyConfig !== 'undefined' && CopyConfig && CopyConfig.manualWeather) parts.push('今日体感：' + CopyConfig.manualWeather);
   return parts.join('｜');
 }
-var COPY_BAN_NONSUMMER = '三伏天／高温／解暑／消暑／炎炎夏日／凉爽一夏／冰爽一夏／盛夏／35℃／冰镇／冰爽／冰凉／冷藏／冰一下／空调／降温／热到／冒热气／🧊';
+var COPY_BAN_NONSUMMER = '三伏天／高温／解暑／消暑／炎炎夏日／凉爽一夏／冰爽一夏／盛夏／35℃／冰镇／冰爽／冰凉／冷藏／冰一下／空调／热到／冒热气／🧊';
 var COPY_BAN_SUMMER = '秋风／秋燥／凉秋／暖气／围炉／冬日／寒冬／初雪／雪天／毛衣／羽绒／霜降／寒露／立冬';
 var SEASON_REPLACE_WORDS = {
   winter:'清甜／多汁／润／维C／果香／现切／暖房／屋里／窗外／配一杯热饮之后',
@@ -1245,7 +1245,7 @@ function isProductInSeason(product, d){
 function filterSeasonCards(list, d){
   d = d || new Date();
   if (isSummerNow(d)) return list;
-  var re = /夏|𝑠𝑢𝑚𝑚𝑒𝑟|Summer|SUMMER|summer|雪糕|海邊|海边|Soda|冰镇|冰爽|冰凉|冷藏|空调|解暑|消暑|降温|热到|冒热气|三伏|高温/;
+  var re = /夏|𝑠𝑢𝑚𝑚𝑒𝑟|Summer|SUMMER|summer|雪糕|海邊|海边|Soda|冰镇|冰爽|冰凉|冷藏|空调|解暑|消暑|热到|冒热气|三伏|高温/;
   var out = [], i;
   for (i = 0; i < list.length; i++) { if (!re.test(list[i])) out.push(list[i]); }
   return out.length ? out : list;
@@ -1369,16 +1369,22 @@ var COPY_STRUCTS = [
 var COPY_EMOJI_DENSITY = {high:'高——几乎每行都带1个，但emoji必须贴合内容，不要全篇🍉', mid:'中——3~4处即可，位置分散', low:'低——最多2处，只放在中段'};
 var currentCopyMeta = [];
 
-// 用户在「🎨 风格卡」里指定了某张 → 锁定给版本一，另两版从剩余里随机（保证三版不同）
+// 风格分配（2026-11-20 修正语义）
+// ① 指定了某张风格卡 → 三版都用它（用户显式指定优先，差异交给角度/格式/temperature）
+// ② 没指定（自动轮换）→ 抽 n 张互不相同
 function pickStyleSet(n){
-  var a = COPY_STYLES.slice(), out = [], i, j, t, first = null;
+  var a = COPY_STYLES.slice(), out = [], i, j, t;
   var pickId = (typeof CopyConfig !== 'undefined' && CopyConfig && CopyConfig.stylePick) ? CopyConfig.stylePick : '';
   if(pickId){
-    for(i=0;i<a.length;i++){ if(a[i].id === pickId){ first = a[i]; a.splice(i,1); break; } }
+    for(i=0;i<a.length;i++){
+      if(a[i].id === pickId){
+        for(j=0;j<n;j++) out.push(a[i]);
+        return out;
+      }
+    }
   }
   for(i=a.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=a[i]; a[i]=a[j]; a[j]=t; }
-  if(first) out.push(first);
-  for(i=0;i<a.length && out.length<n;i++) out.push(a[i]);
+  for(i=0;i<n&&i<a.length;i++) out.push(a[i]);
   return out;
 }
 function nextStructKind(){
@@ -1424,7 +1430,7 @@ function copyStructGap(a, b){
   return Math.round((rhythm*0.5 + nDiff*0.3 + eDiff*0.5) * 10) / 10;
 }
 var COPY_SEASON_RE = {
-  ban_non: /冰镇|冰爽|冰凉|冷藏|冰一下|解暑|消暑|降温|空调|三伏|高温|炎夏|热到|冒热气|盛夏|35℃|🧊/,
+  ban_non: /冰镇|冰爽|冰凉|冷藏|冰一下|解暑|消暑|空调|三伏|高温|炎夏|热到|冒热气|盛夏|35℃|🧊/,
   ban_sum: /秋高|秋风起|秋燥|凉秋|暖气|围炉|冬日|寒冬|初雪|雪天|毛衣|羽绒|霜降|寒露/
 };
 function checkSeasonWords(text, d){
@@ -1432,7 +1438,7 @@ function checkSeasonWords(text, d){
   var k = 'winter';
   try{ k = getSeasonKey(d); }catch(e){}
   var re = (k==='summer') ? COPY_SEASON_RE.ban_sum : COPY_SEASON_RE.ban_non;
-  var m = String(text||'').match(re);
+  var m = String(text||'').match(new RegExp(re.source, 'g'));
   if(!m) return [];
   var out = [];
   for(var i=0;i<m.length;i++){ if(out.indexOf(m[i])<0) out.push(m[i]); }
@@ -1662,11 +1668,11 @@ function buildCopyPrompt(common, slot, style, structKind, now, seasonHuaBatch){
   p += '\n【只输出这一版的正文】不要任何解释、不要"版本一"这类标签、不要加分隔线。\n';
   return p;
 }
-function buildCopyFreePrompt(common, style, now){
+function buildCopyFreePrompt(common, now){
   return common
-    + '【本次要求】自由创作，不要套模板。你自己决定用不用花字、怎么排版、几句，'
-    + '但必须让人一眼看出这是一条真人发的群消息。\n'
-    + '语气参考：' + style.name + '——' + style.how + '\n'
+    + '【本次要求】自由创作：不套风格卡、不套排版模板。你自己决定语气、用不用花字、怎么排版、写几句，'
+    + '但必须让人一眼看出这是一条真人发的群消息（不是广告海报）。\n'
+    + '上面【本次额外要求】里用户写的东西优先级最高，照着它写。\n'
     + '只输出正文。\n';
 }
 // 模型会把风格卡/格式槽位的名字当正文写出来（实测「店长直给：这批正甜。」），首行剥掉
@@ -1782,8 +1788,8 @@ function generateCopyAI(){
   var commons = [0,1,2].map(function(i){
     return buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, anglePool[i], dirInfo);
   });
-  var styles = pickStyleSet(3);
   var isFree = String(CopyConfig.freeMode)==='1';
+  var styles = isFree ? [] : pickStyleSet(3);
   var slots = [
     {slot: COPY_FORMATS[0]},
     {slot: COPY_FORMATS[1], structKind: nextStructKind()},
@@ -1805,10 +1811,10 @@ function generateCopyAI(){
   }
 
   var jobs = slots.map(function(cfg, i){
-    var prompt = isFree ? buildCopyFreePrompt(commons[i], styles[i], now)
+    var prompt = isFree ? buildCopyFreePrompt(commons[i], now)
                         : buildCopyPrompt(commons[i], cfg.slot, styles[i], cfg.structKind, now, seasonHuaBatch);
     return callCopyAPI(key, prompt, temps[i]).then(function(txt){
-      return {text: txt, style: styles[i], slot: cfg.slot, temp: temps[i]};
+      return {text: txt, style: styles[i] || {id:'free', name:'自由'}, slot: isFree ? {id:'free', name:'自由排版'} : cfg.slot, temp: temps[i]};
     });
   });
 
@@ -1909,7 +1915,7 @@ function rewriteVersion(idx, mode){
     lively: '语气更活泼一点，多一点口语，但不要喊口号、不要用"限时抢"这类词',
     calm:   '语气更克制、像日常聊天，减少形容词和感叹号',
     regen:  '换一个完全不同的切入角度重写这一版',
-    season: '这一版出现了不符合当前季节的词，必须重写：严格禁止出现冰镇/冰爽/冰凉/冷藏/解暑/空调/降温/热到/冒热气等词，改用清甜/多汁/润/维C/果香/暖房等表达'
+    season: '这一版出现了不符合当前季节的词，必须重写：严格禁止出现冰镇/冰爽/冰凉/冷藏/解暑/空调/热到/冒热气等词，改用清甜/多汁/润/维C/果香/暖房等表达'
   };
   var instr = cmds[mode] || '优化这一版，让句子更自然';
   var rule = '';
