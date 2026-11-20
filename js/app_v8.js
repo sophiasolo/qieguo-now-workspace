@@ -1573,6 +1573,17 @@ function getDirectionAngles(dir){
   return {label:'AI推荐（时令优先·' + (SEASON_CN[k]||'') + '季）', angles:angles};
 }
 // 行长超限检测：emoji 按 1 个字符计（微信里占 1 格），只统计正文行，跳过链接行
+// 正文行数（排除空行、链接行）：用来判断文案是不是太长
+function copyBodyLines(t){
+  var a = String(t||'').split('\n'), n = 0, i;
+  for(i=0;i<a.length;i++){
+    var s = a[i].trim();
+    if(!s) continue;
+    if(s.indexOf('://')>=0 || s.indexOf('#')===0) continue;
+    n++;
+  }
+  return n;
+}
 function copyLongLines(t, max){
   max = max || 20;
   var a = String(t||'').split('\n'), out = [], i, arr;
@@ -1659,6 +1670,9 @@ function buildCopyPrompt(common, slot, style, structKind, now, seasonHuaBatch){
   if(slot.id === 'struct' && structKind){
     p += '【结构要求：' + structKind.name + '】' + structKind.how + '\n';
   }
+  var lineRange = (slot.id === 'struct') ? '6~10' : '6~8';
+  p += '【篇幅（硬指标）】正文 ' + lineRange + ' 行，全文正文合计不超过 110 字；宁可少写两句，也不要把一句话拆成两行凑数、不要写小标题、不要重复同一层意思。\n'
+     + '每行控制在 18 字以内（留出 emoji 的余量，超了会自动折行变难看）。\n';
   if(slot.id !== 'struct'){
     var hua = '';
     try{ hua = getSeasonHuaPrompt(now, CopyConfig.customProduct || getCopyProduct(), seasonHuaBatch); }catch(e){}
@@ -1668,12 +1682,26 @@ function buildCopyPrompt(common, slot, style, structKind, now, seasonHuaBatch){
   p += '\n【只输出这一版的正文】不要任何解释、不要"版本一"这类标签、不要加分隔线。\n';
   return p;
 }
-function buildCopyFreePrompt(common, now){
+// 自由模式 = 不限「排版骨架」和「风格卡」，但品牌元素（花字/emoji/产品名/价格）必须保留
+function buildCopyFreePrompt(common, now, seasonHuaBatch, verIdx){
+  var hua = '', lib = '';
+  // 按版分配花字：三版各取批次里的一条（同批 4 条→三版开头不撞）
+  var oneBatch = null;
+  if(seasonHuaBatch && seasonHuaBatch.length){
+    oneBatch = [seasonHuaBatch[(verIdx || 0) % seasonHuaBatch.length]];
+  }
+  try{ hua = getSeasonHuaPrompt(now, CopyConfig.customProduct || getCopyProduct(), oneBatch); }catch(e){}
+  try{ lib = buildHuaZiSample(now); }catch(e){}
   return common
-    + '【本次要求】自由创作：不套风格卡、不套排版模板。你自己决定语气、用不用花字、怎么排版、写几句，'
-    + '但必须让人一眼看出这是一条真人发的群消息（不是广告海报）。\n'
-    + '上面【本次额外要求】里用户写的东西优先级最高，照着它写。\n'
-    + '只输出正文。\n';
+    + '【本次要求】自由创作：语气、结构、句数都由你决定，不要套模板感，但要像真人发群消息。\n'
+    + '品牌元素不能丢（这三条是硬要求）：\n'
+    + '① 至少 1 行花字（Unicode装饰体／谐音梗／emoji叙事串／框线体任选），可放开头或中段\n'
+    + '② 每行至少 1 个贴合内容的 emoji，别全篇🍉\n'
+    + '③ 至少有 1 行写清产品名，价格按上面要求\n'
+    + '【篇幅（硬指标）】正文 6~9 行，全文不超过 120 字；每行 18 字以内。\n'
+    + '上面【本次额外要求】优先级最高，照着它写。\n\n'
+    + hua + lib
+    + '\n只输出正文，不要解释。\n';
 }
 // 模型会把风格卡/格式槽位的名字当正文写出来（实测「店长直给：这批正甜。」），首行剥掉
 function stripStylePrefix(s){
@@ -1733,6 +1761,8 @@ function renderCopyResults(results){
     if(sc.length) warns.push('出现自我纠正痕迹：' + sc.join('、') + '（点「🎲重写」）');
     var longN = raw ? copyLongLines(raw, 20).length : 0;
     if(longN) warns.push(longN + ' 行超过20字，微信群发会折行（点「🎲重写」）');
+    var bodyN = raw ? copyBodyLines(raw) : 0;
+    if(bodyN > 11) warns.push('正文 ' + bodyN + ' 行偏长，群里会刷屏（点「🎲重写」）');
     var head = warns.length
       ? '<div style="font-size:11px;color:#b45309;line-height:1.7;margin-bottom:6px">⚠️ ' + warns.join('<br>⚠️ ') + '</div>'
       : '';
@@ -1811,7 +1841,7 @@ function generateCopyAI(){
   }
 
   var jobs = slots.map(function(cfg, i){
-    var prompt = isFree ? buildCopyFreePrompt(commons[i], now)
+    var prompt = isFree ? buildCopyFreePrompt(commons[i], now, seasonHuaBatch, i)
                         : buildCopyPrompt(commons[i], cfg.slot, styles[i], cfg.structKind, now, seasonHuaBatch);
     return callCopyAPI(key, prompt, temps[i]).then(function(txt){
       return {text: txt, style: styles[i] || {id:'free', name:'自由'}, slot: isFree ? {id:'free', name:'自由排版'} : cfg.slot, temp: temps[i]};
