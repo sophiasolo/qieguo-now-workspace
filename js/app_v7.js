@@ -3,7 +3,7 @@ var productData=null;
 var sentimentFilter='all';
 var currentNoteDate=null;
 
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:'',freeMode:'0',manualWeather:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:'',freeMode:'0',manualWeather:'',stylePick:'',extraNote:''};
 
 // ═══════════════════════════════════════════════════════════════════════════
 // 📅 文案创作 · 今日节日数据（仅供「📅 推送日」今日信息 + AI 节日增强 Prompt 使用）
@@ -685,7 +685,7 @@ toast('✅ '+items.length+'个产品 | '+priceSamples);
 }
 
 // ═══════ COPY ═══════
-var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:'',freeMode:'0',manualWeather:''};
+var CopyConfig={priceMode:'unified',customPrice:'',delivery:'free30',deliveryCustomVal:'',linkMeituan:true,linkEleme:true,linkMini:true,direction:'auto',aiMode:'template',customProduct:'',customDay:'',comboNote:'',festivalName:'',freeMode:'0',manualWeather:'',stylePick:'',extraNote:''};
 function loadCopyConfig(){try{var saved=JSON.parse(localStorage.getItem('qg_copy_config')||'{}');for(var k in saved){if(CopyConfig.hasOwnProperty(k))CopyConfig[k]=saved[k];}}catch(e){}applyCopyConfig();}
 function saveCopyConfig(){localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}
 function setCopyConfig(key,val){
@@ -698,7 +698,21 @@ function setCopyConfig(key,val){
   if(key==='aiMode'){updateGenBtnLabel();}
 }
 function updateGenBtnLabel(){}
-function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}(function(){var sel=document.getElementById('copyDirection');if(!sel)return;var v=CopyConfig.direction||'auto';if(!sel.querySelector('option[value="'+v+'"]')){v='auto';CopyConfig.direction='auto';try{localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}catch(e){}}sel.value=v;})();updateGenBtnLabel();var _fm=document.getElementById('modeStd'),_fz=document.getElementById('modeFree');if(_fm&&_fz){var _isf=String(CopyConfig.freeMode)==='1';_fm.className='btn '+(_isf?'btn-ghost':'btn-primary');_fz.className='btn '+(_isf?'btn-primary':'btn-ghost');}var _cf=document.getElementById('copyFeel');if(_cf&&! _cf.value)_cf.value=CopyConfig.manualWeather||'';}
+// 顶部设置栏的抽屉（产品 / 设置 / 历史）：一次只开一个，避免页面又变长
+function toggleCopyDrawer(name){
+  var map = {prod:'copyDrawerProd', more:'copyDrawerMore', hist:'copyDrawerHist'};
+  var id = map[name];
+  if(!id) return;
+  var el = document.getElementById(id);
+  if(!el) return;
+  var willShow = !el.classList.contains('show');
+  for(var k in map){
+    var o = document.getElementById(map[k]);
+    if(o && o !== el) o.classList.remove('show');
+  }
+  if(willShow) el.classList.add('show'); else el.classList.remove('show');
+}
+function applyCopyConfig(){document.getElementById('priceUnified').className='btn '+(CopyConfig.priceMode==='unified'?'btn-primary':'btn-ghost');document.getElementById('priceRegional').className='btn '+(CopyConfig.priceMode==='regional'?'btn-primary':'btn-ghost');document.getElementById('delivery30').className='btn '+(CopyConfig.delivery==='free30'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustom').className='btn '+(CopyConfig.delivery==='custom'?'btn-primary':'btn-ghost');document.getElementById('deliveryCustomVal').style.display=CopyConfig.delivery==='custom'?'':'none';var pi=document.getElementById('priceCustomVal');if(pi)pi.value=CopyConfig.customPrice||'';document.getElementById('deliveryCustomVal').value=CopyConfig.deliveryCustomVal||'';var links=document.querySelectorAll('#copyLinks label input');if(links.length>=3){links[0].checked=CopyConfig.linkMeituan;links[1].checked=CopyConfig.linkEleme;links[2].checked=CopyConfig.linkMini;}(function(){var sel=document.getElementById('copyDirection');if(!sel)return;var v=CopyConfig.direction||'auto';if(!sel.querySelector('option[value="'+v+'"]')){v='auto';CopyConfig.direction='auto';try{localStorage.setItem('qg_copy_config',JSON.stringify(CopyConfig));}catch(e){}}sel.value=v;})();updateGenBtnLabel();var _fm=document.getElementById('modeStd'),_fz=document.getElementById('modeFree');if(_fm&&_fz){var _isf=String(CopyConfig.freeMode)==='1';_fm.className='btn '+(_isf?'btn-ghost':'btn-primary');_fz.className='btn '+(_isf?'btn-primary':'btn-ghost');}var _cf=document.getElementById('copyFeel');if(_cf&&! _cf.value)_cf.value=CopyConfig.manualWeather||'';var _ss=document.getElementById('copyStyleSel');if(_ss)_ss.value=CopyConfig.stylePick||'';var _en=document.getElementById('copyExtraNote');if(_en&&! _en.value)_en.value=CopyConfig.extraNote||'';}
 
 // ═══════════════════════════════════════════
 // SECTION LUNAR: 农历 / 节气引擎（文案创作「📅 推送日」卡片显示用）
@@ -919,7 +933,7 @@ var currentCopyTexts=[];
 function formatCopyDisplay(text,label,extraLabel){
   var clean=text||"";
   var lines_=clean.split("\n");
-  var out="<div style=\"background:#f0f7f0;border-radius:8px;padding:14px 16px;font-size:13px;line-height:2.2;color:var(--text)\">";
+  var out="<div style=\"background:#f0f7f0;border-radius:8px;padding:12px 14px;font-size:12.5px;line-height:1.95;color:var(--text);word-break:break-word\">";
   out+="<div style=\"font-size:11px;color:var(--brand);margin-bottom:8px;font-weight:600\">"+label+(extraLabel?" · "+extraLabel:"")+"</div>";
   lines_.forEach(function(l){
     if(!l.trim()){out+="<div style=\"height:8px\"></div>";}
@@ -1355,10 +1369,16 @@ var COPY_STRUCTS = [
 var COPY_EMOJI_DENSITY = {high:'高——几乎每行都带1个，但emoji必须贴合内容，不要全篇🍉', mid:'中——3~4处即可，位置分散', low:'低——最多2处，只放在中段'};
 var currentCopyMeta = [];
 
+// 用户在「🎨 风格卡」里指定了某张 → 锁定给版本一，另两版从剩余里随机（保证三版不同）
 function pickStyleSet(n){
-  var a = COPY_STYLES.slice(), out = [], i, j, t;
+  var a = COPY_STYLES.slice(), out = [], i, j, t, first = null;
+  var pickId = (typeof CopyConfig !== 'undefined' && CopyConfig && CopyConfig.stylePick) ? CopyConfig.stylePick : '';
+  if(pickId){
+    for(i=0;i<a.length;i++){ if(a[i].id === pickId){ first = a[i]; a.splice(i,1); break; } }
+  }
   for(i=a.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=a[i]; a[i]=a[j]; a[j]=t; }
-  for(i=0;i<n&&i<a.length;i++) out.push(a[i]);
+  if(first) out.push(first);
+  for(i=0;i<a.length && out.length<n;i++) out.push(a[i]);
   return out;
 }
 function nextStructKind(){
@@ -1585,7 +1605,7 @@ function wrapCopyLines(text, max){
   }
   return out.join('\n');
 }
-function buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, angle){
+function buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, angle, dirInfo){
   var s = '你是切果NOW社群文案创作者，写的是发在微信门店群里的消息，像群里真人说话，不是广告海报。\n\n';
   var seasonText = '';
   try{ seasonText = getSeasonContextText(now); }catch(e){}
@@ -1593,11 +1613,17 @@ function buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRu
   var rule = '';
   try{ rule = getSeasonWordRule(now); }catch(e){}
   if(rule) s += rule + '\n\n';
+  var extraNote = '';
+  try{ extraNote = String((CopyConfig.extraNote||'')).trim(); }catch(e){ extraNote = ''; }
+  if(extraNote){
+    s += '【⭐本次额外要求（最高优先级，必须按它写）】\n' + extraNote + '\n'
+       + '注意：上面是给创作者的指令，不是文案内容 —— 禁止把这段话原样抄进文案，也不要转述成“你要求我…”这类句子。\n\n';
+  }
   s += '【产品】' + product + '\n';
   if(CopyConfig.comboNote) s += '【套餐详情（必须自然融入，不可忽略）】' + CopyConfig.comboNote + '\n';
   if(priceRule) s += '【价格】' + priceRule + '\n';
   if(deliveryRule) s += '【配送】' + deliveryRule + '\n';
-  var da = getDirectionAngles(direction);
+  var da = dirInfo || getDirectionAngles(direction);
   s += '【方向：' + da.label + '】';
   if(angle){
     var others = [], oi;
@@ -1705,6 +1731,8 @@ function renderCopyResults(results){
       ? '<div style="font-size:11px;color:#b45309;line-height:1.7;margin-bottom:6px">⚠️ ' + warns.join('<br>⚠️ ') + '</div>'
       : '';
     var tag = results[i] && results[i].slot ? results[i].slot.name : '';
+    var styName = (results[i] && results[i].style) ? results[i].style.name : '';
+    if(styName) tag = '🎨' + styName + (tag ? ' × ' + tag : '');
     el.innerHTML = head + formatCopyDisplay(full, labels[i], tag);
     if(el.parentElement) el.parentElement.style.opacity = '1';
   }
@@ -1749,9 +1777,10 @@ function generateCopyAI(){
 
   var seasonHuaBatch = [];
   try{ seasonHuaBatch = pickSeasonHua(getSeasonKey(now), 4); }catch(e){}
-  var anglePool = getDirectionAngles(direction).angles;
+  var dirInfo = getDirectionAngles(direction);
+  var anglePool = dirInfo.angles;
   var commons = [0,1,2].map(function(i){
-    return buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, anglePool[i]);
+    return buildCopyCommon(now, dayName, product, direction, priceRule, deliveryRule, anglePool[i], dirInfo);
   });
   var styles = pickStyleSet(3);
   var isFree = String(CopyConfig.freeMode)==='1';
@@ -1808,7 +1837,8 @@ function generateCopyAI(){
     renderCopyResults(res);
     try{ saveCopyHistory(product, currentCopyTexts, res); }catch(e){}
     var extra = res.filter(function(r){ return r.regen; }).length ? ' · 已自动重写 1 版' : '';
-    toast('🧠 已生成 3 版：' + product + extra);
+    var styList = res.map(function(r){ return r && r.style ? r.style.name : ''; }).filter(function(x){ return x; }).join(' / ');
+    toast('🧠 已生成 3 版：' + product + (styList ? '（' + styList + '）' : '') + extra);
   }).catch(fail);
 }
 function generateCopyFestivalAI(key, now){

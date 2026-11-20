@@ -109,6 +109,35 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
 .empty-state h3{font-size:16px;margin-bottom:6px;color:var(--text)}
 .empty-state p{font-size:13px}
 @media(max-width:1024px){.grid2,.grid3{grid-template-columns:1fr}.sidebar{width:60px;min-width:60px;padding:12px 0}.sidebar .nav-item{padding:10px 14px;justify-content:center}.sidebar .nav-item span:not(.icon){display:none}.sidebar .nav-section{display:none}.sidebar-brand{padding:8px 12px 16px;justify-content:center}.main{margin-left:60px}}
+/* ── 文案创作板块 v116 布局（顶部工具条 + 三版并排） ── */
+.copy-bar{padding:12px 16px;margin-bottom:12px}
+.copy-bar-main{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.copy-bar-day{min-width:200px;flex-shrink:0}
+.copy-day-title{font-size:13px;font-weight:700;color:var(--brand)}
+.copy-day-sub{font-size:11px;color:var(--text-dim);margin-top:3px;line-height:1.5}
+.copy-bar-ctrls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;justify-content:flex-end}
+.copy-mini{font-size:11px;padding:5px 8px;border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.7);color:var(--text);font-family:inherit;max-width:180px}
+.copy-chip{font-size:11px;padding:6px 12px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.7);color:var(--text);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .18s}
+.copy-chip:hover{background:rgba(45,138,78,.10);border-color:rgba(45,138,78,.35);color:var(--brand-dark)}
+.copy-drawer{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+.copy-drawer.show{display:block}
+.copy-drawer-title{font-size:12px;font-weight:600;color:var(--brand);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.copy-set-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.copy-set-item{font-size:11px;color:var(--text-dim)}
+.copy-set-item textarea{width:100%;min-height:52px;resize:vertical;font-family:inherit;padding:6px 8px;border:1px solid var(--border);border-radius:8px;font-size:11px;margin-top:4px}
+.copy-ask{padding:12px 16px;margin-bottom:12px}
+.copy-ask-head{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.copy-ask-title{font-size:12px;font-weight:700;color:var(--brand)}
+.copy-ask-hint{font-size:11px;color:var(--text-dim)}
+.copy-ask-input{width:100%;min-height:58px;max-height:180px;resize:vertical;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:12px;line-height:1.7;font-family:inherit;background:rgba(255,255,255,.75);color:var(--text)}
+.copy-ask-input:focus{outline:none;border-color:rgba(45,138,78,.45);box-shadow:0 0 0 3px rgba(45,138,78,.10)}
+.copy-ask-row{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.copy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;align-items:stretch}
+.copy-grid>.card{display:flex;flex-direction:column}
+.copy-grid>.card>div[id^="copyV"]{flex:1}
+/* 等高后让操作按钮沉到卡片底部（覆盖 inline 的 margin-top:10px） */
+.copy-grid>.card .copy-actions{margin-top:auto !important;padding-top:12px}
+@media(max-width:1200px){.copy-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -288,132 +317,164 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
       </div>
     </div>
     <div class="page" id="page-copy">
-      <div style="display:grid;grid-template-columns:300px 1fr 200px;gap:16px;min-height:calc(100vh - 120px)">
-        <!-- LEFT: 配置栏 -->
-        <div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">📅 推送日</div></div>
-            <div style="font-size:13px;font-weight:700;color:var(--brand);margin-bottom:4px" id="copyDayLabel">加载中...</div>
-            <select id="copyDaySelect" onchange="setCopyConfig('customDay',this.value)" style="width:100%;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:11px;margin-bottom:4px">
+      <!-- ① 顶部信息 + 设置条 -->
+      <div class="card copy-bar">
+        <div class="copy-bar-main">
+          <div class="copy-bar-day">
+            <div class="copy-day-title" id="copyDayLabel">加载中...</div>
+            <div class="copy-day-sub" id="copyWeather">加载中...</div>
+          </div>
+          <div class="copy-bar-ctrls">
+            <select id="copyDaySelect" class="copy-mini" onchange="setCopyConfig('customDay',this.value)" title="推送日">
               <option value="">📅 自动（今天）</option>
               <option value="2">周二 · 热销风向</option>
               <option value="3">周三 · 会员日88折</option>
               <option value="4">周四 · 外卖双平台</option>
               <option value="5">周五 · 周末套餐</option>
               <option value="6">周六 · 外卖双平台+周末</option>
-              <option value="festival">🎋 节气品宣（纯氛围，无产品）</option>
+              <option value="festival">🎋 节气品宣</option>
             </select>
-            <input id="festivalNameInput" placeholder="输入节气/节日名称，如：立秋、冬至、中秋" onchange="CopyConfig.festivalName=this.value" style="display:none;width:100%;margin-top:6px;padding:6px 8px;border:1px solid var(--brand);border-radius:4px;font-size:12px">
-            <div id="copyWeather" style="font-size:11px;color:var(--text-dim)">加载中...</div>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">📦 产品</div></div>
-            <div id="copyProducts" style="font-size:13px;color:var(--text-dim)">产品库建设中...</div>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header" onclick="var e2=document.getElementById('comboBox');e2.style.display=e2.style.display==='none'?'block':'none'" style="cursor:pointer"><div class="card-title">📋 套餐说明 <span id="comboToggle" style="font-size:10px;color:var(--text-dim);font-weight:400">展开 ▼</span></div></div>
-            <textarea id="comboBox" style="display:none;width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;font-size:11px;resize:vertical;min-height:60px;font-family:inherit" placeholder="填套餐细节，AI会附加到文案中&#10;如：追剧搭子800g，含芒果250g+三拼300g+桃子250g" onchange="CopyConfig.comboNote=this.value;CopyConfig._modified=true"></textarea>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">💰 价格模式</div></div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-primary" onclick="setCopyConfig('priceMode','unified')" id="priceUnified" style="font-size:11px;padding:5px 12px">统一价格</button>
-              <button class="btn btn-ghost" onclick="setCopyConfig('priceMode','regional')" id="priceRegional" style="font-size:11px;padding:5px 12px">区域差异</button>
-              <input id="priceCustomVal" placeholder="输入价格，如19.9" onchange="setCopyConfig('customPrice',this.value)" style="width:100%;margin-top:4px;padding:5px 8px;border:1px solid var(--border);border-radius:4px;font-size:11px">
-            </div>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">🚚 配送费</div></div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-primary" onclick="setCopyConfig('delivery','free30')" id="delivery30" style="font-size:11px;padding:5px 12px">满30免配送费</button>
-              <button class="btn btn-ghost" onclick="setCopyConfig('delivery','custom')" id="deliveryCustom" style="font-size:11px;padding:5px 12px">自定义</button>
-              <input id="deliveryCustomVal" placeholder="如：满25免" style="display:none;width:100%;margin-top:4px;padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:11px" onchange="setCopyConfig('deliveryCustomVal',this.value)">
-            </div>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">🔗 链接</div></div>
-            <div style="display:flex;gap:8px;font-size:12px" id="copyLinks">
-              <label><input type="checkbox" checked onchange="setCopyConfig('linkMeituan',this.checked)"> 美团</label>
-              <label><input type="checkbox" checked onchange="setCopyConfig('linkEleme',this.checked)"> 饿了么</label>
-              <label id="linkMiniapp"><input type="checkbox" checked onchange="setCopyConfig('linkMini',this.checked)"> 小程序</label>
-            </div>
-          </div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">🎛 生成模式</div></div>
-            <div style="display:flex;gap:6px;margin-bottom:6px">
-              <button class="btn btn-primary" id="modeStd" onclick="setCopyConfig('freeMode','0')" style="flex:1;font-size:11px;padding:6px 0">🎨 风格卡</button>
-              <button class="btn btn-ghost" id="modeFree" onclick="setCopyConfig('freeMode','1')" style="flex:1;font-size:11px;padding:6px 0">🚀 自由模式</button>
-            </div>
-            <input id="copyFeel" placeholder="今日体感（可选）：如 3~9℃ 阴、外面刮风" onchange="CopyConfig.manualWeather=this.value;saveCopyConfig();" style="width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:4px;font-size:11px">
-          </div>
-          <div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">
-            <button class="btn btn-primary" onclick="generateCopy()" id="btnGenerateCopy" style="flex:1;padding:12px;font-size:14px">🧠 AI 一键生成</button>
-            <span onclick="openApiKeyModal()" style="cursor:pointer;font-size:14px;opacity:0.4;padding:0 4px" title="API Key 设置">⚙️</span>
+            <input id="festivalNameInput" class="copy-mini" placeholder="节气/节日名" onchange="CopyConfig.festivalName=this.value" style="display:none;width:110px">
+            <button class="copy-chip" onclick="toggleCopyDrawer('prod')">📦 产品</button>
+            <select id="copyStyleSel" class="copy-mini" onchange="setCopyConfig('stylePick',this.value)" title="选定后锁定给版本一，另两版仍随机不重复">
+              <option value="">🎲 自动轮换（每版不同）</option>
+              <option value="boss">店长直给</option>
+              <option value="bff">闺蜜吐槽</option>
+              <option value="diary">碎片日记</option>
+              <option value="danmu">弹幕冒泡</option>
+              <option value="list">清单作答</option>
+              <option value="ask">反问钩子</option>
+              <option value="cold">冷知识</option>
+              <option value="self">自嘲</option>
+              <option value="poem">短句诗</option>
+              <option value="dialog">对话体</option>
+              <option value="notice">通知体</option>
+              <option value="score">打分体</option>
+              <option value="compare">对比体</option>
+              <option value="weather">体感切入</option>
+              <option value="child">童心</option>
+              <option value="hush">低声安利</option>
+            </select>
+            <button class="copy-chip" onclick="toggleCopyDrawer('more')">⚙️ 设置</button>
+            <button class="copy-chip" onclick="toggleCopyDrawer('hist')">📜 历史</button>
           </div>
         </div>
-        
-        <!-- CENTER: 创作区 -->
-        <div>
-          <div style="margin-bottom:8px">
-            <span style="font-size:12px;color:var(--text-dim)">🎯 方向：</span>
-            <select id="copyDirection" onchange="setCopyConfig('direction',this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px">
-              <option value="auto">🤖 AI推荐</option>
-              <option value="emotion">💔 情感缺口</option>
-              <option value="scene">🌆 场景共鸣</option>
-              <option value="social">👥 社交裂变</option>
-              <option value="surprise">🎁 惊喜彩蛋</option>
-              <option value="health">💪 健康密码</option>
-              <option value="contrast">⚖️ 对比锚定</option>
-              <option value="lazy">😴 懒人救星</option>
-            </select>
-          </div>
-          <div id="copyVersions" style="display:flex;flex-direction:column;gap:12px">
-            <div class="card" style="opacity:0.5">
-              <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本一 · 待生成</div>
-              <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV1">点击左侧 🚀 生成</div>
-              <div style="display:flex;gap:8px;margin-top:10px;display:none;flex-wrap:wrap" class="copy-actions">
-                <button class="btn btn-ghost" onclick="copyVersion(1)" style="font-size:11px;padding:4px 9px">📋 复制</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(1,'opener')" style="font-size:11px;padding:4px 9px">🔄 换开头</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(1,'lively')" style="font-size:11px;padding:4px 9px">✨ 更活泼</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(1,'calm')" style="font-size:11px;padding:4px 9px">🍃 更克制</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(1,'season')" style="font-size:11px;padding:4px 9px">❄️ 季节重写</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(1,'regen')" style="font-size:11px;padding:4px 9px">🎲 重写</button>
+
+        <!-- 抽屉：产品 -->
+        <div class="copy-drawer" id="copyDrawerProd">
+          <div class="copy-drawer-title">📦 选择产品（点一下即选中）</div>
+          <div id="copyProducts" style="font-size:13px;color:var(--text-dim)">产品库建设中...</div>
+        </div>
+
+        <!-- 抽屉：设置 -->
+        <div class="copy-drawer" id="copyDrawerMore">
+          <div class="copy-drawer-title">⚙️ 出单设置</div>
+          <div class="copy-set-grid">
+            <div class="copy-set-item">
+              <span>📋 套餐说明</span>
+              <textarea id="comboBox" placeholder="填套餐细节，AI会附加到文案中&#10;如：追剧搭子800g，含芒果250g+三拼300g+桃子250g" onchange="CopyConfig.comboNote=this.value;saveCopyConfig();"></textarea>
+            </div>
+            <div class="copy-set-item">
+              <span>💰 价格模式</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+                <button class="btn btn-primary" onclick="setCopyConfig('priceMode','unified')" id="priceUnified" style="font-size:11px;padding:5px 12px">统一价格</button>
+                <button class="btn btn-ghost" onclick="setCopyConfig('priceMode','regional')" id="priceRegional" style="font-size:11px;padding:5px 12px">区域差异</button>
+              </div>
+              <input id="priceCustomVal" class="copy-mini" placeholder="输入价格，如 19.9" onchange="setCopyConfig('customPrice',this.value)" style="width:100%;margin-top:6px;max-width:none">
+            </div>
+            <div class="copy-set-item">
+              <span>🚚 配送费</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+                <button class="btn btn-primary" onclick="setCopyConfig('delivery','free30')" id="delivery30" style="font-size:11px;padding:5px 12px">满30免</button>
+                <button class="btn btn-ghost" onclick="setCopyConfig('delivery','custom')" id="deliveryCustom" style="font-size:11px;padding:5px 12px">自定义</button>
+              </div>
+              <input id="deliveryCustomVal" class="copy-mini" placeholder="如：满25免" style="display:none;width:100%;margin-top:6px;max-width:none" onchange="setCopyConfig('deliveryCustomVal',this.value)">
+            </div>
+            <div class="copy-set-item">
+              <span>🔗 附带链接</span>
+              <div style="display:flex;gap:10px;font-size:12px;margin-top:8px" id="copyLinks">
+                <label><input type="checkbox" checked onchange="setCopyConfig('linkMeituan',this.checked)"> 美团</label>
+                <label><input type="checkbox" checked onchange="setCopyConfig('linkEleme',this.checked)"> 饿了么</label>
+                <label id="linkMiniapp"><input type="checkbox" checked onchange="setCopyConfig('linkMini',this.checked)"> 小程序</label>
               </div>
             </div>
-            <div class="card" style="opacity:0.5">
-              <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本二 · 待生成</div>
-              <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV2">点击左侧 🚀 生成</div>
-              <div style="display:flex;gap:8px;margin-top:10px;display:none;flex-wrap:wrap" class="copy-actions">
-                <button class="btn btn-ghost" onclick="copyVersion(2)" style="font-size:11px;padding:4px 9px">📋 复制</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(2,'opener')" style="font-size:11px;padding:4px 9px">🔄 换开头</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(2,'lively')" style="font-size:11px;padding:4px 9px">✨ 更活泼</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(2,'calm')" style="font-size:11px;padding:4px 9px">🍃 更克制</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(2,'season')" style="font-size:11px;padding:4px 9px">❄️ 季节重写</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(2,'regen')" style="font-size:11px;padding:4px 9px">🎲 重写</button>
-              </div>
-            </div>
-            <div class="card" style="opacity:0.5">
-              <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本三 · 待生成</div>
-              <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV3">点击左侧 🚀 生成</div>
-              <div style="display:flex;gap:8px;margin-top:10px;display:none;flex-wrap:wrap" class="copy-actions">
-                <button class="btn btn-ghost" onclick="copyVersion(3)" style="font-size:11px;padding:4px 9px">📋 复制</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(3,'opener')" style="font-size:11px;padding:4px 9px">🔄 换开头</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(3,'lively')" style="font-size:11px;padding:4px 9px">✨ 更活泼</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(3,'calm')" style="font-size:11px;padding:4px 9px">🍃 更克制</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(3,'season')" style="font-size:11px;padding:4px 9px">❄️ 季节重写</button>
-                <button class="btn btn-ghost" onclick="rewriteVersion(3,'regen')" style="font-size:11px;padding:4px 9px">🎲 重写</button>
-              </div>
+            <div class="copy-set-item">
+              <span>🌡 今日体感（可选）</span>
+              <input id="copyFeel" class="copy-mini" placeholder="如 3~9℃ 阴、外面刮风" onchange="CopyConfig.manualWeather=this.value;saveCopyConfig();" style="width:100%;margin-top:4px;max-width:none">
             </div>
           </div>
         </div>
-        
-        <!-- RIGHT: 输出栏 -->
-        <div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-header"><div class="card-title">📜 历史记录</div><button class="btn btn-ghost" onclick="clearCopyHistory()" style="font-size:10px;color:var(--red);padding:2px 8px">🗑 清空</button></div>
-            <div id="copyHistory" style="font-size:11px;color:var(--text-dim);max-height:400px;overflow-y:auto">
-              <div style="padding:4px 0">暂无记录</div>
-            </div>
+
+        <!-- 抽屉：历史 -->
+        <div class="copy-drawer" id="copyDrawerHist">
+          <div class="copy-drawer-title">📜 历史记录<button class="btn btn-ghost" onclick="clearCopyHistory()" style="font-size:10px;color:var(--red);padding:2px 8px">🗑 清空</button></div>
+          <div id="copyHistory" style="font-size:11px;color:var(--text-dim);max-height:240px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px">
+            <div style="padding:4px 0">暂无记录</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② 本次要求 + 生成 -->
+      <div class="card copy-ask">
+        <div class="copy-ask-head">
+          <span class="copy-ask-title">💬 本次要求</span>
+          <span class="copy-ask-hint">写你要什么，AI 按这个写（不会照抄你的原话）</span>
+        </div>
+        <textarea id="copyExtraNote" class="copy-ask-input" oninput="CopyConfig.extraNote=this.value;saveCopyConfig();" placeholder="例：今天降温，重点讲暖气房里吃，别太促销，结尾问一句就行&#10;例：这条发给老客户，强调现切，不要提价格&#10;例：用第一人称，像我自己在群里随手发的，别用花字"></textarea>
+        <div class="copy-ask-row">
+          <select id="copyDirection" class="copy-mini" onchange="setCopyConfig('direction',this.value)" title="文案方向">
+            <option value="auto">🤖 AI推荐</option>
+            <option value="emotion">💔 情感缺口</option>
+            <option value="scene">🌆 场景共鸣</option>
+            <option value="social">👥 社交裂变</option>
+            <option value="surprise">🎁 惊喜彩蛋</option>
+            <option value="health">💪 健康密码</option>
+            <option value="contrast">⚖️ 对比锚定</option>
+            <option value="lazy">😴 懒人救星</option>
+          </select>
+          <button class="btn btn-primary" id="modeStd" onclick="setCopyConfig('freeMode','0')" style="font-size:11px;padding:6px 12px">🎨 风格卡</button>
+          <button class="btn btn-ghost" id="modeFree" onclick="setCopyConfig('freeMode','1')" style="font-size:11px;padding:6px 12px">🚀 自由</button>
+          <span style="flex:1"></span>
+          <button class="btn btn-primary" onclick="generateCopy()" id="btnGenerateCopy" style="padding:10px 24px;font-size:14px">🧠 生成 3 版</button>
+        </div>
+      </div>
+
+      <!-- ③ 三版并排 -->
+      <div id="copyVersions" class="copy-grid">
+        <div class="card" style="opacity:0.5">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本一 · 待生成</div>
+          <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV1">点上方 🧠 生成 3 版</div>
+          <div style="display:flex;gap:6px;margin-top:10px;display:none;flex-wrap:wrap" class="copy-actions">
+            <button class="btn btn-ghost" onclick="copyVersion(1)" style="font-size:10px;padding:4px 8px">📋 复制</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(1,'opener')" style="font-size:10px;padding:4px 8px">🔄 换开头</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(1,'lively')" style="font-size:10px;padding:4px 8px">✨ 更活泼</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(1,'calm')" style="font-size:10px;padding:4px 8px">🍃 更克制</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(1,'season')" style="font-size:10px;padding:4px 8px">❄️ 季节重写</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(1,'regen')" style="font-size:10px;padding:4px 8px">🎲 重写</button>
+          </div>
+        </div>
+        <div class="card" style="opacity:0.5">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本二 · 待生成</div>
+          <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV2">点上方 🧠 生成 3 版</div>
+          <div style="display:flex;gap:6px;margin-top:10px;display:none;flex-wrap:wrap" class="copy-actions">
+            <button class="btn btn-ghost" onclick="copyVersion(2)" style="font-size:10px;padding:4px 8px">📋 复制</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(2,'opener')" style="font-size:10px;padding:4px 8px">🔄 换开头</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(2,'lively')" style="font-size:10px;padding:4px 8px">✨ 更活泼</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(2,'calm')" style="font-size:10px;padding:4px 8px">🍃 更克制</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(2,'season')" style="font-size:10px;padding:4px 8px">❄️ 季节重写</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(2,'regen')" style="font-size:10px;padding:4px 8px">🎲 重写</button>
+          </div>
+        </div>
+        <div class="card" style="opacity:0.5">
+          <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">版本三 · 待生成</div>
+          <div style="font-size:13px;color:var(--text-dim);line-height:1.8;min-height:120px" id="copyV3">点上方 🧠 生成 3 版</div>
+          <div style="display:flex;gap:6px;margin-top:10px;display:none;flex-wrap:wrap" class="copy-actions">
+            <button class="btn btn-ghost" onclick="copyVersion(3)" style="font-size:10px;padding:4px 8px">📋 复制</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(3,'opener')" style="font-size:10px;padding:4px 8px">🔄 换开头</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(3,'lively')" style="font-size:10px;padding:4px 8px">✨ 更活泼</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(3,'calm')" style="font-size:10px;padding:4px 8px">🍃 更克制</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(3,'season')" style="font-size:10px;padding:4px 8px">❄️ 季节重写</button>
+            <button class="btn btn-ghost" onclick="rewriteVersion(3,'regen')" style="font-size:10px;padding:4px 8px">🎲 重写</button>
           </div>
         </div>
       </div>
@@ -512,7 +573,7 @@ body{font-family:'Noto Sans SC','PingFang SC','Hiragino Sans GB','Microsoft YaHe
 <div style="font-size:11px;color:var(--text-dim);margin-top:14px;line-height:1.9">同步范围：📅 社群运营排期编辑 · 🧠 素材灵感库自定义花字<br>打开页面自动拉取云端；你的任何修改会在 2 秒后自动上传。<br>Token 权限：仅本仓库 Contents 读写；撤销入口 → <a href="https://github.com/settings/personal-access-tokens" target="_blank" style="color:var(--brand)">github.com/settings/personal-access-tokens</a></div>
 <div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" onclick="closeCloudModal()">关闭</button></div>
 </div></div>
-<script src="js/app_v8.js?v=114"></script>
+<script src="js/app_v8.js?v=118"></script>
   <div id="cardModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
     <div style="background:#fff;border-radius:12px;padding:24px;width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.15)">
       <div style="font-weight:700;margin-bottom:16px;font-size:15px">➕ 添加花字卡片</div>
