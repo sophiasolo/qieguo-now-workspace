@@ -1801,7 +1801,7 @@ function generateCopyAI(){
 
   var now = new Date();
   var day = CopyConfig.customDay ? parseInt(CopyConfig.customDay) : now.getDay();
-  var dayNames = {2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·周末种草（小程序）'};
+  var dayNames = {2:'周二·热销风向',3:'周三·会员日88折',4:'周四·外卖双平台',5:'周五·周末套餐',6:'周六·周末种草'};
   var dayName = dayNames[day] || '今日';
   var product = (CopyConfig.customDay==='festival') ? '' : getCopyProduct();
   var direction = CopyConfig.direction || 'auto';
