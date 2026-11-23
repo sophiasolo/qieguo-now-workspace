@@ -1,6 +1,6 @@
 {
   "updated": "1116-1122",
-  "generated": "2026-11-23 10:35",
+  "generated": "2026-11-23 10:42",
   "kpi": {
     "groups": 745,
     "stores": 706,
@@ -219,8 +219,8 @@
   },
   "churn_count": 0,
   "acquisition": {
-    "scan_total": 6802,
-    "join_total": 5293,
+    "scan_total": 6800,
+    "join_total": 5291,
     "week_loss": 54,
     "funnel": {
       "scan": 480,
@@ -242,8 +242,8 @@
     },
     "week_total_join": 286,
     "suidan": {
-      "scan_total": 4997,
-      "join_total": 4069,
+      "scan_total": 4996,
+      "join_total": 4068,
       "week_loss": 15,
       "funnel": {
         "scan": 132,
@@ -289,8 +289,8 @@
       "launch": "2026-11-06"
     },
     "taika": {
-      "scan_total": 1439,
-      "join_total": 976,
+      "scan_total": 1438,
+      "join_total": 975,
       "week_loss": 11,
       "funnel": {
         "scan": 195,
