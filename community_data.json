@@ -1,13 +1,13 @@
 {
-  "updated": "1109-1115",
-  "generated": "2026-11-17 11:15",
+  "updated": "1116-1122",
+  "generated": "2026-11-23 09:55",
   "kpi": {
-    "groups": 749,
-    "stores": 709,
-    "members": 30600,
-    "join": 278,
-    "quit": 278,
-    "net": 0,
+    "groups": 745,
+    "stores": 706,
+    "members": 30483,
+    "join": 286,
+    "quit": 307,
+    "net": -21,
     "penetration": 91.8
   },
   "weeks": [
@@ -38,7 +38,8 @@
     "1019-1025",
     "1026-1101",
     "1102-1108",
-    "1109-1115"
+    "1109-1115",
+    "1116-1122"
   ],
   "data": {
     "0504-0510": {
@@ -208,95 +209,101 @@
       "quit": 278,
       "net": 0,
       "retention": 88.85
+    },
+    "1116-1122": {
+      "join": 286,
+      "quit": 307,
+      "net": -21,
+      "retention": 86.76
     }
   },
-  "churn_count": 1,
+  "churn_count": 0,
   "acquisition": {
-    "scan_total": 6508,
-    "join_total": 5081,
+    "scan_total": 6802,
+    "join_total": 5293,
     "week_loss": 54,
     "funnel": {
-      "scan": 528,
-      "add": 305,
-      "join": 194
+      "scan": 480,
+      "add": 298,
+      "join": 188
     },
-    "week_join_rate": 63.6,
+    "week_join_rate": 63.1,
     "retention": {
       "h24": 91.3,
-      "d7": 89.9,
-      "d15": 88.8,
-      "d30": 87.3
+      "d7": 90.0,
+      "d15": 88.9,
+      "d30": 87.4
     },
     "hist_join_rate": 81.4,
     "channels_total": {
-      "add": 305,
-      "join": 194,
-      "join_share": 69.8
+      "add": 298,
+      "join": 188,
+      "join_share": 65.7
     },
-    "week_total_join": 278,
+    "week_total_join": 286,
     "suidan": {
-      "scan_total": 4911,
-      "join_total": 3998,
-      "week_loss": 13,
+      "scan_total": 4997,
+      "join_total": 4069,
+      "week_loss": 15,
       "funnel": {
-        "scan": 152,
-        "add": 87,
-        "join": 67
+        "scan": 132,
+        "add": 90,
+        "join": 71
       },
       "retention": {
         "h24": 91.3,
-        "d7": 89.9,
-        "d15": 88.8,
-        "d30": 87.3
+        "d7": 90.0,
+        "d15": 88.9,
+        "d30": 87.4
       },
       "hist_join_rate": 81.4,
       "coverage": {
-        "rate": 26.5,
-        "a": 11,
-        "b": 177,
-        "c": 521
+        "rate": 26.8,
+        "a": 13,
+        "b": 176,
+        "c": 517
       }
     },
     "miniapp": {
-      "scan_total": 207,
-      "join_total": 144,
+      "scan_total": 366,
+      "join_total": 248,
       "week_loss": 28,
       "funnel": {
-        "scan": 144,
-        "add": 147,
-        "join": 81
+        "scan": 153,
+        "add": 159,
+        "join": 80
       },
       "retention": {
-        "h24": 87.4,
-        "d7": 86.0,
-        "d15": 86.0,
-        "d30": 86.0
+        "h24": 86.3,
+        "d7": 84.7,
+        "d15": 84.4,
+        "d30": 84.4
       },
-      "hist_join_rate": 69.6,
+      "hist_join_rate": 67.8,
       "coverage": {
-        "rate": 93.5,
-        "a": 115,
-        "b": 548,
-        "c": 46
+        "rate": 93.8,
+        "a": 35,
+        "b": 627,
+        "c": 44
       },
       "launch": "2026-11-06"
     },
     "taika": {
-      "scan_total": 1390,
-      "join_total": 939,
-      "week_loss": 13,
+      "scan_total": 1439,
+      "join_total": 976,
+      "week_loss": 11,
       "funnel": {
-        "scan": 232,
-        "add": 71,
-        "join": 46
+        "scan": 195,
+        "add": 49,
+        "join": 37
       },
       "retention": {
-        "h24": 89.4,
+        "h24": 89.3,
         "d7": 87.8,
-        "d15": 87.2,
-        "d30": 85.4
+        "d15": 87.1,
+        "d30": 85.3
       },
-      "hist_join_rate": 67.5,
+      "hist_join_rate": 67.8,
       "coverage": {
         "rate": 93.5,
         "a": 50,
